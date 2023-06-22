@@ -1,15 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
+using Shop_API.Repository;
+using Shop_API.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+// Add services to the container.
+
+builder.Services.AddControllers();
 builder.Services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
+builder.Services.AddTransient<IRamRepository, RamRepository>();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
