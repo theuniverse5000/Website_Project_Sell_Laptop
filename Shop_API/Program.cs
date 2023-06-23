@@ -12,6 +12,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddControllers();
 builder.Services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
 builder.Services.AddTransient<IRamRepository, RamRepository>();
+builder.Services.AddTransient<IScreenRepository, ScreenRepository>();
+builder.Services.AddTransient<IProductDetailRepository, ProductDetailRepository>();
+builder.Services.AddTransient<IImeiRepository, ImeiRepository>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
