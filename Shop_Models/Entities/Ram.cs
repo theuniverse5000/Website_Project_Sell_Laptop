@@ -8,6 +8,7 @@ namespace Shop_Models.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
         [MaxLength(50)]
         public string? Ma { get; set; }
         [MaxLength(100)]

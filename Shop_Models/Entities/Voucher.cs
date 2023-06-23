@@ -6,9 +6,12 @@ namespace Shop_Models.Entities
     [Table("Voucher")]
     public class Voucher
     {
-        [Key] public Guid IdVoucher { get; set; }
-        public string MaVoucher { get; set; }
-        public string TenVoucher { get; set; }
+        [Key] public Guid Id { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string? MaVoucher { get; set; }
+        [MaxLength(150)]
+        public string? TenVoucher { get; set; }
         public DateTime StarDay { get; set; }
         public DateTime EndDay { get; set; }
         public double GiaTri { get; set; }
