@@ -7,6 +7,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Create(Imei obj);
         Task<bool> Update(Imei obj);
         Task<bool> Delete(Guid id);
-        Task<IEnumerable<Screen>> GetAll();
+        Task<IEnumerable<Imei>> GetAll();
     }
 }
