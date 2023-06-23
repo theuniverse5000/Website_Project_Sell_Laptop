@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shop_Models.Entities
 {
-    internal class SanPhamGiamGia
+    [Table("SanPhamGiamGia")]
+    public class SanPhamGiamGia
     {
+        [Key] public Guid Id { get; set; }
+        public Guid IdProductDetail { get; set; }
+        public Guid IdVoucher { get; set; }
+        public double DonGia { get; set; }
+        public double SoTienConLai { get; set; }
+        public int TrangThai { get; set; }
+        public virtual GiamGia? GiamGia { get; set; }
+        public virtual ProductDetail? ProductDetail { get; set; }
     }
 }
