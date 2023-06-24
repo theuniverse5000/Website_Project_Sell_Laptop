@@ -15,10 +15,12 @@ namespace Shop_API.Controllers
         {
             _repository = repository;
         }
+        [HttpGet]
         public async Task<IActionResult> GetAllVoucher()
         {
             return Ok(await _repository.GetAllImage());
         }
+        [HttpPost]
         public async Task<IActionResult> CreateVoucher(Voucher voucher)
         {
             voucher.Id= Guid.NewGuid();
