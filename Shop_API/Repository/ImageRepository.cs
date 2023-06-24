@@ -53,7 +53,7 @@ namespace Shop_API.Repository
 
         public async Task<IEnumerable<Image>> GetAllImage()
         {
-            var list = await _context.Images.ToListAsync();// lấy tất cả ram
+            var list = await _context.Images.AsQueryable().Where(x=>x.Status!=0).ToListAsync();// lấy tất cả ram
             return list;
         }
 
@@ -69,10 +69,7 @@ namespace Shop_API.Repository
 
               
                 img.Status = obj.Status;
-                img.ProductDetailId = obj.ProductDetailId;
                 img.LinkImage = obj.LinkImage;
-                img.Id = obj.Id;
-                img.Ma=obj.Ma;
                 _context.Images.Update(img);
                 await _context.SaveChangesAsync();
                 return true;

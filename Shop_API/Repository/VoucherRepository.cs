@@ -40,6 +40,7 @@ namespace Shop_API.Repository
             }
             try
             {
+                vou.Status = 0;
                 _context.Vouchers.Update(vou);
                 await _context.SaveChangesAsync();
                 return true;
@@ -52,7 +53,7 @@ namespace Shop_API.Repository
 
         public async Task<IEnumerable<Voucher>> GetAllImage()
         {
-            var list = await _context.Vouchers.ToListAsync();// lấy tất cả ram
+            var list = await _context.Vouchers.AsQueryable().Where(x=>x.Status!=0).ToListAsync();// lấy tất cả ram
             return list;
         }
 
@@ -68,13 +69,13 @@ namespace Shop_API.Repository
 
                 vou.Status = obj.Status;
                 vou.TenVoucher = obj.TenVoucher;
-                vou.MaVoucher = obj.MaVoucher;
+               
                 vou.StarDay = obj.StarDay;
                 vou.SoLuong = obj.SoLuong;
                 vou.EndDay = obj.EndDay;
                 vou.GiaTri = obj.GiaTri;
-                vou.Bills = obj.Bills;
-                vou.Id = obj.Id;
+               
+
 
                 _context.Vouchers.Update(vou);
                 await _context.SaveChangesAsync();

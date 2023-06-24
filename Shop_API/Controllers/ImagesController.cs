@@ -29,7 +29,7 @@ namespace Shop_API.Controllers
             return Ok(await _repository.GetAllImage());
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> UpdateImage( Image image)
         {
             if(await _repository.Update(image))
