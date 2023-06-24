@@ -40,6 +40,7 @@ namespace Shop_API.Repository
             }
             try
             {
+                img.Status = 0;
                 _context.Images.Update(img);
                 await _context.SaveChangesAsync();
                 return true;
@@ -66,7 +67,7 @@ namespace Shop_API.Repository
             try
             {
 
-               img.ProductDetail = obj.ProductDetail;
+              
                 img.Status = obj.Status;
                 img.ProductDetailId = obj.ProductDetailId;
                 img.LinkImage = obj.LinkImage;
