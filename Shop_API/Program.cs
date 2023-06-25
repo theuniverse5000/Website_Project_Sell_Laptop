@@ -17,6 +17,10 @@ builder.Services.AddTransient<IProductDetailRepository, ProductDetailRepository>
 builder.Services.AddTransient<IImeiRepository, ImeiRepository>();
 builder.Services.AddTransient<IImageRepository, ImageRepository>();
 builder.Services.AddTransient<IVoucherRepository, VoucherRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IViDiemRepository, ViDiemRepository>();
+builder.Services.AddTransient<IQuyDoiDiemRepository, QuyDoiDiemRepository>();
+builder.Services.AddTransient<ILichSuTieuDiemRepository, LichSuTieuDiemRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
