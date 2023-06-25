@@ -7,15 +7,10 @@ namespace Shop_Models.Entities
     public class User
     {
         [Key] public Guid Id { get; set; }
-        [MaxLength(30)]
         public string? Username { get; set; }
-        [MaxLength(30)]
         public string? Password { get; set; }
-        [MaxLength(150)]
         public string? FullName { get; set; }
-        [MaxLength(20)]
-        public int? PhoneNumber { get; set; }
-        [MaxLength(150)]
+        public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public int Status { get; set; }
         public Guid RoleId { get; set; }
