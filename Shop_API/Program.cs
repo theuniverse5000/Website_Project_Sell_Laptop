@@ -15,8 +15,6 @@ builder.Services.AddTransient<IRamRepository, RamRepository>();
 builder.Services.AddTransient<IScreenRepository, ScreenRepository>();
 builder.Services.AddTransient<IProductDetailRepository, ProductDetailRepository>();
 builder.Services.AddTransient<IImeiRepository, ImeiRepository>();
-builder.Services.AddTransient<ICpuRepository, CpuRepository>();
-builder.Services.AddTransient<IRoleRepository, RoleRepository>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
