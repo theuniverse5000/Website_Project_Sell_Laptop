@@ -32,6 +32,10 @@ namespace Shop_API.Repository
         public async Task<bool> Delete(Guid id)
         {
             var lichSuTieuDiem = await _context.LichSuTieuDiems.FindAsync(id);
+            if(lichSuTieuDiem == null)
+            {
+                return false;
+            }
             try
             {
                 lichSuTieuDiem.TrangThai = 0;
