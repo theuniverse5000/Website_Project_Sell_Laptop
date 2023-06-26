@@ -10,7 +10,7 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Delete(Guid id);
         Task<IEnumerable<ProductDetail>> GetAll();
         Task<IEnumerable<ProductDetailView>> GetAllProductDetail();
-        Task<IEnumerable<ProductDetailView>> GetAllProductDetailById(Guid id);
+        //    Task<ProductDetailView> GetAllProductDetailById(Guid id);
         Task<bool> UpdateSoLuong(Guid id, int soLuong);
     }
 }
