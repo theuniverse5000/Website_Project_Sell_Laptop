@@ -12,8 +12,10 @@ namespace Shop_Models.Entities
         [MaxLength(50)]
         public string? Ma { get; set; }
         public decimal ImportPrice { get; set; }
+        //  [Range(1,Decimal.MaxValue)]
         public decimal Price { get; set; }
         public int AvailableQuantity { get; set; }
+        [Range(0, 5, ErrorMessage = "Trạng thái phải từ 0 đến 5")]
         public int Status { get; set; }
         public string? Description { get; set; }
         public Guid ProductId { get; set; }
