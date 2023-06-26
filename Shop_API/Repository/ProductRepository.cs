@@ -15,7 +15,7 @@ namespace Shop_API.Repository
         }
         public async Task<bool> Create(Product obj)
         {
-            var x = await dbContext.Products.AnyAsync(p=>p.Id == obj.Id);
+            var x = await dbContext.Products.AnyAsync(p=>p.Name == obj.Name);
             if (x== true && obj == null)
             {
                 return false;

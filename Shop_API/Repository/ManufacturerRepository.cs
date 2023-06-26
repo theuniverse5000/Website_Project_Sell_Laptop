@@ -16,7 +16,7 @@ namespace Shop_API.Repository
 
         public async Task<bool> Create(Manufacturer obj)
         {
-            var checktt = await dbContext.Manufacturers.AnyAsync(p => p.Id == obj.Id);
+            var checktt = await dbContext.Manufacturers.AnyAsync(p => p.Name == obj.Name);
             if (obj == null && checktt == true)
             {
                 return false;
