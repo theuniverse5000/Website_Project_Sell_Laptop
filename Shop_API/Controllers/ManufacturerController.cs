@@ -16,14 +16,14 @@ namespace Shop_API.Controllers
             _manufacturer = manufacturerRepository;
         }
 
-        [HttpGet("Get-All-Manufacturer")]
+        [HttpGet]
 
         public async Task<IActionResult> GetAllManu()
         {
             return Ok(await _manufacturer.GetAll());
         }
 
-        [HttpPost("Creat-Manufacturer")]
+        [HttpPost]
 
         public async Task<IActionResult> Create(Manufacturer obj)
         {
@@ -35,7 +35,7 @@ namespace Shop_API.Controllers
             return BadRequest("Thêm thất bại");
         }
 
-        [HttpPut("Update-Manufacturer")]
+        [HttpPut]
         public async Task<IActionResult> Update(Manufacturer x)
         {
             if (await _manufacturer.Update(x))
@@ -44,7 +44,7 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Sửa thất bại");
         }
-        [HttpDelete("Delete-Manufacturer")]
+        [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (await _manufacturer.Delete(id))

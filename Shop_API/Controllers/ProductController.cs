@@ -17,14 +17,14 @@ namespace Shop_API.Controllers
             _productRepository = Ipr;   
         }
 
-        [HttpGet("Get-All-Product")]
+        [HttpGet]
 
         public async Task<IActionResult> GetAllPro()
         {
             return Ok(await _productRepository.GetAll());
         }
 
-        [HttpPost("Creat-Product")]
+        [HttpPost]
 
         public async Task<IActionResult> Create(Product obj)
         {
@@ -36,7 +36,7 @@ namespace Shop_API.Controllers
             return BadRequest("Thêm thất bại");
         }
 
-        [HttpPut("Update-Product")]
+        [HttpPut]
         public async Task<IActionResult> Update(Product x)
         {
             if (await _productRepository.Update(x))
@@ -45,7 +45,7 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Sửa thất bại");
         }
-        [HttpDelete("Delete-Product")]
+        [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (await _productRepository.Delete(id))
