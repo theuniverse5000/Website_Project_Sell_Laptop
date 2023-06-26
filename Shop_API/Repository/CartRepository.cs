@@ -61,7 +61,7 @@ namespace Shop_API.Repository
             return cart;
         }
 
-        public Task<IEnumerable<Cart>> GetCartItem()
+        public Task<IEnumerable<CartItem>> GetCartItem()
         {
             throw new NotImplementedException();
         }

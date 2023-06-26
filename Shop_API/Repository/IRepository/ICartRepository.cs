@@ -10,6 +10,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Delete(Guid id);
         Task<IEnumerable<Cart>> GetAll();
         Task<Cart> GetById(Guid id);
-        Task<IEnumerable<Cart>> GetCartItem();
+        Task<IEnumerable<CartItem>> GetCartItem();
     }
 }
