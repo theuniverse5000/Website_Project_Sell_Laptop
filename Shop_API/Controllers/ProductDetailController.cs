@@ -13,10 +13,22 @@ namespace Shop_API.Controllers
         {
             _repository = repository;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllProductDetails()
+        [HttpGet("GetAllNoJoin")]
+        public async Task<IActionResult> GetAlls()
         {
             return Ok(await _repository.GetAll());
+        }
+        [HttpGet("GetAllJoin")]
+        public async Task<IActionResult> GetAllProductDetails()
+        {
+            return Ok(await _repository.GetAllProductDetail());
+        }
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetProductDetailById(Guid id)
+        {
+            var list = await _repository.GetAllProductDetail();
+            var proX = list.Where(x => x.Id == id);
+            return Ok(proX);
         }
         [HttpPost]
         public async Task<IActionResult> CreateProductDetail(ProductDetail obj)
