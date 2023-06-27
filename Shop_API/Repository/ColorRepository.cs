@@ -5,13 +5,13 @@ using Shop_Models.Entities;
 
 namespace Shop_API.Repository
 {
-    public class ColorRepository
+    public class ColorRepository : IColorRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public ColorRepository()
+        public ColorRepository(ApplicationDbContext dbContext)
         {
-            _dbContext = new ApplicationDbContext();
+            _dbContext = dbContext;
         }
 
         public async Task<bool> Create(Color obj)

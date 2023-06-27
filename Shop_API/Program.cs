@@ -19,7 +19,7 @@ builder.Services.AddTransient<IHardDriveRepository, HardDriveRepository>();
 builder.Services.AddTransient<ISanPhamGiamGiaRepository, SanPhamGiamGiaRepository>();
 builder.Services.AddTransient<IGiamGiaRepository, GiamGiaRepository>();
 builder.Services.AddTransient<IRoleRepository, RoleRepository>();
-builder.Services.AddTransient<ICpuRepository, CpuRepository>();
+builder.Services.AddTransient<IColorRepository, ColorRepository>();
 builder.Services.AddTransient<IScreenRepository, ScreenRepository>();
 builder.Services.AddTransient<IProductDetailRepository, ProductDetailRepository>();
 builder.Services.AddTransient<IManufacturerRepository, ManufacturerRepository>();
