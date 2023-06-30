@@ -1,5 +1,5 @@
-﻿using Shop_Models.Entities;
-using Shop_Models.ViewModels;
+﻿using Shop_Models.Dto;
+using Shop_Models.Entities;
 
 namespace Shop_API.Repository.IRepository
 {
@@ -9,7 +9,8 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(Cart obj);
         Task<bool> Delete(Guid id);
         Task<IEnumerable<Cart>> GetAll();
-        Task<Cart> GetById(Guid id);
-        Task<IEnumerable<CartItem>> GetCartItem();
+        Task<Cart> GetCartByUsername(string username);
+        Task<IEnumerable<CartItemDto>> GetCartItem(string username);
+        //  Task<IEnumerable<CartItemDto>> GetAllCarts();
     }
 }
