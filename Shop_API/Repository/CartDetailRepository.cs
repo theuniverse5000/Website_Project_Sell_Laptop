@@ -14,8 +14,8 @@ namespace Shop_API.Repository
         }
         public async Task<bool> Create(CartDetail obj)
         {
-            var checkId = await _context.CartDetails.AnyAsync(x => x.Id == obj.Id);
-            if (obj == null || checkId == true)
+
+            if (obj == null)
             {
                 return false;
             }
