@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -9,19 +10,23 @@ namespace Shop_API.Controllers
     public class ProductDetailController : ControllerBase
     {
         private readonly IProductDetailRepository _repository;
+        private readonly ReponseDto _reponse;
         public ProductDetailController(IProductDetailRepository repository)
         {
             _repository = repository;
+            _reponse = new ReponseDto();
         }
         [HttpGet("GetAllNoJoin")]
         public async Task<IActionResult> GetAlls()
         {
-            return Ok(await _repository.GetAll());
+            _reponse.Result = await _repository.GetAll();
+            return Ok(_reponse);
         }
         [HttpGet("GetAllJoin")]
         public async Task<IActionResult> GetAllProductDetails()
         {
-            return Ok(await _repository.GetAllProductDetail());
+            _reponse.Result = await _repository.GetAllProductDetail();
+            return Ok(_reponse);
         }
         [HttpGet("GetById")]
         public async Task<IActionResult> GetProductDetailById(Guid id)
@@ -36,18 +41,26 @@ namespace Shop_API.Controllers
             obj.Id = Guid.NewGuid();
             if (await _repository.Create(obj))
             {
-                return Ok("Thêm thành công");
+                _reponse.Result = obj;
+                return Ok(_reponse);
             }
-            return BadRequest("Thêm thất bại");
+            _reponse.Result = null;
+            _reponse.IsSuccess = false;
+            _reponse.Message = "Thất bại";
+            return BadRequest(_reponse);
         }
         [HttpPut]
         public async Task<IActionResult> UpdateProductDetail(ProductDetail obj)
         {
             if (await _repository.Update(obj))
             {
-                return Ok("Sửa thành công");
+                _reponse.Result = obj;
+                return Ok(_reponse);
             }
-            return BadRequest("Sửa thất bại");
+            _reponse.Result = null;
+            _reponse.IsSuccess = false;
+            _reponse.Message = "Thất bại";
+            return BadRequest(_reponse);
         }
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteProductDetail(Guid id)
