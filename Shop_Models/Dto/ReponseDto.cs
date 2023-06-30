@@ -4,6 +4,7 @@
     {
         public object? Result { get; set; }
         public bool IsSuccess { get; set; } = true;
+        public int Code { get; set; }
         public string Message { get; set; } = "Thành công";
     }
 }
