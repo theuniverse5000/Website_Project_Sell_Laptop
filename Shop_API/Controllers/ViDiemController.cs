@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -9,45 +10,85 @@ namespace Shop_API.Controllers
     public class ViDiemController : ControllerBase
     {
         private readonly IViDiemRepository _viDiemRepository;
+        private ReponseDto _reponseDto;
         public ViDiemController(IViDiemRepository viDiemRepository)
         {
             _viDiemRepository = viDiemRepository;
+            _reponseDto = new ReponseDto();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllViDiem()
+        public async Task<ReponseDto> GetAllViDiem()
         {
-            return Ok(await _viDiemRepository.GetAllViDiems());
+            var list = await _viDiemRepository.GetAllViDiems();
+            if (list != null)
+            {
+                _reponseDto.Result = list;
+                _reponseDto.Code = 200;
+                return _reponseDto;
+            }
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Code = 404;
+                _reponseDto.Message = "Lỗi";
+                return _reponseDto;
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateViDiem(ViDiem obj)
+        public async Task<ReponseDto> CreateViDiem(ViDiem obj)
         {
             if (await _viDiemRepository.Create(obj))
             {
-                return Ok("Thêm thành Công");
+                _reponseDto.Result = obj;
+                _reponseDto.Code = 201;
+                return _reponseDto;
             }
-            return BadRequest("Thêm Thất Bại");
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Code = 404;
+                _reponseDto.Message = "Lỗi";
+                return _reponseDto;
+            }
 
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateViDiem(ViDiem obj)
+        public async Task<ReponseDto> UpdateViDiem(ViDiem obj)
         {
             if (await _viDiemRepository.Update(obj))
             {
-                return Ok("Chỉnh sửa thành Công");
+                _reponseDto.Result = obj;
+                _reponseDto.Code = 200;
+                return _reponseDto;
             }
-            return BadRequest("Chỉnh sửa Thất Bại");
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Code = 404;
+                _reponseDto.Message = "Lỗi";
+                return _reponseDto;
+            }
 
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteViDiem(Guid id)
+        public async Task<ReponseDto> DeleteViDiem(Guid id)
         {
             if (await _viDiemRepository.Delete(id))
             {
-                return Ok("Xóa thành Công");
+                _reponseDto.Result = null;
+                _reponseDto.Code = 204;
+                _reponseDto.Message = "Xóa Thành Công";
+                return _reponseDto;
             }
-            return BadRequest("Xóa Thất Bại");
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Code = 404;
+                _reponseDto.Message = "Thất bại";
+                return _reponseDto;
+            }
         }
     }
 }

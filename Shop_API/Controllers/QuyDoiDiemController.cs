@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -9,45 +10,88 @@ namespace Shop_API.Controllers
     public class QuyDoiDiemController : ControllerBase
     {
         private readonly IQuyDoiDiemRepository _quyDoiDiemRepository;
+        private readonly ReponseDto _reponseDto;
         public QuyDoiDiemController(IQuyDoiDiemRepository quyDoiDiemRepository)
         {
             _quyDoiDiemRepository = quyDoiDiemRepository;
+            _reponseDto = new ReponseDto();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllQuyDoi()
+        public async Task<ReponseDto> GetAllQuyDoi()
         {
-            return Ok(await _quyDoiDiemRepository.GetAllQuyDoiDiems());
+            var list = await _quyDoiDiemRepository.GetAllQuyDoiDiems();
+            if (list != null)
+            {
+                _reponseDto.Result = list;
+                _reponseDto.Code = 200;
+                return _reponseDto;
+            }
+            else
+            {
+                _reponseDto.Result = null;
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Rỗng";
+                _reponseDto.Code = 404;
+                return _reponseDto;
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateQuyDoiDiem(QuyDoiDiem obj)
+        public async Task<ReponseDto> CreateQuyDoiDiem(QuyDoiDiem obj)
         {
             obj.Id = Guid.NewGuid();
             if (await _quyDoiDiemRepository.Create(obj))
             {
-                return Ok("Thêm Thành Công");
+                _reponseDto.Result = obj;
+                _reponseDto.Code = 200;
+                return _reponseDto;
             }
-            return BadRequest("Thêm Thất Bại");
+            else
+            {
+                _reponseDto.Result = null;
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Lỗi";
+                _reponseDto.Code = 405;
+                return _reponseDto;
+            }
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateQuyDoiDiem(QuyDoiDiem obj)
+        public async Task<ReponseDto> UpdateQuyDoiDiem(QuyDoiDiem obj)
         {
             if (await _quyDoiDiemRepository.Update(obj))
             {
-                return Ok("Chỉnh Sửa Thành Công");
+                _reponseDto.Result = obj;
+                _reponseDto.Code = 200;
+                return _reponseDto;
             }
-            return BadRequest("Chỉnh Sửa Thất Bại");
+            else
+            {
+                _reponseDto.Result = null;
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Lỗi";
+                _reponseDto.Code = 405;
+                return _reponseDto;
+            }
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteQuyDoiDiem(Guid id)
+        public async Task<ReponseDto> DeleteQuyDoiDiem(Guid id)
         {
             if (await _quyDoiDiemRepository.Delete(id))
             {
-                return Ok("Xóa Thành Công");
+
+                _reponseDto.Code = 200;
+                return _reponseDto;
             }
-            return BadRequest("Xóa Thất Bại");
+            else
+            {
+                _reponseDto.Result = null;
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Lỗi";
+                _reponseDto.Code = 405;
+                return _reponseDto;
+            }
         }
 
 

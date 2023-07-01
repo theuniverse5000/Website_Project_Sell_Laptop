@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -10,46 +10,84 @@ namespace Shop_API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly ReponseDto _reponseDto;
         public UserController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+            _reponseDto = new ReponseDto();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllUser()
+        public async Task<ReponseDto> GetAllUser()
         {
-            var list = _userRepository.GetAllUsers();
-            return Ok(await list);
+            var list = await _userRepository.GetAllUsers();
+            if (list != null)
+            {
+                _reponseDto.Result = list;
+                _reponseDto.Code = 200;
+                return _reponseDto;
+            }
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Lỗi";
+                _reponseDto.Code = 404;
+                return _reponseDto;
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(User obj)
+        public async Task<ReponseDto> CreateUser(User obj)
         {
             obj.Id = Guid.NewGuid();
             if (await _userRepository.Create(obj))
             {
-                return Ok("Thêm thành công");
+                _reponseDto.Result = obj;
+                _reponseDto.Code = 200;
+                return _reponseDto;
             }
-            return BadRequest("Thêm thất bại");
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Lỗi";
+                _reponseDto.Code = 405;
+                return _reponseDto;
+            }
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(User obj)
+        public async Task<ReponseDto> UpdateUser(User obj)
         {
             if (await _userRepository.Update(obj))
             {
-                return Ok("Chỉnh sửa thành Công");
+                _reponseDto.Result = obj;
+                _reponseDto.Code = 200;
+                return _reponseDto;
             }
-            return BadRequest("Chỉnh sửa Thất Bại");
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Lỗi";
+                _reponseDto.Code = 405;
+                return _reponseDto;
+            }
 
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteUser(Guid id)
+        public async Task<ReponseDto> DeleteUser(Guid id)
         {
             if (await _userRepository.Delete(id))
             {
-                return Ok("Xóa thành Công");
+
+                _reponseDto.Code = 200;
+                return _reponseDto;
             }
-            return BadRequest("Xóa Thất Bại");
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Lỗi";
+                _reponseDto.Code = 405;
+                return _reponseDto;
+            }
         }
     }
 }

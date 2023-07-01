@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -10,46 +10,84 @@ namespace Shop_API.Controllers
     public class LichSuTieuDiemController : ControllerBase
     {
         private readonly ILichSuTieuDiemRepository _lichSuTieuDiem;
+        private readonly ReponseDto _reponseDto;
         public LichSuTieuDiemController(ILichSuTieuDiemRepository lichSuTieuDiem)
         {
             _lichSuTieuDiem = lichSuTieuDiem;
+            _reponseDto = new ReponseDto();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllLichSuTieuDiem()
+        public async Task<ReponseDto> GetAllLichSuTieuDiem()
         {
-            return Ok(await _lichSuTieuDiem.GetAllLichSuTieuDiems());
+            var list = await _lichSuTieuDiem.GetAllLichSuTieuDiems();
+            if (list != null)
+            {
+                _reponseDto.Result = list;
+                _reponseDto.Code = 200;
+                return _reponseDto;
+            }
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Code = 404;
+                _reponseDto.Message = "Lỗi";
+                return _reponseDto;
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateLichSuTieuDiem(LichSuTieuDiem obj)
+        public async Task<ReponseDto> CreateLichSuTieuDiem(LichSuTieuDiem obj)
         {
-            obj.Id = Guid.NewGuid();
             if (await _lichSuTieuDiem.Create(obj))
             {
-                return Ok("Thêm thành Công");
+                _reponseDto.Result = obj;
+                _reponseDto.Code = 201;
+                return _reponseDto;
             }
-            return BadRequest("Thêm Thất Bại");
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Code = 405;
+                _reponseDto.Message = "Lỗi";
+                return _reponseDto;
+            }
 
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateLichSuTieuDiem(LichSuTieuDiem obj)
+        public async Task<ReponseDto> UpdateLichSuTieuDiem(LichSuTieuDiem obj)
         {
             if (await _lichSuTieuDiem.Update(obj))
             {
-                return Ok("Chỉnh sửa thành Công");
+                _reponseDto.Result = obj;
+                _reponseDto.Code = 200;
+                return _reponseDto;
             }
-            return BadRequest("Chỉnh sửa Thất Bại");
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Code = 405;
+                _reponseDto.Message = "Lỗi";
+                return _reponseDto;
+            }
 
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteLichSuTieuDiem(Guid id)
+        public async Task<ReponseDto> DeleteLichSuTieuDiem(Guid id)
         {
             if (await _lichSuTieuDiem.Delete(id))
             {
-                return Ok("Xóa thành Công");
+                _reponseDto.Result = null;
+                _reponseDto.Code = 204;
+                return _reponseDto;
             }
-            return BadRequest("Xóa Thất Bại");
+            else
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Code = 405;
+                _reponseDto.Message = "Lỗi";
+                return _reponseDto;
+            }
         }
     }
 }
