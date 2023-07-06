@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
+using Shop_API.Service;
+using Shop_API.Service.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
@@ -47,7 +49,7 @@ builder.Services.AddTransient<ICartRepository, CartRepository>();
 builder.Services.AddTransient<ICartDetailRepository, CartDetailRepository>();
 builder.Services.AddTransient<IBillRepository, BillRepository>();
 builder.Services.AddTransient<IBillDetailRepository, BillDetailRepository>();
-
+builder.Services.AddTransient<IEmailService, EmailService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
