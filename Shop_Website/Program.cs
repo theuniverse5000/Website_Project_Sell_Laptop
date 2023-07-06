@@ -1,8 +1,11 @@
+using Shop_Website.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -21,6 +24,7 @@ app.UseRouting();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
+app.MapHub<UserHub>("/hubs/userCount");
 
 app.MapFallbackToFile("index.html");
 
