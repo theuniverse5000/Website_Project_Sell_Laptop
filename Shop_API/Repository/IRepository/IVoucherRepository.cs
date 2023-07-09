@@ -7,6 +7,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Create(Voucher obj);
         Task<bool> Update(Voucher obj);
         Task<bool> Delete(Guid id);
-        Task<IEnumerable<Voucher>> GetAllImage();
+        Task<IEnumerable<Voucher>> GetAllVouchers();
     }
 }

@@ -18,13 +18,13 @@ namespace Shop_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllVoucher()
         {
-            return Ok(await _repository.GetAllImage());
+            return Ok(await _repository.GetAllVouchers());
         }
         [HttpPost]
         public async Task<IActionResult> CreateVoucher(Voucher voucher)
         {
-            voucher.Id= Guid.NewGuid();
-            if(await _repository.Create(voucher))
+            voucher.Id = Guid.NewGuid();
+            if (await _repository.Create(voucher))
             {
                 return Ok("Thêm thành công");
             }

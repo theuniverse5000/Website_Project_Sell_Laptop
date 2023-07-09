@@ -51,9 +51,9 @@ namespace Shop_API.Repository
             }
         }
 
-        public async Task<IEnumerable<Voucher>> GetAllImage()
+        public async Task<IEnumerable<Voucher>> GetAllVouchers()
         {
-            var list = await _context.Vouchers.AsQueryable().Where(x=>x.Status!=0).ToListAsync();// lấy tất cả ram
+            var list = await _context.Vouchers.AsQueryable().Where(x => x.Status != 0).ToListAsync();// lấy tất cả ram
             return list;
         }
 
@@ -69,12 +69,12 @@ namespace Shop_API.Repository
 
                 vou.Status = obj.Status;
                 vou.TenVoucher = obj.TenVoucher;
-               
+
                 vou.StarDay = obj.StarDay;
                 vou.SoLuong = obj.SoLuong;
                 vou.EndDay = obj.EndDay;
                 vou.GiaTri = obj.GiaTri;
-               
+
 
 
                 _context.Vouchers.Update(vou);
