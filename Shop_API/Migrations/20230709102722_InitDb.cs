@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Shop_API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDatabase : Migration
+    public partial class InitDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -291,19 +291,21 @@ namespace Shop_API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Ma = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SDTKhachHang = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     HoTenKhachHang = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     DiaChiKhachHang = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UsersId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bill", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bill_User_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_Bill_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -511,9 +513,9 @@ namespace Shop_API.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bill_UsersId",
+                name: "IX_Bill_UserId",
                 table: "Bill",
-                column: "UsersId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bill_VoucherId",

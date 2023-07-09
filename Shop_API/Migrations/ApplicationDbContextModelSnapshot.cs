@@ -28,6 +28,9 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DiaChiKhachHang")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
@@ -36,6 +39,11 @@ namespace Shop_API.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<string>("Ma")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("SDTKhachHang")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
@@ -43,7 +51,7 @@ namespace Shop_API.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("UsersId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("VoucherId")
@@ -51,7 +59,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("UserId");
 
                     b.HasIndex("VoucherId");
 
@@ -670,7 +678,7 @@ namespace Shop_API.Migrations
                 {
                     b.HasOne("Shop_Models.Entities.User", "Users")
                         .WithMany("Bills")
-                        .HasForeignKey("UsersId");
+                        .HasForeignKey("UserId");
 
                     b.HasOne("Shop_Models.Entities.Voucher", "Vouchers")
                         .WithMany("Bills")
