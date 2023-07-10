@@ -2,6 +2,7 @@
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
+using System;
 
 namespace Shop_API.Repository
 {
@@ -23,7 +24,7 @@ namespace Shop_API.Repository
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -43,7 +44,7 @@ namespace Shop_API.Repository
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -74,7 +75,7 @@ namespace Shop_API.Repository
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
