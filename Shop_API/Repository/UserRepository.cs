@@ -57,8 +57,7 @@ namespace Shop_API.Repository
 
         public async Task<List<User>> GetAllUsers()
         {
-            var allList = await _context.Users.ToListAsync();// Lấy tất cả danh sách user
-            var list = allList.Where(x => x.Status != 0).ToList();// lấy tất cả danh sách user với điều kiện status khác 0.
+            var list = await _context.Users.Where(x => x.Status > 0).ToListAsync();// Lấy tất cả danh sách user
             return list;
         }
 
