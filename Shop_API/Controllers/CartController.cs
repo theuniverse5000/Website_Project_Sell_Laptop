@@ -8,7 +8,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    [Authorize]
     public class CartController : ControllerBase
     {
         private readonly ICartRepository _cartRepository;
@@ -26,7 +26,8 @@ namespace Shop_API.Controllers
             _userRepository = userRepository;
             _reponse = new ReponseDto();
         }
-        [HttpGet("GetAllCarts"), Authorize]
+        [Authorize]
+        [HttpGet("GetAllCarts")]
         public async Task<ReponseDto> GetAllCarts()
         {
             var cartItem = await _cartRepository.GetAll();
@@ -46,6 +47,7 @@ namespace Shop_API.Controllers
             }
 
         }
+        [AllowAnonymous]
         [HttpGet("GetCartByUsername")]
         public async Task<ReponseDto> GetCartByUsername(string username)
         {
@@ -66,7 +68,8 @@ namespace Shop_API.Controllers
             }
 
         }
-        [HttpGet("GetCartJoinForUser"), AllowAnonymous]
+        [AllowAnonymous]
+        [HttpGet("GetCartJoinForUser")]
         public async Task<ReponseDto> GetCartJoinForUser(string username)
         {
             var cartItem = await _cartRepository.GetCartItem(username);
@@ -106,18 +109,35 @@ namespace Shop_API.Controllers
         //    }
 
         //}
-        [HttpPost("AddCart"), AllowAnonymous]
+        [AllowAnonymous]
+        [HttpPost("AddCart")]
         public async Task<ReponseDto> AddCart(string username, string maProductDetail)
         {
             try
             {
-                Guid idProductDetail = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Ma == maProductDetail).Id;
+                var productDetailToCart = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Ma == maProductDetail);
+                var userToCart = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.Username == username);
+                if (userToCart == null)
+                {
+                    _reponse.Result = null;
+                    _reponse.IsSuccess = false;
+                    _reponse.Code = 404;
+                    _reponse.Message = "Không tìm thấy tài khoản";
+                    return _reponse;
+                }
+                if (productDetailToCart == null)
+                {
+                    _reponse.Result = null;
+                    _reponse.IsSuccess = false;
+                    _reponse.Code = 404;
+                    _reponse.Message = "Không tìm thấy sản phẩm";
+                    return _reponse;
+                }
                 // Bước 1: Khi truyền vào username lấy ra được id của user
-                getUserId = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.Username == username).Id;
-                var userCart = _cartRepository.GetAll().Result.FirstOrDefault(x => x.UserId == getUserId);// Tìm cart của người dùng
-                var productDetailX = _productDetailRepository.GetAll().Result.Where(x => x.Id == idProductDetail).ToList();// Kiểm tra sản phẩm trong db
-                int soLuongProductDetail = productDetailX.FirstOrDefault().AvailableQuantity;// Lấy số lượng giỏ hàng
-                if (soLuongProductDetail <= 0)// Check xem còn hàng không
+                getUserId = userToCart.Id;
+                var userCart = _cartRepository.GetAll().Result.FirstOrDefault(x => x.UserId == getUserId);
+                int soLuongProductDetail = productDetailToCart.AvailableQuantity;
+                if (soLuongProductDetail <= 0)
                 {
                     _reponse.Result = null;
                     _reponse.IsSuccess = false;
@@ -125,9 +145,9 @@ namespace Shop_API.Controllers
                     _reponse.Message = "Số lượng sản phẩm không đủ";
                     return _reponse;
                 }
-                if (userCart != null)// TH người dùng đã có giỏ hàng => trỏ đến giỏ hàng đó thực hiện
+                if (userCart != null)
                 {
-                    var checkProductDetailInCart = _cartDetailRepository.GetAll().Result.FirstOrDefault(a => a.CartId == getUserId && a.ProductDetailId == idProductDetail);
+                    var checkProductDetailInCart = _cartDetailRepository.GetAll().Result.FirstOrDefault(a => a.CartId == getUserId && a.ProductDetailId == productDetailToCart.Id);
                     if (checkProductDetailInCart != null)
                     {
                         CartDetail a = new CartDetail();
@@ -150,7 +170,7 @@ namespace Shop_API.Controllers
                     {
                         CartDetail x = new CartDetail();
                         x.Id = new Guid();
-                        x.ProductDetailId = idProductDetail;
+                        x.ProductDetailId = productDetailToCart.Id;
                         x.CartId = getUserId;
                         x.Quantity = 1;
                         if (await _cartDetailRepository.Create(x))
@@ -168,41 +188,32 @@ namespace Shop_API.Controllers
                         return _reponse;
                     }
                 }
-                else // TH người dùng chưa có giỏ hàng
+                else
                 {
-                    Cart cart = new Cart(); // Khởi tạo 1 giỏ hàng mới
-                    cart.UserId = getUserId;// Id là id của người dùng lấy được thông qua username
+                    Cart cart = new Cart();
+                    cart.UserId = getUserId;
                     cart.Description = $"Giỏ hàng của {username}";
-                    if (await _cartRepository.Create(cart))// Thêm giỏ hàng vào db nếu thành công thì tiếp tục
+                    if (await _cartRepository.Create(cart))
                     {
-                        CartDetail b = new CartDetail();// Khởi tạo giỏ hàng chi tiết
-                        b.Id = new Guid();// id tự sinh
-                        b.ProductDetailId = idProductDetail;// id sản phẩm lấy được khi truyền vào mã ctsp
-                        b.CartId = getUserId;// Id giỏ hàng = id user
-                        b.Quantity = 1;// Thêm vào giỏ hàng số lượng mặc định là 1
-                        if (await _cartDetailRepository.Create(b))// Thêm ctsp vào giỏ hàng chi tiết
+                        CartDetail b = new CartDetail();
+                        b.Id = new Guid();
+                        b.ProductDetailId = productDetailToCart.Id;
+                        b.CartId = getUserId;
+                        b.Quantity = 1;
+                        if (await _cartDetailRepository.Create(b))
+
                         {
-                            _reponse.Result = b;// trả về result là 1 chuỗi obj dạng json
+                            _reponse.Result = b;
                             _reponse.IsSuccess = true;
                             _reponse.Code = 201;
                             _reponse.Message = "Thêm sản phẩm vào giỏ hàng thành công";
-                            return _reponse;// Trả về reponse
-                        }
-                        else
-                        {
-                            _reponse.Result = null;
-                            _reponse.IsSuccess = false;
-                            _reponse.Code = 404;
-                            _reponse.Message = "Không thể thêm chi tiết sản phẩm vào giỏ hàng chi tiết";
                             return _reponse;
                         }
-
                     }
-                    // Nếu tạo thất bại trả về lỗi
                     _reponse.Result = null;
                     _reponse.IsSuccess = false;
                     _reponse.Code = 404;
-                    _reponse.Message = "Không thể tạo giỏ hàng";
+                    _reponse.Message = "Không thể thêm sản phẩm vào trong giỏ hàng";
                     return _reponse;
                 }
             }
@@ -214,14 +225,23 @@ namespace Shop_API.Controllers
                 _reponse.Message = e.Message;
                 return _reponse;
             }
-
         }
-        [HttpPut("CongQuantity"), AllowAnonymous]
+        [AllowAnonymous]
+        [HttpPut("CongQuantity")]
         public async Task<ReponseDto> CongQuantityCartDetail(Guid idCartDetail)
         {
             try
             {
-                var checkProductDetailInCart = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail).Quantity;
+                var cartDetailX = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail);
+                if (cartDetailX == null)
+                {
+                    _reponse.Result = null;
+                    _reponse.IsSuccess = false;
+                    _reponse.Code = 404;
+                    _reponse.Message = "Không tìm thấy giỏ hàng chi tiết";
+                    return _reponse;
+                }
+                var checkProductDetailInCart = cartDetailX.Quantity;
                 CartDetail cartDetail = new CartDetail();
                 cartDetail.Id = idCartDetail;
                 cartDetail.Quantity = (checkProductDetailInCart += 1);
@@ -251,12 +271,22 @@ namespace Shop_API.Controllers
                 return _reponse;
             }
         }
-        [HttpPut("TruQuantityCartDetail"), AllowAnonymous]
+        [AllowAnonymous]
+        [HttpPut("TruQuantityCartDetail")]
         public async Task<ReponseDto> TruQuantityCartDetail(Guid idCartDetail)
         {
             try
             {
-                var checkProductDetailInCart = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail).Quantity;
+                var cartDetailX = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail);
+                if (cartDetailX == null)
+                {
+                    _reponse.Result = null;
+                    _reponse.IsSuccess = false;
+                    _reponse.Code = 404;
+                    _reponse.Message = "Không tìm thấy giỏ hàng chi tiết";
+                    return _reponse;
+                }
+                var checkProductDetailInCart = cartDetailX.Quantity;
                 if (checkProductDetailInCart > 0)
                 {
                     CartDetail cartDetail = new CartDetail();
