@@ -7,7 +7,7 @@
         public Guid IdProductDetails { get; set; }
         public int Quantity { get; set; }
         public string? MaProductDetail { get; set; }
-        public decimal Price { get; set; }
+        public float Price { get; set; }
         public string? Description { get; set; }
         public Guid IdProduct { get; set; }
         public Guid IdColor { get; set; }

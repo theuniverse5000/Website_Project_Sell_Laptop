@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Shop_API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class InitDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -226,11 +226,11 @@ namespace Shop_API.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Ma = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ImportPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AvailableQuantity = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<float>(type: "real", nullable: false),
+                    ImportPrice = table.Column<float>(type: "real", nullable: false),
+                    Upgrade = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ColorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -404,12 +404,31 @@ namespace Shop_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Serial",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    ProductDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Serial", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Serial_ProductDetail_ProductDetailId",
+                        column: x => x.ProductDetailId,
+                        principalTable: "ProductDetail",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BillDetail",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<float>(type: "real", nullable: false),
                     BillId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -493,19 +512,19 @@ namespace Shop_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Imei",
+                name: "SerialDaBan",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SoImei = table.Column<int>(type: "int", nullable: false),
-                    TrangThai = table.Column<int>(type: "int", nullable: false),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     BillDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Imei", x => x.Id);
+                    table.PrimaryKey("PK_SerialDaBan", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Imei_BillDetail_BillDetailId",
+                        name: "FK_SerialDaBan_BillDetail_BillDetailId",
                         column: x => x.BillDetailId,
                         principalTable: "BillDetail",
                         principalColumn: "Id",
@@ -546,11 +565,6 @@ namespace Shop_API.Migrations
                 name: "IX_Image_ProductDetailId",
                 table: "Image",
                 column: "ProductDetailId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Imei_BillDetailId",
-                table: "Imei",
-                column: "BillDetailId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LichSuTieuDiem_BillId",
@@ -618,6 +632,16 @@ namespace Shop_API.Migrations
                 column: "ProductDetailId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Serial_ProductDetailId",
+                table: "Serial",
+                column: "ProductDetailId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SerialDaBan_BillDetailId",
+                table: "SerialDaBan",
+                column: "BillDetailId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_RoleId",
                 table: "User",
                 column: "RoleId");
@@ -633,19 +657,19 @@ namespace Shop_API.Migrations
                 name: "Image");
 
             migrationBuilder.DropTable(
-                name: "Imei");
-
-            migrationBuilder.DropTable(
                 name: "LichSuTieuDiem");
 
             migrationBuilder.DropTable(
                 name: "SanPhamGiamGia");
 
             migrationBuilder.DropTable(
-                name: "Cart");
+                name: "Serial");
 
             migrationBuilder.DropTable(
-                name: "BillDetail");
+                name: "SerialDaBan");
+
+            migrationBuilder.DropTable(
+                name: "Cart");
 
             migrationBuilder.DropTable(
                 name: "QuyDoiDiem");
@@ -655,6 +679,9 @@ namespace Shop_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "GiamGia");
+
+            migrationBuilder.DropTable(
+                name: "BillDetail");
 
             migrationBuilder.DropTable(
                 name: "Bill");

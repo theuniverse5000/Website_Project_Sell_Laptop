@@ -81,7 +81,6 @@ namespace Shop_API.Repository
                             Ma = a.Ma,
                             ImportPrice = a.ImportPrice,
                             Price = a.Price,
-                            AvailableQuantity = a.AvailableQuantity,
                             Status = a.Status,
                             Description = a.Description,
                             ThongSoRam = b.ThongSo,
@@ -125,7 +124,7 @@ namespace Shop_API.Repository
             {
                 productDetail.ImportPrice = obj.ImportPrice;
                 productDetail.Price = obj.Price;
-                productDetail.AvailableQuantity = obj.AvailableQuantity;
+                // productDetail.AvailableQuantity = obj.AvailableQuantity;
                 productDetail.Description = obj.Description;
                 productDetail.Status = obj.Status;
                 _context.ProductDetails.Update(productDetail);
@@ -148,7 +147,7 @@ namespace Shop_API.Repository
                 {
                     return false;
                 }
-                productDetail.AvailableQuantity -= soLuong;
+                //productDetail.AvailableQuantity -= soLuong;
                 _context.ProductDetails.Update(productDetail);
                 await _context.SaveChangesAsync();
                 return true;

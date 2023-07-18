@@ -6,20 +6,20 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ImeiController : ControllerBase
+    public class SerialController : ControllerBase
     {
-        private readonly IImeiRepository _repository;
-        public ImeiController(IImeiRepository repository)
+        private readonly ISerialRepository _repository;
+        public SerialController(ISerialRepository repository)
         {
             _repository = repository;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllImeis()
+        public async Task<IActionResult> GetAllSerials()
         {
             return Ok(await _repository.GetAll());
         }
         [HttpPost]
-        public async Task<IActionResult> CreateImei(Imei obj)
+        public async Task<IActionResult> CreateSerial(Serial obj)
         {
             obj.Id = Guid.NewGuid();
             if (await _repository.Create(obj))
@@ -29,7 +29,7 @@ namespace Shop_API.Controllers
             return BadRequest("Thêm thất bại");
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateImei(Imei obj)
+        public async Task<IActionResult> UpdateSerial(Serial obj)
         {
             if (await _repository.Update(obj))
             {
@@ -38,7 +38,7 @@ namespace Shop_API.Controllers
             return BadRequest("Sửa thất bại");
         }
         [HttpDelete("id")]
-        public async Task<IActionResult> DeleteImei(Guid id)
+        public async Task<IActionResult> DeleteSerial(Guid id)
         {
             if (await _repository.Delete(id))
             {

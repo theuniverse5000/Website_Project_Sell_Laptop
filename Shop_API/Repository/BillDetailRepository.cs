@@ -64,7 +64,7 @@ namespace Shop_API.Repository
                 if (x == null) return false;
                 else
                 {
-                    x.Quantity = obj.Quantity;
+                    //     x.Quantity = obj.Quantity;
                     x.Price = obj.Price;
                     _context.BillDetails.Update(x);
                     await _context.SaveChangesAsync();

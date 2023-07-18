@@ -38,7 +38,7 @@ builder.Services.AddTransient<IScreenRepository, ScreenRepository>();
 builder.Services.AddTransient<IProductDetailRepository, ProductDetailRepository>();
 builder.Services.AddTransient<IManufacturerRepository, ManufacturerRepository>();
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
-builder.Services.AddTransient<IImeiRepository, ImeiRepository>();
+builder.Services.AddTransient<ISerialRepository, SerialRepository>();
 builder.Services.AddTransient<IImageRepository, ImageRepository>();
 builder.Services.AddTransient<IVoucherRepository, VoucherRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();

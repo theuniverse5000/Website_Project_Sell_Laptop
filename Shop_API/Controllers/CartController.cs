@@ -136,7 +136,7 @@ namespace Shop_API.Controllers
                 // Bước 1: Khi truyền vào username lấy ra được id của user
                 getUserId = userToCart.Id;
                 var userCart = _cartRepository.GetAll().Result.FirstOrDefault(x => x.UserId == getUserId);
-                int soLuongProductDetail = productDetailToCart.AvailableQuantity;
+                int soLuongProductDetail = 1;// productDetailToCart.AvailableQuantity;
                 if (soLuongProductDetail <= 0)
                 {
                     _reponse.Result = null;

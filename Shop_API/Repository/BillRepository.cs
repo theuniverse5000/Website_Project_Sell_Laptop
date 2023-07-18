@@ -84,7 +84,7 @@ namespace Shop_API.Repository
                                HoTenKhachHang = x.HoTenKhachHang,
                                DiaChiKhachHang = x.DiaChiKhachHang,
                                UserId = o.Id,
-                               Quantity = y.Quantity,
+                               //        Quantity = y.Quantity,
                                IdProductDetails = a.Id,
                                MaProductDetail = a.Ma,
                                Price = a.Price,

@@ -75,14 +75,11 @@ namespace Shop_API.Migrations
                     b.Property<Guid>("BillId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.Property<Guid>("ProductDetailId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -289,28 +286,6 @@ namespace Shop_API.Migrations
                     b.ToTable("Image");
                 });
 
-            modelBuilder.Entity("Shop_Models.Entities.Imei", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BillDetailId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("SoImei")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TrangThai")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BillDetailId");
-
-                    b.ToTable("Imei");
-                });
-
             modelBuilder.Entity("Shop_Models.Entities.LichSuTieuDiem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -398,9 +373,6 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AvailableQuantity")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("CardVGAId")
                         .HasColumnType("uniqueidentifier");
 
@@ -416,16 +388,16 @@ namespace Shop_API.Migrations
                     b.Property<Guid>("HardDriveId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("ImportPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("ImportPrice")
+                        .HasColumnType("real");
 
                     b.Property<string>("Ma")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
@@ -438,6 +410,9 @@ namespace Shop_API.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("Upgrade")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -583,6 +558,52 @@ namespace Shop_API.Migrations
                     b.ToTable("Screen");
                 });
 
+            modelBuilder.Entity("Shop_Models.Entities.Serial", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductDetailId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductDetailId");
+
+                    b.ToTable("Serial");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.SerialDaBan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BillDetailId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SerialNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BillDetailId");
+
+                    b.ToTable("SerialDaBan");
+                });
+
             modelBuilder.Entity("Shop_Models.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -697,7 +718,7 @@ namespace Shop_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shop_Models.Entities.ProductDetail", "ProductDetails")
+                    b.HasOne("Shop_Models.Entities.ProductDetail", "ProductDetail")
                         .WithMany("BillDetails")
                         .HasForeignKey("ProductDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -705,7 +726,7 @@ namespace Shop_API.Migrations
 
                     b.Navigation("Bill");
 
-                    b.Navigation("ProductDetails");
+                    b.Navigation("ProductDetail");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Cart", b =>
@@ -745,17 +766,6 @@ namespace Shop_API.Migrations
                         .IsRequired();
 
                     b.Navigation("ProductDetail");
-                });
-
-            modelBuilder.Entity("Shop_Models.Entities.Imei", b =>
-                {
-                    b.HasOne("Shop_Models.Entities.BillDetail", "BillDetail")
-                        .WithMany("Imeis")
-                        .HasForeignKey("BillDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BillDetail");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.LichSuTieuDiem", b =>
@@ -874,6 +884,28 @@ namespace Shop_API.Migrations
                     b.Navigation("ProductDetail");
                 });
 
+            modelBuilder.Entity("Shop_Models.Entities.Serial", b =>
+                {
+                    b.HasOne("Shop_Models.Entities.ProductDetail", "ProductDetail")
+                        .WithMany("Serials")
+                        .HasForeignKey("ProductDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductDetail");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.SerialDaBan", b =>
+                {
+                    b.HasOne("Shop_Models.Entities.BillDetail", "BillDetail")
+                        .WithMany("SerialDaBans")
+                        .HasForeignKey("BillDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BillDetail");
+                });
+
             modelBuilder.Entity("Shop_Models.Entities.User", b =>
                 {
                     b.HasOne("Shop_Models.Entities.Role", "Role")
@@ -903,7 +935,7 @@ namespace Shop_API.Migrations
 
             modelBuilder.Entity("Shop_Models.Entities.BillDetail", b =>
                 {
-                    b.Navigation("Imeis");
+                    b.Navigation("SerialDaBans");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.CardVGA", b =>
@@ -953,6 +985,8 @@ namespace Shop_API.Migrations
                     b.Navigation("CartDetails");
 
                     b.Navigation("Imagess");
+
+                    b.Navigation("Serials");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.QuyDoiDiem", b =>

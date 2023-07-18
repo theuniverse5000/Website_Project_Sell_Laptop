@@ -11,13 +11,13 @@ namespace Shop_Models.Entities
         [Required]
         [MaxLength(50)]
         public string? Ma { get; set; }
-        public decimal ImportPrice { get; set; }
-        //  [Range(1,Decimal.MaxValue)]
-        public decimal Price { get; set; }
-        public int AvailableQuantity { get; set; }
+        public float Price { get; set; }
+        public float ImportPrice { get; set; }
+        public string? Upgrade { get; set; }
+        public string? Description { get; set; }
         [Range(0, 5, ErrorMessage = "Trạng thái phải từ 0 đến 5")]
         public int Status { get; set; }
-        public string? Description { get; set; }
+
         public Guid ProductId { get; set; }
         // [ForeignKey("Fk_ProductDetail_Color")]
         public Guid ColorId { get; set; }
@@ -33,9 +33,9 @@ namespace Shop_Models.Entities
         public virtual CardVGA? CardVGA { get; set; }
         public virtual HardDrive? HardDrive { get; set; }
         public virtual Product? Product { get; set; }
-
         public ICollection<Image>? Imagess { get; set; }
         public ICollection<BillDetail>? BillDetails { get; set; }
         public ICollection<CartDetail>? CartDetails { get; set; }
+        public ICollection<Serial>? Serials { get; set; }
     }
 }

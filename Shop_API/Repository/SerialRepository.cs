@@ -5,23 +5,23 @@ using Shop_Models.Entities;
 
 namespace Shop_API.Repository
 {
-    public class ImeiRepository : IImeiRepository
+    public class SerialRepository : ISerialRepository
     {
         private readonly ApplicationDbContext _context;
-        public ImeiRepository(ApplicationDbContext context)
+        public SerialRepository(ApplicationDbContext context)
         {
             _context = context;
         }
-        public async Task<bool> Create(Imei obj)
+        public async Task<bool> Create(Serial obj)
         {
-            var checkMa = await _context.Imeis.AnyAsync(x => x.SoImei == obj.SoImei);
+            var checkMa = await _context.Serials.AnyAsync(x => x.SerialNumber == obj.SerialNumber);
             if (obj == null || checkMa == true)
             {
                 return false;
             }
             try
             {
-                await _context.Imeis.AddAsync(obj);
+                await _context.Serials.AddAsync(obj);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -33,15 +33,15 @@ namespace Shop_API.Repository
 
         public async Task<bool> Delete(Guid id)
         {
-            var imei = await _context.Imeis.FindAsync(id);
-            if (imei == null)
+            var Serial = await _context.Serials.FindAsync(id);
+            if (Serial == null)
             {
                 return false;
             }
             try
             {
-                imei.TrangThai = 0;
-                _context.Imeis.Update(imei);
+                Serial.Status = 0;
+                _context.Serials.Update(Serial);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -51,25 +51,25 @@ namespace Shop_API.Repository
             }
         }
 
-        public async Task<IEnumerable<Imei>> GetAll()
+        public async Task<IEnumerable<Serial>> GetAll()
         {
-            var list = await _context.Imeis.ToListAsync();
-            var listImei = list.Where(x => x.TrangThai > 0).ToList();
-            return listImei;
+            var list = await _context.Serials.ToListAsync();
+            var listSerial = list.Where(x => x.Status > 0).ToList();
+            return listSerial;
         }
 
-        public async Task<bool> Update(Imei obj)
+        public async Task<bool> Update(Serial obj)
         {
-            var imei = await _context.Imeis.FindAsync(obj.Id);
-            if (imei == null)
+            var Serial = await _context.Serials.FindAsync(obj.Id);
+            if (Serial == null)
             {
                 return false;
             }
             try
             {
-                imei.SoImei = obj.SoImei;
-                imei.TrangThai = obj.TrangThai;
-                _context.Imeis.Update(imei);
+                Serial.SerialNumber = obj.SerialNumber;
+                Serial.Status = obj.Status;
+                _context.Serials.Update(Serial);
                 await _context.SaveChangesAsync();
                 return true;
             }

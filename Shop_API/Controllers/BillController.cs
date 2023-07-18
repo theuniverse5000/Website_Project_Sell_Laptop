@@ -133,7 +133,7 @@ namespace Shop_API.Controllers
                                 _reponse.Message = "Sản phẩm không tồn tại";
                                 return _reponse;
                             }
-                            int soLuongProductDetail = productDetailX.AvailableQuantity;
+                            int soLuongProductDetail = 0; //productDetailX.AvailableQuantity;
                             if (soLuongProductDetail <= 0 || soLuongProductDetail < x.Quantity)
                             {
                                 _reponse.Result = null;
@@ -146,8 +146,8 @@ namespace Shop_API.Controllers
                             billDetail.Id = Guid.NewGuid();
                             billDetail.BillId = bill.Id;
                             billDetail.ProductDetailId = x.IdProductDetails;
-                            billDetail.Quantity = x.Quantity;
-                            billDetail.Price = Convert.ToDouble(x.Price);
+                            //   billDetail.Quantity = x.Quantity;
+                            billDetail.Price = x.Price;
                             if (!await _billDetailRepository.CreateBillDetail(billDetail))
                             {
                                 _reponse.Result = null;
