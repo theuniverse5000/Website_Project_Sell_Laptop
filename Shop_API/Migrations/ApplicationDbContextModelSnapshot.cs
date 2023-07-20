@@ -357,12 +357,17 @@ namespace Shop_API.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<Guid>("ProductTypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ManufacturerId");
+
+                    b.HasIndex("ProductTypeId");
 
                     b.ToTable("Product");
                 });
@@ -431,6 +436,25 @@ namespace Shop_API.Migrations
                     b.HasIndex("ScreenId");
 
                     b.ToTable("ProductDetail");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.ProductType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductType");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.QuyDoiDiem", b =>
@@ -803,7 +827,15 @@ namespace Shop_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Shop_Models.Entities.ProductType", "ProductType")
+                        .WithMany("Products")
+                        .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Manufacturer");
+
+                    b.Navigation("ProductType");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ProductDetail", b =>
@@ -987,6 +1019,11 @@ namespace Shop_API.Migrations
                     b.Navigation("Imagess");
 
                     b.Navigation("Serials");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.ProductType", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.QuyDoiDiem", b =>

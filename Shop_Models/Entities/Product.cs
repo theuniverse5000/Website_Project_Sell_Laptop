@@ -13,7 +13,9 @@ namespace Shop_Models.Entities
         public string? Name { get; set; }
         public int Status { get; set; }
         public Guid ManufacturerId { get; set; }
+        public Guid ProductTypeId { get; set; }
         public virtual Manufacturer? Manufacturer { get; set; }
+        public virtual ProductType? ProductType { get; set; }
         public virtual ICollection<ProductDetail>? ProductDetails { get; set; }
     }
 }
