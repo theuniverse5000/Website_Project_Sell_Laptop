@@ -9,6 +9,7 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(ProductDetail obj);
         Task<bool> Delete(Guid id);
         Task<IEnumerable<ProductDetail>> GetAll();
+        Task<int> GetCountProductDetail();
         Task<IEnumerable<ProductDetailView>> GetAllProductDetail();
         //    Task<ProductDetailView> GetAllProductDetailById(Guid id);
         Task<bool> UpdateSoLuong(Guid id, int soLuong);

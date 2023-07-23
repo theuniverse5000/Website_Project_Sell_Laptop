@@ -59,10 +59,12 @@ namespace Shop_API.Repository
             return listProductDetail;
         }
 
+
         public async Task<IEnumerable<ProductDetailView>> GetAllProductDetail()
         {
             // ProductDetailView là 1 ViewModel ảo, tạo ra để hiện thị các thuộc tính của 1 đối tượng
             // mà mình mong muốn = cách gán giá trị vào cho nó
+            int soLuongProductDetail = await GetCountProductDetail();
             List<ProductDetailView> listProductDetails = new List<ProductDetailView>();
             listProductDetails = (
                         from a in await _context.ProductDetails.ToListAsync()
@@ -75,6 +77,58 @@ namespace Shop_API.Repository
                         // join h in await _context.Images.ToListAsync() on a.Id equals h.ProductDetailId
                         join i in await _context.Products.ToListAsync() on a.ProductId equals i.Id
                         join k in await _context.Manufacturers.ToListAsync() on i.ManufacturerId equals k.Id
+                        join l in await _context.ProductTypes.ToListAsync() on i.ProductTypeId equals l.Id
+
+                        select new ProductDetailView
+                        {
+                            Id = a.Id,
+                            Ma = a.Ma,
+                            ImportPrice = a.ImportPrice,
+                            Price = a.Price,
+                            Status = a.Status,
+                            Description = a.Description,
+                            AvailableQuantity = soLuongProductDetail,
+                            ThongSoRam = b.ThongSo,
+                            MaRam = b.Ma,
+                            TenCpu = c.Ten,
+                            MaCpu = c.Ma,
+                            ThongSoHardDrive = d.ThongSo,
+                            MaHardDrive = d.Ma,
+                            NameColor = e.Name,
+                            MaColor = e.Ma,
+                            MaCardVGA = f.Ma,
+                            TenCardVGA = f.Ten,
+                            ThongSoCardVGA = f.ThongSo,
+                            MaManHinh = g.Ma,
+                            KichCoManHinh = g.KichCo,
+                            TanSoManHinh = g.TanSo,
+                            ChatLieuManHinh = g.ChatLieu,
+                            NameProduct = i.Name,
+                            NameProductType = l.Name,
+                            NameManufacturer = k.Name,
+                            //  LinkImage = h.LinkImage
+                        }
+
+               ).ToList();
+            return listProductDetails.Where(x => x.Status > 0);
+        }
+
+        public async Task<int> GetCountProductDetail()
+        {
+            List<ProductDetailView> listProductDetails = new List<ProductDetailView>();
+            listProductDetails = (
+                        from a in await _context.ProductDetails.ToListAsync()
+                        join b in await _context.Rams.ToListAsync() on a.RamId equals b.Id
+                        join c in await _context.Cpus.ToListAsync() on a.CpuId equals c.Id
+                        join d in await _context.HardDrives.ToListAsync() on a.HardDriveId equals d.Id
+                        join e in await _context.Colors.ToListAsync() on a.ColorId equals e.Id
+                        join f in await _context.CardVGAs.ToListAsync() on a.CardVGAId equals f.Id
+                        join g in await _context.Screens.ToListAsync() on a.ScreenId equals g.Id
+                        // join h in await _context.Images.ToListAsync() on a.Id equals h.ProductDetailId
+                        join i in await _context.Products.ToListAsync() on a.ProductId equals i.Id
+                        join k in await _context.Manufacturers.ToListAsync() on i.ManufacturerId equals k.Id
+                        join l in await _context.ProductTypes.ToListAsync() on i.ProductTypeId equals l.Id
+                        join m in await _context.Serials.ToListAsync() on a.Id equals m.ProductDetailId
                         select new ProductDetailView
                         {
                             Id = a.Id,
@@ -99,12 +153,14 @@ namespace Shop_API.Repository
                             TanSoManHinh = g.TanSo,
                             ChatLieuManHinh = g.ChatLieu,
                             NameProduct = i.Name,
+                            NameProductType = l.Name,
                             NameManufacturer = k.Name,
                             //  LinkImage = h.LinkImage
                         }
 
                ).ToList();
-            return listProductDetails.Where(x => x.Status > 0);
+            int soLuong = listProductDetails.Where(x => x.Status > 0).Count();
+            return soLuong;
         }
 
         //public async Task<ProductDetailView> GetAllProductDetailById(Guid id)

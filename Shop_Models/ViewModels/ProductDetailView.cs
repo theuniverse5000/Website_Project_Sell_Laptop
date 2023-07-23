@@ -26,6 +26,7 @@
         public string? MaColor { get; set; }
         public string? NameProduct { get; set; }
         public string? NameManufacturer { get; set; }
+        public string? NameProductType { get; set; }
         public string? MaManHinh { get; set; }
         public string? KichCoManHinh { get; set; }
         public string? TanSoManHinh { get; set; }
