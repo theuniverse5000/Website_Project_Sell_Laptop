@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
 
@@ -19,16 +18,17 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> CreateProductType(ProductType obj)
         {
             obj.Id = Guid.NewGuid();
-            if(await _repository.Create(obj))
+            if (await _repository.Create(obj))
             {
                 return Ok("Thêm thành công");
-            }return BadRequest("Thêm thất bại");
+            }
+            return BadRequest("Thêm thất bại");
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateProductType(ProductType obj)
         {
-           
+
             if (await _repository.Update(obj))
             {
                 return Ok("Chỉnh sửa thành công");

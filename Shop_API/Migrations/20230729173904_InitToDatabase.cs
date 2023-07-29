@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Shop_API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class InitToDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -172,6 +172,19 @@ namespace Shop_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SerialDaBan",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SerialDaBan", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Voucher",
                 columns: table => new
                 {
@@ -245,7 +258,7 @@ namespace Shop_API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Ma = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     ImportPrice = table.Column<float>(type: "real", nullable: false),
                     Upgrade = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -311,11 +324,11 @@ namespace Shop_API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Ma = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    InvoiceCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SDTKhachHang = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    HoTenKhachHang = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
-                    DiaChiKhachHang = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    FullName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
@@ -449,8 +462,9 @@ namespace Shop_API.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     BillId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SerialDaBanId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -462,9 +476,9 @@ namespace Shop_API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BillDetail_ProductDetail_ProductDetailId",
-                        column: x => x.ProductDetailId,
-                        principalTable: "ProductDetail",
+                        name: "FK_BillDetail_SerialDaBan_SerialDaBanId",
+                        column: x => x.SerialDaBanId,
+                        principalTable: "SerialDaBan",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -505,18 +519,11 @@ namespace Shop_API.Migrations
                     SoDiemCong = table.Column<double>(type: "float", nullable: false),
                     TrangThai = table.Column<int>(type: "int", nullable: false),
                     QuyDoiDiemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ViDiemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BillId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ViDiemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LichSuTieuDiem", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_LichSuTieuDiem_Bill_BillId",
-                        column: x => x.BillId,
-                        principalTable: "Bill",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_LichSuTieuDiem_QuyDoiDiem_QuyDoiDiemId",
                         column: x => x.QuyDoiDiemId,
@@ -528,26 +535,6 @@ namespace Shop_API.Migrations
                         column: x => x.ViDiemId,
                         principalTable: "ViDiem",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SerialDaBan",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    BillDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SerialDaBan", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SerialDaBan_BillDetail_BillDetailId",
-                        column: x => x.BillDetailId,
-                        principalTable: "BillDetail",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -567,9 +554,9 @@ namespace Shop_API.Migrations
                 column: "BillId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BillDetail_ProductDetailId",
+                name: "IX_BillDetail_SerialDaBanId",
                 table: "BillDetail",
-                column: "ProductDetailId");
+                column: "SerialDaBanId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartDetail_CartId",
@@ -585,11 +572,6 @@ namespace Shop_API.Migrations
                 name: "IX_Image_ProductDetailId",
                 table: "Image",
                 column: "ProductDetailId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LichSuTieuDiem_BillId",
-                table: "LichSuTieuDiem",
-                column: "BillId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LichSuTieuDiem_QuyDoiDiemId",
@@ -662,11 +644,6 @@ namespace Shop_API.Migrations
                 column: "ProductDetailId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SerialDaBan_BillDetailId",
-                table: "SerialDaBan",
-                column: "BillDetailId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_User_RoleId",
                 table: "User",
                 column: "RoleId");
@@ -675,6 +652,9 @@ namespace Shop_API.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "BillDetail");
+
             migrationBuilder.DropTable(
                 name: "CartDetail");
 
@@ -689,6 +669,9 @@ namespace Shop_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Serial");
+
+            migrationBuilder.DropTable(
+                name: "Bill");
 
             migrationBuilder.DropTable(
                 name: "SerialDaBan");
@@ -706,19 +689,13 @@ namespace Shop_API.Migrations
                 name: "GiamGia");
 
             migrationBuilder.DropTable(
-                name: "BillDetail");
-
-            migrationBuilder.DropTable(
-                name: "Bill");
-
-            migrationBuilder.DropTable(
                 name: "ProductDetail");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Voucher");
 
             migrationBuilder.DropTable(
-                name: "Voucher");
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "CPU");

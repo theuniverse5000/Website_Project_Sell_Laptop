@@ -12,8 +12,8 @@ using Shop_API.AppDbContext;
 namespace Shop_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230720154822_InitDb")]
-    partial class InitDb
+    [Migration("20230729173904_InitToDatabase")]
+    partial class InitToDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,23 +31,23 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DiaChiKhachHang")
+                    b.Property<string>("FullName")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("HoTenKhachHang")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("Ma")
+                    b.Property<string>("InvoiceCode")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("SDTKhachHang")
+                    b.Property<string>("PhoneNumber")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -81,14 +81,17 @@ namespace Shop_API.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
-                    b.Property<Guid>("ProductDetailId")
+                    b.Property<Guid>("SerialDaBanId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BillId");
 
-                    b.HasIndex("ProductDetailId");
+                    b.HasIndex("SerialDaBanId");
 
                     b.ToTable("BillDetail");
                 });
@@ -295,9 +298,6 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BillId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("NgaySD")
                         .HasColumnType("datetime2");
 
@@ -317,8 +317,6 @@ namespace Shop_API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BillId");
 
                     b.HasIndex("QuyDoiDiemId");
 
@@ -384,6 +382,11 @@ namespace Shop_API.Migrations
                     b.Property<Guid>("CardVGAId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<Guid>("ColorId")
                         .HasColumnType("uniqueidentifier");
 
@@ -398,11 +401,6 @@ namespace Shop_API.Migrations
 
                     b.Property<float>("ImportPrice")
                         .HasColumnType("real");
-
-                    b.Property<string>("Ma")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<float>("Price")
                         .HasColumnType("real");
@@ -614,9 +612,6 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BillDetailId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -625,8 +620,6 @@ namespace Shop_API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BillDetailId");
 
                     b.ToTable("SerialDaBan");
                 });
@@ -745,15 +738,15 @@ namespace Shop_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shop_Models.Entities.ProductDetail", "ProductDetail")
+                    b.HasOne("Shop_Models.Entities.SerialDaBan", "SerialDaBan")
                         .WithMany("BillDetails")
-                        .HasForeignKey("ProductDetailId")
+                        .HasForeignKey("SerialDaBanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Bill");
 
-                    b.Navigation("ProductDetail");
+                    b.Navigation("SerialDaBan");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Cart", b =>
@@ -797,12 +790,6 @@ namespace Shop_API.Migrations
 
             modelBuilder.Entity("Shop_Models.Entities.LichSuTieuDiem", b =>
                 {
-                    b.HasOne("Shop_Models.Entities.Bill", "Bill")
-                        .WithMany("LichSuTieuDiems")
-                        .HasForeignKey("BillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Shop_Models.Entities.QuyDoiDiem", "QuyDoiDiem")
                         .WithMany("LichSuTieuDiems")
                         .HasForeignKey("QuyDoiDiemId")
@@ -814,8 +801,6 @@ namespace Shop_API.Migrations
                         .HasForeignKey("ViDiemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Bill");
 
                     b.Navigation("QuyDoiDiem");
 
@@ -930,17 +915,6 @@ namespace Shop_API.Migrations
                     b.Navigation("ProductDetail");
                 });
 
-            modelBuilder.Entity("Shop_Models.Entities.SerialDaBan", b =>
-                {
-                    b.HasOne("Shop_Models.Entities.BillDetail", "BillDetail")
-                        .WithMany("SerialDaBans")
-                        .HasForeignKey("BillDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BillDetail");
-                });
-
             modelBuilder.Entity("Shop_Models.Entities.User", b =>
                 {
                     b.HasOne("Shop_Models.Entities.Role", "Role")
@@ -964,13 +938,6 @@ namespace Shop_API.Migrations
             modelBuilder.Entity("Shop_Models.Entities.Bill", b =>
                 {
                     b.Navigation("BillDetails");
-
-                    b.Navigation("LichSuTieuDiems");
-                });
-
-            modelBuilder.Entity("Shop_Models.Entities.BillDetail", b =>
-                {
-                    b.Navigation("SerialDaBans");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.CardVGA", b =>
@@ -1015,8 +982,6 @@ namespace Shop_API.Migrations
 
             modelBuilder.Entity("Shop_Models.Entities.ProductDetail", b =>
                 {
-                    b.Navigation("BillDetails");
-
                     b.Navigation("CartDetails");
 
                     b.Navigation("Imagess");
@@ -1047,6 +1012,11 @@ namespace Shop_API.Migrations
             modelBuilder.Entity("Shop_Models.Entities.Screen", b =>
                 {
                     b.Navigation("ProductDetails");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.SerialDaBan", b =>
+                {
+                    b.Navigation("BillDetails");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.User", b =>

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.7" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.8" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\product.js" />
     <Content Remove="wwwroot\js\signalr.js" />
     <Content Remove="wwwroot\js\signalr.js.map" />
     <Content Remove="wwwroot\js\signalr.min.js" />
@@ -32,6 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\product.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\product.js" />
     <None Include="wwwroot\js\signalr.js" />
     <None Include="wwwroot\js\signalr.js.map" />
     <None Include="wwwroot\js\signalr.min.js" />
@@ -232,6 +239,10 @@
     <None Include="wwwroot\lib\microsoft\signalr\src\Utils.ts" />
     <None Include="wwwroot\lib\microsoft\signalr\src\WebSocketTransport.ts" />
     <None Include="wwwroot\lib\microsoft\signalr\src\XhrHttpClient.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shop_Models\Shop_Models.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

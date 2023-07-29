@@ -115,7 +115,7 @@ namespace Shop_API.Controllers
         {
             try
             {
-                var productDetailToCart = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Ma == maProductDetail);
+                var productDetailToCart = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Code == maProductDetail);
                 var userToCart = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.Username == username);
                 if (userToCart == null)
                 {

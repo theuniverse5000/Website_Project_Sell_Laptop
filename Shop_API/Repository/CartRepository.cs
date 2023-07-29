@@ -102,7 +102,7 @@ namespace Shop_API.Repository
                                UserId = x.UserId,
                                Quantity = y.Quantity,
                                IdProductDetails = a.Id,
-                               MaProductDetail = a.Ma,
+                               MaProductDetail = a.Code,
                                Price = a.Price,
                                Description = a.Description,
                                ThongSoRam = b.ThongSo,

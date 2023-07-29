@@ -29,7 +29,7 @@ namespace Shop_API.Controllers
             return BadRequest("Thêm thất bại");
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> UpdateSerialDaBan(SerialDaBan obj)
         {
             if (await _repository.Update(obj))

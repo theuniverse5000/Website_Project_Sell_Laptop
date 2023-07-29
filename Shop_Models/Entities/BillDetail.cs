@@ -8,12 +8,11 @@ namespace Shop_Models.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        //    public int Quantity { get; set; }
         public float Price { get; set; }
+        public int Status { get; set; }
         public Guid BillId { get; set; }
-        public Guid ProductDetailId { get; set; }
+        public Guid SerialDaBanId { get; set; }
         public virtual Bill? Bill { get; set; }
-        public virtual ProductDetail? ProductDetail { get; set; }
-        public ICollection<SerialDaBan>? SerialDaBans { get; set; }
+        public virtual SerialDaBan? SerialDaBan { get; set; }
     }
 }

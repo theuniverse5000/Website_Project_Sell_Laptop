@@ -112,11 +112,11 @@ namespace Shop_API.Controllers
                     Bill bill = new Bill()// Tạo hóa đơn
                     {
                         Id = Guid.NewGuid(),
-                        Ma = "Bill" + DateTime.Now.ToString(),
+                        InvoiceCode = "Bill" + DateTime.Now.ToString(),
                         CreateDate = Convert.ToDateTime(DateTime.Now.ToString()),
-                        HoTenKhachHang = user.FullName,
-                        SDTKhachHang = user.PhoneNumber,
-                        DiaChiKhachHang = user.Address,
+                        FullName = user.FullName,
+                        PhoneNumber = user.PhoneNumber,
+                        Address = user.Address,
                         Status = 1,
                         UserId = getUserId,
                         VoucherId = voucherX != null ? voucherX.Id : null
@@ -145,7 +145,7 @@ namespace Shop_API.Controllers
                             BillDetail billDetail = new BillDetail();
                             billDetail.Id = Guid.NewGuid();
                             billDetail.BillId = bill.Id;
-                            billDetail.ProductDetailId = x.IdProductDetails;
+                            //   billDetail.ProductDetailId = x.IdProductDetails;
                             //   billDetail.Quantity = x.Quantity;
                             billDetail.Price = x.Price;
                             if (!await _billDetailRepository.CreateBillDetail(billDetail))

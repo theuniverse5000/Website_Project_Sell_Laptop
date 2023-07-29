@@ -1,16 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shop_API.AppDbContext;
+﻿using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
 
 namespace Shop_API.Repository
 {
-    public class TieuDiemRepository: ITieuDiemRepository
+    public class TieuDiemRepository : ITieuDiemRepository
     {
-        private readonly  ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         public TieuDiemRepository(ApplicationDbContext context)
         {
-                _context = context; 
+            _context = context;
         }
 
         // Hàm tính số điểm tích lũy dựa vào tổng tiền hóa đơn
@@ -72,7 +71,7 @@ namespace Shop_API.Repository
             objLSTieuDiem.TrangThai = 1;
             objLSTieuDiem.QuyDoiDiemId = objQuyDoiDiem.Id;
             objLSTieuDiem.ViDiemId = viDiem.UserId;
-            objLSTieuDiem.BillId = _bill.Id;
+
 
             _context.LichSuTieuDiems.Add(objLSTieuDiem);
             _context.SaveChanges();
@@ -129,7 +128,6 @@ namespace Shop_API.Repository
             objLSTieuDiem.TrangThai = 1;
             objLSTieuDiem.QuyDoiDiemId = objQuyDoiDiem.Id;
             objLSTieuDiem.ViDiemId = viDiem.UserId;
-            objLSTieuDiem.BillId = _bill.Id;
 
             _context.LichSuTieuDiems.Add(objLSTieuDiem);
             _context.SaveChanges();

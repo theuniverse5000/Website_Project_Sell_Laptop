@@ -15,7 +15,7 @@ namespace Shop_API.Repository
         }
         public async Task<bool> Create(ProductDetail obj)
         {
-            var checkMa = await _context.ProductDetails.AnyAsync(x => x.Ma == obj.Ma);
+            var checkMa = await _context.ProductDetails.AnyAsync(x => x.Code == obj.Code);
             if (obj == null || checkMa == true)
             {
                 return false;
@@ -82,7 +82,7 @@ namespace Shop_API.Repository
                         select new ProductDetailView
                         {
                             Id = a.Id,
-                            Ma = a.Ma,
+                            Ma = a.Code,
                             ImportPrice = a.ImportPrice,
                             Price = a.Price,
                             Status = a.Status,
@@ -132,7 +132,7 @@ namespace Shop_API.Repository
                         select new ProductDetailView
                         {
                             Id = a.Id,
-                            Ma = a.Ma,
+                            Ma = a.Code,
                             ImportPrice = a.ImportPrice,
                             Price = a.Price,
                             Status = a.Status,
