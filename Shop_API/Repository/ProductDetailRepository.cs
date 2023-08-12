@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
-using Shop_Models.ViewModels;
 
 namespace Shop_API.Repository
 {
     public class ProductDetailRepository : IProductDetailRepository
     {
         private readonly ApplicationDbContext _context;
+        public static int Page_Size { get; set; } = 10;
         public ProductDetailRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -60,12 +61,12 @@ namespace Shop_API.Repository
         }
 
 
-        public async Task<IEnumerable<ProductDetailView>> GetAllProductDetail()
+        public async Task<IEnumerable<ProductDetailDto>> GetAllProductDetail()
         {
             // ProductDetailView là 1 ViewModel ảo, tạo ra để hiện thị các thuộc tính của 1 đối tượng
             // mà mình mong muốn = cách gán giá trị vào cho nó
             int soLuongProductDetail = await GetCountProductDetail();
-            List<ProductDetailView> listProductDetails = new List<ProductDetailView>();
+            List<ProductDetailDto> listProductDetails = new List<ProductDetailDto>();
             listProductDetails = (
                         from a in await _context.ProductDetails.ToListAsync()
                         join b in await _context.Rams.ToListAsync() on a.RamId equals b.Id
@@ -79,13 +80,14 @@ namespace Shop_API.Repository
                         join k in await _context.Manufacturers.ToListAsync() on i.ManufacturerId equals k.Id
                         join l in await _context.ProductTypes.ToListAsync() on i.ProductTypeId equals l.Id
 
-                        select new ProductDetailView
+                        select new ProductDetailDto
                         {
                             Id = a.Id,
-                            Ma = a.Code,
+                            Code = a.Code,
                             ImportPrice = a.ImportPrice,
                             Price = a.Price,
                             Status = a.Status,
+                            Upgrade = a.Upgrade,
                             Description = a.Description,
                             AvailableQuantity = soLuongProductDetail,
                             ThongSoRam = b.ThongSo,
@@ -105,7 +107,7 @@ namespace Shop_API.Repository
                             ChatLieuManHinh = g.ChatLieu,
                             NameProduct = i.Name,
                             NameProductType = l.Name,
-                            NameManufacturer = k.Name,
+                            NameManufacturer = k.Name
                             //  LinkImage = h.LinkImage
                         }
 
@@ -115,7 +117,7 @@ namespace Shop_API.Repository
 
         public async Task<int> GetCountProductDetail()
         {
-            List<ProductDetailView> listProductDetails = new List<ProductDetailView>();
+            List<ProductDetailDto> listProductDetails = new List<ProductDetailDto>();
             listProductDetails = (
                         from a in await _context.ProductDetails.ToListAsync()
                         join b in await _context.Rams.ToListAsync() on a.RamId equals b.Id
@@ -129,10 +131,10 @@ namespace Shop_API.Repository
                         join k in await _context.Manufacturers.ToListAsync() on i.ManufacturerId equals k.Id
                         join l in await _context.ProductTypes.ToListAsync() on i.ProductTypeId equals l.Id
                         join m in await _context.Serials.ToListAsync() on a.Id equals m.ProductDetailId
-                        select new ProductDetailView
+                        select new ProductDetailDto
                         {
                             Id = a.Id,
-                            Ma = a.Code,
+                            Code = a.Code,
                             ImportPrice = a.ImportPrice,
                             Price = a.Price,
                             Status = a.Status,
@@ -161,6 +163,48 @@ namespace Shop_API.Repository
                ).ToList();
             int soLuong = listProductDetails.Where(x => x.Status > 0).Count();
             return soLuong;
+        }
+
+        public async Task<IEnumerable<ProductDetailDto>> GetProductDetail(string? search, double? from, double? to, string? sortBy, int page = 1)
+        {
+            var listProductDetail = await GetAllProductDetail();
+            #region Filltering
+            if (!string.IsNullOrEmpty(search))
+            {
+                listProductDetail = listProductDetail.Where(x => x.NameProduct.Contains(search));
+            }
+            if (from.HasValue)
+            {
+                listProductDetail = listProductDetail.Where(x => x.Price >= from);
+            }
+            if (to.HasValue)
+            {
+                listProductDetail = listProductDetail.Where(x => x.Price <= to);
+            }
+            #endregion
+            #region Sorting
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "nameproduct_desc":
+                        listProductDetail = listProductDetail.OrderByDescending(x => x.NameProduct);
+                        break;
+                    case "price_asc":
+                        listProductDetail = listProductDetail.OrderBy(x => x.Price);
+                        break;
+                    case "price_desc":
+                        listProductDetail = listProductDetail.OrderByDescending(x => x.Price);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            #endregion
+            #region Paging
+            listProductDetail = listProductDetail.Skip((page - 1) * Page_Size).Take(Page_Size);
+            #endregion
+            return listProductDetail;
         }
 
         //public async Task<ProductDetailView> GetAllProductDetailById(Guid id)

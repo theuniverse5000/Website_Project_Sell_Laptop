@@ -28,6 +28,12 @@ namespace Shop_API.Controllers
             _reponse.Result = await _repository.GetAllProductDetail();
             return Ok(_reponse);
         }
+        [HttpGet("GetProductDetailsFSP")]
+        public async Task<IActionResult> GetProductDetailsFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            _reponse.Result = await _repository.GetProductDetail(search, from, to, sortBy, page);
+            return Ok(_reponse);
+        }
         [HttpGet("GetById")]
         public async Task<IActionResult> GetProductDetailById(Guid id)
         {

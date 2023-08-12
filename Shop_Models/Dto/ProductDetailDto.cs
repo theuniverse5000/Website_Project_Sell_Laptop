@@ -1,13 +1,14 @@
-﻿namespace Shop_Models.ViewModels
+﻿namespace Shop_Models.Dto
 {
-    public class ProductDetailView
+    public class ProductDetailDto
     {
         public Guid Id { get; set; }
-        public string? Ma { get; set; }
+        public string? Code { get; set; }
         public double ImportPrice { get; set; }
         public double Price { get; set; }
         public int AvailableQuantity { get; set; }
         public int Status { get; set; }
+        public string? Upgrade { get; set; }
         public string? Description { get; set; }
         public Guid IdProduct { get; set; }
         public Guid IdColor { get; set; }
