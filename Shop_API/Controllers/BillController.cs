@@ -19,9 +19,10 @@ namespace Shop_API.Controllers
         private readonly ReponseDto _reponse;
         private static Guid getUserId;  // Tạo 1 biết static phạm vi private dùng trong controller
         private static IEnumerable<CartItemDto>? cartItem;
+        private readonly IConfiguration _config;
         public BillController(IBillRepository billRepository, IBillDetailRepository billDetailRepository,
             IProductDetailRepository productDetailRepository, IUserRepository userRepository,
-            ICartRepository cartRepository, IVoucherRepository voucherRepository)
+            ICartRepository cartRepository, IVoucherRepository voucherRepository, IConfiguration config)
         {
             _billRepository = billRepository;
             _billDetailRepository = billDetailRepository;
@@ -30,11 +31,24 @@ namespace Shop_API.Controllers
             _userRepository = userRepository;
             _reponse = new ReponseDto();
             _voucherRepository = voucherRepository;
+            _config = config;
         }
         [Authorize]
         [HttpGet("GetAllBills")]
         public async Task<ReponseDto> GetAllBills()
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                //  return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                //return Unauthorized();
+            }
             var bill = await _billRepository.GetAll();
             if (bill == null)
             {

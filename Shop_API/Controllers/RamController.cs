@@ -9,18 +9,45 @@ namespace Shop_API.Controllers
     public class RamController : ControllerBase
     {
         private readonly IRamRepository _repository;
-        public RamController(IRamRepository repository)
+        private readonly IConfiguration _config;
+        public RamController(IRamRepository repository, IConfiguration config)
         {
             _repository = repository;
+            _config = config;
+
         }
         [HttpGet]
         public async Task<IActionResult> GetAllRam()
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             return Ok(await _repository.GetAllRams());
         }
         [HttpPost]
         public async Task<IActionResult> CreateRam(Ram obj)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             obj.Id = Guid.NewGuid();
             if (await _repository.Create(obj))
             {
@@ -31,6 +58,18 @@ namespace Shop_API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateRam(Ram obj)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _repository.Update(obj))
             {
                 return Ok("Sửa thành công");
@@ -40,6 +79,18 @@ namespace Shop_API.Controllers
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteRam(Guid id)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _repository.Delete(id))
             {
                 return Ok("Xóa thành công");

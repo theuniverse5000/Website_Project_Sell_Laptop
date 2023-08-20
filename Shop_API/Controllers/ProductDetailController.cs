@@ -7,36 +7,82 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductDetailController : ControllerBase
+    public class ProductDetailController : LaptopShopController
     {
         private readonly IProductDetailRepository _repository;
         private readonly ReponseDto _reponse;
-        public ProductDetailController(IProductDetailRepository repository)
+        private readonly IConfiguration _config;
+        public ProductDetailController(IProductDetailRepository repository, IConfiguration config)
         {
             _repository = repository;
             _reponse = new ReponseDto();
+            _config = config;
         }
         [HttpGet("GetAllNoJoin")]
         public async Task<IActionResult> GetAlls()
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             _reponse.Result = await _repository.GetAll();
             return Ok(_reponse);
         }
         [HttpGet("GetAllJoin")]
         public async Task<IActionResult> GetAllProductDetails()
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             _reponse.Result = await _repository.GetAllProductDetail();
             return Ok(_reponse);
         }
         [HttpGet("GetProductDetailsFSP")]
         public async Task<IActionResult> GetProductDetailsFSP(string? search, double? from, double? to, string? sortBy, int page)
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             _reponse.Result = await _repository.GetProductDetail(search, from, to, sortBy, page);
             return Ok(_reponse);
         }
         [HttpGet("GetById")]
         public async Task<IActionResult> GetProductDetailById(Guid id)
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             var list = await _repository.GetAllProductDetail();
             var proX = list.Where(x => x.Id == id);
             return Ok(proX);
@@ -44,6 +90,17 @@ namespace Shop_API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProductDetail(ProductDetail obj)
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             obj.Id = Guid.NewGuid();
             if (await _repository.Create(obj))
             {
@@ -58,6 +115,17 @@ namespace Shop_API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateProductDetail(ProductDetail obj)
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _repository.Update(obj))
             {
                 _reponse.Result = obj;
@@ -71,6 +139,17 @@ namespace Shop_API.Controllers
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteProductDetail(Guid id)
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _repository.Delete(id))
             {
                 return Ok("Xóa thành công");

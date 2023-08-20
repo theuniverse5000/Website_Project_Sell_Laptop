@@ -10,14 +10,36 @@ namespace Shop_API.Controllers
     {
         private readonly IEmailService _emailService;
         private readonly ReponseDto _reponse;
-        public UtilityController(IEmailService emailService)
+        private readonly IConfiguration _config;
+        public UtilityController(IEmailService emailService, IConfiguration config)
         {
             _emailService = emailService;
             _reponse = new ReponseDto();
+            _config = config;
         }
         [HttpPost]
         public ReponseDto SendEmail(EmailDto request)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                _reponse.Result = null;
+                _reponse.IsSuccess = false;
+                _reponse.Code = 404;
+                _reponse.Message = "Không có quyền";
+                return _reponse;
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                _reponse.Result = null;
+                _reponse.IsSuccess = false;
+                _reponse.Code = 404;
+                _reponse.Message = "Không có quyền";
+                return _reponse;
+            }
             if (_emailService.SendEmail(request))
             {
                 _reponse.Result = request;

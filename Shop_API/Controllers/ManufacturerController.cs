@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
 
@@ -10,16 +9,30 @@ namespace Shop_API.Controllers
     public class ManufacturerController : ControllerBase
     {
         private readonly IManufacturerRepository _manufacturer;
+        private readonly IConfiguration _config;
 
-        public ManufacturerController(IManufacturerRepository manufacturerRepository)
+        public ManufacturerController(IManufacturerRepository manufacturerRepository, IConfiguration config)
         {
             _manufacturer = manufacturerRepository;
+            _config = config;
         }
 
         [HttpGet]
 
         public async Task<IActionResult> GetAllManu()
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             return Ok(await _manufacturer.GetAll());
         }
 
@@ -27,6 +40,18 @@ namespace Shop_API.Controllers
 
         public async Task<IActionResult> Create(Manufacturer obj)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             obj.Id = Guid.NewGuid();
             if (await _manufacturer.Create(obj))
             {
@@ -38,6 +63,18 @@ namespace Shop_API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(Manufacturer x)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _manufacturer.Update(x))
             {
                 return Ok("Sửa thành công");
@@ -47,6 +84,18 @@ namespace Shop_API.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _manufacturer.Delete(id))
             {
                 return Ok("Xóa thành công");

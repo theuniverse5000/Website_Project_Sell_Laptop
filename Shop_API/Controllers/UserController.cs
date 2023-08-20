@@ -11,14 +11,34 @@ namespace Shop_API.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly ReponseDto _reponseDto;
-        public UserController(IUserRepository userRepository)
+        private readonly IConfiguration _config;
+        public UserController(IUserRepository userRepository, IConfiguration config)
         {
             _userRepository = userRepository;
             _reponseDto = new ReponseDto();
+            _config = config;
         }
         [HttpGet]
         public async Task<ReponseDto> GetAllUser()
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Bạn không có quyền";
+                _reponseDto.Code = 401;
+                return _reponseDto;
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Bạn không có quyền";
+                _reponseDto.Code = 401;
+                return _reponseDto;
+            }
             var list = await _userRepository.GetAllUsers();
             if (list != null)
             {
@@ -38,6 +58,23 @@ namespace Shop_API.Controllers
         [HttpPost]
         public async Task<ReponseDto> CreateUser(User obj)
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Bạn không có quyền";
+                _reponseDto.Code = 401;
+                return _reponseDto;
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Bạn không có quyền";
+                _reponseDto.Code = 401;
+                return _reponseDto;
+            }
             obj.Id = Guid.NewGuid();
             if (await _userRepository.Create(obj))
             {
@@ -56,6 +93,23 @@ namespace Shop_API.Controllers
         [HttpPut]
         public async Task<ReponseDto> UpdateUser(User obj)
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Bạn không có quyền";
+                _reponseDto.Code = 401;
+                return _reponseDto;
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Bạn không có quyền";
+                _reponseDto.Code = 401;
+                return _reponseDto;
+            }
             if (await _userRepository.Update(obj))
             {
                 _reponseDto.Result = obj;
@@ -75,6 +129,23 @@ namespace Shop_API.Controllers
         [HttpDelete]
         public async Task<ReponseDto> DeleteUser(Guid id)
         {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Bạn không có quyền";
+                _reponseDto.Code = 401;
+                return _reponseDto;
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                _reponseDto.IsSuccess = false;
+                _reponseDto.Message = "Bạn không có quyền";
+                _reponseDto.Code = 401;
+                return _reponseDto;
+            }
             if (await _userRepository.Delete(id))
             {
 

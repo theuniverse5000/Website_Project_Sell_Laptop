@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
 
@@ -10,20 +9,45 @@ namespace Shop_API.Controllers
     public class CpuController : Controller
     {
         private readonly ICpuRepository _cpuRepository;
-
-        public CpuController(ICpuRepository cpuRepository)
+        private readonly IConfiguration _config;
+        public CpuController(ICpuRepository cpuRepository, IConfiguration config)
         {
             _cpuRepository = cpuRepository;
+            _config = config;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllCpu()
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             return Ok(await _cpuRepository.GetAllCpus());
         }
         [HttpPost]
         public async Task<IActionResult> CreateCpu(Cpu obj)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             obj.Id = Guid.NewGuid();
             if (await _cpuRepository.Create(obj))
             {
@@ -34,6 +58,18 @@ namespace Shop_API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateCpu(Cpu obj)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _cpuRepository.Update(obj))
             {
                 return Ok("Sửa thành công");
@@ -43,6 +79,18 @@ namespace Shop_API.Controllers
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteCpu(Guid id)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _cpuRepository.Delete(id))
             {
                 return Ok("Xóa thành công");

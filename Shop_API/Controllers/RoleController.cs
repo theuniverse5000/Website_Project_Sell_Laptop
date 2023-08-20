@@ -9,20 +9,45 @@ namespace Shop_API.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleRepository _roleRepository;
-
-        public RoleController(IRoleRepository roleRepository)
+        private readonly IConfiguration _config;
+        public RoleController(IRoleRepository roleRepository, IConfiguration config)
         {
             _roleRepository = roleRepository;
+            _config = config;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllRoles()
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             return Ok(await _roleRepository.GetAllRoles());
         }
         [HttpPost]
         public async Task<IActionResult> CreateRole(Role obj)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             obj.Id = Guid.NewGuid();
             if (await _roleRepository.Create(obj))
             {
@@ -33,6 +58,18 @@ namespace Shop_API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateRole(Role obj)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _roleRepository.Update(obj))
             {
                 return Ok("Sửa thành công");
@@ -42,6 +79,18 @@ namespace Shop_API.Controllers
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteRole(Guid id)
         {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             if (await _roleRepository.Delete(id))
             {
                 return Ok("Xóa thành công");

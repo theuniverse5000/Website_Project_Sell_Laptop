@@ -36,21 +36,22 @@ namespace Shop_API.Repository
 
         public async Task<bool> Delete(Guid idobj)
         {
-            var manu = await dbContext.Manufacturers.FindAsync(idobj);
+            var manu = await dbContext.Manufacturers.FindAsync(obj.Id);
             if (manu == null)
             {
                 return false;
             }
             try
             {
-                dbContext.Manufacturers.Remove(manu);
+
+                manu.Status = 0;
+                dbContext.Manufacturers.Update(manu);
                 await dbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
             {
                 return false;
-
             }
         }
 
