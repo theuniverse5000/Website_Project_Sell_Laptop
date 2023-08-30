@@ -52,6 +52,8 @@ builder.Services.AddTransient<IBillDetailRepository, BillDetailRepository>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<ISerialDaBanRepository, SerialDaBanRepository>();
 builder.Services.AddTransient<IProductTypeRepository, ProductTypeRepository>();
+builder.Services.AddTransient<IGiamGiaHangLoatServices, GiamGiaHangLoatServices>();
+
 
 builder.Services.AddTransient<ICartService, CartService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
