@@ -11,38 +11,6 @@
     <link rel="stylesheet" href="./css/style.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-
-    </style>
-
-    <script>
-        var app = angular.module("myApp", ["ngRoute"]);
-
-        app.config(function ($routeProvider, $locationProvider) {
-            $locationProvider.hashPrefix("");
-
-
-            $routeProvider
-                .when("/", {
-                    templateUrl: "main.html"
-                })
-                .when("/login", {
-                    templateUrl: "login.html"
-                })
-                .when("/sign_up", {
-                    templateUrl: "sign_up.html"
-                })
-                .when("/cart", {
-                    templateUrl: "cart.html"
-                })
-                .otherwise({
-                    redirectTo: "/"
-
-                });
-
-        });
-    </script>
 </head>
 <body>
     <div class="Nav container-fluid">
