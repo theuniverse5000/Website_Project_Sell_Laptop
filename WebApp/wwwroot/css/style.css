@@ -1,0 +1,151 @@
+
+@media screen and (max-width: 768px) {
+    .col-sm-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .col-sm-3 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+.text-align-center {
+    text-align: center;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+/* Adjust carousel control buttons for smaller screens */
+
+
+/* Make product boxes responsive */
+
+@media (min-width: 768px)
+.col-md-4 {
+    flex: 0 0 auto;
+    width: 33.33333333%;
+}
+@media screen and (max-width: 768px) {
+    .List-products .hot-product {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+#breadcrumb {
+    font-size: larger;
+}
+
+    #breadcrumb a {
+        color: rgb(179, 166, 166);
+        text-decoration: none;
+    }
+
+.Buy-add-product-to-cart {
+    margin-top: 15px;
+    background-color: #FF4242;
+    border-radius: 5px;
+    height: 90px;
+    text-decoration: none;
+    padding-top: 10px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.Payemnt-methods {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+    .Payemnt-methods a {
+        text-decoration: none;
+        display: inline-block;
+    }
+
+.method {
+    height: 72px;
+    width: 224px;
+    background-color: #73BBFE;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    .method b {
+        color: white;
+        font-size: large !important;
+    }
+
+    .method p {
+        color: white;
+    }
+
+.buy-policies {
+    list-style: none;
+    padding-left: 0 !important;
+    font-size: larger;
+}
+
+    .buy-policies li {
+        margin-bottom: 4px;
+    }
+
+.buying-polici-title {
+    border: 1px solid #f2e6e6;
+    border-radius: 10px;
+}
+
+.configuration-block-table {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid rgb(227, 210, 210);
+    border-radius: 10px;
+}
+
+.configratuion-table td {
+    font-size: medium;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+}
+
+    .quantity input {
+        width: 40px;
+        text-align: center;
+        border: 0.5px solid rgb(148, 144, 144);
+    }
+
+    .quantity .btn {
+        padding: 5px;
+        font-size: 12px;
+        text-align: center;
+        width: 20px;
+        line-height: 10px;
+        border-radius: 50%;
+        border: none;
+        color: #000;
+        cursor: pointer;
+    }
+
+        .quantity .btn:hover {
+            background-color: #aaa;
+        }
+
+.product-in-cart-info img {
+    max-width: 95px;
+    max-height: 80px;
+}
+
+
+
+
