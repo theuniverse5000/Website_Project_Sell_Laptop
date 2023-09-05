@@ -13,6 +13,14 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="wwwroot\bai_dang_images\" />
+    <Folder Include="wwwroot\product_images\" />
+    <Folder Include="wwwroot\user_images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shop_API\Shop_API.csproj" />
+    <ProjectReference Include="..\Shop_Models\Shop_Models.csproj" />
   </ItemGroup>
 
 </Project>
