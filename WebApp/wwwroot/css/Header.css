@@ -1,0 +1,115 @@
+﻿/*Navigation*/
+.Nav {
+    height: 176px;
+    margin-bottom: 10px;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.Logo-img {
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
+    .Logo-img img {
+        max-width: 100%;
+        max-height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+.Top-head {
+    padding-top: 10px;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .search-container i {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translate(0, -50%);
+        color: #999;
+    }
+
+.search-input {
+    padding-left: 25px;
+    border-radius: 5px;
+    border: none;
+    width: 584px;
+    height: 45px;
+}
+
+.Hot-Line i,
+.Phone-number i,
+.User-Infor i {
+    color: white;
+    font-size: 40px;
+}
+
+.Hot-Line,
+.Phone-number,
+.User-Infor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+    .Hot-Line span,
+    .Phone-number span,
+    .User-Infor span {
+        font-size: 15px;
+        color: white;
+        margin-left: 5px;
+        font-weight: bold;
+    }
+/* Phần thanh chọn loại sản phẩm*/
+.Menu {
+    width: 1440px;
+    height: 85px;
+    background-color: rgb(64, 69, 73,0.6);
+    margin: auto;
+    border-radius: 10px;
+}
+
+.Menu-list {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 10px; /* Khoảng cách giữa các item */
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Đảm bảo chiều cao của Menu-list */
+}
+
+.Menu-list {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.item span {
+    font-weight: bold;
+    color: #ffffff;
+    font-size: larger;
+}
+.item a {
+    text-decoration: none;
+}
+.item {
+    padding: 10px;
+    text-align: center;
+}

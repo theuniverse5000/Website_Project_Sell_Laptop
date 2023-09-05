@@ -1,0 +1,118 @@
+﻿@media (min-width: 768px) .col-md-4 {
+    flex: 0 0 auto;
+    width: 33.33333333%;
+}
+
+#Detail {
+    width: 1440px;
+    margin: auto;
+}
+
+    #Detail b {
+        font-size: xx-large;
+    }
+
+
+.Product-main-img {
+    max-width: 460px;
+    max-height: 460px;
+}
+.Product-imgs img {
+    max-width: 150px;
+    max-height: 150px;
+    display: inline-block;
+}
+
+.Product-imgs {
+    max-width: 460px;
+    margin-top: 20px;
+    display: block;
+}
+
+
+.giaKhuyenMai {
+    font-size: xx-large;
+}
+
+.giaGoc {
+    font-size: x-large;
+}
+
+.details {
+    color: rgb(93, 97, 97);
+    text-decoration: underline;
+}
+
+.giaTien {
+    color: red;
+    font-size: large;
+}
+
+.box_promotion {
+    position: absolute;
+    margin-top: -19px;
+    margin-left: 20px;
+    padding: 6px 15px;
+    color: white;
+    background: #16c60c;
+    text-transform: uppercase;
+    border-radius: 30px;
+}
+
+.fa-gift {
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.giftBonus {
+    padding-top: 25px;
+    margin-left: 0;
+    padding-left: 25px;
+}
+
+.title-buying-policy {
+    font-size: x-large;
+    color: rgb(255, 0, 0);
+}
+
+.thongSoKyThuat {
+    margin-left: 5px;
+    color: red;
+}
+
+.product-configuration-block {
+    width: 225px;
+    border: 1px solid rgb(231, 231, 231);
+    display: inline-block;
+    min-height: 125px;
+    padding-top: 15px;
+    margin-top: 2px;
+    border-radius: 0.3rem;
+    position: relative;
+}
+.other-product-configuration {
+    max-width: 460px;
+}
+.block-check {
+    position: absolute;
+    top: 5%;
+    left: 2%;
+}
+.block-content {
+    padding: 10px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.promotion {
+    border: 1px solid #16c60c;
+    margin-top: 35px;
+    border-radius: 5px;
+}
+.product-configuration-block span {
+    font-size: smaller;
+    font-weight: 600;
+}

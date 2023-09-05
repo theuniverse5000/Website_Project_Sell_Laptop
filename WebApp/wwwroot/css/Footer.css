@@ -1,0 +1,23 @@
+﻿.Footer {
+    margin-top: 15px;
+}
+
+.Hot-Line-Box {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 400px;
+    height: 80px;
+    background-color: #73BBFE;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    border-radius: 10px;
+}
+.Footer span {
+    font-weight: bold;
+    text-align: center;
+    font-size: larger;
+    color: #ffffff;
+}
