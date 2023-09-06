@@ -33,21 +33,21 @@ namespace Shop_API.Controllers
             _voucherRepository = voucherRepository;
             _config = config;
         }
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet("GetAllBills")]
-        public async Task<ReponseDto> GetAllBills()
+        public async Task<IActionResult> GetAllBills()
         {
 
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
             {
-                //  return Unauthorized();
+                return Unauthorized();
             }
 
             var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
             if (keyDomain != apiKey.ToLower())
             {
-                //return Unauthorized();
+                return Unauthorized();
             }
             var bill = await _billRepository.GetAll();
             if (bill == null)
@@ -56,13 +56,13 @@ namespace Shop_API.Controllers
                 _reponse.IsSuccess = false;
                 _reponse.Code = 404;
                 _reponse.Message = "Lỗi";
-                return _reponse;
+                return Ok(_reponse);
             }
             else
             {
                 _reponse.Result = bill;
                 _reponse.Code = 200;
-                return _reponse;
+                return Ok(_reponse);
             }
 
         }
