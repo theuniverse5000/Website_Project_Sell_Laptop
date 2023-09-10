@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Shop_Models.Entities.Bill>
+
+@{
+    ViewData["Title"] = "Thống kê";
+    List<int> billCount = new List<int>();
+    List<string> dayInWeek = new List<string>();
+    for (int i = 6; i >= 0; i--)
+    {
+        var count = Model.Where(x => x.CreateDate.Date == DateTime.Now.AddDays(-i).Date && x.Status == 1).ToList().Count();
+        billCount.Add(count);
+        var day = DateTime.Now.AddDays(-i).Date.ToString().Split(" ");
+        dayInWeek.Add(day[0]);
+    }
+}
+
+<h1 style="text-align:center">THỐNG KÊ</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã hóa đơn
+            </th>
+            <th>
+                Ngày tạo
+            </th>
+            <th>
+                Người mua
+            </th>
+            <th>
+                SĐT
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Trạng thái
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InvoiceCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                @if (item.Status == 1)
+                {
+                    <td>Đã thanh toán</td>
+                }
+                else
+                {
+                    <td>Chưa thanh toán</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="card chart-container">
+    <canvas id="chart"></canvas>
+</div>
+
+<style>
+    .chart-container {
+        width: 100%;
+        height: 100%;
+        margin: auto;
+    }
+</style>
+
+<script>
+    var currentTime = new Date();
+    var listData = @Html.Raw(Json.Serialize(billCount));
+    var listLabel = @Html.Raw(Json.Serialize(dayInWeek));
+
+    var ctx = document.getElementById("chart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: listLabel,
+            datasets: [{
+                label: 'Số HĐ đã thanh toán',
+                backgroundColor: 'rgba(161, 198, 247, 1)',
+                borderColor: 'rgb(47, 128, 237)',
+                data: listData,
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                    }
+                }]
+            }
+        },
+    });
+</script>
