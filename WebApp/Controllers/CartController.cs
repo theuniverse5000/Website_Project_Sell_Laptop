@@ -4,9 +4,9 @@ namespace WebApp.Controllers
 {
     public class CartController : Controller
     {
-        public IActionResult Cart()
+        public IActionResult UserCart()
         {
-            return View();
+            return PartialView("_UserCart");
         }
     }
 }
