@@ -93,10 +93,9 @@ body {
 }
 
 .Menu-list {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    display: flex;
     grid-gap: 10px;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     height: 100%;
 }

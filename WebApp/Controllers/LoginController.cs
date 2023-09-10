@@ -5,6 +5,6 @@ public class LoginController : Controller
 {
     public IActionResult Login()
     {
-        return View("_Login");
+        return View("Login");
     }
 }
