@@ -12,8 +12,8 @@ using Shop_API.AppDbContext;
 namespace Shop_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230729173904_InitToDatabase")]
-    partial class InitToDatabase
+    [Migration("20230911034841_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,8 +81,8 @@ namespace Shop_API.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
-                    b.Property<Guid>("SerialDaBanId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("SerialNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -90,8 +90,6 @@ namespace Shop_API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BillId");
-
-                    b.HasIndex("SerialDaBanId");
 
                     b.ToTable("BillDetail");
                 });
@@ -151,6 +149,9 @@ namespace Shop_API.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CartId");
@@ -180,6 +181,39 @@ namespace Shop_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Color");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.Contact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CodeManagePost")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Contact");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Cpu", b =>
@@ -323,6 +357,35 @@ namespace Shop_API.Migrations
                     b.HasIndex("ViDiemId");
 
                     b.ToTable("LichSuTieuDiem");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.ManagePost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LinkImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ManagePost");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Manufacturer", b =>
@@ -606,24 +669,6 @@ namespace Shop_API.Migrations
                     b.ToTable("Serial");
                 });
 
-            modelBuilder.Entity("Shop_Models.Entities.SerialDaBan", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("SerialNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SerialDaBan");
-                });
-
             modelBuilder.Entity("Shop_Models.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -738,15 +783,7 @@ namespace Shop_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shop_Models.Entities.SerialDaBan", "SerialDaBan")
-                        .WithMany("BillDetails")
-                        .HasForeignKey("SerialDaBanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Bill");
-
-                    b.Navigation("SerialDaBan");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Cart", b =>
@@ -1012,11 +1049,6 @@ namespace Shop_API.Migrations
             modelBuilder.Entity("Shop_Models.Entities.Screen", b =>
                 {
                     b.Navigation("ProductDetails");
-                });
-
-            modelBuilder.Entity("Shop_Models.Entities.SerialDaBan", b =>
-                {
-                    b.Navigation("BillDetails");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.User", b =>

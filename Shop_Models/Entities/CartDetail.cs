@@ -11,6 +11,7 @@ namespace Shop_Models.Entities
         public Guid CartId { get; set; }
         public Guid ProductDetailId { get; set; }
         public int Quantity { get; set; }
+        public int Status { get; set; }
         public virtual Cart? Cart { get; set; }
         public virtual ProductDetail? ProductDetail { get; set; }
 

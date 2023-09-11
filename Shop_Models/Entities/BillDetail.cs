@@ -11,8 +11,7 @@ namespace Shop_Models.Entities
         public float Price { get; set; }
         public int Status { get; set; }
         public Guid BillId { get; set; }
-        public Guid SerialDaBanId { get; set; }
+        public string? SerialNumber { get; set; }
         public virtual Bill? Bill { get; set; }
-        public virtual SerialDaBan? SerialDaBan { get; set; }
     }
 }
