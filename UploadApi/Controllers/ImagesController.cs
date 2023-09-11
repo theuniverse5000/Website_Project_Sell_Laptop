@@ -21,7 +21,7 @@ namespace UploadApi.Controllers
 
 		[HttpPost]
 		[Route("taianh")]
-		public async Task<IActionResult> taianh(IFormFile file, string objectType, Guid? objectId, string imageCode)
+		public async Task<IActionResult> TaiAnh(IFormFile file, string objectType, Guid? objectId, string imageCode)
 		{
 			if (file == null)
 			{
