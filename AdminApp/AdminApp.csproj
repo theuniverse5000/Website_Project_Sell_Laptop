@@ -283,4 +283,15 @@
     <None Include="wwwroot\assets\scss\soft-ui-dashboard\_variables.scss" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shop_Models\Shop_Models.csproj" />
+  </ItemGroup>
+
 </Project>

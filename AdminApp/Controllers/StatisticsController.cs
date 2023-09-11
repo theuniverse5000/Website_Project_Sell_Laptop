@@ -1,21 +1,19 @@
-﻿using Shop_API.AppDbContext;
-using Shop_Models.Entities;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using static System.Net.WebRequestMethods;
+using Shop_Models.Entities;
 
 namespace AdminApp.Controllers
 {
     public class StatisticsController : Controller
     {
         private readonly ILogger<StatisticsController> _logger;
-        ApplicationDbContext _dbContext;
+
         HttpClient http;
 
         public StatisticsController(ILogger<StatisticsController> logger)
         {
             _logger = logger;
-            _dbContext = new ApplicationDbContext();
+
             http = new HttpClient();
         }
 
