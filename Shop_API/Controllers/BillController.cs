@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
+using Shop_API.Service.IService;
 using Shop_Models.Dto;
 
 namespace Shop_API.Controllers
@@ -11,6 +12,7 @@ namespace Shop_API.Controllers
     public class BillController : ControllerBase
     {
         private readonly IBillRepository _billRepository;
+        private readonly IBillService _billService;
         private readonly IBillDetailRepository _billDetailRepository;
         private readonly IProductDetailRepository _productDetailRepository;
         private readonly IUserRepository _userRepository;
@@ -22,7 +24,8 @@ namespace Shop_API.Controllers
         private readonly IConfiguration _config;
         public BillController(IBillRepository billRepository, IBillDetailRepository billDetailRepository,
             IProductDetailRepository productDetailRepository, IUserRepository userRepository,
-            ICartRepository cartRepository, IVoucherRepository voucherRepository, IConfiguration config)
+            ICartRepository cartRepository, IVoucherRepository voucherRepository, IConfiguration config,
+            IBillService billService)
         {
             _billRepository = billRepository;
             _billDetailRepository = billDetailRepository;
@@ -32,13 +35,14 @@ namespace Shop_API.Controllers
             _reponse = new ReponseDto();
             _voucherRepository = voucherRepository;
             _config = config;
+            _billService = billService;
         }
         [AllowAnonymous]
         [HttpGet("GetAllBills")]
         public async Task<IActionResult> GetAllBills()
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
+            string? apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
             {
                 return Unauthorized();
@@ -70,7 +74,7 @@ namespace Shop_API.Controllers
         [HttpPost("CreateBill")]
         public async Task<IActionResult> CreateBill(string username, string maVoucher)
         {
-            return Ok();
+            return Ok(await _billService.CreateBill(username, maVoucher));
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Shop_API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitToDatabase : Migration
+    public partial class InitDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,6 +38,24 @@ namespace Shop_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Color", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contact",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CodeManagePost = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contact", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +103,22 @@ namespace Shop_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HardDrive", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ManagePost",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LinkImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ManagePost", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -169,19 +203,6 @@ namespace Shop_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Screen", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SerialDaBan",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SerialDaBan", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -464,7 +485,7 @@ namespace Shop_API.Migrations
                     Price = table.Column<float>(type: "real", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     BillId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SerialDaBanId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -473,12 +494,6 @@ namespace Shop_API.Migrations
                         name: "FK_BillDetail_Bill_BillId",
                         column: x => x.BillId,
                         principalTable: "Bill",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BillDetail_SerialDaBan_SerialDaBanId",
-                        column: x => x.SerialDaBanId,
-                        principalTable: "SerialDaBan",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -490,7 +505,8 @@ namespace Shop_API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -552,11 +568,6 @@ namespace Shop_API.Migrations
                 name: "IX_BillDetail_BillId",
                 table: "BillDetail",
                 column: "BillId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BillDetail_SerialDaBanId",
-                table: "BillDetail",
-                column: "SerialDaBanId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartDetail_CartId",
@@ -659,10 +670,16 @@ namespace Shop_API.Migrations
                 name: "CartDetail");
 
             migrationBuilder.DropTable(
+                name: "Contact");
+
+            migrationBuilder.DropTable(
                 name: "Image");
 
             migrationBuilder.DropTable(
                 name: "LichSuTieuDiem");
+
+            migrationBuilder.DropTable(
+                name: "ManagePost");
 
             migrationBuilder.DropTable(
                 name: "SanPhamGiamGia");
@@ -672,9 +689,6 @@ namespace Shop_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Bill");
-
-            migrationBuilder.DropTable(
-                name: "SerialDaBan");
 
             migrationBuilder.DropTable(
                 name: "Cart");

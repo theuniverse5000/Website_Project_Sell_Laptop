@@ -40,7 +40,7 @@ namespace Shop_API.Repository
             }
             try
             {
-                obj.Status = false;
+                obj.Status = 0;
                 _dbContext.Contacts.Update(obj);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -54,7 +54,7 @@ namespace Shop_API.Repository
         public async Task<List<Contact>> GetAllContacts()
         {
             var list = await _dbContext.Contacts.ToListAsync();
-            var listContact = list.Where(x => x.Status != false).ToList();
+            var listContact = list.Where(x => x.Status != 0).ToList();
             return listContact;
         }
 

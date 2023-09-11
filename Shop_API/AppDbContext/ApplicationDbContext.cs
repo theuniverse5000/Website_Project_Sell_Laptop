@@ -25,7 +25,6 @@ namespace Shop_API.AppDbContext
         public virtual DbSet<GiamGia> GiamGias { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Serial> Serials { get; set; }
-        public virtual DbSet<SerialDaBan> SerialDaBans { get; set; }
         public virtual DbSet<LichSuTieuDiem> LichSuTieuDiems { get; set; }
         public virtual DbSet<Manufacturer> Manufacturers { get; set; }
         public virtual DbSet<Product> Products { get; set; }
