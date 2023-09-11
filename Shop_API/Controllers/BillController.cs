@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
@@ -42,32 +43,34 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> GetAllBills()
         {
 
-            string? apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //string? apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             var bill = await _billRepository.GetAll();
-            if (bill == null)
-            {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = "Lỗi";
-                return Ok(_reponse);
-            }
-            else
-            {
-                _reponse.Result = bill;
-                _reponse.Code = 200;
-                return Ok(_reponse);
-            }
+            //if (bill == null)
+            //{
+            //    _reponse.Result = null;
+            //    _reponse.IsSuccess = false;
+            //    _reponse.Code = 404;
+            //    _reponse.Message = "Lỗi";
+            //    return Ok(_reponse);
+            //}
+            //else
+            //{
+            _reponse.Result = bill;
+            _reponse.Code = 200;
+            Log.Information("GetBill => {@_reponse}", _reponse);
+            return Ok(_reponse);
+
+            // }
 
         }
         [AllowAnonymous]
