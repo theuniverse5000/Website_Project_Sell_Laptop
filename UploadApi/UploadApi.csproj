@@ -14,6 +14,12 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="wwwroot\bai_dang_images\" />
+    <Folder Include="wwwroot\manufacturer_images\" />
+    <Folder Include="wwwroot\card_VGA_images\" />
+    <Folder Include="wwwroot\hard_drive_images\" />
+    <Folder Include="wwwroot\voucher_images\" />
+    <Folder Include="wwwroot\screen_images\" />
+    <Folder Include="wwwroot\ram_images\" />
     <Folder Include="wwwroot\product_images\" />
     <Folder Include="wwwroot\user_images\" />
   </ItemGroup>
