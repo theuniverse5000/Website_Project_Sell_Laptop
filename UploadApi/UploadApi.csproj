@@ -17,6 +17,7 @@
     <Folder Include="wwwroot\manufacturer_images\" />
     <Folder Include="wwwroot\card_VGA_images\" />
     <Folder Include="wwwroot\hard_drive_images\" />
+    <Folder Include="wwwroot\allPhotoUploaded\" />
     <Folder Include="wwwroot\voucher_images\" />
     <Folder Include="wwwroot\screen_images\" />
     <Folder Include="wwwroot\ram_images\" />
