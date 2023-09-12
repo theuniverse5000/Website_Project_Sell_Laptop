@@ -13,6 +13,12 @@ namespace Shop_API.Service
         private readonly IUserRepository _userRepository;
         private readonly ReponseDto _reponse;
         private static Guid getUserId;  // Tạo 1 biết static phạm vi private dùng trong controller
+        /*
+          Các trạng thái của cart detail
+         1: Trạng thái mặc định khi thêm sản phẩm vào giỏ hàng
+         2: Trạng thái chờ của sản phẩm khi thêm vào hóa đơn chi tiết
+         0: Trạng thái ẩn sản phẩm trong giỏ hàng
+         */
         public CartService(ICartRepository cartRepository, ICartDetailRepository cartDetailRepository,
             IProductDetailRepository productDetailRepository, IUserRepository userRepository)
         {
@@ -111,6 +117,7 @@ namespace Shop_API.Service
                         b.ProductDetailId = productDetailToCart.Id;
                         b.CartId = getUserId;
                         b.Quantity = 1;
+                        b.Status = 1;
                         if (await _cartDetailRepository.Create(b))
 
                         {
