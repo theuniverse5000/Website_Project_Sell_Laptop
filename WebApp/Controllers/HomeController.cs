@@ -13,5 +13,9 @@ namespace WebApp.Controllers
         {
             return RedirectToAction("Login","Login");
         }
+        public IActionResult ProductDetail()
+        {
+            return PartialView("_Detail");
+        }
     }
 }
