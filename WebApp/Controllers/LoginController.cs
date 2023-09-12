@@ -7,4 +7,8 @@ public class LoginController : Controller
     {
         return PartialView("_Login");   
     }
+    public IActionResult SignUp()
+    {
+        return PartialView("_SignUp");
+    }
 }
