@@ -103,6 +103,26 @@ namespace Shop_API.Service
                         _reponse.Code = 200;
                         _reponse.Message = "Đặt hàng thành công";
                         return _reponse;
+                        foreach (var x in cartItem)
+                        {
+                            var productDetailX = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == x.Id);
+                            if (productDetailX == null)
+                            {
+                                _reponse.IsSuccess = false;
+                                _reponse.Code = 404;
+                                _reponse.Message = "Sản phẩm không tồn tại";
+                                return _reponse;
+                            }
+                            for (int i = 0; i < x.Quantity; i++)
+                            {
+                                BillDetail billDetail = new BillDetail();
+                                billDetail.Id = Guid.NewGuid();
+                                billDetail.BillId = bill.Id;
+                                billDetail.SerialNumber = "Chưa có";
+                            }
+
+
+                        }
                     }
                     else
                     {
@@ -112,56 +132,7 @@ namespace Shop_API.Service
                         _reponse.Message = "Đặt hàng thất bại";
                         return _reponse;
                     }
-                    //if (await _billRepository.Create(bill))// Nếu tạo hóa đơn thành công thì tiếp tục 
-                    //{
-                    //    foreach (var x in cartItem)
-                    //    {
-                    //        var productDetailX = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == x.Id);
-                    //        if (productDetailX == null)
-                    //        {
-                    //            _reponse.IsSuccess = false;
-                    //            _reponse.Code = 404;
-                    //            _reponse.Message = "Sản phẩm không tồn tại";
-                    //            return _reponse;
-                    //        }
-                    //        int soLuongProductDetail = 0; //productDetailX.AvailableQuantity;
-                    //        if (soLuongProductDetail <= 0 || soLuongProductDetail < x.Quantity)
-                    //        {
-                    //            _reponse.Result = null;
-                    //            _reponse.IsSuccess = false;
-                    //            _reponse.Code = 404;
-                    //            _reponse.Message = "Số lượng sản phẩm trong kho không đủ";
-                    //            return _reponse;
-                    //        }
-                    //        BillDetail billDetail = new BillDetail();
-                    //        billDetail.Id = Guid.NewGuid();
-                    //        billDetail.BillId = bill.Id;
-                    //        //   billDetail.ProductDetailId = x.IdProductDetails;
-                    //        //   billDetail.Quantity = x.Quantity;
-                    //        billDetail.Price = x.Price;
-                    //        if (!await _billDetailRepository.CreateBillDetail(billDetail))
-                    //        {
-                    //            _reponse.Result = null;
-                    //            _reponse.IsSuccess = false;
-                    //            _reponse.Code = 404;
-                    //            _reponse.Message = "Lỗi khi thêm sản phẩm vào hóa đơn";
-                    //            return _reponse;
-                    //        }
-                    //    }
-                    //    _reponse.Result = null;
-                    //    _reponse.IsSuccess = true;
-                    //    _reponse.Code = 200;
-                    //    _reponse.Message = "Thành công";
-                    //    return _reponse;
-                    //}
-                    //else // Nếu không tạo được hóa đơn thì trả về kết quả
-                    //{
-                    //    _reponse.Result = null;
-                    //    _reponse.IsSuccess = false;
-                    //    _reponse.Code = 404;
-                    //    _reponse.Message = "Không thể tạo hóa đơn";
-                    //    return _reponse;
-                    //}
+
                 }
             }
             catch (Exception e)
