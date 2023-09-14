@@ -118,7 +118,7 @@ namespace Shop_API.Service
                                 BillDetail billDetail = new BillDetail();
                                 billDetail.Id = Guid.NewGuid();
                                 billDetail.BillId = bill.Id;
-                                billDetail.SerialNumber = "Chưa có";
+
                             }
 
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Shop_API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class InitDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -127,6 +127,7 @@ namespace Shop_API.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    LinkImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -458,34 +459,15 @@ namespace Shop_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Serial",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    ProductDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Serial", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Serial_ProductDetail_ProductDetailId",
-                        column: x => x.ProductDetailId,
-                        principalTable: "ProductDetail",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BillDetail",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    BillId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    BillId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -552,6 +534,31 @@ namespace Shop_API.Migrations
                         principalTable: "ViDiem",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Serial",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    ProductDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BillDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Serial", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Serial_BillDetail_BillDetailId",
+                        column: x => x.BillDetailId,
+                        principalTable: "BillDetail",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Serial_ProductDetail_ProductDetailId",
+                        column: x => x.ProductDetailId,
+                        principalTable: "ProductDetail",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -650,6 +657,11 @@ namespace Shop_API.Migrations
                 column: "ProductDetailId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Serial_BillDetailId",
+                table: "Serial",
+                column: "BillDetailId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Serial_ProductDetailId",
                 table: "Serial",
                 column: "ProductDetailId");
@@ -663,9 +675,6 @@ namespace Shop_API.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "BillDetail");
-
             migrationBuilder.DropTable(
                 name: "CartDetail");
 
@@ -688,9 +697,6 @@ namespace Shop_API.Migrations
                 name: "Serial");
 
             migrationBuilder.DropTable(
-                name: "Bill");
-
-            migrationBuilder.DropTable(
                 name: "Cart");
 
             migrationBuilder.DropTable(
@@ -703,13 +709,13 @@ namespace Shop_API.Migrations
                 name: "GiamGia");
 
             migrationBuilder.DropTable(
+                name: "BillDetail");
+
+            migrationBuilder.DropTable(
                 name: "ProductDetail");
 
             migrationBuilder.DropTable(
-                name: "Voucher");
-
-            migrationBuilder.DropTable(
-                name: "User");
+                name: "Bill");
 
             migrationBuilder.DropTable(
                 name: "CPU");
@@ -733,13 +739,19 @@ namespace Shop_API.Migrations
                 name: "Screen");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Voucher");
 
             migrationBuilder.DropTable(
                 name: "Manufacturer");
 
             migrationBuilder.DropTable(
                 name: "ProductType");
+
+            migrationBuilder.DropTable(
+                name: "Role");
         }
     }
 }
