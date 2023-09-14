@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Product Details";
+}
+
+
+
+<div id="example">
+    <div id="grid"></div>
+</div>
+
+@section scripts {
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "/ProductType/GetProductType",
+                            type: "GET",
+                            dataType: "json" 
+                        },
+                        create: {
+                            url: "/ProductType/CreateProductType",
+                            type: "POST",
+                            dataType: "json" 
+                        },
+                        update: {
+                            url: "/ProductType/UpdateProductType",
+                            type: "PUT",
+                            dataType: "json" 
+                        },
+                        destroy: {
+                            url: "/ProductDetail/DeleteProduct",
+                            type: "DELETE",
+                            dataType: "json" // Assuming the response is in JSON format
+                        }
+                    },
+                    schema: {
+                        data: "data", // Assuming the products array is under "data" in the response
+                        total: "total", // Assuming the total count is provided in "total" field
+                        model: {
+                            id: "id",
+                            fields: {
+                                id: { type: "guid" },
+                                name: { type: "string" },
+                                status: { type: "int" }
+                            }
+                        }
+                    },
+                    pageSize: 20
+                },
+                height: 550,
+                groupable: true,
+                sortable: true,
+                pageable: true,
+                toolbar: ["create"],
+                editable: "inline",
+                columns: [
+                    {
+                        field: "status",
+                        title: "Trạng thái"
+
+                    },
+                    {
+                        field: "name",
+                        title: "Tên"
+
+                    },
+                    {
+                        command: ["edit", "destroy"],
+                        title: "Hành động",
+                        width: "250px"
+                    }
+                ]
+
+            });
+        });
+    </script>
+}
