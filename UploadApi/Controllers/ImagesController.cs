@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shop_API.AppDbContext;
 using Shop_Models.Entities;
 using UploadApi.Services.IServices;
 
@@ -10,20 +11,23 @@ namespace UploadApi.Controllers
 	{
 		private readonly IImagesServies _imageUploadService;
 		private readonly IWebHostEnvironment _hostingEnvironment;
+		private readonly ApplicationDbContext _context;
 
-		public ImagesController(IImagesServies imageUploadService, IWebHostEnvironment hostingEnvironment)
+		public ImagesController(IImagesServies imageUploadService, IWebHostEnvironment hostingEnvironment, ApplicationDbContext context)
 		{
 			_imageUploadService = imageUploadService;
 			_hostingEnvironment = hostingEnvironment;
 			// Tạo thư mục lưu trữ nếu nó không tồn tại
 			Directory.CreateDirectory(_uploadFolder);
+
+			_context = context;
 		}
 
 
 
 		[HttpPost]
 		[Route("TaiAnh")]
-		public async Task<IActionResult> TaiAnh(IFormFile file, string objectType, Guid objectId, string imageCode)
+		public async Task<IActionResult> TaiAnh(IFormFile file, string objectType, Guid? objectId, string imageCode)
 		{
 			if (file == null)
 			{
@@ -90,11 +94,11 @@ namespace UploadApi.Controllers
 				return BadRequest("Kích thước tệp quá lớn. Vui lòng tải lên một tệp nhỏ hơn.");
 			}
 
-			if (objectId == Guid.Empty)
-			{
+			//if (objectId == Guid.Empty)
+			//{
 
-				return BadRequest("Thiếu sản phẩm chi tiết được chọn để thêm ảnh");
-			}
+			//	return BadRequest("Thiếu sản phẩm chi tiết được chọn để thêm ảnh");
+			//}
 			using (var stream = new FileStream(filePath, FileMode.Create))
 			{
 				await file.CopyToAsync(stream);
@@ -116,6 +120,130 @@ namespace UploadApi.Controllers
 
 			return Ok("Tải lên và lưu thành công.");
 		}
+
+
+
+
+
+
+
+
+
+
+		[HttpPost]
+		[Route("test")]
+		public async Task<IActionResult> test(IFormFile? file, string objectType, Guid? objectId, string imageCode)
+		{
+			if (file == null)
+			{
+				return BadRequest("Vui lòng chọn một tệp để tải lên và lưu.");
+			}
+
+			string objectFolder = null;
+			bool saveToDb = false;
+
+			switch (objectType)
+			{
+				case "a":
+					objectFolder = "product_images";
+
+					saveToDb = true;
+					break;
+				case "b":
+					objectFolder = "user_images";
+					saveToDb = false;
+					break;
+				case "c":
+					objectFolder = "bai_dang_images";
+					saveToDb = false;
+					break;
+				case "d":
+					objectFolder = "card_VGA_images";
+					saveToDb = false;
+					break;
+				case "e":
+					objectFolder = "hard_drive_images";
+					saveToDb = false;
+					break;
+				case "f":
+					objectFolder = "manufacturer_images"; saveToDb = false;
+					break;
+				case "g":
+					objectFolder = "ram_images"; saveToDb = false;
+					break;
+				case "h":
+					objectFolder = "screen_images"; saveToDb = false;
+					break;
+				case "i":
+					objectFolder = "voucher_images"; saveToDb = false;
+					break;
+
+				default:
+					return BadRequest("Loại đối tượng không hợp lệ.");
+			}
+
+			string basePath = _hostingEnvironment.WebRootPath;
+			string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+			string filePath = Path.Combine(basePath, objectFolder, fileName);
+
+			string fileExtension = Path.GetExtension(file.FileName).ToLower();
+			string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+			if (!allowedExtensions.Contains(fileExtension))
+			{
+				return BadRequest("Vui lòng tải lên một tệp ảnh hợp lệ.");
+			}
+
+			long maxFileSizeInBytes = 5 * 1024 * 1024;
+			if (file.Length > maxFileSizeInBytes)
+			{
+				return BadRequest("Kích thước tệp quá lớn. Vui lòng tải lên một tệp nhỏ hơn.");
+			}
+			var spct = await _context.ProductDetails.FindAsync(objectId);
+			if (objectType == "a" && spct == null)
+			{
+				return BadRequest("Thiếu sản phẩm chi tiết được chọn để thêm ảnh");
+
+			}
+			else if (objectType == "a" || spct != null)
+			{
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await file.CopyToAsync(stream);
+				}
+
+			}
+			else if (objectType != "a" && (objectId == null || objectId == Guid.Empty))
+			{
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await file.CopyToAsync(stream);
+				}
+			}
+
+
+
+
+			if (saveToDb)
+			{
+				var image = new Image
+				{
+					Id = Guid.NewGuid(),
+					Ma = imageCode,
+					LinkImage = $"/{objectFolder}/{fileName}",
+					ProductDetailId = (Guid)objectId,
+					Status = 1
+				};
+
+				// Lưu ảnh vào cơ sở dữ liệu ở đây (sử dụng dịch vụ _imageUploadService)
+				await _imageUploadService.SaveImageAsync(image);
+			}
+
+			return Ok(new { message = "Tải lên và lưu thành công." });
+		}
+
+
+
+
 
 
 		[HttpDelete]
@@ -165,7 +293,17 @@ namespace UploadApi.Controllers
 			string basePath = _hostingEnvironment.WebRootPath; // Đường dẫn gốc của thư mục wwwroot
 			string filePath = Path.Combine(basePath, objectFolder, imageName);
 
-			if (System.IO.File.Exists(filePath))
+			var image = _context.Images.FirstOrDefault(x => x.LinkImage == $"/{objectFolder}/{imageName}");
+			// tìm ảnh theo tên 
+			//var imagesByName = _context.Images.FirstOrDefault(x=>x.Ma==);
+			if (System.IO.File.Exists(filePath) && image != null)
+			{
+				_context.Images.Remove(image);
+				_context.SaveChanges();
+				System.IO.File.Delete(filePath);
+				return Ok("Xóa tệp ảnh thành công.");
+			}
+			else if (System.IO.File.Exists(filePath) && image == null)
 			{
 				System.IO.File.Delete(filePath);
 				return Ok("Xóa tệp ảnh thành công.");
@@ -181,7 +319,7 @@ namespace UploadApi.Controllers
 
 		[HttpPut]
 		[Route("update/{imageName}")]
-		public IActionResult UpdateImage(string imageName, string objectType,/* [FromForm]*/ IFormFile file)
+		public async Task<IActionResult> UpdateImage(string imageName, string objectType,/* [FromForm]*/ IFormFile file)
 		{
 			try
 			{
@@ -237,31 +375,55 @@ namespace UploadApi.Controllers
 				string filePath = Path.Combine(basePath, objectFolder, imageName);
 
 
+				string _newFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+				string NewfilePath = Path.Combine(basePath, objectFolder, _newFileName);
+
+				var image = _context.Images.FirstOrDefault(x => x.LinkImage == $"/{objectFolder}/{imageName}");
+				// tìm ảnh theo tên 
 
 				if (!System.IO.File.Exists(filePath))
 				{
 					return NotFound("Không tìm thấy tệp ảnh.");
 				}
 
-				if (System.IO.File.Exists(filePath))
+				if (System.IO.File.Exists(filePath) && image != null && objectType == "a")
 				{
-					System.IO.File.Create(filePath);
-					return Ok("chỉnh tệp ảnh thành công.");
+					image.LinkImage = $"/{objectFolder}/{_newFileName}";
+
+
+					// Lưu ảnh vào cơ sở dữ liệu ở đây (sử dụng dịch vụ _imageUploadService)
+
+					_context.Images.Update(image);
+					await _context.SaveChangesAsync();
+
+					// Xóa tệp ảnh cũ
+					System.IO.File.Delete(filePath);
+
+					// Lưu tệp ảnh mới
+					using (var stream = new FileStream(NewfilePath, FileMode.Create))
+					{
+						await file.CopyToAsync(stream);
+					}
+					//System.IO.File.Create(NewfilePath);
+					//return Ok("chỉnh tệp ảnh thành công.");
+				}
+				else
+				{
+					System.IO.File.Delete(filePath);
+
+					// Lưu tệp ảnh mới
+					using (var stream = new FileStream(NewfilePath, FileMode.Create))
+					{
+						await file.CopyToAsync(stream);
+					}
 				}
 
 
 
 
-				// Xóa tệp ảnh cũ
-				System.IO.File.Delete(filePath);
 
-				// Lưu tệp ảnh mới
-				using (var stream = new FileStream(filePath, FileMode.Create))
-				{
-					file.CopyTo(stream);
-				}
 
-				return Ok(new { Message = "Cập nhật ảnh thành công.", ImagePath = filePath });
+				return Ok(new { Message = "Cập nhật ảnh thành công.", ImagePath = NewfilePath });
 			}
 			catch (Exception ex)
 			{
@@ -399,7 +561,7 @@ namespace UploadApi.Controllers
 
 
 		[HttpPost]
-		[Route("uploadManyImages")]
+		[Route("uploadManyImages")] // NO NO
 		public async Task<IActionResult> UploadImages(List<IFormFile> files)
 		{
 			try
@@ -431,7 +593,7 @@ namespace UploadApi.Controllers
 			}
 		}
 
-		[HttpPost]
+		[HttpPost]// DONE wwwroot, not done db
 		[Route("uploadManyImageszszs")]
 		public async Task<IActionResult> UploadImagezzs(List<IFormFile> files)
 		{
@@ -472,6 +634,62 @@ namespace UploadApi.Controllers
 				return StatusCode(500, $"Lỗi: {ex.Message}");
 			}
 		}
+
+
+
+		// update many images
+		[HttpPut] // DONE wwwroot, not done db
+		[Route("updateImages")]
+		public async Task<IActionResult> UpdateImages(List<IFormFile> files)
+		{
+			try
+			{
+				// Bước 1: Lấy danh sách các tệp ảnh cũ trong thư mục "allPhotoUploaded"
+				string uploadFolder = "allPhotoUploaded";
+				string folderPath = Path.Combine(_hostingEnvironment.WebRootPath, uploadFolder);
+
+				if (Directory.Exists(folderPath))
+				{
+					// Bước 2: Xóa toàn bộ tệp ảnh cũ trong thư mục "allPhotoUploaded"
+					Directory.Delete(folderPath, true);
+				}
+
+				if (!Directory.Exists(folderPath))
+				{
+					Directory.CreateDirectory(folderPath);
+				}
+
+				var uploadedFiles = new List<string>();
+
+				foreach (var file in files)
+				{
+					if (file != null && file.Length > 0)
+					{
+						// Bước 3: Lưu tệp ảnh mới từ dữ liệu PUT vào thư mục "allPhotoUploaded"
+						string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+						string filePath = Path.Combine(folderPath, fileName);
+
+						using (var stream = new FileStream(filePath, FileMode.Create))
+						{
+							await file.CopyToAsync(stream);
+						}
+
+						uploadedFiles.Add(fileName);
+					}
+				}
+
+				// Bước 4: Trả về danh sách tên tệp ảnh sau khi đã cập nhật
+				return Ok(new { Message = "Cập nhật ảnh thành công", Files = uploadedFiles });
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Lỗi: {ex.Message}");
+			}
+		}
+
+
+
+
 
 	}
 }

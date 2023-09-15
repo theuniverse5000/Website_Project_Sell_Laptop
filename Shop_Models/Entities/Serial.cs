@@ -11,7 +11,8 @@ namespace Shop_Models.Entities
         [Required]
         public string? SerialNumber { get; set; }
         public int Status { get; set; }
-        public Guid ProductDetailId { get; set; }// Tạo khóa ngoại
+        public Guid? ProductDetailId { get; set; }// Tạo khóa ngoại
+        public Guid? BillDetailId { get; set; }// Tạo khóa ngoại
         public virtual ProductDetail? ProductDetail { get; set; }//
     }
 }

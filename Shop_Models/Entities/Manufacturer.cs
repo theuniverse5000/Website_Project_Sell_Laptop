@@ -11,6 +11,7 @@ namespace Shop_Models.Entities
         [Required]
         [MaxLength(150)]
         public string? Name { get; set; }
+        public string? LinkImage { get; set; }
         public int Status { get; set; }
         public virtual ICollection<Product>? Products { get; set; }
     }
