@@ -1,16 +1,22 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Shop_API.AppDbContext;
 using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service;
 using Shop_API.Service.IService;
+using System.Text;
+using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 // Add services to the container.
+
+
 
 builder.Services.AddControllers();
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -58,6 +64,24 @@ builder.Services.AddTransient<ICartService, CartService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var tfConf = builder.Configuration.GetSection("Jwt");
+
+var tokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidateLifetime = true,
+    ValidateIssuerSigningKey = true,
+    ValidIssuer = tfConf["Issuer"],
+    ValidAudience = tfConf["Audience"],
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tfConf["Key"]))
+};
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o => { o.TokenValidationParameters = tokenValidationParameters; });
+
+
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration).CreateLogger();
 builder.Host.UseSerilog();
@@ -72,6 +96,7 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
