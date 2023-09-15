@@ -3,11 +3,6 @@ using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
-using Shop_Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Shop_API.Service
 {
@@ -18,7 +13,10 @@ namespace Shop_API.Service
         private readonly IProductDetailRepository _productDetailRepository;
         private readonly IGiamGiaRepository _giamGiaRepository;
         private readonly ReponseDto _reponseDto;
+        public GiamGiaHangLoatServices()
+        {
 
+        }
         public GiamGiaHangLoatServices(
             ApplicationDbContext context,
             SanPhamGiamGiaRepository sanPhamGiamGiaRepository,
