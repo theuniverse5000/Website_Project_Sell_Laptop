@@ -257,5 +257,96 @@ namespace Shop_API.Repository
                 return false;
             }
         }
+
+
+
+        public async Task<IEnumerable<ProductDetailDto>> GetProductDetailsByPromotionType(string promotionType)
+        {
+            try
+            {
+                int soLuongProductDetail = await GetCountProductDetail();
+                List<ProductDetailDto> listProductDetails = new List<ProductDetailDto>();
+                listProductDetails = (
+                            from a in await _context.ProductDetails.ToListAsync()
+                            join b in await _context.Rams.ToListAsync() on a.RamId equals b.Id
+                            join c in await _context.Cpus.ToListAsync() on a.CpuId equals c.Id
+                            join d in await _context.HardDrives.ToListAsync() on a.HardDriveId equals d.Id
+                            join e in await _context.Colors.ToListAsync() on a.ColorId equals e.Id
+                            join f in await _context.CardVGAs.ToListAsync() on a.CardVGAId equals f.Id
+                            join g in await _context.Screens.ToListAsync() on a.ScreenId equals g.Id
+                            join i in await _context.Products.ToListAsync() on a.ProductId equals i.Id
+                            join k in await _context.Manufacturers.ToListAsync() on i.ManufacturerId equals k.Id
+                            join l in await _context.ProductTypes.ToListAsync() on i.ProductTypeId equals l.Id
+
+                            where i.PromotionType == promotionType // Lọc theo loại khuyến mãi
+                            select new ProductDetailDto
+                            {
+                                Id = a.Id,
+                                Code = a.Code,
+                                ImportPrice = a.ImportPrice,
+                                Price = a.Price,
+                                Status = a.Status,
+                                Upgrade = a.Upgrade,
+                                Description = a.Description,
+                                AvailableQuantity = soLuongProductDetail,
+                                ThongSoRam = b.ThongSo,
+                                MaRam = b.Ma,
+                                TenCpu = c.Ten,
+                                MaCpu = c.Ma,
+                                ThongSoHardDrive = d.ThongSo,
+                                MaHardDrive = d.Ma,
+                                NameColor = e.Name,
+                                MaColor = e.Ma,
+                                MaCardVGA = f.Ma,
+                                TenCardVGA = f.Ten,
+                                ThongSoCardVGA = f.ThongSo,
+                                MaManHinh = g.Ma,
+                                KichCoManHinh = g.KichCo,
+                                TanSoManHinh = g.TanSo,
+                                ChatLieuManHinh = g.ChatLieu,
+                                NameProduct = i.Name,
+                                NameProductType = l.Name,
+                                NameManufacturer = k.Name
+                                //LinkImage = h.LinkImage
+                            }
+                   ).ToList();
+
+                return listProductDetails.Where(x => x.Status > 0);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> Update(ProductDetailDto productDetail)
+        {
+            try
+            {
+                var existingProductDetail = await _context.ProductDetails.FindAsync(productDetail.Id);
+
+                if (existingProductDetail == null)
+                {
+                    return false; 
+                }
+
+                // Cập nhật thông tin sản phẩm từ DTO
+                existingProductDetail.ImportPrice = (float)productDetail.ImportPrice;
+                existingProductDetail.Price = (float)productDetail.Price;
+                existingProductDetail.Description = productDetail.Description;
+                existingProductDetail.Status = productDetail.Status;
+
+                // Cập nhật vào cơ sở dữ liệu
+                _context.ProductDetails.Update(existingProductDetail);
+                await _context.SaveChangesAsync();
+
+                return true; 
+            }
+            catch (Exception)
+            {
+                return false; 
+            }
+
+        }
     }
 }

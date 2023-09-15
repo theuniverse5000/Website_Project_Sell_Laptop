@@ -8,5 +8,7 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(GiamGia obj);
         Task<bool> Delete(Guid id);
         Task<List<GiamGia>> GetAllGiamGias();
+        Task<GiamGia> GetGiamGiaByPromotionType(string promotionType);
+
     }
 }

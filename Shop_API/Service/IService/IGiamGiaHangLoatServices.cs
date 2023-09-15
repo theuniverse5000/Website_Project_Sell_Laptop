@@ -1,8 +1,9 @@
-﻿namespace Shop_API.Service.IService
+﻿using Shop_Models.Dto;
+
+namespace Shop_API.Service.IService
 {
     public interface IGiamGiaHangLoatServices
     {
-        void ApplyBulkDiscount(Guid giamGiaId, float percentDiscount);
-
+        Task<ReponseDto> ApplyDiscountByPromotionType(string promotionType, double discountAmount);
     }
 }
