@@ -1,7 +1,8 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    var signUpButton = document.getElementById('signUpButton');
+    var signUpButton = document.getElementById('signUp');
 
-    signUpButton.addEventListener('click', function () {
+    signUpButton.addEventListener('click', function (event) {
+        event.preventDefault()
         $.ajax({
             url: "/Login/SignUp",
             type: "GET",

@@ -1,6 +1,7 @@
 ﻿
 var loginButton = document.getElementById('LoginButton');
-loginButton.addEventListener('click', function () {
+loginButton.addEventListener('click', function (event) {
+    event.preventDefault();
     $.ajax({
         url: "/Login/Login", 
         type: "GET",
@@ -17,7 +18,8 @@ loginButton.addEventListener('click', function () {
 
 var cartButton = document.getElementById('CartButton');
 
-cartButton.addEventListener('click', function () {
+cartButton.addEventListener('click', function (event) {
+    event.preventDefault()
         $.ajax({
             url: "/Cart/UserCart",
             type: "GET",
