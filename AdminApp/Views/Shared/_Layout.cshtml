@@ -39,6 +39,7 @@
 </head>
 <body>
     <div class="container-scroller">
+        <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <div class="me-3">
@@ -53,6 +54,7 @@
                     <a class="navbar-brand brand-logo-mini" href="index.html">
                         <img src="https://inkythuatso.com/uploads/thumbnails/800/2021/11/logo-fpt-inkythuatso-1-01-01-14-33-35.jpg" alt="logo" />
                     </a>
+
                 </div>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-top">
@@ -62,11 +64,12 @@
                         <h3 class="welcome-sub-text">Have a nice day!</h3>
                     </li>
                 </ul>
+
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <form class="search-form" action="#">
                             <i class="icon-search"></i>
-                            <input type="search" class="form-control" placeholder="Search Here" title="Search here">
+                            <input type="search" class="form-control" placeholder="Search..." title="Search here">
                         </form>
                     </li>
                     <li class="nav-item dropdown d-none d-lg-block user-dropdown">
@@ -74,15 +77,17 @@
                             <img class="img-xs rounded-circle" src="https://scienceoxford.com/wp-content/uploads/2018/03/avatar-male.jpg" alt="Profile image">
                         </a>
                     </li>
+
                 </ul>
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas" style="padding-top: 10px;">
                     <span class="mdi mdi-menu"></span>
                 </button>
+
             </div>
         </nav>
-
+        <!-- partial -->
         <div class="page-body-wrapper">
-
+            <!-- partial:partials/_settings-panel.html -->
             <div class="theme-setting-wrapper">
                 <div id="settings-trigger"><i class="ti-settings"></i></div>
                 <div id="theme-settings" class="settings-panel">
@@ -102,8 +107,17 @@
                 </div>
             </div>
 
+            <!-- partial -->
+            <!-- partial:partials/_sidebar.html -->
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
+                    <li class="nav-item nav-category">THỐNG KÊ</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="menu-icon mdi mdi-clipboard-text"></i>
+                            <span class="menu-title">Thống kê doanh thu</span>
+                        </a>
+                    </li>
                     <li class="nav-item nav-category">QUẢN LÝ</li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
@@ -122,42 +136,40 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <a class="nav-link" href="">
                             <i class="menu-icon mdi mdi-account-edit"></i>
                             <span class="menu-title">Quản lý người dùng</span>
                         </a>
                     </li>
-                    <li class="nav-item nav-category">THỐNG KÊ</li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle=" collapse" aria-expanded="false" aria-controls="ui-basic">
-                            <i class="menu-icon mdi mdi-clipboard-text"></i>
-                            <span class="menu-title">Thống kê doanh thu</span>
-                        </a>
-                    </li>
+
                     <li class="nav-item nav-category">KHÁC</li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <a class="nav-link" href="">
                             <i class="menu-icon mdi mdi-account-remove"></i>
                             <span class="menu-title">Đăng xuất</span>
                         </a>
                     </li>
-                </ul>
             </nav>
+            <!-- partial -->
             <div class="main-panel">
                 <main role="main" class="pb-3">
                     @RenderBody()
                 </main>
-                <footer class="border-top footer text-muted">
+
+                <!-- partial:partials/_footer.html -->
+                <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
-                            <h5>Design by FPT Polytechnic</h5>
-                        </span>
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash.</span>
                         <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
                     </div>
                 </footer>
+                <!-- partial -->
             </div>
+            <!-- main-panel ends -->
         </div>
+        <!-- page-body-wrapper ends -->
     </div>
+    <!-- container-scroller -->
 
     <script src="./vendors/js/vendor.bundle.base.js"></script>
     <script src="./vendors/chart.js/Chart.min.js"></script>
