@@ -277,7 +277,8 @@ namespace Shop_API.Repository
                             join i in await _context.Products.ToListAsync() on a.ProductId equals i.Id
                             join k in await _context.Manufacturers.ToListAsync() on i.ManufacturerId equals k.Id
                             join l in await _context.ProductTypes.ToListAsync() on i.ProductTypeId equals l.Id
-                            join m in await _context.GiamGias.ToListAsync() on i.ManufacturerId equals m.Id
+                            join n in await _context.SanPhamGiamGias.ToListAsync() on a.Id equals n.ProductDetailId
+                            join m in await _context.GiamGias.ToListAsync() on n.GiamGiaId equals m.Id
 
                             where m.LoaiGiamGia == promotionType // Lọc theo loại khuyến mãi
                             select new ProductDetailDto
