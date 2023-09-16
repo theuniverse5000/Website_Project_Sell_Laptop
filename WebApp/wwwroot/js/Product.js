@@ -2,7 +2,8 @@
 var hotProducts = document.getElementsByClassName('hot-product');
 
 for (var i = 0; i < hotProducts.length; i++) {
-    hotProducts[i].addEventListener('click', function () {
+    hotProducts[i].addEventListener('click', function (event) {
+        event.preventDefault()
         $.ajax({
             url: "/Home/ProductDetail",
             type: "GET",
