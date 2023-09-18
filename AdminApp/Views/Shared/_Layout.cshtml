@@ -1,8 +1,10 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>@ViewData["Title"] - AdminApp</title>
     @* <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=FontName"> *@
 
@@ -11,15 +13,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.js"></script>
-    @* <link rel="stylesheet" href="./css/style.css" /> *@
+    <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css" />
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cdbootstrap/css/cdb.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/cdb.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/9d1d9a82d2.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    @*Thư viện icon layout*@
+    <link rel="stylesheet" href="./img/icon-layout/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="./img/icon-layout/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="./img/icon-layout/ti-icons/css/themify-icons.css">
+
+    @*add css layout*@
+    <link rel="stylesheet" href="./css/layout_css/style.css">
 
     @* add kendo 6.7.0 *@
     <link href="https://kendo.cdn.telerik.com/themes/6.7.0/default/default-main.css" rel="stylesheet" />
@@ -27,45 +39,150 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @* add kendo all min js 2021.3.914 *@
     <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AdminApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="GetAllBills">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ProductDetails" asp-action="AllProductDetails">ProductDetails</a>
-                        </li>
-                    </ul>
+<body id="root">
+    <div class="container-scroller">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+                <div class="me-3">
+                    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+                        <span class="icon-menu"></span>
+                    </button>
+                </div>
+                <div>
+                    <a class="navbar-brand brand-logo" href="index.html">
+                        <img src="https://img5.thuthuatphanmem.vn/uploads/2022/01/16/logo-fpt-fpt-polytechnic-tach-nen_043151201.png" alt="logo" />
+                    </a>
+                    <a class="navbar-brand brand-logo-mini" href="index.html">
+                        <img src="https://inkythuatso.com/uploads/thumbnails/800/2021/11/logo-fpt-inkythuatso-1-01-01-14-33-35.jpg" alt="logo" />
+                    </a>
+
                 </div>
             </div>
+            <div class="navbar-menu-wrapper d-flex align-items-top">
+                <ul class="navbar-nav">
+                    <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
+                        <h1 class="welcome-text">Good Morning, Admin</h1>
+                        <h3 class="welcome-sub-text">Have a nice day!</h3>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <form class="search-form" action="#">
+                            <i class="mdi mdi-magnify" style="padding-top: 10px;"></i>
+                            <input type="search" class="form-control" placeholder="Search..." title="Search here">
+                        </form>
+                    </li>
+                    <li class="nav-item dropdown d-none d-lg-block user-dropdown">
+                        <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img class="img-xs rounded-circle" src="https://scienceoxford.com/wp-content/uploads/2018/03/avatar-male.jpg" alt="Profile image">
+                        </a>
+                    </li>
+
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas" style="padding-top: 10px;">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+
+            </div>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+        <!-- partial -->
+        <div class="page-body-wrapper">
+            <!-- partial:partials/_settings-panel.html -->
+            <div class="theme-setting-wrapper">
+                <div id="settings-trigger"><i class="ti-settings"></i></div>
+                <div id="theme-settings" class="settings-panel">
+                    <i class="settings-close ti-close"></i>
+                    <p class="settings-heading">SIDEBAR SKINS</p>
+                    <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border me-3"></div>Light</div>
+                    <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border me-3"></div>Dark</div>
+                    <p class="settings-heading mt-2">HEADER SKINS</p>
+                    <div class="color-tiles mx-0 px-4">
+                        <div class="tiles success"></div>
+                        <div class="tiles warning"></div>
+                        <div class="tiles danger"></div>
+                        <div class="tiles info"></div>
+                        <div class="tiles dark"></div>
+                        <div class="tiles default"></div>
+                    </div>
+                </div>
+            </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - AdminApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <!-- partial -->
+            <!-- partial:partials/_sidebar.html -->
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item nav-category">THỐNG KÊ</li>
+                    <li class="nav-item" id="thongKe">
+                        <a class="nav-link" href="">
+                            <i class="menu-icon mdi mdi-clipboard-text"></i>
+                            <span class="menu-title">Thống kê doanh thu</span>
+                        </a>
+                    </li>
+                    <li class="nav-item nav-category">QUẢN LÝ</li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                            <i class="menu-icon mdi mdi-monitor-multiple"></i>
+                            <span class="menu-title">Quản lý sản phẩm</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" href="">Sản phẩm</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="">Sản phẩm chi tiết</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="">CPU</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="">RAM</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="">GPU</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">
+                            <i class="menu-icon mdi mdi-account-edit"></i>
+                            <span class="menu-title">Quản lý người dùng</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item nav-category">KHÁC</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">
+                            <i class="menu-icon mdi mdi-account-remove"></i>
+                            <span class="menu-title">Đăng xuất</span>
+                        </a>
+                    </li>
+            </nav>
+            <!-- partial -->
+            <div class="main-panel">
+                <main role="main" class="content-wrapper pb-3">
+                    @RenderBody()
+                </main>
+
+                <!-- partial:partials/_footer.html -->
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Design by <a href="#" target="_blank">FPT Polytechnic</a>.</span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
+                    </div>
+                </footer>
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
         </div>
-    </footer>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
 
-    
+    @*add js của layout*@
+    <script src="./js/layout_js/hoverable-collapse.js"></script>
+    <script src="./js/layout_js/off-canvas.js"></script>
+    <script src="./js/layout_js/settings.js"></script>
+    <script src="./js/layout_js/template.js"></script>
+    <script src="./js/layout_js/Nav.js"></script>
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -73,4 +190,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
