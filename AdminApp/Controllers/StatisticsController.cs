@@ -4,6 +4,7 @@ using Shop_Models.Entities;
 
 namespace AdminApp.Controllers
 {
+    
     public class StatisticsController : Controller
     {
         private readonly ILogger<StatisticsController> _logger;

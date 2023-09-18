@@ -12,6 +12,23 @@ namespace Shop_API.Repository
         {
             _context = context;
         }
+
+
+        public async Task<GiamGia> GetGiamGiaByPromotionType(string promotionType)
+        {
+            try
+            {
+                return await _context.GiamGias
+                    .Where(g => g.LoaiGiamGia == promotionType && g.TrangThai != 0)
+                    .FirstOrDefaultAsync();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<bool> Create(GiamGia obj)
         {
             var checkMa = await _context.GiamGias.AnyAsync(x => x.Ma == obj.Ma);// tìm mã, trả về true nếu đã có, false nếu chưa có

@@ -13,6 +13,9 @@ namespace Shop_API.Repository.IRepository
         Task<IEnumerable<ProductDetailDto>> GetAllProductDetail();
         Task<IEnumerable<ProductDetailDto>> GetProductDetail(string? search, double? from, double? to, string? sortBy, int page = 1);
         //    Task<ProductDetailView> GetAllProductDetailById(Guid id);
+
+        Task<IEnumerable<ProductDetailDto>> GetProductDetailsByPromotionType(string promotionType);
         Task<bool> UpdateSoLuong(Guid id, int soLuong);
+        Task<bool> Update(ProductDetailDto productDetail);
     }
 }
