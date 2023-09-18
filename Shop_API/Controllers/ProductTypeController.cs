@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -9,11 +12,16 @@ namespace Shop_API.Controllers
     public class ProductTypeController : ControllerBase
     {
         private readonly IProductTypeRepository _repository;
+        private readonly IPagingRepository _iPagingRepository;
         private readonly IConfiguration _config;
-        public ProductTypeController(IProductTypeRepository repository, IConfiguration config)
+        private readonly ReponseDto _reponse;
+        public ProductTypeController(IProductTypeRepository repository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _repository = repository;
             _config = config;
+            _reponse = new ReponseDto();
+            _iPagingRepository = pagingRepository;
+
         }
         [HttpGet]
         public async Task<IActionResult> GetAllProductType()
@@ -32,6 +40,31 @@ namespace Shop_API.Controllers
             //}
             return Ok(await _repository.GetAll());
         }
+
+
+        [HttpGet("GetPagingProductsFSP")]
+        public async Task<IActionResult> GetPagingProductsFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+
+            _reponse.Result = _iPagingRepository.GetAll(search, from, to, sortBy, page);
+            var count = _reponse.Count = _iPagingRepository.GetAll(search, from, to, sortBy, page).Count;
+
+
+            return Ok(_reponse);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> CreateProductType(ProductType obj)
         {
@@ -59,17 +92,17 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> UpdateProductType(ProductType obj)
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             if (await _repository.Update(obj))
             {
                 return Ok("Chỉnh sửa thành công");
@@ -81,17 +114,17 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> DeleteProductType(Guid id)
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             if (await _repository.Delete(id))
             {
                 return Ok("Xóa thành công");
