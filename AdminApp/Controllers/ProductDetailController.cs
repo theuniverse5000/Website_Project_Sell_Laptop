@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shop_Models.Dto;
 
 namespace AdminApp.Controllers
 {
@@ -16,10 +17,57 @@ namespace AdminApp.Controllers
         {
             return View();
         }
-        public IActionResult AllProductDetails()
+        public async Task<IActionResult> GetProductDetail()
         {
-            return View();
-        }
 
+            string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
+            string? urlApi = _config.GetSection("UrlApiAdmin").Value;
+            using (HttpClient client = new HttpClient())
+            {
+                // client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
+                HttpResponseMessage response = client.GetAsync($"{urlApi}/api/ProductDetail/GetProductDetailsFSP").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return Content(result, "application/json");
+                }
+                else
+                {
+                    return Json(null);
+                }
+
+            }
+        }
+        public JsonResult CreateProductDetail(ProductDetailDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                return Json(model);
+            }
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { Errors = errors });
+            }
+        }
+        public IActionResult Create()
+        {
+
+            return View();
+
+        }
+        [HttpPost]
+        public IActionResult Create(string description)
+        {
+            if (ModelState.IsValid)
+            {
+                return View();
+            }
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return Json(new { Errors = errors });
+            }
+        }
     }
 }
