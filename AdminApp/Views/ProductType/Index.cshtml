@@ -1,25 +1,49 @@
 ﻿@{
-    ViewBag.Title = "Product Details";
+    ViewBag.Title = "Product Type";
 
 }
 
 <div id="example">
-    <div id="grid1"></div>
+    <div id="grid"></div>
 </div>
+<span id="popupNotification"></span>
+<span id="staticNotification"></span>
 <br/>
 <div id="example">
     <div id="grid2"></div>
 </div>
 
 @section scripts {
+    <link href="https://kendo.cdn.telerik.com/2023.3.1018/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2023.3.1018/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="https://kendo.cdn.telerik.com/2023.3.1018/js/kendo.all.min.js"></script>
+
     <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css" rel="stylesheet" />
     <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        /*
+            This demo renders the grid in "DejaVu Sans" font family, which is
+            declared in kendo.common.css. It also declares the paths to the
+            fonts below using <tt>kendo.pdf.defineFont</tt>, because the
+            stylesheet is hosted on a different domain.
+        */
+       // Fix xuất file PDF
+        kendo.pdf.defineFont({ 
+            "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+            "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+            "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
+        });
+    </script>
+
+
+    <script>
         $(document).ready(function () {
-            $("#grid1").kendoGrid({
+            $("#grid").kendoGrid({
                 dataSource: {
                     transport: {
                         read: {
@@ -51,16 +75,15 @@
                         model: {
                             id: "id",
                             fields: {
-                                name: {
-                                    type: "string", validate: { required: true } },
-                                status: { type: "int", validate: { required: true } }
+                                name: { type: "string", validation: { required: true } },
+                                status: { type: "int", validation: { required: true } }
                             }
                         }
                     }, 
                     
                     pageSize: 20,
 
-                    // thêm thành công sẽ hiển thị thông báo thêm thành công
+                    // thông báo sau khi thêm
                     requestEnd: function (e) {
                         if (e.type === "create" && e.response) {
                             var result = e.response.Result || {};
@@ -70,7 +93,18 @@
                                 alert("Thêm mới thành công!");
                             }
                         }
+                        /// thông báo sau cập nhật
+                        if (e.type === "update" && e.response) {
+                            var result = e.response.Result || {};
+                            if (result.Errors && result.Errors.length > 0) {
+                                alert("Cập nhật  thất bại: " + result.Errors.join(", "));
+                            } else {
+                                alert("Cập nhật thành công!");
+                            }
+                        }
                     },
+                    
+                    
                 }, 
               
                    
@@ -106,9 +140,26 @@
                     landscape: true,
                     repeatHeaders: true,
                     template: $("#page-template").html(),
-                    scale: 0.8,
-                },             
-                editable: "inline",              
+                    scale: 0.8,                
+                },
+                editable: "inline",
+                destroy: function (e) {
+                    // Display a confirmation dialog when saving changes
+                    e.preventDefault(); // Prevent the default save action
+                    Swal.fire({
+                        title: "Confirm Save",
+                        text: "Bạn có chắc chắn muốn xóa không?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Có",
+                        cancelButtonText: "Không",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // If the user confirms, allow the save action to proceed
+                            e.sender.saveChanges();
+                        }
+                    });
+                },
                 columns: [
                     {
                         field: "name",
@@ -124,15 +175,20 @@
                             {
                                 name: "edit",
                                 text: "Sửa",
+                                
+
+
                             },
                             {
                                 name: "destroy",
                                 text: "Xóa",
+                               
                                 
                             },
                         ],
                         title: "Hành động",
-                        width: "250px"
+                        width: "250px",
+                        exportable: false
                     }
                 ],
                
