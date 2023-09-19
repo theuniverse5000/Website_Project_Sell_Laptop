@@ -34,5 +34,6 @@
         public string? TenCardVGA { get; set; }
         public string? ThongSoCardVGA { get; set; }
         public string? LinkImage { get; set; }
+        public int Status { get; set; }
     }
 }

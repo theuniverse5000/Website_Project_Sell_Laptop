@@ -55,18 +55,19 @@ namespace Shop_API.Controllers
         [HttpGet("GetProductDetailsFSP")]
         public async Task<IActionResult> GetProductDetailsFSP(string? search, double? from, double? to, string? sortBy, int page)
         {
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             _reponse.Result = await _repository.GetProductDetail(search, from, to, sortBy, page);
+            _reponse.Count = 10;
             return Ok(_reponse);
         }
         [HttpGet("GetById")]
