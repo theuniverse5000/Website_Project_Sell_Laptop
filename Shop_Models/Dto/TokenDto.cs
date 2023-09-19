@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Shop_Models.Dto
 {
-    internal class TokenDto
+    public class TokenDto
     {
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 }
