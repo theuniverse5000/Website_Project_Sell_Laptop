@@ -10,7 +10,7 @@ namespace Shop_Models.Entities
     {
         public string RefreshToken { get; set; }
         public Guid Id { get; set; }
-        public Guid IdUser { get; set; }
+        public Guid UserId { get; set; }
         public virtual User User { get; set; }
         public bool IsUsed { get; set; }
         public bool IsRevoked { get; set; }
