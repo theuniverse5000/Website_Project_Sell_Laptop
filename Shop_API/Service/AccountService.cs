@@ -1,5 +1,4 @@
-﻿using Auth0.ManagementApi.Models.Rules;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Shop_API.AppDbContext;
@@ -77,7 +76,7 @@ namespace Shop_API.Service
             var token = jwtTokenHandler.CreateToken(tokenDescription);
             var accessToken = jwtTokenHandler.WriteToken(token);
             var refreshToken = GenerateRefreshToken();
-            var check = await _context.tokens.FirstOrDefaultAsync(p => p.IdUser == user.Id);
+            var check = await _context.tokens.FirstOrDefaultAsync(p => p.UserId == user.Id);
             if (check != null)
             {
                 refreshToken = check.RefreshToken;
@@ -88,7 +87,7 @@ namespace Shop_API.Service
                 var refreshTokenEntity = new Token
                 {
                     Id = Guid.NewGuid(),
-                    IdUser = user.Id,
+                    UserId = user.Id,
                     RefreshToken = refreshToken,
                     IsUsed = false,
                     IsRevoked = false,
@@ -112,6 +111,7 @@ namespace Shop_API.Service
             };
 
         }
+
         private string GenerateRefreshToken()
         {
             var random = new byte[32];
@@ -131,8 +131,6 @@ namespace Shop_API.Service
 
         public static async Task<bool> checkAccessToken(string AccessToken)
         {
-
-
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             //CacheData cacheData = CacheData.Instance;
             byte[] secretKeyBytes = Encoding.UTF8.GetBytes(key);
@@ -207,13 +205,13 @@ namespace Shop_API.Service
                     if (storedToken != null)
                     {
                         // task 5 check refresh token isuser/revoked  
-                        var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == storedToken.IdUser);
+                        var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == storedToken.UserId);
                         if (user != null)
                         {
                             LoginRequestDto loginRequestVM = new LoginRequestDto();
                             loginRequestVM.UserName = user.Username;
                             loginRequestVM.Password = user.Password;
-                            if (!storedToken.IsUsed && user.Id == storedToken.IdUser && !storedToken.IsRevoked && !storedToken.IsActive && storedToken.Expired >= DateTime.UtcNow || storedToken.Expired >= DateTime.UtcNow)
+                            if (!storedToken.IsUsed && user.Id == storedToken.UserId && !storedToken.IsRevoked && !storedToken.IsActive && storedToken.Expired >= DateTime.UtcNow || storedToken.Expired >= DateTime.UtcNow)
                             {
                                 // update
                                 storedToken.IsRevoked = true;
