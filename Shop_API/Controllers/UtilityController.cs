@@ -21,25 +21,25 @@ namespace Shop_API.Controllers
         public ReponseDto SendEmail(EmailDto request)
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = "Không có quyền";
-                return _reponse;
-            }
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    _reponse.Result = null;
+            //    _reponse.IsSuccess = false;
+            //    _reponse.Code = 404;
+            //    _reponse.Message = "Không có quyền";
+            //    return _reponse;
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = "Không có quyền";
-                return _reponse;
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    _reponse.Result = null;
+            //    _reponse.IsSuccess = false;
+            //    _reponse.Code = 404;
+            //    _reponse.Message = "Không có quyền";
+            //    return _reponse;
+            //}
             if (_emailService.SendEmail(request))
             {
                 _reponse.Result = request;

@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Product Details";
+}
+
+<div id="example">
+   <form asp-controller="ProductDetail" asp-action="Create"method="post">
+    <div id="grid1"></div>
+    <div class="demo-section wide">
+        <textarea name="description" id="editor" rows="10" cols="30" style="width:100%; height:840px" aria-label="editor">
+       
+    </textarea>
+        </div>
+        <button type="submit">Save</button>
+    </form>
+        <script>
+            var editor = $("#editor").kendoEditor({
+                stylesheets: [
+                    "../content/shared/styles/editor.css",
+                ],
+                tools: [
+                    "bold",
+                    "italic",
+                    "underline",
+                    "undo",
+                    "redo",
+                    "justifyLeft",
+                    "justifyCenter",
+                    "justifyRight",
+                    "insertUnorderedList",
+                    "createLink",
+                    "unlink",
+                    "insertImage",
+                    "tableWizard",
+                    "tableProperties",
+                    "tableCellProperties",
+                    "createTable",
+                    "addRowAbove",
+                    "addRowBelow",
+                    "addColumnLeft",
+                    "addColumnRight",
+                    "deleteRow",
+                    "deleteColumn",
+                    "mergeCellsHorizontally",
+                    "mergeCellsVertically",
+                    "splitCellHorizontally",
+                    "splitCellVertically",
+                    "tableAlignLeft",
+                    "tableAlignCenter",
+                    "tableAlignRight",
+                    "fontSize",
+                    "foreColor",
+                    "backColor",
+                ]
+            });
+        </script>
+    </div>
+
+
+@section scripts {
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
+    <script>
+
+      
+    </script>
+}

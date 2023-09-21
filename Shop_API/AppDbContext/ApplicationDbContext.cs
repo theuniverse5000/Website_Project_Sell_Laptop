@@ -39,7 +39,7 @@ namespace Shop_API.AppDbContext
 
         public virtual DbSet<ManagePost> ManagePosts { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
-
+        public virtual DbSet<Token> tokens { get; set; }
 
     }
 }

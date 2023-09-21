@@ -1,5 +1,6 @@
 ﻿using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
+using Shop_API.Utilities;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
 
@@ -32,7 +33,7 @@ namespace Shop_API.Service
 
         public async Task<ReponseDto> CreateBill(string username, string maVoucher)
         {
-            try // Bắt lỗi ngoại lệ
+            try
             {
                 var user = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.Username == username);
                 if (user == null)
@@ -53,86 +54,83 @@ namespace Shop_API.Service
                     _reponse.Message = "Không có sản phẩm trong giỏ hàng";
                     return _reponse;// Nếu chưa có sản phẩm trong giỏ hàng thì không thể tạo hóa đơn
                 }
-                else
+                var listVoucher = await _voucherRepository.GetAllVouchers();// Lấy danh sách voucher
+                var voucherX = listVoucher.FirstOrDefault(x => x.MaVoucher == maVoucher);// Kiểm tra xem có voucher ko
+                if (voucherX == null)// Không có thì trả về kết quả
                 {
-                    var listVoucher = await _voucherRepository.GetAllVouchers();// Lấy danh sách voucher
-                    var voucherX = listVoucher.FirstOrDefault(x => x.MaVoucher == maVoucher);// Kiểm tra xem có voucher ko
-                    if (voucherX == null)// Không có thì trả về kết quả
+                    _reponse.Result = null;
+                    _reponse.IsSuccess = false;
+                    _reponse.Code = 404;
+                    _reponse.Message = "Voucher sai hoặc không tồn tại";
+                    return _reponse;
+                }
+                int checkSlVoucher = voucherX.SoLuong;
+                DateTime startTimeVoucher = voucherX.StarDay;
+                DateTime endTimeVoucher = voucherX.EndDay;
+                if (checkSlVoucher <= 0)
+                {
+                    _reponse.Result = null;
+                    _reponse.IsSuccess = false;
+                    _reponse.Code = 404;
+                    _reponse.Message = "Voucher đã hết lượt sử dụng";
+                    return _reponse;
+                }
+                if (startTimeVoucher > DateTime.Now || DateTime.Now > endTimeVoucher)
+                {
+                    _reponse.Result = null;
+                    _reponse.IsSuccess = false;
+                    _reponse.Code = 404;
+                    _reponse.Message = "Voucher đã hết hạn sử dụng hoặc chưa đến ngày sử dụng";
+                    return _reponse;
+                }
+                Bill bill = new Bill()// Tạo hóa đơn
+                {
+                    Id = Guid.NewGuid(),
+                    InvoiceCode = "Bill" + RamdomString.GenerateRandomString(7),
+                    CreateDate = Convert.ToDateTime(DateTime.Now.ToString()),
+                    FullName = user.FullName,
+                    PhoneNumber = user.PhoneNumber,
+                    Address = user.Address,
+                    Status = 1,
+                    UserId = getUserId,
+                    VoucherId = voucherX != null ? voucherX.Id : null
+                };
+                if (await _billRepository.Create(bill))
+                {
+
+                    var cartItemToBill = cartItem.Where(x => x.Status == 3).ToList();
+                    foreach (var x in cartItemToBill)
                     {
-                        _reponse.Result = null;
-                        _reponse.IsSuccess = false;
-                        _reponse.Code = 404;
-                        _reponse.Message = "Voucher sai hoặc không tồn tại";
-                        return _reponse;
-                    }
-                    int checkSlVoucher = voucherX.SoLuong;
-                    DateTime startTimeVoucher = voucherX.StarDay;
-                    DateTime endTimeVoucher = voucherX.EndDay;
-                    if (checkSlVoucher <= 0)
-                    {
-                        _reponse.Result = null;
-                        _reponse.IsSuccess = false;
-                        _reponse.Code = 404;
-                        _reponse.Message = "Voucher đã hết lượt sử dụng";
-                        return _reponse;
-                    }
-                    if (startTimeVoucher > DateTime.Now || DateTime.Now > endTimeVoucher)
-                    {
-                        _reponse.Result = null;
-                        _reponse.IsSuccess = false;
-                        _reponse.Code = 404;
-                        _reponse.Message = "Voucher đã hết hạn sử dụng hoặc chưa đến ngày sử dụng";
-                        return _reponse;
-                    }
-                    Bill bill = new Bill()// Tạo hóa đơn
-                    {
-                        Id = Guid.NewGuid(),
-                        InvoiceCode = "Bill" + DateTime.Now.ToString(),
-                        CreateDate = Convert.ToDateTime(DateTime.Now.ToString()),
-                        FullName = user.FullName,
-                        PhoneNumber = user.PhoneNumber,
-                        Address = user.Address,
-                        Status = 1,
-                        UserId = getUserId,
-                        VoucherId = voucherX != null ? voucherX.Id : null
-                    };
-                    if (await _billRepository.Create(bill))
-                    {
+                        var productDetailX = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == x.Id);
+                        if (productDetailX == null)
+                        {
+                            _reponse.IsSuccess = false;
+                            _reponse.Code = 404;
+                            _reponse.Message = "Sản phẩm không tồn tại";
+                            return _reponse;
+                        }
+
+                        BillDetail billDetail = new BillDetail();
+                        billDetail.Id = Guid.NewGuid();
+                        billDetail.Code = bill.InvoiceCode + RamdomString.GenerateRandomString(6);
+                        billDetail.Price = productDetailX.Price;
+                        billDetail.Quantity = cartItemToBill.FirstOrDefault().Quantity;
+                        billDetail.BillId = bill.Id;
                         _reponse.Result = bill;
                         _reponse.IsSuccess = true;
                         _reponse.Code = 200;
                         _reponse.Message = "Đặt hàng thành công";
-                        return _reponse;
-                        foreach (var x in cartItem)
-                        {
-                            var productDetailX = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == x.Id);
-                            if (productDetailX == null)
-                            {
-                                _reponse.IsSuccess = false;
-                                _reponse.Code = 404;
-                                _reponse.Message = "Sản phẩm không tồn tại";
-                                return _reponse;
-                            }
-                            for (int i = 0; i < x.Quantity; i++)
-                            {
-                                BillDetail billDetail = new BillDetail();
-                                billDetail.Id = Guid.NewGuid();
-                                billDetail.BillId = bill.Id;
 
-                            }
-
-
-                        }
                     }
-                    else
-                    {
-                        _reponse.Result = null;
-                        _reponse.IsSuccess = false;
-                        _reponse.Code = 400;
-                        _reponse.Message = "Đặt hàng thất bại";
-                        return _reponse;
-                    }
-
+                    return _reponse;
+                }
+                else
+                {
+                    _reponse.Result = null;
+                    _reponse.IsSuccess = false;
+                    _reponse.Code = 400;
+                    _reponse.Message = "Đặt hàng thất bại";
+                    return _reponse;
                 }
             }
             catch (Exception e)

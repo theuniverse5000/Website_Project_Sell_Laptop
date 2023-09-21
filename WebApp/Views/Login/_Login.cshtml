@@ -1,4 +1,11 @@
-﻿<div style="border: #4c4949 1px solid; width: 1087px; height: 864px; margin: 65px auto;">
+﻿@page "/Login"
+@model Shop_Models.Dto.Account.LoginRequestDto;
+
+
+
+<div style="border: #4c4949 1px solid; width: 1087px; height: 864px; margin: 65px auto;">
+    @using (Html.BeginForm("LoginWithJWT", "Login"))
+        {
     <form>
         <!-- Email input -->
         <div class="form-outline mb-4" style="margin-top: 234px;">
@@ -32,10 +39,11 @@
 
         <!-- Register buttons -->
         <div id="signUp" style="margin-top: 40px;">
-            <a ><img src="./img/icon/logo_google.png" alt="" style="margin-left: 398px;"></a>
-            <a ><img src="./img/icon/logo-facebook.jpg" alt="" style="margin-left: 81px;"></a>
-            <a ><img src="./img/icon/logo_zalo.png" alt="" style="margin-left: 81px;"></a>
-            <p  style="margin-top: 29px; font-size: 30px; text-align: center;">Bạn chưa có tài khoản? <a style="color: #685858; font-weight: bold;">ĐĂNG KÝ NGAY</a></p>
+            <a><img src="./img/icon/logo_google.png" alt="" style="margin-left: 398px;"></a>
+            <a><img src="./img/icon/logo-facebook.jpg" alt="" style="margin-left: 81px;"></a>
+            <a><img src="./img/icon/logo_zalo.png" alt="" style="margin-left: 81px;"></a>
+            <p style="margin-top: 29px; font-size: 30px; text-align: center;">Bạn chưa có tài khoản? <a style="color: #685858; font-weight: bold;">ĐĂNG KÝ NGAY</a></p>
         </div>
     </form>
+    }
 </div>

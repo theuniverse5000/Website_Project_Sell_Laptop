@@ -101,6 +101,7 @@ namespace Shop_API.Repository
                                Id = y.Id,
                                UserId = x.UserId,
                                Quantity = y.Quantity,
+                               Status = y.Status,
                                IdProductDetails = a.Id,
                                MaProductDetail = a.Code,
                                Price = a.Price,
