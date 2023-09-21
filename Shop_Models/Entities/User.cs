@@ -14,10 +14,10 @@ namespace Shop_Models.Entities
         public string? Address { get; set; }
         public int Status { get; set; }
         public Guid RoleId { get; set; }
+        public string AccessToken { get; set; }
         public virtual Role? Role { get; set; }
         public virtual Cart? Cart { get; set; }
         public virtual ViDiem? ViDiem { get; set; }
         public virtual ICollection<Bill>? Bills { get; set; }
-
     }
 }
