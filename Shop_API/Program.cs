@@ -8,7 +8,6 @@ using Shop_API.Repository.IRepository;
 using Shop_API.Service;
 using Shop_API.Service.IService;
 using System.Text;
-using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
