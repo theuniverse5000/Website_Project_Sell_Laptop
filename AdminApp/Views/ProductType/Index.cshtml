@@ -1,23 +1,14 @@
 ﻿@{
     ViewBag.Title = "Product Type";
-
+    
 }
-
-<div id="example">
+<span id="notification" style="display:none;">222</span>
+<div id="example" style="width: 1300px; margin: 0 auto;">
     <div id="grid"></div>
 </div>
-<span id="popupNotification"></span>
-<span id="staticNotification"></span>
 <br/>
-<div id="example">
-    <div id="grid2"></div>
-</div>
 
 @section scripts {
-    <link href="https://kendo.cdn.telerik.com/2023.3.1018/styles/kendo.common.min.css" rel="stylesheet" />
-    <link href="https://kendo.cdn.telerik.com/2023.3.1018/styles/kendo.default.min.css" rel="stylesheet" />
-    <script src="https://kendo.cdn.telerik.com/2023.3.1018/js/kendo.all.min.js"></script>
-
     <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css" rel="stylesheet" />
     <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -40,9 +31,26 @@
         });
     </script>
 
-
     <script>
         $(document).ready(function () {
+
+            // Cấu hình Kendo UI Notification
+            $("#notification").kendoNotification({
+                position: {
+                    top: 50,
+                    right: 20
+                }
+            });
+            // Function hiển thị thông báo
+            function showNotification(message, type) {
+                $("#notification").data("kendoNotification").show({
+                    message: message,
+                    hideAfter: 40000, // Thời gian hiển thị thông báo (3 giây)
+                    width: 300,
+                    type: type // Loại thông báo: "success" hoặc "error"
+                });
+            }
+           
             $("#grid").kendoGrid({
                 dataSource: {
                     transport: {
@@ -76,39 +84,14 @@
                             id: "id",
                             fields: {
                                 name: { type: "string", validation: { required: true } },
-                                status: { type: "int", validation: { required: true } }
+                              //  status: { type: "int" }
                             }
                         }
                     }, 
                     
                     pageSize: 20,
-
-                    // thông báo sau khi thêm
-                    requestEnd: function (e) {
-                        if (e.type === "create" && e.response) {
-                            var result = e.response.Result || {};
-                            if (result.Errors && result.Errors.length > 0) {
-                                alert("Thêm mới thất bại: " + result.Errors.join(", "));
-                            } else {
-                                alert("Thêm mới thành công!");
-                            }
-                        }
-                        /// thông báo sau cập nhật
-                        if (e.type === "update" && e.response) {
-                            var result = e.response.Result || {};
-                            if (result.Errors && result.Errors.length > 0) {
-                                alert("Cập nhật  thất bại: " + result.Errors.join(", "));
-                            } else {
-                                alert("Cập nhật thành công!");
-                            }
-                        }
-                    },
-                    
-                    
+            
                 }, 
-              
-                   
-                
                 height: 550,
                 groupable: false,
                 sortable: true,
@@ -127,8 +110,6 @@
                     name: "create",
                     text: "Thêm", /* Thay đổi văn bản của nút "Thêm" */
 
-                      
-
                 }, 
                 
                 "pdf"],
@@ -142,48 +123,38 @@
                     template: $("#page-template").html(),
                     scale: 0.8,                
                 },
-                editable: "inline",
-                destroy: function (e) {
-                    // Display a confirmation dialog when saving changes
-                    e.preventDefault(); // Prevent the default save action
-                    Swal.fire({
-                        title: "Confirm Save",
-                        text: "Bạn có chắc chắn muốn xóa không?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Có",
-                        cancelButtonText: "Không",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // If the user confirms, allow the save action to proceed
-                            e.sender.saveChanges();
-                        }
-                    });
+                editable: {
+                    mode: "popup",
+                    window: { width: 550, height:250}, // Chỉnh chiều rộng ở đây
                 },
+
+
+                save: function (e) {
+                    if (e.model.isNew()) {
+                        if (status === 'success') {
+                            showNotification("status","error");
+                            showNotification('', 'error');
+                        } else {
+                            showNotification('', 'error');
+                        }
+
+                    }
+                },
+
                 columns: [
                     {
                         field: "name",
                         title: "Tên"
                     },
                     {
-                        field: "status",
-                        title: "Trạng thái"
-                    },
-                   
-                    {
                         command: [
                             {
                                 name: "edit",
                                 text: "Sửa",
-                                
-
-
                             },
                             {
                                 name: "destroy",
                                 text: "Xóa",
-                               
-                                
                             },
                         ],
                         title: "Hành động",
@@ -197,6 +168,47 @@
     </script>
 }
 <style>
+
+
+
+
+
+    /* Tùy chỉnh popup bằng CSS */
+    .k-popup-edit-form {
+        background-color: #f5f5f5; /* Màu nền của popup chỉnh sửa */
+        border: 1px solid #ddd; /* Viền xung quanh popup */
+    }
+
+    .k-edit-form-container {
+        padding: 20px; /* Khoảng cách giữa nội dung và viền popup */
+    }
+
+    .k-edit-label {
+        font-weight: bold; /* Định dạng kiểu font cho nhãn */
+    }
+
+    .k-edit-field {
+        width: 100%; /* Kích thước trường nhập liệu */
+    }
+
+    .k-grid-update, .k-grid-cancel {
+        background-color: #337ab7; /* Màu nền của nút Lưu và Hủy */
+        color: #fff; /* Màu chữ của nút Lưu và Hủy */
+    }
+
+        .k-grid-update:hover, .k-grid-cancel:hover {
+            background-color: #23527c; /* Màu nền khi di chuột qua nút */
+        }
+
+
+
+
+
+
+
+
+
+
     /* Page Template for the exported PDF */
         .page-template {
           font-family: "DejaVu Sans", "Arial", sans-serif;
@@ -255,6 +267,38 @@
           line-height: 32px;
           padding-left: 3px;
         }
+
+
+
+    /* Tùy chỉnh popup */
+    .k-popup-content {
+        border-radius: 10px; /* Điều này sẽ làm cho các góc tròn */
+        background-color: #f5f5f5; /* Màu nền */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng đổ */
+    }
+
+    /* Tùy chỉnh header của popup */
+    .k-popup-title {
+        background-color: #007bff; /* Màu header */
+        color: #fff; /* Màu chữ */
+        border-radius: 10px 10px 0 0; /* Góc trên của header là tròn, dưới là vuông */
+    }
+
+    /* Tùy chỉnh nút đóng popup */
+    .k-popup .k-i-close {
+        color: #fff; /* Màu của nút đóng */
+        font-size: 20px; /* Kích thước của biểu tượng đóng */
+        top: 5px; /* Điều chỉnh vị trí nút đóng */
+        right: 5px;
+    }
+
+    /* Tùy chỉnh nội dung của popup */
+    .k-popup-content .k-edit-form-container {
+        padding: 20px; /* Khoảng cách nội dung từ biên của popup */
+    }
+
+
+
 </style>
 
 
