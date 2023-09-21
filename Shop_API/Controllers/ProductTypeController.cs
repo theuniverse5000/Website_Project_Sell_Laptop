@@ -65,7 +65,7 @@ namespace Shop_API.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("CreateProductType")]
         public async Task<IActionResult> CreateProductType(ProductType obj)
         {
 
@@ -81,6 +81,7 @@ namespace Shop_API.Controllers
             //    return Unauthorized();
             //}
             obj.Id = Guid.NewGuid();
+            obj.Status = 1;
             if (await _repository.Create(obj))
             {
                 return Ok("Thêm thành công");
