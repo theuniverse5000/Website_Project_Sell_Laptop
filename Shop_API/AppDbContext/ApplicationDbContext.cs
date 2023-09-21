@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NuGet.Common;
 using Shop_Models.Entities;
 
 namespace Shop_API.AppDbContext
@@ -40,7 +39,7 @@ namespace Shop_API.AppDbContext
 
         public virtual DbSet<ManagePost> ManagePosts { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
-        public virtual DbSet<Shop_Models.Entities.Token> tokens { get; set; }
+        public virtual DbSet<Token> tokens { get; set; }
 
     }
 }
