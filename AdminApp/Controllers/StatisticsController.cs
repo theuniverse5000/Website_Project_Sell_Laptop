@@ -19,6 +19,7 @@ namespace AdminApp.Controllers
         }
 
         [HttpGet]
+        [Route("thongKeDoanhThu")]
         public async Task<IActionResult> GetAllBills()
         {
             string apiKey = "c825f522ca3f4a5f935f2d2ac3e05e25";
