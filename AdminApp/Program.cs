@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,9 +10,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient("IHttp", c =>
+// Add Service cho 1 Httpclient và cấu hình 
+builder.Services.AddHttpClient("PhuongThaoHttpAdmin", thao =>
 {
-    //c.DefaultRequestHeaders.Add("Accept", "application/json");
+    thao.BaseAddress = new Uri(builder.Configuration["UrlApiAdmin"]);
+    thao.DefaultRequestHeaders.Add("Key-Domain", builder.Configuration["TokenGetApiAdmin"]);
 });
 var app = builder.Build();
 

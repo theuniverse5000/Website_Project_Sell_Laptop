@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Shop_API.Repository;
-using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
 
@@ -12,14 +10,13 @@ namespace AdminApp.Controllers
         private readonly ILogger<ProductDetailController> _logger;
         private readonly IConfiguration _config;
         private readonly IHttpClientFactory _httpClientFactory;
-        private string? urlApi;
 
-        public ProductDetailController(ILogger<ProductDetailController> logger, IConfiguration config, IHttpClientFactory httpClientFactory )
+
+        public ProductDetailController(ILogger<ProductDetailController> logger, IConfiguration config, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _config = config;
             _httpClientFactory = httpClientFactory;
-            urlApi = _config.GetSection("UrlApiAdmin").Value;
 
         }
         public IActionResult Index()
@@ -29,12 +26,12 @@ namespace AdminApp.Controllers
         }
         public async Task<IActionResult> GetProductDetail()
         {
-            string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
-            var client = _httpClientFactory.CreateClient();
-            string result = await client.GetStringAsync($"{urlApi}/api/ProductDetail/GetProductDetailsFSP");
+
+            var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+            string result = await client.GetStringAsync($"/api/ProductDetail/GetProductDetailsFSP");
             return Content(result, "application/json");
-        }  
-    
+        }
+
 
         public async Task<JsonResult> CreateProductDetail(ProductDetailDto productRequest)
         {
@@ -45,10 +42,8 @@ namespace AdminApp.Controllers
                     Id = Guid.NewGuid(),
                     Code = productRequest.Code
                 };
-                string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
-
-                var client = _httpClientFactory.CreateClient();
-                var result = await client.PostAsJsonAsync($"{urlApi}/api/ProductDetail", productDetail);
+                var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+                var result = await client.PostAsJsonAsync($"/api/ProductDetail", productDetail);
                 if (result.IsSuccessStatusCode)
                 {
                     return Json(productDetail);
@@ -63,21 +58,21 @@ namespace AdminApp.Controllers
         }
         public async Task<IActionResult> Create()
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
 
-            string getProduct = await client.GetStringAsync($"{urlApi}/api/Product");
+            string getProduct = await client.GetStringAsync($"/api/Product");
             ViewBag.GetProduct = JsonConvert.DeserializeObject<List<Product>>(getProduct);
 
-            string getManufacturer = await client.GetStringAsync($"{urlApi}/api/Manufacturer");
-            ViewBag.GetManufacturer =  JsonConvert.DeserializeObject<List<Manufacturer>>(getManufacturer);
+            string getManufacturer = await client.GetStringAsync($"/api/Manufacturer");
+            ViewBag.GetManufacturer = JsonConvert.DeserializeObject<List<Manufacturer>>(getManufacturer);
 
-            string getProductType = await client.GetStringAsync($"{urlApi}/api/ProductType");
+            string getProductType = await client.GetStringAsync($"/api/ProductType");
             ViewBag.GetProductType = JsonConvert.DeserializeObject<List<ProductType>>(getProductType);
-            
-            string getCPU = await client.GetStringAsync($"{urlApi}/api/Cpu");
+
+            string getCPU = await client.GetStringAsync($"/api/Cpu");
             ViewBag.GetCPU = JsonConvert.DeserializeObject<List<Cpu>>(getCPU);
 
-            string getRam = await client.GetStringAsync($"{urlApi}/api/Ram");
+            string getRam = await client.GetStringAsync($"/api/Ram");
             ViewBag.GetRam = JsonConvert.DeserializeObject<List<Ram>>(getRam);
 
             return View();
