@@ -35,7 +35,7 @@ namespace Shop_API.Repository
             //var allProducts = _context.ProductTypes.Include(pt => pt.Name).AsQueryable();
 
 
-            var allProducts = _context.ProductTypes.AsQueryable();
+            var allProducts = _context.ProductTypes.Where(x=>x.Status>0).AsQueryable();
 
 
             #region Filtering
@@ -56,7 +56,6 @@ namespace Shop_API.Repository
             #region Sorting
             //Default sort by Name (TenHh)
             allProducts = allProducts.OrderBy(hh => hh.Name);
-
             if (!string.IsNullOrEmpty(sortBy))
             {
                 //switch (sortBy)
@@ -70,6 +69,8 @@ namespace Shop_API.Repository
 
             //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
             int totalCount = allProducts.Count();
+
+
             return allProducts.Select(hh => new PagingDto
             {
                 Id = hh.Id,
