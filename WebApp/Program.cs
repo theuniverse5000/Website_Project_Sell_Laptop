@@ -1,7 +1,13 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+// Add Service cho 1 Httpclient và cấu hình 
+builder.Services.AddHttpClient("PhuongThaoHttpWeb", thao =>
+{
+    thao.BaseAddress = new Uri(builder.Configuration["UrlApiAdmin"]);
+    thao.DefaultRequestHeaders.Add("Key-Domain", builder.Configuration["TokenGetApiAdmin"]);
+});
 
 var app = builder.Build();
 
