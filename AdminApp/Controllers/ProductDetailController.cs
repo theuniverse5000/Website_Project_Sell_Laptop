@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Shop_API.Repository;
+using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
 
@@ -10,12 +13,14 @@ namespace AdminApp.Controllers
         private readonly IConfiguration _config;
         private readonly IHttpClientFactory _httpClientFactory;
         private string? urlApi;
-        public ProductDetailController(ILogger<ProductDetailController> logger, IConfiguration config, IHttpClientFactory httpClientFactory)
+
+        public ProductDetailController(ILogger<ProductDetailController> logger, IConfiguration config, IHttpClientFactory httpClientFactory )
         {
             _logger = logger;
             _config = config;
             _httpClientFactory = httpClientFactory;
             urlApi = _config.GetSection("UrlApiAdmin").Value;
+
         }
         public IActionResult Index()
         {
@@ -28,7 +33,9 @@ namespace AdminApp.Controllers
             var client = _httpClientFactory.CreateClient();
             string result = await client.GetStringAsync($"{urlApi}/api/ProductDetail/GetProductDetailsFSP");
             return Content(result, "application/json");
-        }
+        }  
+    
+
         public async Task<JsonResult> CreateProductDetail(ProductDetailDto productRequest)
         {
             if (ModelState.IsValid)
@@ -57,7 +64,21 @@ namespace AdminApp.Controllers
         public async Task<IActionResult> Create()
         {
             var client = _httpClientFactory.CreateClient();
-            ViewBag.MaRam = await client.GetFromJsonAsync<ProductType>($"{urlApi}/api/ProductType");
+
+            string getProduct = await client.GetStringAsync($"{urlApi}/api/Product");
+            ViewBag.GetProduct = JsonConvert.DeserializeObject<List<Product>>(getProduct);
+
+            string getManufacturer = await client.GetStringAsync($"{urlApi}/api/Manufacturer");
+            ViewBag.GetManufacturer =  JsonConvert.DeserializeObject<List<Manufacturer>>(getManufacturer);
+
+            string getProductType = await client.GetStringAsync($"{urlApi}/api/ProductType");
+            ViewBag.GetProductType = JsonConvert.DeserializeObject<List<ProductType>>(getProductType);
+            
+            string getCPU = await client.GetStringAsync($"{urlApi}/api/Cpu");
+            ViewBag.GetCPU = JsonConvert.DeserializeObject<List<Cpu>>(getCPU);
+
+            string getRam = await client.GetStringAsync($"{urlApi}/api/Ram");
+            ViewBag.GetRam = JsonConvert.DeserializeObject<List<Ram>>(getRam);
 
             return View();
 
@@ -75,5 +96,7 @@ namespace AdminApp.Controllers
                 return Json(new { Errors = errors });
             }
         }
+
+
     }
 }
