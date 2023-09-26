@@ -1,22 +1,25 @@
-﻿@{
-    @using Shop_Models;  
+﻿@model Shop_Models.Dto.ProductDetailDto;
+@{
+
+    @using Shop_Models;
     @using Shop_Models.Entities;
+ 
 
 }
  
 <div id="example">
-   <form asp-controller="ProductDetail" asp-action="Create"method="post">
+    <form asp-controller="ProductDetail" asp-action="Create" method="post">
     
    @*  <div id="grid1"></div> *@
 
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Mã</label>
-            <input type="email" class="form-control" id="code" placeholder="Mã Sản Phẩm">
+            <input type="text" class="form-control" asp-for="Code" placeholder="Mã Sản Phẩm">
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Tên Sản Phẩm</label>
 
-            <select class="form-select">
+            <select class="form-select" asp-for="IdProduct">
                 <option>Chọn Tên Sản Xuất</option>
                 @foreach (var t in (List<Product>)ViewBag.GetProduct)
                 {
@@ -26,11 +29,11 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Hãng Sản Xuất</label>
+            <label for="exampleFormControlInput1" class="form-label"> Màu Sắc</label>
             <div class="form-group col-md-6">
-                <select class="form-select">
-                    <option>Chọn Hãng Sản Xuất</option>
-                    @foreach (var t in (List<Manufacturer>)ViewBag.GetManufacturer)
+                <select class="form-select" asp-for="IdColor">
+                    <option>Chọn Màu Sắc</option>
+                    @foreach (var t in (List<Color>)ViewBag.GetColor)
                     {
                         <option value="@t.Id">@t.Name</option>
                     }
@@ -39,15 +42,12 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Dòng Sản Phẩm</label>
-            @* <select id="productType" class="form-select" aria-label="">
-                <option selected>Chọn Dòng Sản Phẩm</option>
-            </select> *@
-            <select class="form-select">
-                <option>Chọn Hãng Sản Xuất</option>
-                @foreach (var t in (List<ProductType>)ViewBag.GetProductType)
+            <label for="exampleFormControlInput1" class="form-label">Ram</label>
+            <select class="form-select" asp-for="IdRam">
+                <option>Chọn Ram</option>
+                @foreach (var t in (List<Ram>)ViewBag.GetRam)
                 {
-                    <option value="@t.Id">@t.Name</option>
+                    <option value="@t.Id" >@t.Ma</option>
                 }
 
             </select>
@@ -56,26 +56,49 @@
 
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>
-            <select class="form-select">
+            <select class="form-select" asp-for="IdCpu">
                 <option>Chọn Vi Xử Lí</option>
                 @foreach (var t in (List<Cpu>)ViewBag.GetCPU)
                 {
-                    <option value="@t.Id">@t.Ma</option>
+                    <option value="@t.Id" >@t.Ma</option>
                 }
 
             </select>
         </div> 
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Ram</label>
-            <select class="form-select">
-                <option>Chọn Ram</option>
-                @foreach (var t in (List<Ram>)ViewBag.GetRam)
+            <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>
+            <select class="form-select" asp-for="IdScreen">
+                <option>Chọn Vi Xử Lí</option>
+                @foreach (var t in (List<Screen>)ViewBag.GetScreen)
                 {
-                    <option value="@t.Id">@t.Ma</option>
+                    <option value="@t.Id" >@t.Ma</option>
                 }
 
             </select>
-        </div>
+        </div> 
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">HardDrive</label>
+            <select class="form-select" asp-for="IdHardDrive">
+                <option>Chọn HardDrive</option>
+                @foreach (var t in (List<HardDrive>)ViewBag.GetHardDrive)
+                {
+                    <option value="@t.Id" >@t.Ma</option>
+                }
+
+            </select>
+        </div>   
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">CardVGA</label>
+            <select class="form-select" asp-for="IdCardVGA">
+                <option>Chọn CardVGA</option>
+                @foreach (var t in (List<CardVGA>)ViewBag.GetlistCardVGA)
+                {
+                    <option value="@t.Id" >@t.Ma</option>
+                }
+
+            </select>
+        </div> 
+       
        @*  <div class="form-group col-md-6">
             <label for="">Sản phẩm</label>
             <select class="form-select" >
@@ -87,18 +110,26 @@
             </select>
         </div> *@
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Số Lượng</label>
-            <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Nhập số lượng">
+            <label for="exampleFormControlInput1" class="form-label">Upgrade</label>
+            <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Upgrade" placeholder="Nhập Upgrade">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Price</label>
+            <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Price" placeholder="Nhập Price">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">ImportPrice</label>
+            <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder="Nhập ImportPrice">
         </div>
         <div class="demo-section wide">
-        <textarea name="description" id="editor" rows="10" cols="30" style="width:100%; height:840px" aria-label="editor"></textarea>
+            <textarea name="editor" id="description" rows="10" cols="30" style="width:100%; height:840px" aria-label="editor"></textarea>
         </div>
 
 
-        <button type="submit">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
         <script>
-            var editor = $("#editor").kendoEditor({
+        var editor = $("#description").kendoEditor({
                 stylesheets: [
                     "../content/shared/styles/editor.css",
                 ],
