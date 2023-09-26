@@ -45,20 +45,27 @@
 <body>
    
    
-    <header>
-        @await Html.PartialAsync("_Slidebar")
-    </header>
-    <div class="container">
-        <!-- Content here -->
-    <div id="rootAdmin">
-        @RenderBody()
+    <div class="wrapper">
+        <div class="section">
+            <div class="top_navbar">
+                <div class="hamburger">
+                    <a href="#">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
-    <footer>
-       @*  @await Html.PartialAsync("_Footer") *@
-        </footer>
-    
+        <div class="sidebar">
+            @await Html.PartialAsync("_Slidebar")
+        </div>
+        <div id="rootAdmin" class="content" style="padding-left:250px">
+        @RenderBody()
+    </div>  
+ </div>
+   
+    <script src="./js/animation.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
