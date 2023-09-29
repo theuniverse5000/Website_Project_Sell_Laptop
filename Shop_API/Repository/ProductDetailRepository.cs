@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
+using Shop_API.HelpperModel;
 using Shop_API.Repository.IRepository;
+using Shop_API.RequestModel;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
+using Shop_Models.HelpperModel;
 
 namespace Shop_API.Repository
 {
@@ -53,12 +56,20 @@ namespace Shop_API.Repository
             }
         }
 
-        public async Task<IEnumerable<ProductDetail>> GetAll()
+        public async Task<Pagination<ProductDetail>> GetAll(ProductDetailQueryModel productDetailQueryModel)
         {
-            var listProductDetail = await _context.ProductDetails
-            .Where(x => x.Status > 0)
-            .ToListAsync();
-            return listProductDetail;
+            var page = productDetailQueryModel.CurrentPage??1;
+            var size = productDetailQueryModel.PageSize??20;
+
+            var query = _context.ProductDetails
+            .Where(x => x.Status > 0).AsQueryable();
+
+            if (string.IsNullOrEmpty(productDetailQueryModel.Sort))
+            {
+                query=query.OrderBy(x => x.Product.Name).AsQueryable();
+            }
+            var resut = await query.GetPagedAsync<ProductDetail>(page, size);
+            return resut;
 
         }
         public int GetCountProductDetail(string codeProductDetail)
@@ -301,6 +312,17 @@ namespace Shop_API.Repository
                 return false;
             }
 
+        }
+
+        public async Task<ProductDetail> GetByCode(string code)
+        {
+            var result = await _context.ProductDetails.FirstOrDefaultAsync(x=>x.Code==code && x.Status>0);
+            return result;
+        }
+
+        public Task<ProductDetailDto> GetProductDetail()
+        {
+            throw new NotImplementedException();
         }
     }
 }

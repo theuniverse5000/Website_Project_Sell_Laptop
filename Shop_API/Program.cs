@@ -65,8 +65,9 @@ builder.Services.AddTransient<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddTransient<IGiamGiaHangLoatServices, GiamGiaHangLoatServices>();
 builder.Services.AddTransient<IBillService, BillService>();
 builder.Services.AddTransient<ICartService, CartService>();
-
+builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IPagingRepository, PagingRepository>();
+
 
 // Add Dependencies
 builder.Services.AddTransient<IUserServiece, UserServiece>();
@@ -77,6 +78,7 @@ builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
 builder.Services.AddIdentity<User, Position>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager<SignInManager<User>>();
+
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration).CreateLogger();

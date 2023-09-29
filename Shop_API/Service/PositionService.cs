@@ -7,7 +7,7 @@ using Shop_Models.Entities;
 
 namespace Shop_API.Service
 {
-    public class PositionService: IPositionService
+    public class PositionService : IPositionService
     {
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<Position> _roleManager;
