@@ -1,4 +1,4 @@
-﻿@page "/Login"
+﻿@* @page "/Login"
 @model Shop_Models.Dto.Account.LoginRequestDto;
 
 
@@ -46,4 +46,47 @@
         </div>
     </form>
     }
+</div> *@
+
+
+@page "/Login"
+@model Shop_Models.Dto.Account.LoginRequestDto;
+
+<h2>Login</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        @using (Html.BeginForm("LoginWithJWT", "Login"))
+        {
+            <form>
+
+                @if (!string.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <span class="text-danger">
+                        @ViewBag.Message
+                    </span>
+                }
+                @Html.HiddenFor(x => x.ReturnUrl)
+                <div class="form-group">
+                    <label name="UserName" class="control-label"></label>
+                    <input name="UserName" class="form-control" />
+
+
+                </div>
+                <div class="form-group">
+                    <label name="Password" class="control-label"></label>
+                    <input name="Password" class="form-control" />
+
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Login" class="btn btn-default" />
+                </div>
+            </form>
+        }
+
+
+    </div>
 </div>

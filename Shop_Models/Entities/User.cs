@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shop_Models.Entities
 {
     [Table("User")]
-    public class User
+    public class User : IdentityUser<Guid>
     {
         [Key] public Guid Id { get; set; }
         public string? Username { get; set; } = "";
