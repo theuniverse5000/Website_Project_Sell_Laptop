@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shop_API\Shop_API.csproj" />
     <ProjectReference Include="..\Shop_Models\Shop_Models.csproj" />
   </ItemGroup>
 

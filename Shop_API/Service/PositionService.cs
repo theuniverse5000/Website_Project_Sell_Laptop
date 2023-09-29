@@ -78,14 +78,24 @@ namespace Shop_API.Service
             }
         }
 
-            public async Task<List<Position>> GetAllPosition()
-            {
-                return await _context.Roles.ToListAsync();
-            }
-        public async Task<List<Position>> GetAllPositionActive()
+        public Task<List<Position>> GetAllPosition()
         {
-            return await _context.Roles.AsQueryable().Where(p => p.Status != 1).ToListAsync();
+            throw new NotImplementedException();
         }
+
+        public Task<List<Position>> GetAllPositionActive()
+        {
+            throw new NotImplementedException();
+        }
+
+        //    public async Task<List<Position>> GetAllPosition()
+        //    {
+        //        return await _context.Roles.ToListAsync();
+        //    }
+        //public async Task<List<Position>> GetAllPositionActive()
+        //{
+        //    return await _context.Roles.AsQueryable().Where(p => p.Status != 1).ToListAsync();
+        //}
         public async Task<Position> GetPositionById(Guid id)
         {
 
