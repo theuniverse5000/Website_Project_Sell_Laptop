@@ -7,7 +7,7 @@ using Shop_Models.Entities;
 
 namespace Shop_API.Service
 {
-    public class PositionService: IPositionService
+    public class PositionService : IPositionService
     {
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<Position> _roleManager;
@@ -78,13 +78,13 @@ namespace Shop_API.Service
             }
         }
 
-            public async Task<List<Position>> GetAllPosition()
-            {
-                return await _context.Roles.ToListAsync();
-            }
+        public async Task<List<Position>> GetAllPosition()
+        {
+            return null;
+        }
         public async Task<List<Position>> GetAllPositionActive()
         {
-            return await _context.Roles.AsQueryable().Where(p => p.Status != 1).ToListAsync();
+            return null;
         }
         public async Task<Position> GetPositionById(Guid id)
         {

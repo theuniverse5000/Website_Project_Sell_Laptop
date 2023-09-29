@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -7,6 +8,7 @@ using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service;
 using Shop_API.Service.IService;
+using Shop_Models.Entities;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,8 +62,12 @@ builder.Services.AddTransient<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddTransient<IGiamGiaHangLoatServices, GiamGiaHangLoatServices>();
 builder.Services.AddTransient<IBillService, BillService>();
 builder.Services.AddTransient<ICartService, CartService>();
-
+builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IPagingRepository, PagingRepository>();
+
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -32,7 +32,7 @@ namespace Shop_API.Service
         {
             try
             {
-                var productDetailToCart = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Code == codeProductDetail);
+                var productDetailToCart = await _productDetailRepository.GetByCode(codeProductDetail);
                 var userToCart = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.Username == username);
                 if (userToCart == null)
                 {
