@@ -9,11 +9,8 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(ProductDetail obj);
         Task<bool> Delete(Guid id);
         Task<IEnumerable<ProductDetail>> GetAll();
-        Task<int> GetCountProductDetail();// Truy vấn ra số lượng sản phẩm là số lượng serial
-        Task<IEnumerable<ProductDetailDto>> GetAllProductDetail();
+        int GetCountProductDetail(string codeProductDetail);// Truy vấn ra số lượng sản phẩm là số lượng serial
         Task<IEnumerable<ProductDetailDto>> GetProductDetail(string? search, double? from, double? to, string? sortBy, int page = 1);
-        //    Task<ProductDetailView> GetAllProductDetailById(Guid id);
-
         Task<IEnumerable<ProductDetailDto>> GetProductDetailsByPromotionType(string promotionType);
         Task<bool> UpdateSoLuong(Guid id, int soLuong);
         Task<bool> Update(ProductDetailDto productDetail);

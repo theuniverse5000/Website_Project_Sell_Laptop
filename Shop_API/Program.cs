@@ -29,7 +29,7 @@ builder.Services.AddControllers();
 //            ValidateIssuer = false,
 //            ValidateAudience = false
 //        };
-//    });
+//    }); 
 // Add DI 
 builder.Services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
 builder.Services.AddTransient<IRamRepository, RamRepository>();

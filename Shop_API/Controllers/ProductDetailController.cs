@@ -35,8 +35,8 @@ namespace Shop_API.Controllers
             _reponse.Result = await _repository.GetAll();
             return Ok(_reponse);
         }
-        [HttpGet("GetAllJoin")]
-        public async Task<IActionResult> GetAllProductDetails()
+        [HttpGet("GetProductDetailsFSP")]
+        public async Task<IActionResult> GetProductDetailsFSP(string? search, double? from, double? to, string? sortBy, int page)
         {
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
@@ -49,11 +49,12 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            _reponse.Result = await _repository.GetAllProductDetail();
+            _reponse.Result = await _repository.GetProductDetail(search, from, to, sortBy, page);
+            _reponse.Count = 10;
             return Ok(_reponse);
         }
-        [HttpGet("GetProductDetailsFSP")]
-        public async Task<IActionResult> GetProductDetailsFSP(string? search, double? from, double? to, string? sortBy, int page)
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetProductDetailById(Guid id)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
             //if (apiKey == null)
@@ -66,27 +67,9 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            _reponse.Result = await _repository.GetProductDetail(search, from, to, sortBy, page);
-            _reponse.Count = 10;
-            return Ok(_reponse);
-        }
-        [HttpGet("GetById")]
-        public async Task<IActionResult> GetProductDetailById(Guid id)
-        {
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
-            var list = await _repository.GetAllProductDetail();
-            var proX = list.Where(x => x.Id == id);
-            return Ok(proX);
+            //var list = await _repository.GetAllProductDetail();
+            //var proX = list.Where(x => x.Id == id);
+            return Ok();
         }
         [HttpPost]
         public async Task<IActionResult> CreateProductDetail(ProductDetail obj)
