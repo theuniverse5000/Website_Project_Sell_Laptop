@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Shop_API.AppDbContext;
-using Shop_API.Repository;
-using Shop_API.Repository.IRepository;
-using Shop_API.Service;
-using Shop_API.Service.IService;
 using Shop_Models.Entities;
 using System.Text;
 
@@ -22,23 +19,18 @@ builder.Services.AddHttpClient("PhuongThaoHttpWeb", thao =>
     thao.DefaultRequestHeaders.Add("Key-Domain", builder.Configuration["TokenGetApiAdmin"]);
 });
 
-// Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+// Đăng ký HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 
-// Add Dependencies
-builder.Services.AddTransient<IUserServiece, UserServiece>();
-builder.Services.AddTransient<IPositionService, PositionService>();
-builder.Services.AddTransient<IAccountService, AccountService>();
-builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
-// Add Identity
-builder.Services.AddIdentity<User, Shop_Models.Entities.Position>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddSignInManager<SignInManager<User>>();
-
-
-// cau hinh identity
+//cấu hình nén phản hồi
+builder.Services.AddResponseCompression(otp =>
+{
+    otp.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" });
+});
+builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, Shop_Models.Entities.Position>()
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddSignInManager<SignInManager<User>>();
 
@@ -67,10 +59,6 @@ builder.Services.Configure<IdentityOptions>(options => {
     options.SignIn.RequireConfirmedAccount = true;
 
 });
-
-builder.Services.AddSession();
-// cau hinh google
-
 builder.Services.AddAuthentication(options =>
 {
     // DefaultAuthenticateScheme: Đây là Scheme sẽ được sử dụng để xác thực yêu cầu đã được xác thực thành công.
@@ -95,6 +83,20 @@ builder.Services.AddAuthentication(options =>
             });
 
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ADMIN", policy => { policy.RequireAuthenticatedUser(); policy.RequireRole("ADMIN"); });
+    options.AddPolicy("CLIENT", policy => { policy.RequireAuthenticatedUser(); policy.RequireRole("CLIENT"); });
+    options.AddPolicy("ClinetOld", policy => { policy.RequireAuthenticatedUser(); policy.RequireRole("ClientOld"); });
+
+});
+
+builder.Services.AddSession();
+
+// Add services to the container.
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+builder.Services.AddHttpClient();
 
 
 var app = builder.Build();
@@ -106,8 +108,10 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 app.UseHttpsRedirection();
 app.UseSession();
+
 app.UseStaticFiles();
 app.UseRouting();
 
