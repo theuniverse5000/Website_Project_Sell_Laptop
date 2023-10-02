@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Shop_Models;
+using Shop_Models.Entities;
 
 
 namespace Shop_Models.Dto.User
