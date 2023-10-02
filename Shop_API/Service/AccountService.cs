@@ -50,7 +50,7 @@ namespace Shop_API.Service
             {
                 new Claim(ClaimTypes.Name,loginRequest.UserName),
                 new Claim("Id",user.Id.ToString()),
-                new Claim("userName",user.Username.ToString()),
+                new Claim("userName",user.UserName.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
             };
@@ -209,7 +209,7 @@ namespace Shop_API.Service
                         if (user != null)
                         {
                             LoginRequestDto loginRequestVM = new LoginRequestDto();
-                            loginRequestVM.UserName = user.Username;
+                            loginRequestVM.UserName = user.UserName;
                             loginRequestVM.Password = user.Password;
                             if (!storedToken.IsUsed && user.Id == storedToken.UserId && !storedToken.IsRevoked && !storedToken.IsActive && storedToken.Expired >= DateTime.UtcNow || storedToken.Expired >= DateTime.UtcNow)
                             {
@@ -244,24 +244,32 @@ namespace Shop_API.Service
                 var user = new User()
                 {
                     Id = Guid.NewGuid(),
-                    Username = p.UserName,
+                    UserName = p.UserName,
                     PhoneNumber = p.PhoneNumber,
                     Status = 0,   // quy uoc 0 có nghĩa là đang hđ
                     Address = p.DiaChi,
                     Password = p.Password,
-
                 };
                 var result = await _userManager.CreateAsync(user, p.Password);
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "Client");
                 }
-                return false;
-            }
-            catch (Exception)
-            {
+                else
+                {
+                    // Log or retrieve detailed error information
+                    foreach (var error in result.Errors)
+                    {
+                        Console.WriteLine($"Error: {error.Description}");
+                    }
+                }
 
-                return false;
+                return result.Succeeded;
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception here or log it for debugging
+                throw; // Re-throw the exception for the calling code to handle
             }
         }
 
