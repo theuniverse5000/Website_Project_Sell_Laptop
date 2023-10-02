@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.AppDbContext;
 using Shop_Models.Entities;
+using System.Net.Http;
 
 namespace AdminApp.Controllers
 {
@@ -11,13 +12,13 @@ namespace AdminApp.Controllers
         HttpClient client = new HttpClient();
         ApplicationDbContext context;
         static int Check {get;set;}
-        
-        public ProductTypeController(ILogger<ProductTypeController> logger, IConfiguration config, ApplicationDbContext ctext)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public ProductTypeController(ILogger<ProductTypeController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _config = config;
             context = ctext;
-
+            _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()
         {
@@ -27,7 +28,7 @@ namespace AdminApp.Controllers
 
         public async Task<IActionResult> GetProductType()
         {
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/ProductType/GetPagingProductsFSP");
 
@@ -51,7 +52,7 @@ namespace AdminApp.Controllers
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
                 HttpResponseMessage response = await client.PostAsJsonAsync($"https://localhost:44333/api/ProductType/CreateProductType", p);

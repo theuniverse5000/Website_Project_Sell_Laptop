@@ -17,7 +17,7 @@ namespace Shop_API.Repository
         public async Task<bool> Create(Color obj)
         {
             var checkMa = await _dbContext.Colors.AnyAsync(x => x.Ma == obj.Ma);
-            if (obj == null || checkMa == true)
+            if (obj == null || checkMa == true||obj.Ma==null||obj.Name==null)
             {
                 return false;
             }
@@ -70,7 +70,8 @@ namespace Shop_API.Repository
             try
             {
                 color.Name = obj.Name;
-                color.TrangThai = obj.TrangThai;
+                color.Ma = obj.Ma;
+                //color.TrangThai = obj.TrangThai;
                 _dbContext.Colors.Update(color);
                 await _dbContext.SaveChangesAsync();
                 return true;

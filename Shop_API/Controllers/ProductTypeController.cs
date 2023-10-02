@@ -45,17 +45,17 @@ namespace Shop_API.Controllers
         [HttpGet("GetPagingProductsFSP")]
         public async Task<IActionResult> GetPagingProductsFSP(string? search, double? from, double? to, string? sortBy, int page)
         {
-            //string apiKey = _config.GetSection("ApiKey").Value;
-            //if (apiKey == null)
-            //{
-            //    return Unauthorized();
-            //}
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
 
-            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            //if (keyDomain != apiKey.ToLower())
-            //{
-            //    return Unauthorized();
-            //}
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
 
             _reponse.Result = _iPagingRepository.GetAll(search, from, to, sortBy, page);
             var count = _reponse.Count = _iPagingRepository.GetAll(search, from, to, sortBy, page).Count;
@@ -69,17 +69,17 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> CreateProductType(ProductType obj)
         {
 
-            //  string apiKey = _config.GetSection("ApiKey").Value;
-            //if (apiKey == null)
-            //{
-            //    return Unauthorized();
-            //}
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
 
-            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            //if (keyDomain != apiKey.ToLower())
-            //{
-            //    return Unauthorized();
-            //}
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             obj.Id = Guid.NewGuid();
             obj.Status = 1;
             if (await _repository.Create(obj))

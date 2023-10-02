@@ -68,7 +68,7 @@ namespace Shop_API.Repository
             //var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
 
             //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
-            int totalCount = allProducts.Count();
+            //int totalCount = allProducts.Count();
 
 
             return allProducts.Select(hh => new PagingDto
@@ -79,5 +79,49 @@ namespace Shop_API.Repository
             }).ToList();
         }
 
-    }
+		public List<PagingDto> GetAllColor(string search, double? from, double? to, string sortBy, int page)
+		{
+			var allColors = _context.Colors.Where(x=>x.TrangThai>0).AsQueryable();
+
+
+            #region Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                allColors = allColors.Where(pt => pt.Name.Contains(search));
+            }
+            if (from.HasValue)
+            {
+                allColors = allColors.Where(hh => hh.TrangThai >= from);
+            }
+            if (to.HasValue)
+            {
+                allColors = allColors.Where(hh => hh.TrangThai <= to);
+            }
+            #endregion
+
+            #region Sorting
+            //Default sort by Name (TenHh)
+            allColors = allColors.OrderBy(hh => hh.Name);
+			if (!string.IsNullOrEmpty(sortBy))
+			{
+
+				allColors = allColors.OrderByDescending(hh => hh.Name); /*break;*/
+				
+			}
+			#endregion
+
+			//var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+			//var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+			int totalCount = allColors.Count();
+
+
+			return allColors.Select(hh => new PagingDto
+			{
+				Id = hh.Id,
+                Ma=hh.Ma,
+				Name = hh.Name,
+			}).ToList();
+		}
+	}
 }
