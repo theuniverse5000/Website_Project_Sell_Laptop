@@ -1,4 +1,5 @@
 
+
 @media screen and (max-width: 768px) {
     .col-sm-6 {
         flex: 0 0 100%;
@@ -34,6 +35,13 @@ img {
         max-width: 50%;
     }
 }
+@media screen and (max-width: 1440px) {
+    #menu {
+        width: 100% !important;
+    }
+}
+
+
 
 #breadcrumb {
     font-size: larger;
@@ -145,7 +153,6 @@ img {
     max-width: 95px;
     max-height: 80px;
 }
-
 
 
 

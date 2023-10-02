@@ -35,7 +35,7 @@ namespace Shop_API.Service
         {
             try
             {
-                var user = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.Username == username);
+                var user = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.UserName == username);
                 if (user == null)
                 {
                     _reponse.Result = null;
@@ -148,7 +148,7 @@ namespace Shop_API.Service
         public async Task<ReponseDto> CreateBillDetail(string invoiceCode, string serialNumber, string username)
         {
             var billX = _billRepository.GetAll().Result.FirstOrDefault(x => x.InvoiceCode == invoiceCode);
-            var user = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.Username == username);
+            var user = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.UserName == username);
             if (user == null)
             {
                 _reponse.Result = null;

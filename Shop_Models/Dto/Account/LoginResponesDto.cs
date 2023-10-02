@@ -8,8 +8,8 @@ namespace Shop_Models.Dto.Account
 {
     public class LoginResponesDto
     {
-        public string Mess { get; set; }
-        public bool Successful { get; set; }
+        public string Mess { get; set; } = "Login Falied";
+        public bool Successful { get; set; } = false;
         public object Data { get; set; }
     }
 }

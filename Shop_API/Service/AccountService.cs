@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Packaging;
 using Shop_API.AppDbContext;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
@@ -10,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Token = Shop_Models.Entities.Token;
 
 namespace Shop_API.Service
@@ -34,7 +36,14 @@ namespace Shop_API.Service
         {
             //cấp token
             var token = await GenerateToken(loginRequest);
-            return new LoginResponesDto { Successful = true, Mess = "Successful", Data = token };
+            var respone = new LoginResponesDto();
+            if (token==null)
+            {
+                respone.Mess="Login SucessFull";
+                respone.Successful=true;
+                respone.Data=token;
+            }
+            return respone;
         }
 
         public async Task<TokenDto> GenerateToken(LoginRequestDto loginRequest)
@@ -50,7 +59,7 @@ namespace Shop_API.Service
             {
                 new Claim(ClaimTypes.Name,loginRequest.UserName),
                 new Claim("Id",user.Id.ToString()),
-                new Claim("userName",user.Username.ToString()),
+                new Claim("userName",user.UserName.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
             };
@@ -209,7 +218,7 @@ namespace Shop_API.Service
                         if (user != null)
                         {
                             LoginRequestDto loginRequestVM = new LoginRequestDto();
-                            loginRequestVM.UserName = user.Username;
+                            loginRequestVM.UserName = user.UserName;
                             loginRequestVM.Password = user.Password;
                             if (!storedToken.IsUsed && user.Id == storedToken.UserId && !storedToken.IsRevoked && !storedToken.IsActive && storedToken.Expired >= DateTime.UtcNow || storedToken.Expired >= DateTime.UtcNow)
                             {
@@ -237,31 +246,49 @@ namespace Shop_API.Service
             }
         }
 
-        public async Task<bool> SignUp(SignUpDto p)
+        public async Task<SignUpRespone> SignUp(SignUpDto p)
         {
             try
             {
                 var user = new User()
                 {
                     Id = Guid.NewGuid(),
-                    Username = p.UserName,
+                    UserName = p.UserName,
                     PhoneNumber = p.PhoneNumber,
                     Status = 0,   // quy uoc 0 có nghĩa là đang hđ
                     Address = p.DiaChi,
                     Password = p.Password,
-
+                    RoleId=p.IdRole
                 };
                 var result = await _userManager.CreateAsync(user, p.Password);
+                SignUpRespone res = new SignUpRespone();
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "Client");
+                    
+                    res.Mess=result.Succeeded.ToString();
+                    res.Data=null;
                 }
-                return false;
-            }
-            catch (Exception)
-            {
+                else
+                {
+                    res.Mess=result.Succeeded.ToString();
+                    res.Data = new List<IdentityError>();
+                  foreach(var er in result.Errors)
+                    {
+                        if (er==null) continue;
+                        res.Data.Add(er); 
+                    }
 
-                return false;
+                }
+                return res;
+
+ 
+            }
+          
+            catch (Exception ex)
+            {
+                
+                throw ex; 
             }
         }
 

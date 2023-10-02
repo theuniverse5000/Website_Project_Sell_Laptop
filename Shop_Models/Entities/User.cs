@@ -8,7 +8,9 @@ namespace Shop_Models.Entities
     public class User : IdentityUser<Guid>
     {
         [Key] public Guid Id { get; set; }
+        [NotMapped]
         public string? Username { get; set; } = "";
+        [NotMapped]
         public string? Password { get; set; } = "";
         public string? FullName { get; set; }
         public string? PhoneNumber { get; set; }
