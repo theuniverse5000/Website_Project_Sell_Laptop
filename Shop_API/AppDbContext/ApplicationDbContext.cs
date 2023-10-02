@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Common;
 using Shop_Models.Entities;
 
 namespace Shop_API.AppDbContext
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User, Shop_Models.Entities.Position, Guid>
     {
         public ApplicationDbContext()
         {

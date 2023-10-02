@@ -31,7 +31,7 @@ namespace Shop_API.Service
             _voucherRepository = voucherRepository;
         }
 
-        public async Task<ReponseDto> CreateBill(string username, string maVoucher)
+        public async Task<ReponseDto> CreateBill(string username, string? maVoucher)
         {
             try
             {
@@ -91,37 +91,39 @@ namespace Shop_API.Service
                     FullName = user.FullName,
                     PhoneNumber = user.PhoneNumber,
                     Address = user.Address,
-                    Status = 1,
+                    Status = 2,// Trạng thái 2: Chờ xác nhận
                     UserId = getUserId,
                     VoucherId = voucherX != null ? voucherX.Id : null
                 };
                 if (await _billRepository.Create(bill))
                 {
-
                     var cartItemToBill = cartItem.Where(x => x.Status == 3).ToList();
                     foreach (var x in cartItemToBill)
                     {
-                        var productDetailX = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == x.Id);
-                        if (productDetailX == null)
-                        {
-                            _reponse.IsSuccess = false;
-                            _reponse.Code = 404;
-                            _reponse.Message = "Sản phẩm không tồn tại";
-                            return _reponse;
-                        }
+                        //var productDetailX = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == x.Id);
+                        //if (productDetailX == null)
+                        //{
+                        //    _reponse.IsSuccess = false;
+                        //    _reponse.Code = 404;
+                        //    _reponse.Message = "Sản phẩm không tồn tại";
+                        //    return _reponse;
+                        //}
 
                         BillDetail billDetail = new BillDetail();
                         billDetail.Id = Guid.NewGuid();
                         billDetail.Code = bill.InvoiceCode + RamdomString.GenerateRandomString(6);
-                        billDetail.Price = productDetailX.Price;
-                        billDetail.Quantity = cartItemToBill.FirstOrDefault().Quantity;
+                        // billDetail.CodeProductDetail = productDetailX.Code;
+                        billDetail.Price = x.Price;
+                        billDetail.Quantity = x.Quantity;
                         billDetail.BillId = bill.Id;
-                        _reponse.Result = bill;
-                        _reponse.IsSuccess = true;
-                        _reponse.Code = 200;
-                        _reponse.Message = "Đặt hàng thành công";
+                        await _billDetailRepository.CreateBillDetail(billDetail);
+
 
                     }
+                    _reponse.Result = bill;
+                    _reponse.IsSuccess = true;
+                    _reponse.Code = 200;
+                    _reponse.Message = "Đặt hàng thành công";
                     return _reponse;
                 }
                 else

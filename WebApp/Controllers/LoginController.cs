@@ -36,7 +36,7 @@ public class LoginController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> LoginWithJWT(LoginRequestDto loginRequest)
     {
-        var result = await _httpClient.PostAsJsonAsync("/api/Account/Login", loginRequest);
+        var result = await _httpClient.PostAsJsonAsync("https://localhost:7286/api/Account/Login", loginRequest);
         if (result.IsSuccessStatusCode)
         {
             var token = await result.Content.ReadAsStringAsync();

@@ -1,4 +1,6 @@
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -7,6 +9,7 @@ using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service;
 using Shop_API.Service.IService;
+using Shop_Models.Entities;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +18,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
     ));
 // Add services to the container.
 
-
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -29,7 +34,7 @@ builder.Services.AddControllers();
 //            ValidateIssuer = false,
 //            ValidateAudience = false
 //        };
-//    });
+//    }); 
 // Add DI 
 builder.Services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
 builder.Services.AddTransient<IRamRepository, RamRepository>();
@@ -60,28 +65,19 @@ builder.Services.AddTransient<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddTransient<IGiamGiaHangLoatServices, GiamGiaHangLoatServices>();
 builder.Services.AddTransient<IBillService, BillService>();
 builder.Services.AddTransient<ICartService, CartService>();
-
+builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IPagingRepository, PagingRepository>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-var tfConf = builder.Configuration.GetSection("Jwt");
-
-var tokenValidationParameters = new TokenValidationParameters
-{
-    ValidateIssuer = true,
-    ValidateAudience = true,
-    ValidateLifetime = true,
-    ValidateIssuerSigningKey = true,
-    ValidIssuer = tfConf["Issuer"],
-    ValidAudience = tfConf["Audience"],
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tfConf["Key"]))
-};
-
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o => { o.TokenValidationParameters = tokenValidationParameters; });
+// Add Dependencies
+builder.Services.AddTransient<IUserServiece, UserServiece>();
+builder.Services.AddTransient<IPositionService, PositionService>();
+builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
+// Add Identity
+builder.Services.AddIdentity<User, Position>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddSignInManager<SignInManager<User>>();
 
 
 Log.Logger = new LoggerConfiguration()
@@ -97,7 +93,6 @@ if (app.Environment.IsDevelopment())
 }
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
