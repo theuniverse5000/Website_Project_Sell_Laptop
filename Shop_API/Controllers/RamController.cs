@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -10,10 +13,16 @@ namespace Shop_API.Controllers
     {
         private readonly IRamRepository _repository;
         private readonly IConfiguration _config;
-        public RamController(IRamRepository repository, IConfiguration config)
+        private readonly IPagingRepository _iPagingRepository;
+        private readonly ReponseDto _reponse;
+
+
+        public RamController(IRamRepository repository, IConfiguration config, IPagingRepository iPagingRepository)
         {
             _repository = repository;
             _config = config;
+            _reponse = new ReponseDto();
+            _iPagingRepository = iPagingRepository;
 
         }
         [HttpGet]
@@ -98,5 +107,25 @@ namespace Shop_API.Controllers
             return BadRequest("Xóa thất bại");
 
         }
+
+        [HttpGet("GetRamsFSP")]
+        public async Task<IActionResult> GetRamsFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            _reponse.Result = _iPagingRepository.GetAllRam(search, from, to, sortBy, page);
+            _reponse.Count = 10;
+            return Ok(_reponse);
+        }
+
     }
 }

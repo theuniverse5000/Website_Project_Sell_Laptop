@@ -1,23 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ColorController : Controller
+    public class ColorController : ControllerBase
     {
         private readonly IColorRepository _colorRepository;
-        private readonly IConfiguration _config;
-
-        public ColorController(IColorRepository colorRepository, IConfiguration config)
+		private readonly IPagingRepository _iPagingRepository;
+		private readonly IConfiguration _config;
+		private readonly ReponseDto _reponse;
+		public ColorController(IColorRepository colorRepository, IConfiguration config, IProductDetailRepository repository, IPagingRepository pagingRepository)
         {
             _colorRepository = colorRepository;
-            _config = config;
-        }
+            _config = config; 
+            _reponse = new ReponseDto();
+			_iPagingRepository = pagingRepository;
+		}
 
-        [HttpGet]
+		[HttpGet]
         public async Task<IActionResult> GetAllColor()
         {
 
@@ -34,7 +41,7 @@ namespace Shop_API.Controllers
             }
             return Ok(await _colorRepository.GetAllColors());
         }
-        [HttpPost]
+        [HttpPost("CreateColor")]
         public async Task<IActionResult> CreateColor(Color obj)
         {
 
@@ -50,6 +57,8 @@ namespace Shop_API.Controllers
                 return Unauthorized();
             }
             obj.Id = Guid.NewGuid();
+     
+            obj.TrangThai = 1;
             if (await _colorRepository.Create(obj))
             {
                 return Ok("Thêm thành công");
@@ -99,5 +108,26 @@ namespace Shop_API.Controllers
             return BadRequest("Xóa thất bại");
 
         }
-    }
+
+
+		[HttpGet("GetColorFSP")]
+		public async Task<IActionResult> GetColorFSP(string? search, double? from, double? to, string? sortBy, int page)
+		{
+			//string apiKey = _config.GetSection("ApiKey").Value;
+			//if (apiKey == null)
+			//{
+			//    return Unauthorized();
+			//}
+
+			//var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+			//if (keyDomain != apiKey.ToLower())
+			//{
+			//    return Unauthorized();
+			//}
+			_reponse.Result =  _iPagingRepository.GetAllColor(search, from, to, sortBy, page);
+			_reponse.Count = 10;
+			return Ok(_reponse);
+		}
+
+	}
 }

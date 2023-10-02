@@ -1,37 +1,212 @@
 ﻿@{
     ViewBag.Title = "Product Details";
+    @using Shop_Models;
+    @using Shop_Models.Entities;
+    @model Shop_Models.Dto.ProductDetailDto;
+
 }
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.common.min.css">
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.default.min.css">
+<script src="https://kendo.cdn.telerik.com/2021.3.1207/js/jquery.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2021.3.1207/js/kendo.all.min.js"></script>
+
+
+
 
 <div id="example">
-   <button id="createproductdetail">Thêm</button>
-    <div id="grid1"></div>
-      <div class="demo-section wide">
-@*         <textarea id="editor" rows="10" cols="30" style="width:100%; height:840px" aria-label="editor">
- *@        
-    @* </textarea> *@
+    @* button thêm mới *@
+   @*  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Product Detail</button>*@
+
+    <div id="grid"></div>
+
+</div>
+@*  create product details  *@
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Create New</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div id="example">
+                    <form asp-controller="ProductDetail" asp-action="Index" method="post">
+
+                        <div class="form-group col-md-6">
+                            <label for="exampleFormControlInput1" class="form-label">Mã</label>
+                            <input type="text" class="form-control" asp-for="Code" placeholder="Mã Sản Phẩm" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Tên Sản Phẩm</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="IdProduct" id="selectProductName" required>
+                                    <option value="">Chọn tên Sản phẩm</option>
+                                    @foreach (var t in (List<Product>)ViewBag.GetProduct)
+                                    {
+                                        <option value="@t.Id">@t.Name</option>
+                                    }
+                                </select>  <div asp-validation-for="IdProduct" id="nameError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label"> Màu Sắc</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="IdColor" id="selectColor" required>
+                                    <option value="">Chọn Màu Sắc</option>
+                                    @foreach (var t in (List<Color>)ViewBag.GetColor)
+                                    {
+                                        <option value="@t.Id">@t.Name</option>
+                                    }
+
+                                </select> <div asp-validation-for="IdColor" id="colorError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Ram</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="IdRam" id="selectRam" required>
+                                    <option value="">Chọn Ram</option>
+                                    @foreach (var t in (List<Ram>)ViewBag.GetRam)
+                                    {
+                                        <option value="@t.Id">@t.Ma</option>
+                                    }
+
+                                </select>
+                                <div asp-validation-for="IdRam" id="ramError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="IdCpu" id="selectCPU" required>
+                                    <option value="">Chọn Vi Xử Lí</option>
+                                    @foreach (var t in (List<Cpu>)ViewBag.GetCPU)
+                                    {
+                                        <option value="@t.Id">@t.Ma</option>
+                                    }
+
+                                </select>
+                                <div asp-validation-for="IdCpu" id="cpuError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Màn Hình</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="IdScreen" id="selectScreen" required>
+                                    <option value="">Chọn Màn Hình</option>
+                                    @foreach (var t in (List<Screen>)ViewBag.GetScreen)
+                                    {
+                                        <option value="@t.Id">@t.Ma</option>
+                                    }
+
+                                </select> <div asp-validation-for="IdScreen" id="screenError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">HardDrive</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="IdHardDrive" id="selectHardDrive" required>
+                                    <option value="">Chọn HardDrive</option>
+                                    @foreach (var t in (List<HardDrive>)ViewBag.GetHardDrive)
+                                    {
+                                        <option value="@t.Id">@t.Ma</option>
+                                    }
+
+                                </select> <div asp-validation-for="IdHardDrive" id="hardDriveError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">CardVGA</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="IdCardVGA" id="selectCardVGA" required>
+                                    <option value="">Chọn CardVGA</option>
+                                    @foreach (var t in (List<CardVGA>)ViewBag.GetlistCardVGA)
+                                    {
+                                        <option value="@t.Id">@t.Ma</option>
+                                    }
+
+                                </select> <div asp-validation-for="IdCardVGA" id="cardVgaError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Upgrade</label>
+                            <input type="string" class="form-control" id="exampleFormControlInput1" asp-for="Upgrade" placeholder="Nhập Upgrade" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Price" placeholder="Nhập Price" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">ImportPrice</label>
+                            <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder="Nhập ImportPrice" required>
+                        </div>
+                        <div id="error-toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; top: 0; right: 0; z-index: 1050;"></div>
+
+                        <div class="demo-section wide">
+                            <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
+                            @* <textarea name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor"  required></textarea> *@
+                            <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
+
+                            <div class="k-editor">
+                                <textarea class="form-control is-invalid" name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea>
+                            </div>
+
+                            <div class="invalid-feedback">
+                                Vui lòng nhập nội dung trường này.
+                            </div>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
-
 <script>
-
-    var loginButton = document.getElementById('createproductdetail');
-    loginButton.addEventListener('click', function (event) {
-        event.preventDefault();
-        $.ajax({
-            url: "/ProductDetail/Create",
-            type: "GET",
-            success: function (result) {
-                $("#rootAdmin").html(result); // Cập nhật nội dung của phần tử trên trang web
-            },
-            error: function () {
-                alert("Có lỗi xảy ra.");
-            }
+    $(document).ready(function () {
+        // Khi nhấn vào nút "C rết"
+        $(".k-grid-other").click(function () {
+            // Hiển thị modal
+            $("#exampleModal").modal("show");
         });
-
-    })
-
-
+    });
 </script>
+<style>
+    /* Đặt kích thước modal mặc định */
+    .modal-dialog {
+        max-width: 90%;
+        width: auto;
+    }
+
+    /* Thiết lập thuộc tính cho việc kéo modal */
+    .modal-content {
+        overflow: hidden; /* Ngăn chặn nội dung bên ngoài khỏi modal */
+    }
+
+    /* Thiết lập kích thước của modal-body khi kéo */
+    .modal-body {
+        max-height: 80vh; /* Điều chỉnh kích thước tùy ý dựa trên nhu cầu của bạn */
+        overflow-y: auto;
+    }
+
+</style>
+
+@* create product details *@
+
+
+
+
+
 
 @section scripts {
     <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css" rel="stylesheet" />
@@ -39,183 +214,279 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
     <script>
-        var editor = $("#editor").kendoEditor({
-            stylesheets: [
-                "../content/shared/styles/editor.css",
-            ],
-            tools: [
-                "bold",
-                "italic",
-                "underline",
-                "undo",
-                "redo",
-                "justifyLeft",
-                "justifyCenter",
-                "justifyRight",
-                "insertUnorderedList",
-                "createLink",
-                "unlink",
-                "insertImage",
-                "tableWizard",
-                "tableProperties",
-                "tableCellProperties",
-                "createTable",
-                "addRowAbove",
-                "addRowBelow",
-                "addColumnLeft",
-                "addColumnRight",
-                "deleteRow",
-                "deleteColumn",
-                "mergeCellsHorizontally",
-                "mergeCellsVertically",
-                "splitCellHorizontally",
-                "splitCellVertically",
-                "tableAlignLeft",
-                "tableAlignCenter",
-                "tableAlignRight",
-                "fontSize",
-                "foreColor",
-                "backColor",
-            ]
+        /*
+            This demo renders the grid in "DejaVu Sans" font family, which is
+            declared in kendo.common.css. It also declares the paths to the
+            fonts below using <tt>kendo.pdf.defineFont</tt>, because the
+            stylesheet is hosted on a different domain.
+        */
+        // Fix xuất file PDF
+        kendo.pdf.defineFont({
+            "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+            "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+            "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
         });
-        // $(document).ready(function () {
-        //     var dataSource = new kendo.data.DataSource({
-        //         transport: {
-        //             read: {
-        //                 url: "/ProductDetail/GetProductDetail",
-        //                 dataType: "json"
-        //             },
-        //             update: {
-        //                 url: "/ProductDetail/Update", // Chỉnh sửa đường dẫn URL nếu cần
-        //                 dataType: "json"
-        //             },
-        //             destroy: {
-        //                 url: "/ProductDetail/Destroy", // Chỉnh sửa đường dẫn URL nếu cần
-        //                 dataType: "json"
-        //             },
-        //             create: {
-        //                 url: "/ProductDetail/CreateProductDetail", // Chỉnh sửa đường dẫn URL nếu cần
-        //                 dataType: "json"
-        //             },
-        //             parameterMap: function (options, operation) {
-        //                 if (operation !== "read" && options.models) {
-        //                     return { models: kendo.stringify(options.models) };
-        //                 }
-        //             }
-        //         },
-        //         batch: true,
-        //         pageSize: 20,
-        //         schema: {
-        //             data: "result",
-        //             model: {
-        //                 id: "id",
-        //                 fields: {
-        //                     code: {
-        //                         type: "string", validate: { required: true }
-        //                     },
-        //                     status: { type: "int", validate: { required: true } }
-        //                 }
-        //             }
-        //         }
-        //     });
+    </script>
+}
+<script>
 
-        //     $("#grid").kendoGrid({
-        //         dataSource: dataSource,
-        //         pageable: false,
-        //         height: 550,
-        //         toolbar: ["create"],
-        //         columns: [
-        //             { field: "code", title: "Product Name" },
-        //             { field: "status", title: "Unit Price", format: "{0:c}", width: "120px" },
-                   
-        //             { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
-        //         ],
-        //         editable: "popup"
-        //     });
+
+ 
+
+
+
+    var editor = $("#description").kendoEditor({
+        // stylesheets: [
+        //     "../content/shared/styles/editor.css",
+        // ],
+        tools: [
+            "bold",
+            "italic",
+            "underline",
+            "strikethrough",
+            "fontName",
+            "fontSize",
+            "foreColor",
+            "backColor",
+            "insertImage",
+            "createLink",
+            "undo",
+            "redo",
+            "justifyLeft",
+            "justifyCenter",
+            "justifyRight",
+            "insertUnorderedList",
+            "insertOrderedList",
+            "indent",
+            "outdent",
+            "formatBlock",
+            "clearFormat"
+        ]
+    });
+    // $(document).ready(function () {
+    //     var dataSource = new kendo.data.DataSource({
+    //         transport: {
+    //             read: {
+    //                 url: "/ProductDetail/GetProductDetail",
+    //                 dataType: "json"
+    //             },
+    //             update: {
+    //                 url: "/ProductDetail/Update", // Chỉnh sửa đường dẫn URL nếu cần
+    //                 dataType: "json"
+    //             },
+    //             destroy: {
+    //                 url: "/ProductDetail/Destroy", // Chỉnh sửa đường dẫn URL nếu cần
+    //                 dataType: "json"
+    //             },
+    //             create: {
+    //                 url: "/ProductDetail/CreateProductDetail", // Chỉnh sửa đường dẫn URL nếu cần
+    //                 dataType: "json"
+    //             },
+    //             parameterMap: function (options, operation) {
+    //                 if (operation !== "read" && options.models) {
+    //                     return { models: kendo.stringify(options.models) };
+    //                 }
+    //             }
+    //         },
+    //         batch: true,
+    //         pageSize: 20,
+    //         schema: {
+    //             data: "result",
+    //             model: {
+    //                 id: "id",
+    //                 fields: {
+    //                     code: {
+    //                         type: "string", validate: { required: true }
+    //                     },
+    //                     status: { type: "int", validate: { required: true } }
+    //                 }
+    //             }
+    //         }
+    //     });
+
+    //     $("#grid").kendoGrid({
+    //         dataSource: dataSource,
+    //         pageable: false,
+    //         height: 550,
+    //         toolbar: ["create"],
+    //         columns: [
+    //             { field: "code", title: "Product Name" },
+    //             { field: "status", title: "Unit Price", format: "{0:c}", width: "120px" },
+
+    //             { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
+    //         ],
+    //         editable: "popup"
+    //     });
+    // });
+
+
+
+
+    // cửa sổ
+
+    // $(document).ready(function () {
+    //     $("#openCreateModal").on("click", function () {
+    //         // Đường dẫn đến trang "Create.cshtml"
+    //         var url = "/ProductDetail/Create";
+
+    //         // Tạo modal
+    //         var modal = $('<div class="modal fade" id="createModal" tabindex="-1" role="dialog">\
+    //             <div class="modal-dialog" role="document">\
+    //                 <div class="modal-content">\
+    //                     <div class="modal-header" >\
+    //                                 <h5 class="modal-title" style="width:1000px;">Create Page</h5>\
+    //                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
+    //                             <span aria-hidden="true">&times;</span>\
+    //                         </button>\
+    //                     </div>\
+    //                             <div class="modal-body" style="width:1000px; height:1000px;">\
+    //                         <iframe src="' + url + '" style="width:1000px; height:1000px;"></iframe>\
+    //                     </div>\
+    //                 </div>\
+    //             </div>\
+    //         </div>');
+
+    //         // Thêm modal vào trang
+    //         modal.modal("show");
+
+    //         // Xử lý sự kiện khi modal đóng
+    //         modal.on("hidden.bs.modal", function () {
+    //             $(this).remove();
+    //         });
+    //     });
+    // });
+
+
+    $(document).ready(function () {
+
+
+        // // Đặt sự kiện click cho nút "Create"
+        // $("#grid").on("click", ".k-grid-other", function () {
+        //     // Chuyển hướng người dùng đến trang "Create.cshtml"
+        //     window.location.href = "/ProductDetail/Create";
         // });
-        $(document).ready(function () {
 
 
-          
+        // $("form").submit(function (e) {
+        //     if (this.checkValidity() === false) {
+        //         e.preventDefault(); // Ngăn chặn việc gửi biểu mẫu nếu có lỗi
+
+        //         // Hiển thị Toast thông báo lỗi
+        //         var toast = `<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+        //                         <div class="toast-header">
+        //                             <strong class="me-auto">Lỗi</strong>
+        //                             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        //                         </div>
+        //                         <div class="toast-body">
+        //                             Vui lòng kiểm tra lại thông tin biểu mẫu.
+        //                         </div>
+        //                     </div>`;
+
+        //         $("#error-toast-container").html(toast);
+
+        //         var errorToast = new bootstrap.Toast($(".toast"));
+        //         errorToast.show();
+        //     }
+        // });
 
 
-            $("#grid1").kendoGrid({
-                dataSource: {
-                    transport: {
-                        read: {
-                            url: "/ProductDetail/GetProductDetail",
-                            type: "GET",
-                            dataType: "json"
-                        },
-                        create: {
-                            url: "/ProductDetail/CreateProductDetail",
-                            type: "POST",
-                            dataType: "json",
 
-                        },
-                        update: {
-                            url: "/",
-                            type: "PUT",
-                            dataType: "json"
-                        },
-                        destroy: {
-                            url: "/",
-                            type: "DELETE",
-                            dataType: "json"
-                        },
+        // gọi form khi nhấn edit
+
+        var editButtons = document.querySelectorAll('.k-button k-button-icontext k-grid-capnhat');
+
+    @* Gán sự kiện click cho từng nút "Sửa"*@
+            editButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+    @* Gọi hàm hay thực hiện các đoạn mã tương ứng khi nút "Sửa" được nhấn*@
+                        $('#exampleModal').modal('show');
+                    console.log("Nút 'Sửa' đã được nhấn");
+    @* Thực hiện các tác vụ khác tại đây*@
+                });
+            });
+
+
+        $("#grid").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/ProductDetail/GetProductDetail",
+                        type: "GET",
+                        dataType: "json"
+                    },
+                    capnhat: {
+                        url: "/ProductDetail/Index({id})",
+                        type: "GET",
+                        // dataType: "json",
 
                     },
-                    schema: {
-                        data: "result",
-                       total: "count", // Chỉ định tên trường tổng số dòng,
-                        model: {
-                            id: "id",
-                            fields: {
-                                code: { type: "string", validation: { required: true } },
-                               price: { type: "int", validate: { required: true } },
-                               status: { type: "int", validate: { required: true } }
-                            }
-                        }
+                    update: {
+                        url: "/",
+                        type: "PUT",
+                        dataType: "json"
+                    },
+                    destroy: {
+                        url: "/",
+                        type: "DELETE",
+                        dataType: "json"
                     },
 
-                    pageSize: 20,
-
-                    // thêm thành công sẽ hiển thị thông báo thêm thành công
-                    requestEnd: function (e) {
-                        if (e.type === "create" && e.response) {
-                            var result = e.response.Result || {};
-                            if (result.Errors && result.Errors.length > 0) {
-                                alert("Thêm mới thất bại: " + result.Errors.join(", "));
-                            } else {
-                                alert("Thêm mới thành công!");
-                            }
-                        }
-                    },
                 },
-
-
-
-                height: 550,
-                groupable: false,
-                sortable: true,
-                pageable: {
-                    refresh: true,
-                    pageSizes: [5, 10, 20, "All"],
-                    buttonCount: 3,
-                    messages: {
-                        itemsPerPage: "Số dòng trên mỗi trang",
-                        display: "{0}-{1} trong {2} dòng"
+                schema: {
+                    data: "result",
+                    total: "count", // Chỉ định tên trường tổng số dòng,
+                    model: {
+                        id: "id",
+                        fields: {
+                            code: { type: "string", validation: { required: true } },
+                            price: { type: "int", validate: { required: true } },
+                            status: { type: "int", validate: { required: true } }
+                        }
                     }
                 },
 
-                toolbar: [
-                    {
-                        name: "create",
-                        text: "Thêm", /* Thay đổi văn bản của nút "Thêm" */
+                pageSize: 20,
+
+                // thêm thành công sẽ hiển thị thông báo thêm thành công
+                requestEnd: function (e) {
+                    if (e.type === "create" && e.response) {
+                        var result = e.response.Result || {};
+                        if (result.Errors && result.Errors.length > 0) {
+                            alert("Thêm mới thất bại: " + result.Errors.join(", "));
+                        } else {
+                            alert("Thêm mới thành công!");
+                        }
+                    }
+                },
+            },
 
 
 
-                    },
+            height: 550,
+            groupable: false,
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSizes: [5, 10, 20, "All"],
+                buttonCount: 3,
+                messages: {
+                    itemsPerPage: "Số dòng trên mỗi trang",
+                    display: "{0}-{1} trong {2} dòng"
+                }
+            },
+
+            toolbar: [
+                // {
+                //     name: "other",
+                //     text: "C rết", /* Thay đổi văn bản của nút "Thêm" */
+                //     click: function (e) {
+
+                //     }
+
+
+                // },
 
                     "pdf"],
                 pdf: {
@@ -273,87 +544,124 @@
                     {
                         field: "nameProductType",
                         title: "Dòng sản phẩm",
-                       // hidden: true, // Ẩn cột này
-
-                                
-
-                    },
-                    {
-                        field: "tenCpu", // Đặt tên cho cột tùy chỉnh
-                        title: "Vi xử lý",
-                         hidden: true // Ẩn cột này
-                        
-                    },
-                    {
-                        field: "thongSoRam",
-                        title: "Ram",
-                        // Ẩn cột này
-                    },
-                    {
-                        field: "thongSoHardDrive",
-                        title: "SSD",
-                        hidden: true // Ẩn cột này
-                    },
-                    {
-                        field: "price",
-                        title: "Giá"
-                    },
-                    {
-                        field: "availableQuantity",
-                        title: "Số lượng"
-                    }, {
-                        field: "availableQuantity",
-                        title: "Số lượng"
-                    },
-
-                    {
-                        field: "yourFieldName", // Replace with your actual field name
-                        title: "Your Field Title",
-                        editor: function (container, options) {
-                            // Create a textarea element
-                            var textarea = $('<textarea name="description" id="editor"  style="width:1000; heigpxht:840px" aria-label="editor"></textarea>')
-                                .attr("name", options.field)
-                                .appendTo(container);
-
-                            // Bind the field's value to the textarea
-                            textarea.val(options.model[options.field]);
-
-                            // Enable the textarea
-                            textarea.prop("disabled", false);
-
-                            // Handle changes in the textarea
-                            textarea.on("change", function () {
-                                options.model[options.field] = textarea.val();
-                            });
-                        }
-                    },
+                        hidden: true, // Ẩn cột này
 
 
 
-                    {
-                        command: [
-                            {
-                                name: "edit",
-                                text: "Sửa",
-                            },
-                            {
-                                name: "destroy",
-                                text: "Xóa",
+                },
+                {
+                    field: "tenCpu", // Đặt tên cho cột tùy chỉnh
+                    title: "Vi xử lý",
+                    hidden: true // Ẩn cột này
 
-                            },
-                        ],
-                        title: "Hành động",
-                        width: "250px"
+                },
+                {
+                    field: "thongSoRam",
+                    title: "Ram",
+                    // Ẩn cột này
+                },
+                {
+                    field: "thongSoHardDrive",
+                    title: "SSD",
+                    hidden: true // Ẩn cột này
+                },
+                {
+                    field: "price",
+                    title: "Giá"
+                },
+                {
+                    field: "availableQuantity",
+                    title: "Số lượng"
+                }, {
+                    field: "availableQuantity",
+                    title: "Số lượng"
+                },
+
+                {
+                    field: "yourFieldName", // Replace with your actual field name
+                    title: "Your Field Title",
+                    editor: function (container, options) {
+                        // Create a textarea element
+                        var textarea = $('<textarea name="description" id="editor"  style="width:1000; heigpxht:840px" aria-label="editor"></textarea>')
+                            .attr("name", options.field)
+                            .appendTo(container);
+
+                        // Bind the field's value to the textarea
+                        textarea.val(options.model[options.field]);
+
+                        // Enable the textarea
+                        textarea.prop("disabled", false);
+
+                        // Handle changes in the textarea
+                        textarea.on("change", function () {
+                            options.model[options.field] = textarea.val();
+                        });
                     }
-                ],
+                },
 
-            });
-            var newTextarea = $('<textarea id="editor" rows="10" cols="30" style="width:100%; height:840px" aria-label="editor"></textarea>');
 
-            // Find elements with the specified class and prepend the textarea before them
-            $(".k-edit-buttons.k-state-default").prepend(newTextarea);
+
+                {
+                    command: [
+                        {
+
+                            // return '<button type="button" class="k-button k-button-icontext k-grid-capnhat">capnhat</button>'
+                            name: "capnhat",
+                            text: "sửa",
+                            click: function (e) {
+                                e.preventDefault();
+                                var dataItem = this.dataItem($(e.target).closest("tr"));
+                                var productId = dataItem.Id; // Assuming 'Id' is the property that holds the ID
+                                openEditModal(productId);
+                            }
+
+                        },
+                        {
+                            name: "destroy",
+                            text: "Xóa",
+
+                        },
+                    ],
+                    title: "Hành động",
+                    width: "250px"
+                }
+            ],
+
         });
+        var newTextarea = $('<textarea id="editor" rows="10" cols="30" style="width:100%; height:840px" aria-label="editor"></textarea>');
+
+        // Find elements with the specified class and prepend the textarea before them
+        $(".k-edit-buttons.k-state-default").prepend(newTextarea);
 
 
-    </script>
-}
+
+        // tạo 1 nút thêm trước class k-grid-pdf
+        var newButton = $('<a type="button" class="k-button k-button-icontext k-grid-create" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Product Detail</a> ');
+        // Find elements with the specified class and prepend the textarea before them
+        $(".k-grid-pdf").before(newButton);
+       
+
+    });
+
+    function openEditModal(IdProduct) {
+        $.ajax({
+            url: "/ProductDetail/Index?id=" + IdProduct,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                // Điền vào các trường biểu mẫu phương thức với dữ liệu từ máy chủ
+                $("#exampleModal").modal("show");
+                $("#Code").val(data.Code);
+                $("#selectProductName").val(data.IdProduct);
+                // Điền các trường biểu mẫu khác tương tự
+            },
+            error: function () {
+                // Xử lý lỗi
+            }
+        });
+    }
+
+
+
+</script>
+

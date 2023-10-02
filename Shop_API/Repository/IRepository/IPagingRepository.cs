@@ -7,5 +7,7 @@ namespace Shop_API.Repository.IRepository
        
 
         List<PagingDto> GetAll(string search, double? from, double? to, string sortBy, int page);
-    }
+		List<PagingDto> GetAllColor(string? search, double? from, double? to, string? sortBy, int page);
+		List<PagingDto> GetAllRam(string? search, double? from, double? to, string? sortBy, int page);
+	}
 }

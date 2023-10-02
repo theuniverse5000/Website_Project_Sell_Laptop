@@ -1,7 +1,7 @@
 ﻿@{
-    ViewBag.Title = "Product Type";
-}
+    ViewBag.Title = "Color";
 
+}
 <span id="notification" style="display:none;">222</span>
 <div id="example" style="width: 1300px; margin: 0 auto;">
     <div id="grid"></div>
@@ -55,23 +55,23 @@
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/ProductType/GetProductType",
+                            url: "/Color/GetColor",
                             type: "GET",
                             dataType: "json"
                         },
                         create: {
-                            url: "/ProductType/CreateProductType",
+                            url: "/Color/CreateColor",
                             type: "POST",
                             dataType: "json",
 
                         },
                         update: {
-                            url: "/ProductType/UpdateProductType",
+                            url: "/Color/UpdateColor",
                             type: "PUT",
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/ProductType/DeleteProductType2",
+                            url: "/Color/DeleteColor2",
                             type: "DELETE",
                             dataType: "json"
                         },
@@ -83,6 +83,7 @@
                         model: {
                             id: "id",
                             fields: {
+                                ma: { type: "string", validation: { required: true } },
                                 name: { type: "string", validation: { required: true } },
                                 //  status: { type: "int" }
                             }
@@ -128,12 +129,14 @@
                     window: { width: 550, height: 250 }, // Chỉnh chiều rộng ở đây
                 },
 
+
                 save: function (e) {
                     if (e.model.isNew()) {
                         // Thay đổi status thành biến thực tế của bạn
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
 
                         if (status === 'success') {
+                            Response 
                             showNotification("Lưu thành công", "success");
                         } else {
                             showNotification("Lưu thất bại", "error");
@@ -159,8 +162,12 @@
                     }
                 },
 
-
                 columns: [
+                    {
+
+                        field: "ma",
+                        title: "Mã"
+                    },
                     {
                         field: "name",
                         title: "Tên"
@@ -186,3 +193,11 @@
         });
     </script>
 }
+
+
+
+
+
+
+
+
