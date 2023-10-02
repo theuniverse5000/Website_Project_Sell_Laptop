@@ -18,12 +18,12 @@ namespace Shop_Models.Entities
         [Range(0, 5, ErrorMessage = "Trạng thái phải từ 0 đến 5")]
         public int Status { get; set; }
         public Guid ProductId { get; set; }
-        public Guid ColorId { get; set; }
-        public Guid RamId { get; set; }
-        public Guid CpuId { get; set; }
-        public Guid HardDriveId { get; set; }
-        public Guid ScreenId { get; set; }
-        public Guid CardVGAId { get; set; }
+        public Guid? ColorId { get; set; }
+        public Guid? RamId { get; set; }
+        public Guid? CpuId { get; set; }
+        public Guid? HardDriveId { get; set; }
+        public Guid? ScreenId { get; set; }
+        public Guid? CardVGAId { get; set; }
         public virtual Color? Color { get; set; }
         public virtual Ram? Ram { get; set; }
         public virtual Cpu? Cpu { get; set; }

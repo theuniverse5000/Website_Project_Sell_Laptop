@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Shop_API.Migrations
 {
     /// <inheritdoc />
-    public partial class _1 : Migration
+    public partial class InitDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -335,12 +335,12 @@ namespace Shop_API.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ColorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CpuId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    HardDriveId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ScreenId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CardVGAId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ColorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RamId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CpuId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    HardDriveId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ScreenId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CardVGAId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -349,26 +349,22 @@ namespace Shop_API.Migrations
                         name: "FK_ProductDetail_CPU_CpuId",
                         column: x => x.CpuId,
                         principalTable: "CPU",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProductDetail_CardVGA_CardVGAId",
                         column: x => x.CardVGAId,
                         principalTable: "CardVGA",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProductDetail_Color_ColorId",
                         column: x => x.ColorId,
                         principalTable: "Color",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProductDetail_HardDrive_HardDriveId",
                         column: x => x.HardDriveId,
                         principalTable: "HardDrive",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProductDetail_Product_ProductId",
                         column: x => x.ProductId,
@@ -379,14 +375,12 @@ namespace Shop_API.Migrations
                         name: "FK_ProductDetail_Ram_RamId",
                         column: x => x.RamId,
                         principalTable: "Ram",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ProductDetail_Screen_ScreenId",
                         column: x => x.ScreenId,
                         principalTable: "Screen",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -622,6 +616,7 @@ namespace Shop_API.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CodeProductDetail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),

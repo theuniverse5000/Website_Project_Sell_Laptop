@@ -181,6 +181,9 @@ namespace Shop_API.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CodeProductDetail")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<float>("Price")
                         .HasColumnType("real");
 
@@ -579,7 +582,7 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CardVGAId")
+                    b.Property<Guid?>("CardVGAId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -587,16 +590,16 @@ namespace Shop_API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("ColorId")
+                    b.Property<Guid?>("ColorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CpuId")
+                    b.Property<Guid?>("CpuId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("HardDriveId")
+                    b.Property<Guid?>("HardDriveId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("ImportPrice")
@@ -608,10 +611,10 @@ namespace Shop_API.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RamId")
+                    b.Property<Guid?>("RamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ScreenId")
+                    b.Property<Guid?>("ScreenId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -1147,27 +1150,19 @@ namespace Shop_API.Migrations
                 {
                     b.HasOne("Shop_Models.Entities.CardVGA", "CardVGA")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("CardVGAId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CardVGAId");
 
                     b.HasOne("Shop_Models.Entities.Color", "Color")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ColorId");
 
                     b.HasOne("Shop_Models.Entities.Cpu", "Cpu")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("CpuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CpuId");
 
                     b.HasOne("Shop_Models.Entities.HardDrive", "HardDrive")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("HardDriveId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HardDriveId");
 
                     b.HasOne("Shop_Models.Entities.Product", "Product")
                         .WithMany("ProductDetails")
@@ -1177,15 +1172,11 @@ namespace Shop_API.Migrations
 
                     b.HasOne("Shop_Models.Entities.Ram", "Ram")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("RamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RamId");
 
                     b.HasOne("Shop_Models.Entities.Screen", "Screen")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("ScreenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ScreenId");
 
                     b.Navigation("CardVGA");
 
@@ -1223,13 +1214,15 @@ namespace Shop_API.Migrations
 
             modelBuilder.Entity("Shop_Models.Entities.Serial", b =>
                 {
-                    b.HasOne("Shop_Models.Entities.BillDetail", null)
+                    b.HasOne("Shop_Models.Entities.BillDetail", "BillDetail")
                         .WithMany("Serials")
                         .HasForeignKey("BillDetailId");
 
                     b.HasOne("Shop_Models.Entities.ProductDetail", "ProductDetail")
                         .WithMany("Serials")
                         .HasForeignKey("ProductDetailId");
+
+                    b.Navigation("BillDetail");
 
                     b.Navigation("ProductDetail");
                 });

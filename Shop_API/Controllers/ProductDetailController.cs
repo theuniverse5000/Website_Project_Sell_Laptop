@@ -27,8 +27,8 @@ namespace Shop_API.Controllers
             [FromQuery] string? filter)
         {
             var queryModel = new ProductDetailQueryModel();
-            queryModel.CurrentPage = page??1;
-            queryModel.PageSize = size??20;
+            queryModel.CurrentPage = page ?? 1;
+            queryModel.PageSize = size ?? 20;
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
             {
@@ -82,17 +82,17 @@ namespace Shop_API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProductDetail(ProductDetail obj)
         {
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             obj.Id = Guid.NewGuid();
             if (await _repository.Create(obj))
             {

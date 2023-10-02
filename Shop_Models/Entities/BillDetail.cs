@@ -9,6 +9,7 @@ namespace Shop_Models.Entities
         [Key]
         public Guid Id { get; set; }
         public string? Code { get; set; }
+        public string? CodeProductDetail { get; set; }
         public int Quantity { get; set; }
         public float Price { get; set; }
         public int Status { get; set; }

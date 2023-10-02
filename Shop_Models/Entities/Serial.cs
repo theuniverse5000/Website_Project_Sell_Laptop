@@ -14,5 +14,6 @@ namespace Shop_Models.Entities
         public Guid? ProductDetailId { get; set; }// Tạo khóa ngoại
         public Guid? BillDetailId { get; set; }// Tạo khóa ngoại
         public virtual ProductDetail? ProductDetail { get; set; }//
+        public virtual BillDetail? BillDetail { get; set; }//
     }
 }
