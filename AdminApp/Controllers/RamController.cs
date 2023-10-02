@@ -1,19 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.AppDbContext;
 using Shop_Models.Entities;
-using System.Net.Http;
 
 namespace AdminApp.Controllers
 {
-    public class ProductTypeController : Controller
+    public class RamController : Controller
     {
-        private readonly ILogger<ProductTypeController> _logger;
+        private readonly ILogger<RamController> _logger;
         private readonly IConfiguration _config;
         HttpClient client = new HttpClient();
         ApplicationDbContext context;
-        static int Check {get;set;}
         private readonly IHttpClientFactory _httpClientFactory;
-        public ProductTypeController(ILogger<ProductTypeController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)
+        int Check = 1;
+        public RamController(ILogger<RamController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _config = config;
@@ -22,22 +21,23 @@ namespace AdminApp.Controllers
         }
         public IActionResult Index()
         {
-            
             return View();
         }
 
-        public async Task<IActionResult> GetProductType()
+        public async Task<IActionResult> GetRam()
         {
-            using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
+
+
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
-                HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/ProductType/GetPagingProductsFSP");
+                HttpResponseMessage response = await client.GetAsync($"/api/Ram/GetRamsFSP");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var count = result.Count();
-                    ViewBag.Count = count; 
-                    
+                    ViewBag.Count = count;
+
 
                     return Content(result, "application/json");
                 }
@@ -48,17 +48,17 @@ namespace AdminApp.Controllers
             }
         }
 
-        public async Task<JsonResult> CreateProductType(ProductType p)
+        public async Task<JsonResult> CreateRam(Ram p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.PostAsJsonAsync($"https://localhost:44333/api/ProductType/CreateProductType", p);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Ram/CreateRam", p);
                 if (response.IsSuccessStatusCode)
                 {
-                    var result =  response.Content.ReadAsStringAsync().Result;
+                    var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
                     Check = 1;
                     return Json(new { status = "success" });
@@ -72,7 +72,7 @@ namespace AdminApp.Controllers
             }
         }
 
-        public async Task<JsonResult> UpdateProductType(ProductType p)
+        public async Task<JsonResult> UpdateRam(Ram p)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace AdminApp.Controllers
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
                     // Gửi yêu cầu PUT dưới dạng JSON
-                    HttpResponseMessage response = await client.PutAsJsonAsync($"https://localhost:44333/api/ProductType", p);
+                    HttpResponseMessage response = await client.PutAsJsonAsync($"/api/Ram", p);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -104,14 +104,14 @@ namespace AdminApp.Controllers
         }
 
 
-        public async Task<JsonResult> DeleteProductType(Guid id)
+        public async Task<JsonResult> DeleteRam(Guid id)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/ProductType/id?id={id}");
+                HttpResponseMessage response = await client.DeleteAsync($"/api/Ram/id?id={id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
@@ -127,7 +127,7 @@ namespace AdminApp.Controllers
         }
 
 
-        public async Task<JsonResult> DeleteProductType2(Guid id)
+        public async Task<JsonResult> DeleteRam2(Guid id)
         {
             try
             {
@@ -137,8 +137,8 @@ namespace AdminApp.Controllers
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
                     // Gửi yêu cầu DELETE với id trong URL
-                    //HttpResponseMessage response = await client.DeleteAsync($"{urlApi}/api/ProductType/{id}");
-                    HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/ProductType/id?id={id}");
+                    //HttpResponseMessage response = await client.DeleteAsync($"{urlApi}/api/Ram/{id}");
+                    HttpResponseMessage response = await client.DeleteAsync($"/api/Ram/id?id={id}");
 
                     if (response.IsSuccessStatusCode)
                     {

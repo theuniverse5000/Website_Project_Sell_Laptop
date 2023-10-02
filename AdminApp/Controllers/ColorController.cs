@@ -12,7 +12,6 @@ namespace AdminApp.Controllers
 		HttpClient client = new HttpClient();
 		ApplicationDbContext context; 
 		private readonly IHttpClientFactory _httpClientFactory;
-
         int Check = 1;
 
 		public ColorController(ILogger<ColorController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)

@@ -11,9 +11,11 @@
 @section scripts {
     <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css" rel="stylesheet" />
     <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         /*
             This demo renders the grid in "DejaVu Sans" font family, which is
@@ -34,21 +36,19 @@
     <script>
         $(document).ready(function () {
 
-            // Cấu hình Kendo UI Notification
-            $("#notification").kendoNotification({
-                position: {
-                    top: 50,
-                    right: 20
-                }
-            });
             // Function hiển thị thông báo
             function showNotification(message, type) {
-                $("#notification").data("kendoNotification").show({
-                    message: message,
-                    hideAfter: 40000, // Thời gian hiển thị thông báo (3 giây)
-                    width: 300,
-                    type: type // Loại thông báo: "success" hoặc "error"
-                });
+                toastr.options = {
+                    positionClass: "toast-top-right", // Điều chỉnh vị trí của thông báo
+                    closeButton: true // Hiển thị nút đóng thông báo
+                };
+
+                // Hiển thị thông báo theo loại
+                if (type === "success") {
+                    toastr.success(message);
+                } else {
+                    toastr.error(message);
+                }
             }
 
             $("#grid").kendoGrid({
@@ -83,6 +83,7 @@
                         model: {
                             id: "id",
                             fields: {
+                                ma: { type: "string", validation: { required: true } },
                                 name: { type: "string", validation: { required: true } },
                                 //  status: { type: "int" }
                             }
@@ -131,13 +132,33 @@
 
                 save: function (e) {
                     if (e.model.isNew()) {
-                        if (status === 'success') {
-                            showNotification("status", "error");
-                            showNotification('', 'error');
-                        } else {
-                            showNotification('', 'error');
-                        }
+                        // Thay đổi status thành biến thực tế của bạn
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
 
+                        if (status === 'success') {
+                            Response 
+                            showNotification("Lưu thành công", "success");
+                        } else {
+                            showNotification("Lưu thất bại", "error");
+                        }
+                    } else if (e.model.dirty) {
+                        // Trường hợp cập nhật
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+
+                        if (status === 'success') {
+                            showNotification("Cập nhật thành công", "success");
+                        } else {
+                            showNotification("Cập nhật thất bại", "error");
+                        }
+                    } else if (e.model.isNew() && e.model.isDestroyed()) {
+                        // Trường hợp xóa
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+
+                        if (status === 'success') {
+                            showNotification("Xóa thành công", "success");
+                        } else {
+                            showNotification("Xóa thất bại", "error");
+                        }
                     }
                 },
 

@@ -28,17 +28,17 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> GetAllColor()
         {
 
-            //string apiKey = _config.GetSection("ApiKey").Value;
-            //if (apiKey == null)
-            //{
-            //    return Unauthorized();
-            //}
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
 
-            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            //if (keyDomain != apiKey.ToLower())
-            //{
-            //    return Unauthorized();
-            //}
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
             return Ok(await _colorRepository.GetAllColors());
         }
         [HttpPost("CreateColor")]
@@ -111,7 +111,7 @@ namespace Shop_API.Controllers
 
 
 		[HttpGet("GetColorFSP")]
-		public async Task<IActionResult> GetColorFSP(string search, double? from, double? to, string sortBy, int page)
+		public async Task<IActionResult> GetColorFSP(string? search, double? from, double? to, string? sortBy, int page)
 		{
 			//string apiKey = _config.GetSection("ApiKey").Value;
 			//if (apiKey == null)

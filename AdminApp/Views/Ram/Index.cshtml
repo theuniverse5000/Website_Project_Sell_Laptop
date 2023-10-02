@@ -1,7 +1,7 @@
 ﻿@{
-    ViewBag.Title = "Product Type";
-}
+    ViewBag.Title = "Ram";
 
+}
 <span id="notification" style="display:none;">222</span>
 <div id="example" style="width: 1300px; margin: 0 auto;">
     <div id="grid"></div>
@@ -51,27 +51,44 @@
                 }
             }
 
+            // // Cấu hình Kendo UI Notification
+            // $("#notification").kendoNotification({
+            //     position: {
+            //         top: 50,
+            //         right: 20
+            //     }
+            // });
+            // Function hiển thị thông báo
+            // function showNotification(message, type) {
+            //     $("#notification").data("kendoNotification").show({
+            //         message: message,
+            //         hideAfter: 40000, // Thời gian hiển thị thông báo (3 giây)
+            //         width: 300,
+            //         type: type // Loại thông báo: "success" hoặc "error"
+            //     });
+            // }
+
             $("#grid").kendoGrid({
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/ProductType/GetProductType",
+                            url: "/Ram/GetRam",
                             type: "GET",
                             dataType: "json"
                         },
                         create: {
-                            url: "/ProductType/CreateProductType",
+                            url: "/Ram/CreateRam",
                             type: "POST",
                             dataType: "json",
 
                         },
                         update: {
-                            url: "/ProductType/UpdateProductType",
+                            url: "/Ram/UpdateRam",
                             type: "PUT",
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/ProductType/DeleteProductType2",
+                            url: "/Ram/DeleteRam2",
                             type: "DELETE",
                             dataType: "json"
                         },
@@ -83,6 +100,7 @@
                         model: {
                             id: "id",
                             fields: {
+                                ma: { type: "string", validation: { required: true } },
                                 name: { type: "string", validation: { required: true } },
                                 //  status: { type: "int" }
                             }
@@ -128,12 +146,14 @@
                     window: { width: 550, height: 250 }, // Chỉnh chiều rộng ở đây
                 },
 
+
                 save: function (e) {
                     if (e.model.isNew()) {
                         // Thay đổi status thành biến thực tế của bạn
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
 
                         if (status === 'success') {
+                            Response
                             showNotification("Lưu thành công", "success");
                         } else {
                             showNotification("Lưu thất bại", "error");
@@ -159,11 +179,15 @@
                     }
                 },
 
-
                 columns: [
                     {
+
+                        field: "ma",
+                        title: "Mã"
+                    },
+                    {
                         field: "name",
-                        title: "Tên"
+                        title: "Thông Số"
                     },
                     {
                         command: [
@@ -186,3 +210,11 @@
         });
     </script>
 }
+
+
+
+
+
+
+
+
