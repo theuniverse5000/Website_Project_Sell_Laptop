@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Service.IService;
@@ -7,26 +8,26 @@ using Shop_Models.Entities;
 
 namespace Shop_API.Service
 {
-    public class PositionService : IPositionService
+    public class RoleService : IRoleService
     {
         private readonly ApplicationDbContext _context;
-        private readonly RoleManager<Position> _roleManager;
+        private readonly RoleManager<Role> _roleManager;
 
-        public PositionService(RoleManager<Position> roleManager)
+        public RoleService(ApplicationDbContext context, RoleManager<Role> roleManager)
         {
             _roleManager = roleManager;
-            _context = new ApplicationDbContext();
+            _context = context;
         }
 
-        public async Task<bool> CreatPosition(RoleCreateDto p)
+        public async Task<bool> CreatRole(RoleCreateDto p)
         {
             try
             {
-                var Role = new Position()
+                var Role = new Role()
                 {
                     Name = p.Name,
                     Id = Guid.NewGuid(),
-                    status = 0,
+                    Status=1,
                     ConcurrencyStamp = p.concurrencyStamp,
                     NormalizedName = p.normalizedName,
                 };
@@ -42,12 +43,12 @@ namespace Shop_API.Service
             }
         }
 
-        public async Task<bool> DelPosition(Guid id)
+        public async Task<bool> DelRole(Guid id)
         {
             try
             {
                 var obj = await _roleManager.FindByIdAsync(id.ToString());
-                obj.status = 1;
+                obj.Status = 1;
                 await _roleManager.UpdateAsync(obj);
                 return true;
             }
@@ -58,12 +59,12 @@ namespace Shop_API.Service
             }
         }
 
-        public async Task<bool> EditPosition(Guid id, RoleUpdateDto roleUpdate)
+        public async Task<bool> EditRole(Guid id, RoleUpdateDto roleUpdate)
         {
             try
             {
                 var obj = await _roleManager.FindByIdAsync(id.ToString());
-                obj.status = roleUpdate.status;
+                obj.Status = roleUpdate.status;
                 obj.Name = roleUpdate.Name;
                 obj.NormalizedName = roleUpdate.normalizedName;
                 obj.ConcurrencyStamp = roleUpdate.concurrencyStamp;
@@ -78,25 +79,18 @@ namespace Shop_API.Service
             }
         }
 
-        public Task<List<Position>> GetAllPosition()
+        public async Task<List<Role>> GetAllRole()
+        {
+            var roles = await _roleManager.Roles.ToListAsync();
+            return roles;
+        }
+
+        public Task<List<Role>> GetAllRoleActive()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Position>> GetAllPositionActive()
-        {
-            throw new NotImplementedException();
-        }
-
-        //    public async Task<List<Position>> GetAllPosition()
-        //    {
-        //        return await _context.Roles.ToListAsync();
-        //    }
-        //public async Task<List<Position>> GetAllPositionActive()
-        //{
-        //    return await _context.Roles.AsQueryable().Where(p => p.Status != 1).ToListAsync();
-        //}
-        public async Task<Position> GetPositionById(Guid id)
+        public async Task<Role> GetRoleById(Guid id)
         {
 
             return await _roleManager.FindByIdAsync(id.ToString());

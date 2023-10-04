@@ -67,18 +67,20 @@ builder.Services.AddTransient<IBillService, BillService>();
 builder.Services.AddTransient<ICartService, CartService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IPagingRepository, PagingRepository>();
+builder.Services.AddTransient<IRoleService, RoleService>();
+
 
 
 // Add Dependencies
 builder.Services.AddTransient<IUserServiece, UserServiece>();
-builder.Services.AddTransient<IPositionService, PositionService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
 // Add Identity
-builder.Services.AddIdentity<User, Position>()
+builder.Services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddSignInManager<SignInManager<User>>();
-
+                .AddDefaultTokenProviders()
+                .AddSignInManager<SignInManager<User>>();
+    
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration).CreateLogger();

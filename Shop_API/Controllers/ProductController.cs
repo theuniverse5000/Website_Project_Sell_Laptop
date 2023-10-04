@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
+using System.Data;
 
 namespace Shop_API.Controllers
 {
@@ -16,6 +18,7 @@ namespace Shop_API.Controllers
             _productRepository = Ipr;
             _config = config;
         }
+        
         [HttpGet]
         public async Task<IActionResult> GetAllPro()
         {
@@ -56,6 +59,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPut]
+        
         public async Task<IActionResult> Update(Product x)
         {
 

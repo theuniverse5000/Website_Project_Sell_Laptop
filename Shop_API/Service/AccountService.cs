@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Packaging;
 using Shop_API.AppDbContext;
+using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
 using Shop_Models.Dto.Account;
@@ -21,15 +22,18 @@ namespace Shop_API.Service
         private readonly ApplicationDbContext _context;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IRoleService _roleService;
         private static readonly string key = "theuniverse500";
-        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public AccountService(RoleManager<Role> roleManager, UserManager<User> userManager, SignInManager<User> signInManager, IRoleService roleService, IConfiguration configuration, ApplicationDbContext applicationDbContext)
         {
-            _context = new ApplicationDbContext();
+            _context = applicationDbContext;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
-
+            _roleService= roleService;
+            _roleManager=roleManager;
         }
 
         public async Task<LoginResponesDto> Validate(LoginRequestDto loginRequest)
@@ -39,10 +43,17 @@ namespace Shop_API.Service
             var respone = new LoginResponesDto();
             if (token==null)
             {
-                respone.Mess="Login SucessFull";
+                respone.Mess="Login Fail";
+                respone.Successful=false;
+                respone.Data=token;
+            }
+            else
+            {
+                respone.Mess="Login Successfull";
                 respone.Successful=true;
                 respone.Data=token;
             }
+
             return respone;
         }
 
@@ -57,8 +68,8 @@ namespace Shop_API.Service
             var rolesOfUser = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name,loginRequest.UserName),
-                new Claim("Id",user.Id.ToString()),
+                new Claim(ClaimTypes.Name,loginRequest.UserName,loginRequest.Password),
+                new Claim("Id",user.Id.ToString(),user.RoleId.ToString()),
                 new Claim("userName",user.UserName.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
@@ -85,7 +96,7 @@ namespace Shop_API.Service
             var token = jwtTokenHandler.CreateToken(tokenDescription);
             var accessToken = jwtTokenHandler.WriteToken(token);
             var refreshToken = GenerateRefreshToken();
-            var check = await _context.tokens.FirstOrDefaultAsync(p => p.UserId == user.Id);
+            var check = await _context.Tokens.FirstOrDefaultAsync(p => p.UserId == user.Id);
             if (check != null)
             {
                 refreshToken = check.RefreshToken;
@@ -210,7 +221,7 @@ namespace Shop_API.Service
                 if (await checkAccessToken(tokenDTO.AccessToken))
                 {
                     // task 4: check refresktoken exist in DB
-                    Token storedToken = _context.tokens.FirstOrDefault(x => x.RefreshToken == tokenDTO.RefreshToken);
+                    Token storedToken = _context.Tokens.FirstOrDefault(x => x.RefreshToken == tokenDTO.RefreshToken);
                     if (storedToken != null)
                     {
                         // task 5 check refresh token isuser/revoked  
@@ -264,8 +275,9 @@ namespace Shop_API.Service
                 SignUpRespone res = new SignUpRespone();
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Client");
-                    
+                    var role = await _roleService.GetRoleById(p.IdRole);
+                    //await _rolema.AddToRoleAsync(user, role.Name);
+                    await _userManager.AddToRoleAsync(user,role.Name);
                     res.Mess=result.Succeeded.ToString();
                     res.Data=null;
                 }
@@ -281,8 +293,6 @@ namespace Shop_API.Service
 
                 }
                 return res;
-
- 
             }
           
             catch (Exception ex)

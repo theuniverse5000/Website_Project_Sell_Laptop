@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Common;
 using Shop_Models.Entities;
+
 
 namespace Shop_API.AppDbContext
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Shop_Models.Entities.Position, Guid>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
     {
         public ApplicationDbContext()
         {
@@ -42,7 +42,9 @@ namespace Shop_API.AppDbContext
 
         public virtual DbSet<ManagePost> ManagePosts { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
-        public virtual DbSet<Shop_Models.Entities.Token> tokens { get; set; }
-
+        public virtual DbSet<Token> Tokens { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
+      
     }
+
 }

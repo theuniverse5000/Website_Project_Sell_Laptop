@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
+using Shop_API.Service.IService;
+using Shop_Models.Dto.Role;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -8,11 +10,11 @@ namespace Shop_API.Controllers
     [ApiController]
     public class RoleController : Controller
     {
-        private readonly IRoleRepository _roleRepository;
+        private readonly IRoleService _roleService; 
         private readonly IConfiguration _config;
-        public RoleController(IRoleRepository roleRepository, IConfiguration config)
+        public RoleController(IRoleService roleService, IConfiguration config)
         {
-            _roleRepository = roleRepository;
+            _roleService = roleService;
             _config = config;
         }
 
@@ -31,7 +33,7 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            return Ok(await _roleRepository.GetAllRoles());
+            return Ok(await _roleService.GetAllRole());
         }
         [HttpPost]
         public async Task<IActionResult> CreateRole(Role obj)
@@ -48,15 +50,25 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            obj.Id = Guid.NewGuid();
-            if (await _roleRepository.Create(obj))
+            var roleCreate = new RoleCreateDto() 
             {
-                return Ok("Thêm thành công");
+                Name = obj.Name,
+                concurrencyStamp= Guid.NewGuid().ToString(),
+                normalizedName= obj.NormalizedName,
+            };
+            
+            try
+            {
+                var result = await _roleService.CreatRole(roleCreate);
+                return Ok(result);
             }
-            return BadRequest("Thêm thất bại");
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
-        [HttpPut]
-        public async Task<IActionResult> UpdateRole(Role obj)
+        [HttpPut("id")]
+        public async Task<IActionResult> UpdateRole(Guid id, RoleUpdateDto roleUpdateDto)
         {
 
             string apiKey = _config.GetSection("ApiKey").Value;
@@ -70,11 +82,14 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            if (await _roleRepository.Update(obj))
+            try
             {
-                return Ok("Sửa thành công");
+               var result = await _roleService.EditRole(id, roleUpdateDto);
+                return Ok(result);
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
-            return BadRequest("Sửa thất bại");
         }
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteRole(Guid id)
@@ -91,11 +106,14 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            if (await _roleRepository.Delete(id))
+            try
             {
-                return Ok("Xóa thành công");
+                var reuslt =await _roleService.DelRole(id);
+                return Ok(reuslt);
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
-            return BadRequest("Xóa thất bại");
 
         }
     }

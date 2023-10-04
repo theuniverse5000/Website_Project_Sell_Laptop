@@ -16,7 +16,8 @@ namespace Shop_API.Repository
 
         public async Task<bool> Create(Role obj)
         {
-            var checkRoleName = await _dbContext.Roles.AnyAsync(x => x.RoleName == obj.RoleName);
+        var checkRoleName = await _dbContext.Roles.AnyAsync(x => x.Name == obj.Name);
+
             if (obj == null || checkRoleName == true)
             {
                 return false;
@@ -60,6 +61,14 @@ namespace Shop_API.Repository
             return listRoles;
         }
 
+        public async Task<Role> GetById(Guid id)
+        {
+            var respone = await _dbContext.Roles.FirstOrDefaultAsync(x => x.Id == id);
+            if (respone==null)
+                throw new ArgumentException(IRoleRepository.Role_NoteFound);
+            return respone;
+        }
+
         public async Task<bool> Update(Role obj)
         {
             var role = await _dbContext.Roles.FindAsync(obj.Id);
@@ -69,8 +78,7 @@ namespace Shop_API.Repository
             }
             try
             {
-                role.RoleName = obj.RoleName;
-                role.Descripion = obj.Descripion;
+                role.Name = obj.Name;
                 role.Status = obj.Status;
                 _dbContext.Roles.Update(role);
                 await _dbContext.SaveChangesAsync();

@@ -56,7 +56,6 @@ namespace Shop_API.Service
             {
                 var user = new User()
                 {
-                    Id = Guid.NewGuid(),
                     UserName = p.UserName,
                     PhoneNumber = p.PhoneNumber,
                     Status = 0,   // quy uoc 0 có nghĩa là đang hđ

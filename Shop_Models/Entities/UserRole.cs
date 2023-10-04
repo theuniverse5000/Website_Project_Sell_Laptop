@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shop_Models.Entities
 {
-    public class Position : IdentityRole<Guid>
+    public class UserRole: IdentityUserRole<Guid>
     {
-        public int status { get; set; }
     }
 }
