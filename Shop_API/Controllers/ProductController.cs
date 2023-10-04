@@ -8,6 +8,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -20,6 +21,7 @@ namespace Shop_API.Controllers
         }
         
         [HttpGet]
+       
         public async Task<IActionResult> GetAllPro()
         {
             string apiKey = _config.GetSection("ApiKey").Value;

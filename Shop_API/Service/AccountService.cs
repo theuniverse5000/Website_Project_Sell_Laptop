@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using NuGet.Packaging;
 using Shop_API.AppDbContext;
-using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
 using Shop_Models.Dto.Account;
@@ -12,7 +10,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Token = Shop_Models.Entities.Token;
 
 namespace Shop_API.Service
@@ -178,7 +175,6 @@ namespace Shop_API.Service
                 if (!result)//false
                 {
                     return false;
-
                 }
             }
 
