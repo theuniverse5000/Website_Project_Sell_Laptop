@@ -16,7 +16,7 @@ namespace Shop_API.Controllers
 		private readonly IPagingRepository _iPagingRepository;
 		private readonly IConfiguration _config;
 		private readonly ReponseDto _reponse;
-		public ColorController(IColorRepository colorRepository, IConfiguration config, IProductDetailRepository repository, IPagingRepository pagingRepository)
+		public ColorController(IColorRepository colorRepository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _colorRepository = colorRepository;
             _config = config; 
@@ -113,19 +113,19 @@ namespace Shop_API.Controllers
 		[HttpGet("GetColorFSP")]
 		public async Task<IActionResult> GetColorFSP(string? search, double? from, double? to, string? sortBy, int page)
 		{
-			//string apiKey = _config.GetSection("ApiKey").Value;
-			//if (apiKey == null)
-			//{
-			//    return Unauthorized();
-			//}
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
 
-			//var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-			//if (keyDomain != apiKey.ToLower())
-			//{
-			//    return Unauthorized();
-			//}
-			_reponse.Result =  _iPagingRepository.GetAllColor(search, from, to, sortBy, page);
-			_reponse.Count = 10;
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            _reponse.Result =  _iPagingRepository.GetAllColor(search, from, to, sortBy, page);
+			_reponse.Count = _iPagingRepository.GetAllColor(search, from, to, sortBy, page).Count;
 			return Ok(_reponse);
 		}
 
