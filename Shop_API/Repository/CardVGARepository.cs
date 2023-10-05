@@ -66,7 +66,7 @@ namespace Shop_API.Repository
             {
                 cardVGA.Ten = obj.Ten;
                 cardVGA.ThongSo = obj.ThongSo;
-                cardVGA.TrangThai = obj.TrangThai;
+                //cardVGA.TrangThai = obj.TrangThai;
                 _context.CardVGAs.Update(cardVGA);
                 await _context.SaveChangesAsync();
                 return true;
