@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -10,11 +11,14 @@ namespace Shop_API.Controllers
     {
         private readonly IManufacturerRepository _manufacturer;
         private readonly IConfiguration _config;
-
-        public ManufacturerController(IManufacturerRepository manufacturerRepository, IConfiguration config)
+        private readonly IPagingRepository _iPagingRepository;
+        private readonly ReponseDto _reponse;
+        public ManufacturerController(IManufacturerRepository manufacturerRepository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _manufacturer = manufacturerRepository;
             _config = config;
+            _iPagingRepository = pagingRepository;
+            _reponse = new ReponseDto();
         }
 
         [HttpGet]
@@ -36,9 +40,9 @@ namespace Shop_API.Controllers
             return Ok(await _manufacturer.GetAll());
         }
 
-        [HttpPost]
+        [HttpPost("CreateManu")]
 
-        public async Task<IActionResult> Create(Manufacturer obj)
+        public async Task<IActionResult> CreateManu(Manufacturer obj)
         {
 
             string apiKey = _config.GetSection("ApiKey").Value;
@@ -61,7 +65,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Manufacturer x)
+        public async Task<IActionResult> UpdateManu(Manufacturer x)
         {
 
             string apiKey = _config.GetSection("ApiKey").Value;
@@ -81,8 +85,8 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Sửa thất bại");
         }
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("id")]
+        public async Task<IActionResult> DeleteManu(Guid id)
         {
 
             string apiKey = _config.GetSection("ApiKey").Value;
@@ -103,5 +107,25 @@ namespace Shop_API.Controllers
             return BadRequest("Xóa thất bại");
 
         }
+        
+        [HttpGet("GetManuFSP")] 
+        public async Task<IActionResult> GetManuFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+            _reponse.Result = _iPagingRepository.GetAllManufacturer(search, from, to, sortBy, page);
+            _reponse.Count = _iPagingRepository.GetAllManufacturer(search, from, to, sortBy, page).Count;
+            return Ok(_reponse);
+        }
+
     }
 }
