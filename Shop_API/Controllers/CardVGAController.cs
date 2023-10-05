@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
@@ -22,21 +21,21 @@ namespace Shop_API.Controllers
             _iPagingRepository = pagingRepository;
             _reponse = new ReponseDto();
         }
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetAllCardVGA()
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //    string apiKey = _config.GetSection("ApiKey").Value;
+            //    if (apiKey == null)
+            //    {
+            //        return Unauthorized();
+            //    }
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //    var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //    if (keyDomain != apiKey.ToLower())
+            //    {
+            //        return Unauthorized();
+            //    }
             return Ok(await _repository.GetAllCardVGA());
         }
         [HttpPost("CreateCardVGA")]

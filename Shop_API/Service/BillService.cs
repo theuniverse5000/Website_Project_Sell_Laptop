@@ -16,6 +16,7 @@ namespace Shop_API.Service
         private readonly ICartRepository _cartRepository;
         private readonly IVoucherRepository _voucherRepository;
         private readonly ReponseDto _reponse;
+        private readonly ReponseBillDto _reponseBill;
         private static Guid getUserId;  // Tạo 1 biết static phạm vi private dùng trong controller
         private static IEnumerable<CartItemDto>? cartItem;
         public BillService(IBillRepository billRepository, IBillDetailRepository billDetailRepository,
@@ -28,6 +29,7 @@ namespace Shop_API.Service
             _cartRepository = cartRepository;
             _userRepository = userRepository;
             _reponse = new ReponseDto();
+            _reponseBill = new ReponseBillDto();
             _voucherRepository = voucherRepository;
         }
 
@@ -35,7 +37,7 @@ namespace Shop_API.Service
         {
             try
             {
-                var user = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.UserName == username);
+                var user = _userRepository.GetAllUsers().Result;//.FirstOrDefault(x => x.UserName == username);
                 if (user == null)
                 {
                     _reponse.Result = null;
@@ -44,7 +46,7 @@ namespace Shop_API.Service
                     _reponse.Message = "Không tìm thấy tài khoản người dùng";
                     return _reponse;// Nếu chưa có sản phẩm trong giỏ hàng thì không thể tạo hóa đơn
                 }
-                getUserId = user.Id;
+                //   getUserId = user.Id;
                 cartItem = await _cartRepository.GetCartItem(username);// Tìm  ra giỏ hàng của user
                 if (cartItem == null)// Kiểm tra giỏ hàng của người dùng 
                 {
@@ -88,9 +90,9 @@ namespace Shop_API.Service
                     Id = Guid.NewGuid(),
                     InvoiceCode = "Bill" + RamdomString.GenerateRandomString(7),
                     CreateDate = Convert.ToDateTime(DateTime.Now.ToString()),
-                    FullName = user.FullName,
-                    PhoneNumber = user.PhoneNumber,
-                    Address = user.Address,
+                    //FullName = user.FullName,
+                    //PhoneNumber = user.PhoneNumber,
+                    //Address = user.Address,
                     Status = 2,// Trạng thái 2: Chờ xác nhận
                     UserId = getUserId,
                     VoucherId = voucherX != null ? voucherX.Id : null
@@ -148,7 +150,7 @@ namespace Shop_API.Service
         public async Task<ReponseDto> CreateBillDetail(string invoiceCode, string serialNumber, string username)
         {
             var billX = _billRepository.GetAll().Result.FirstOrDefault(x => x.InvoiceCode == invoiceCode);
-            var user = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.UserName == username);
+            var user = _userRepository.GetAllUsers().Result.FirstOrDefault();//x => x.UserName == username
             if (user == null)
             {
                 _reponse.Result = null;
@@ -187,6 +189,25 @@ namespace Shop_API.Service
         public Task<ReponseDto> CreateBillDetail(string invoiceCode, string serialNumber)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ReponseBillDto> GetBillByPhoneNumber(string phoneNumber)
+        {
+            Bill billT = await _billRepository.GetBillByPhoneNumber(phoneNumber);
+
+            var listBillDetail = await _billRepository.GetBillDetailByPhoneNumber(phoneNumber);
+            _reponseBill.InvoiceCode = billT.InvoiceCode;
+            _reponseBill.BillDetail = listBillDetail;
+            _reponseBill.Count = listBillDetail.Count();
+            _reponseBill.Code = 201;
+            _reponseBill.IsSuccess = true;
+            _reponseBill.Message = "Lấy thành công";
+            return _reponseBill;
+        }
+
+        public async Task<Bill> GetAllBill(string phoneNumber)
+        {
+            return await _billRepository.GetBillByPhoneNumber(phoneNumber);
         }
     }
 }

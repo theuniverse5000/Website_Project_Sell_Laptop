@@ -9,7 +9,8 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(Bill obj);
         Task<bool> Delete(Bill id);
         Task<IEnumerable<Bill>> GetAll();
-        Task<IEnumerable<BillDetailDto>> GetBillByUsername(string username);
-        Task<IEnumerable<BillDetailDto>> GetBillDetail(string username);
+        Task<IEnumerable<BillDto>> GetBillDetailByPhoneNumber(string phoneNumber);
+        Task<Bill> GetBillByPhoneNumber(string phoneNumber);
+        Task<IEnumerable<BillDto>> GetBillDetail(string username);
     }
 }

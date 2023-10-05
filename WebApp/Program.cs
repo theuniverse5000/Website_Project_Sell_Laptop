@@ -31,8 +31,7 @@ builder.Services.AddResponseCompression(otp =>
     otp.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" });
 });
 builder.Services.AddControllersWithViews();
-builder.Services.AddIdentity<User, Shop_Models.Entities.Position>()
-                .AddEntityFrameworkStores<ApplicationDbContext>().AddSignInManager<SignInManager<User>>();
+
 
 builder.Services.Configure<IdentityOptions>(options => {
     // Thiết lập về Password

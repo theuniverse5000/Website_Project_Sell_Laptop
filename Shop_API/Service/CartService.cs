@@ -33,7 +33,7 @@ namespace Shop_API.Service
             try
             {
                 var productDetailToCart = await _productDetailRepository.GetByCode(codeProductDetail);
-                var userToCart = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.UserName == username);
+                var userToCart = _userRepository.GetAllUsers().Result;//.FirstOrDefault(x => x.UserName == username);
                 if (userToCart == null)
                 {
                     _reponse.Result = null;
@@ -51,7 +51,7 @@ namespace Shop_API.Service
                     return _reponse;
                 }
                 // Bước 1: Khi truyền vào username lấy ra được id của user
-                getUserId = userToCart.Id;
+                getUserId = Guid.NewGuid();// userToCart.Id;
                 var userCart = _cartRepository.GetAll().Result.FirstOrDefault(x => x.UserId == getUserId);
                 int soLuongProductDetail = 1;// productDetailToCart.AvailableQuantity;
                 if (soLuongProductDetail <= 0)

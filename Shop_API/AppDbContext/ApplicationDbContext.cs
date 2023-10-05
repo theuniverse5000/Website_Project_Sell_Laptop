@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Common;
+﻿using Microsoft.EntityFrameworkCore;
 using Shop_Models.Entities;
+
 
 namespace Shop_API.AppDbContext
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Shop_Models.Entities.Position, Guid>
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext()
         {
@@ -42,7 +40,7 @@ namespace Shop_API.AppDbContext
 
         public virtual DbSet<ManagePost> ManagePosts { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
-        public virtual DbSet<Shop_Models.Entities.Token> tokens { get; set; }
 
     }
+
 }

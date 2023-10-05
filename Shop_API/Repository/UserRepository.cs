@@ -14,7 +14,7 @@ namespace Shop_API.Repository
         }
         public async Task<bool> Create(User obj)
         {
-            var _user = await _context.Users.AnyAsync(x => x.UserName == obj.UserName); // tìm đối tượng có cùng tên đăng nhập
+            var _user = await _context.Users.AnyAsync(); //x => x.UserName == obj.UserName tìm đối tượng có cùng tên đăng nhập
             if (obj == null || _user == true) // nếu đối tượng tồn tại hoặc giá trị truyền vào rỗng thì trả về false.
             {
                 return false;
@@ -72,7 +72,7 @@ namespace Shop_API.Repository
             }
             try
             {
-                _update.Password = obj.Password;
+                // _update.Password = obj.Password;
                 _update.FullName = obj.FullName;
                 _update.Address = obj.Address;
                 _update.PhoneNumber = obj.PhoneNumber;
