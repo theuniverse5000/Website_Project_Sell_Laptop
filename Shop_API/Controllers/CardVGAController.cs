@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
 
@@ -15,21 +16,21 @@ namespace Shop_API.Controllers
             _repository = repository;
             _config = config;
         }
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetAllCardVGA()
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //    string apiKey = _config.GetSection("ApiKey").Value;
+            //    if (apiKey == null)
+            //    {
+            //        return Unauthorized();
+            //    }
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //    var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //    if (keyDomain != apiKey.ToLower())
+            //    {
+            //        return Unauthorized();
+            //    }
             return Ok(await _repository.GetAllCardVGA());
         }
         [HttpPost]
