@@ -42,7 +42,7 @@ namespace Shop_API.Controllers
             }
             return Ok(await _repository.GetAllRams());
         }
-        [HttpPost]
+        [HttpPost("CreateRam")]
         public async Task<IActionResult> CreateRam(Ram obj)
         {
 
@@ -58,6 +58,7 @@ namespace Shop_API.Controllers
                 return Unauthorized();
             }
             obj.Id = Guid.NewGuid();
+            obj.TrangThai = 1;
             if (await _repository.Create(obj))
             {
                 return Ok("Thêm thành công");
@@ -109,7 +110,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpGet("GetRamsFSP")]
-        public async Task<IActionResult> GetRamsFSP(string? search, double? from, double? to, string? sortBy, int page)
+        public IActionResult GetRamsFSP(string? search, double? from, double? to, string? sortBy, int page)
         {
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
@@ -123,7 +124,7 @@ namespace Shop_API.Controllers
                 return Unauthorized();
             }
             _reponse.Result = _iPagingRepository.GetAllRam(search, from, to, sortBy, page);
-            _reponse.Count = 10;
+            var count  = _reponse.Count = _iPagingRepository.GetAllRam(search, from, to, sortBy, page).Count;
             return Ok(_reponse);
         }
 

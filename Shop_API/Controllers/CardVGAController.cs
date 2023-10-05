@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -10,10 +13,14 @@ namespace Shop_API.Controllers
     {
         private readonly ICardVGARepository _repository;
         private readonly IConfiguration _config;
-        public CardVGAController(ICardVGARepository repository, IConfiguration config)
+        private readonly IPagingRepository _iPagingRepository;
+        private readonly ReponseDto _reponse;
+        public CardVGAController(ICardVGARepository repository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _repository = repository;
             _config = config;
+            _iPagingRepository = pagingRepository;
+            _reponse = new ReponseDto();
         }
         [HttpGet]
         public async Task<IActionResult> GetAllCardVGA()
@@ -32,7 +39,7 @@ namespace Shop_API.Controllers
             }
             return Ok(await _repository.GetAllCardVGA());
         }
-        [HttpPost]
+        [HttpPost("CreateCardVGA")]
         public async Task<IActionResult> CreateCardVGA(CardVGA obj)
         {
 
@@ -48,6 +55,7 @@ namespace Shop_API.Controllers
                 return Unauthorized();
             }
             obj.Id = Guid.NewGuid();
+            obj.TrangThai = 1;
             if (await _repository.Create(obj))
             {
                 return Ok("Thêm thành công");
@@ -96,5 +104,25 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Xóa thất bại");
         }
+
+        [HttpGet("GetCardVGAFSP")]
+        public IActionResult GetCardVGAFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            _reponse.Result = _iPagingRepository.GetAllCardVGA(search, from, to, sortBy, page);
+            var count = _reponse.Count = _iPagingRepository.GetAllCardVGA(search, from, to, sortBy, page).Count;
+            return Ok(_reponse);
+        }
+
     }
 }
