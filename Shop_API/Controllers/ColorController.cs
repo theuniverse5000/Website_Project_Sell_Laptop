@@ -1,7 +1,5 @@
-﻿using Azure;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
-using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -19,12 +17,12 @@ namespace Shop_API.Controllers
 		public ColorController(IColorRepository colorRepository, IConfiguration config, IProductDetailRepository repository, IPagingRepository pagingRepository)
         {
             _colorRepository = colorRepository;
-            _config = config; 
+            _config = config;
             _reponse = new ReponseDto();
-			_iPagingRepository = pagingRepository;
-		}
+            _iPagingRepository = pagingRepository;
+        }
 
-		[HttpGet]
+        [HttpGet, Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetAllColor()
         {
 
@@ -57,7 +55,7 @@ namespace Shop_API.Controllers
                 return Unauthorized();
             }
             obj.Id = Guid.NewGuid();
-     
+
             obj.TrangThai = 1;
             if (await _colorRepository.Create(obj))
             {
@@ -129,5 +127,5 @@ namespace Shop_API.Controllers
 			return Ok(_reponse);
 		}
 
-	}
+    }
 }

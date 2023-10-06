@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Ram";
+    ViewBag.Title = "Manufacturer";
 
 }
 <span id="notification" style="display:none;">222</span>
@@ -51,44 +51,27 @@
                 }
             }
 
-            // // Cấu hình Kendo UI Notification
-            // $("#notification").kendoNotification({
-            //     position: {
-            //         top: 50,
-            //         right: 20
-            //     }
-            // });
-            // Function hiển thị thông báo
-            // function showNotification(message, type) {
-            //     $("#notification").data("kendoNotification").show({
-            //         message: message,
-            //         hideAfter: 40000, // Thời gian hiển thị thông báo (3 giây)
-            //         width: 300,
-            //         type: type // Loại thông báo: "success" hoặc "error"
-            //     });
-            // }
-
             $("#grid").kendoGrid({
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/Ram/GetRam",
+                            url: "/Manufacturer/GetManufacturer",
                             type: "GET",
                             dataType: "json"
                         },
                         create: {
-                            url: "/Ram/CreateRam",
+                            url: "/Manufacturer/CreateManufacturer",
                             type: "POST",
                             dataType: "json",
 
                         },
                         update: {
-                            url: "/Ram/UpdateRam",
+                            url: "/Manufacturer/UpdateManufacturer",
                             type: "PUT",
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/Ram/DeleteRam2",
+                            url: "/Manufacturer/DeleteManufacturer2",
                             type: "DELETE",
                             dataType: "json"
                         },
@@ -100,8 +83,8 @@
                         model: {
                             id: "id",
                             fields: {
-                                ma: { type: "string", validation: { required: true } },
-                                thongSo: { type: "string", validation: { required: true } },
+                                linkImage: { type: "string", validation: { required: true } },
+                                name: { type: "string", validation: { required: true } },
                                 //  status: { type: "int" }
                             }
                         }
@@ -182,12 +165,12 @@
                 columns: [
                     {
 
-                        field: "ma",
-                        title: "Mã"
+                        field: "linkImage",
+                        title: "linkImage"
                     },
                     {
-                        field: "thongSo",
-                        title: "Thông Số"
+                        field: "name",
+                        title: "Tên"
                     },
                     {
                         command: [
@@ -210,6 +193,7 @@
         });
     </script>
 }
+
 
 
 

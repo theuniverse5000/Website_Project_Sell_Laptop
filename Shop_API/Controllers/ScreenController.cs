@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -9,31 +12,34 @@ namespace Shop_API.Controllers
     public class ScreenController : ControllerBase
     {
         private readonly IScreenRepository _repository;
-        private readonly IConfiguration _config;
-        public ScreenController(IScreenRepository repository, IConfiguration config)
+        private readonly IConfiguration _config; 
+        private readonly ReponseDto _reponse;
+        private readonly IPagingRepository _iPagingRepository;
+        public ScreenController(IScreenRepository repository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _repository = repository;
             _config = config;
-
+            _iPagingRepository=pagingRepository;
+            _reponse = new ReponseDto();
         }
         [HttpGet]
         public async Task<IActionResult> GetAllScreens()
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             return Ok(await _repository.GetAll());
         }
-        [HttpPost]
+        [HttpPost("CreateScreen")]
         public async Task<IActionResult> CreateScreen(Screen obj)
         {
 
@@ -49,6 +55,7 @@ namespace Shop_API.Controllers
                 return Unauthorized();
             }
             obj.Id = Guid.NewGuid();
+            obj.TrangThai = 1;
             if (await _repository.Create(obj))
             {
                 return Ok("Thêm thành công");
@@ -97,6 +104,25 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Xóa thất bại");
 
+        }
+
+        [HttpGet("GetScreenFSP")]
+        public async Task<IActionResult> GetScreenFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+            _reponse.Result = _iPagingRepository.GetAllScreen(search, from, to, sortBy, page);
+            _reponse.Count = _iPagingRepository.GetAllScreen(search, from, to, sortBy, page).Count;
+            return Ok(_reponse);
         }
     }
 }

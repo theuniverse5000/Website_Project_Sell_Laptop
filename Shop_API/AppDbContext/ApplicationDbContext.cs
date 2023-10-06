@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Shop_Models.Entities;
 
 
 namespace Shop_API.AppDbContext
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext()
         {
@@ -42,9 +40,7 @@ namespace Shop_API.AppDbContext
 
         public virtual DbSet<ManagePost> ManagePosts { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
-        public virtual DbSet<Token> Tokens { get; set; }
-        public virtual DbSet<UserRole> UserRoles { get; set; }
-      
+
     }
 
 }

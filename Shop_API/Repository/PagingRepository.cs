@@ -2,6 +2,7 @@
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
+using Shop_Models.Entities;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Shop_API.Repository
@@ -123,7 +124,57 @@ namespace Shop_API.Repository
 				Name = hh.Name,
 			}).ToList();
 		}
-        
+
+
+        public List<PagingDto> GetAllScreen(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            var allScreens = _context.Screens.Where(x => x.TrangThai > 0).AsQueryable();
+
+
+            #region Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                allScreens = allScreens.Where(pt => pt.Ma.Contains(search));
+                //allScreens = allScreens.Where(pt => pt.ChatLieu.Contains(search));
+            }
+
+            if (from.HasValue)
+            {
+                allScreens = allScreens.Where(hh => hh.TrangThai >= from);
+            }
+            if (to.HasValue)
+            {
+                allScreens = allScreens.Where(hh => hh.TrangThai <= to);
+            }
+            #endregion
+
+            #region Sorting
+            //Default sort by Name (TenHh)
+            allScreens = allScreens.OrderBy(hh => hh.Ma);
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+
+                allScreens = allScreens.OrderByDescending(hh => hh.Ma); /*break;*/
+
+            }
+            #endregion
+
+            //var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+            //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            int totalCount = allScreens.Count();
+
+
+            return allScreens.Select(hh => new PagingDto
+            {
+                Id = hh.Id,
+                Ma = hh.Ma,
+                KichCo = hh.KichCo,
+                TanSo = hh.TanSo,
+                ChatLieu = hh.ChatLieu,
+            }).ToList();
+        }
+
         public List<PagingDto> GetAllRam(string? search, double? from, double? to, string? sortBy, int page)
         {
 			var allRams = _context.Rams.Where(x=>x.TrangThai>0).AsQueryable();
@@ -132,7 +183,7 @@ namespace Shop_API.Repository
             #region Filtering
             if (!string.IsNullOrEmpty(search))
             {
-                allRams = allRams.Where(pt => pt.Ma.Contains(search));
+                allRams = allRams.Where(pt => pt.ThongSo.Contains(search));
             }
             if (from.HasValue)
             {
@@ -165,7 +216,141 @@ namespace Shop_API.Repository
 			{
 				Id = hh.Id,
                 Ma=hh.Ma,
-				Name = hh.ThongSo,
+				ThongSo = hh.ThongSo,
+			}).ToList();
+		}
+        public List<PagingDto> GetAllHardDrive(string? search, double? from, double? to, string? sortBy, int page)
+        {
+			var allRams = _context.HardDrives.Where(x=>x.TrangThai>0).AsQueryable();
+
+
+            #region Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                allRams = allRams.Where(pt => pt.ThongSo.Contains(search));
+            }
+            if (from.HasValue)
+            {
+                allRams = allRams.Where(hh => hh.TrangThai >= from);
+            }
+            if (to.HasValue)
+            {
+                allRams = allRams.Where(hh => hh.TrangThai <= to);
+            }
+            #endregion
+
+            #region Sorting
+            //Default sort by ThongSo 
+            allRams = allRams.OrderBy(hh => hh.ThongSo);
+			if (!string.IsNullOrEmpty(sortBy))
+			{
+
+				allRams = allRams.OrderByDescending(hh => hh.ThongSo); /*break;*/
+				
+			}
+			#endregion
+
+			//var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+			//var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+			int totalCount = allRams.Count();
+
+
+			return allRams.Select(hh => new PagingDto
+			{
+				Id = hh.Id,
+                Ma=hh.Ma,
+				ThongSo = hh.ThongSo,
+			}).ToList();
+		}
+        
+        public List<PagingDto> GetAllCardVGA(string? search, double? from, double? to, string? sortBy, int page)
+        {
+			var allRams = _context.CardVGAs.Where(x=>x.TrangThai>0).AsQueryable();
+
+
+            #region Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                allRams = allRams.Where(pt => pt.ThongSo.Contains(search));
+            }
+            if (from.HasValue)
+            {
+                allRams = allRams.Where(hh => hh.TrangThai >= from);
+            }
+            if (to.HasValue)
+            {
+                allRams = allRams.Where(hh => hh.TrangThai <= to);
+            }
+            #endregion
+
+            #region Sorting
+            //Default sort by ThongSo 
+            allRams = allRams.OrderBy(hh => hh.ThongSo);
+			if (!string.IsNullOrEmpty(sortBy))
+			{
+
+				allRams = allRams.OrderByDescending(hh => hh.ThongSo); /*break;*/
+				
+			}
+			#endregion
+
+			//var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+			//var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+			int totalCount = allRams.Count();
+
+
+			return allRams.Select(hh => new PagingDto
+			{
+				Id = hh.Id,
+                Ma=hh.Ma,
+                Ten=hh.Ten,
+				ThongSo = hh.ThongSo,
+			}).ToList();
+		}  
+        public List<PagingDto> GetAllManufacturer(string? search, double? from, double? to, string? sortBy, int page)
+        {
+			var allRams = _context.Manufacturers.Where(x=>x.Status>0).AsQueryable();
+
+
+            #region Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                allRams = allRams.Where(pt => pt.Name.Contains(search));
+            }
+            //if (from.HasValue)
+            //{
+            //    allRams = allRams.Where(hh => hh.Status >= from);
+            //}
+            //if (to.HasValue)
+            //{
+            //    allRams = allRams.Where(hh => hh.Status <= to);
+            //}
+            #endregion
+
+            #region Sorting
+            //Default sort by Name 
+            allRams = allRams.OrderBy(hh => hh.Name);
+			if (!string.IsNullOrEmpty(sortBy))
+			{
+
+				allRams = allRams.OrderByDescending(hh => hh.Name); /*break;*/
+				
+			}
+			#endregion
+
+			//var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+			//var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+			int totalCount = allRams.Count();
+
+
+			return allRams.Select(hh => new PagingDto
+			{
+				Id = hh.Id,
+                Name = hh.Name,
+				LinkImage = hh.LinkImage,
 			}).ToList();
 		}
 

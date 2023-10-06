@@ -70,7 +70,7 @@ namespace Shop_API.Repository
                 screen.KichCo = obj.KichCo;
                 screen.TanSo = obj.TanSo;
                 screen.ChatLieu = obj.ChatLieu;
-                screen.TrangThai = obj.TrangThai;
+                //screen.TrangThai = obj.TrangThai;
                 _context.Screens.Update(screen);
                 await _context.SaveChangesAsync();
                 return true;
