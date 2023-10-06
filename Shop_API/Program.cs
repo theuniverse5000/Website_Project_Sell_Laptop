@@ -51,6 +51,7 @@ builder.Services.AddTransient<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddTransient<IGiamGiaHangLoatServices, GiamGiaHangLoatServices>();
 builder.Services.AddTransient<IBillService, BillService>();
 builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddTransient<ITichDiemServices, TichDiemServices>();
 //builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IPagingRepository, PagingRepository>();
 //builder.Services.AddTransient<IRoleService, RoleService>();

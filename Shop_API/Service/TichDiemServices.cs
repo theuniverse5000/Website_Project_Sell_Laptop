@@ -14,7 +14,7 @@ namespace Shop_API.Service
         private readonly ILichSuTieuDiemRepository _lichSuTieuDiemRepository;
         private readonly IViDiemRepository _viDiemRepository;
         private readonly ReponseDto _reponseDto;
-        public TichDiemServices(ApplicationDbContext context, QuyDoiDiemRepository quyDoiDiemRepository, LichSuTieuDiemRepository lichSuTieuDiemRepository, ViDiemRepository viDiemRepository)
+        public TichDiemServices(ApplicationDbContext context, IQuyDoiDiemRepository quyDoiDiemRepository, ILichSuTieuDiemRepository lichSuTieuDiemRepository, IViDiemRepository viDiemRepository)
         {
             _context = context;
             _quyDoiDiemRepository = quyDoiDiemRepository;
