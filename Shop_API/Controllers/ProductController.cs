@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
@@ -8,7 +9,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -21,7 +22,7 @@ namespace Shop_API.Controllers
         }
         
         [HttpGet]
-       
+
         public async Task<IActionResult> GetAllPro()
         {
             string apiKey = _config.GetSection("ApiKey").Value;

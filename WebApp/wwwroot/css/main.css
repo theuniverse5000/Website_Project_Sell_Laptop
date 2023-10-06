@@ -319,4 +319,8 @@
         font-weight: bold;
         color: #F94747;
     }
-
+@media screen and (max-width: 1440px) {
+    #img-slide {
+        width: 100% !important;
+    }
+}
