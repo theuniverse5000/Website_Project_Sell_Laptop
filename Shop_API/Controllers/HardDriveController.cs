@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -10,10 +11,14 @@ namespace Shop_API.Controllers
     {
         private readonly IHardDriveRepository _repository;
         private readonly IConfiguration _config;
-        public HardDriveController(IHardDriveRepository repository, IConfiguration config)
+        private readonly IPagingRepository _iPagingRepository;
+        private readonly ReponseDto _reponse;
+        public HardDriveController(IHardDriveRepository repository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _repository = repository;
             _config = config;
+            _iPagingRepository = pagingRepository;
+            _reponse = new ReponseDto();
         }
 
         [HttpGet]
@@ -34,7 +39,7 @@ namespace Shop_API.Controllers
             return Ok(await _repository.GetAllHardDrives());
         }
 
-        [HttpPost]
+        [HttpPost("CreateHardDrive")]
         public async Task<IActionResult> CreateHardDrive(HardDrive obj)
         {
 
@@ -50,6 +55,7 @@ namespace Shop_API.Controllers
                 return Unauthorized();
             }
             obj.Id = Guid.NewGuid();
+            obj.TrangThai = 1;
             if (await _repository.Create(obj))
             {
                 return Ok("Thêm thành công");
@@ -100,5 +106,25 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Xóa thất bại");
         }
+
+        [HttpGet("GetHardDriveFSP")]
+        public async Task<IActionResult> GetHardDriveFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            _reponse.Result = _iPagingRepository.GetAllHardDrive(search, from, to, sortBy, page);
+            _reponse.Count = _iPagingRepository.GetAllHardDrive(search, from, to, sortBy, page).Count;
+            return Ok(_reponse);
+        }
+
     }
 }

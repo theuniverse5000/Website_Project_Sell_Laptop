@@ -70,7 +70,7 @@ namespace Shop_API.Repository
             try
             {
                 hardDrive.ThongSo = obj.ThongSo;
-                hardDrive.TrangThai = obj.TrangThai;
+                //hardDrive.TrangThai = obj.TrangThai;
                 _context.HardDrives.Update(hardDrive);
                 await _context.SaveChangesAsync();
                 return true;

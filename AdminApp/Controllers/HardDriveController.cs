@@ -1,61 +1,39 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.AppDbContext;
-using static Org.BouncyCastle.Math.EC.ECCurve;
-using System.Net.Http;
-using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
+using System.Net.Http;
 
 namespace AdminApp.Controllers
 {
-  
-    public class ManufacturerController : Controller
+    public class HardDriveController : Controller
     {
-
-        private readonly ILogger<ManufacturerController> _logger;
+        private readonly ILogger<HardDriveController> _logger;
         private readonly IConfiguration _config;
+        HttpClient client = new HttpClient();
+        ApplicationDbContext context;
         private readonly IHttpClientFactory _httpClientFactory;
-        //private string? urlApi;
-        //private readonly IManufacturerRepository _manufacturer;
+        int Check = 1;
 
-        public ManufacturerController(ILogger<ManufacturerController> logger, IConfiguration config, IHttpClientFactory httpClientFactory/*, IManufacturerRepository manufacturerRepository*/)
+        public HardDriveController(ILogger<HardDriveController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
-            _config = config;            //urlApi = _config.GetSection("UrlApiAdmin").Value;
+            _config = config;
+            context = ctext;
             _httpClientFactory = httpClientFactory;
-
-
-            //_manufacturer = manufacturerRepository;
         }
         public IActionResult Index()
         {
 
             return View();
         }
-        //public async Task<IActionResult> GetList()
-        //{
-        //    string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
-        //    var client = _httpClientFactory.CreateClient();
-        //    string result = await client.GetStringAsync($"{urlApi}/api/Manufacturer");
-        //    return Content(result, "application/json");
-        //}
 
-        //public async Task<IActionResult> GetListViewBag()
-        //{
-
-        //  return  ViewBag.ListManufacturer = new Microsoft.AspNetCore.Mvc.Rendering.SelectList((System.Collections.IEnumerable)_manufacturer.GetAll(),"Id","Name");
-
-           
-        //}
-
-
-        public async Task<IActionResult> GetManufacturer()
+        public async Task<IActionResult> GetHardDrive()
         {
 
 
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
-                HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/Manufacturer/GetManuFSP");
+                HttpResponseMessage response = await client.GetAsync($"/api/HardDrive/GetHardDriveFSP");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -73,31 +51,31 @@ namespace AdminApp.Controllers
             }
         }
 
-        public async Task<JsonResult> CreateManufacturer(Manufacturer p)
+        public async Task<JsonResult> CreateHardDrive(HardDrive p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Manufacturer/CreateManu", p);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/HardDrive/CreateHardDrive", p);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
-                 
+                    Check = 1;
                     return Json(new { status = "success" });
                 }
                 else
                 {
-                    
+                    Check = 0;
                     return Json(new { status = "error" });
                 }
 
             }
         }
 
-        public async Task<JsonResult> UpdateManufacturer(Manufacturer p)
+        public async Task<JsonResult> UpdateHardDrive(HardDrive p)
         {
             try
             {
@@ -107,7 +85,7 @@ namespace AdminApp.Controllers
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
                     // Gửi yêu cầu PUT dưới dạng JSON
-                    HttpResponseMessage response = await client.PutAsJsonAsync($"/api/Manufacturer", p);
+                    HttpResponseMessage response = await client.PutAsJsonAsync($"https://localhost:44333/api/HardDrive", p);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -129,14 +107,14 @@ namespace AdminApp.Controllers
         }
 
 
-        public async Task<JsonResult> DeleteManufacturer(Guid id)
+        public async Task<JsonResult> DeleteHardDrive(Guid id)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.DeleteAsync($"/api/Manufacturer/id?id={id}");
+                HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/HardDrive/id?id={id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
@@ -152,7 +130,7 @@ namespace AdminApp.Controllers
         }
 
 
-        public async Task<JsonResult> DeleteManufacturer2(Guid id)
+        public async Task<JsonResult> DeleteHardDrive2(Guid id)
         {
             try
             {
@@ -162,8 +140,8 @@ namespace AdminApp.Controllers
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
                     // Gửi yêu cầu DELETE với id trong URL
-                    //HttpResponseMessage response = await client.DeleteAsync($"{urlApi}/api/Manufacturer/{id}");
-                    HttpResponseMessage response = await client.DeleteAsync($"/api/Manufacturer/id?id={id}");
+                    //HttpResponseMessage response = await client.DeleteAsync($"{urlApi}/api/HardDrive/{id}");
+                    HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/HardDrive/id?id={id}");
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -183,6 +161,7 @@ namespace AdminApp.Controllers
                 return Json(new { status = "Error", message = ex.Message });
             }
         }
+
 
 
     }

@@ -64,8 +64,9 @@ namespace Shop_API.Repository
             }
             try
             {
+                ram.Ma = obj.Ma;
                 ram.ThongSo = obj.ThongSo;
-                ram.TrangThai = obj.TrangThai;
+                //ram.TrangThai = obj.TrangThai;
                 _context.Rams.Update(ram);
                 await _context.SaveChangesAsync();
                 return true;

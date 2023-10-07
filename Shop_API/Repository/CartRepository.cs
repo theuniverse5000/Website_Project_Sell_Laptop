@@ -60,7 +60,7 @@ namespace Shop_API.Repository
             try
             {
                 var listUser = await _context.Users.ToListAsync();
-                Guid idUser = listUser.FirstOrDefault(x => x.UserName == username).Id;
+                Guid idUser = listUser.FirstOrDefault().Id;//x => x.UserName == username
                 var cart = await _context.Carts.FindAsync(idUser);
                 return cart;
             }
@@ -79,7 +79,7 @@ namespace Shop_API.Repository
                 var listUser = await _context.Users.ToListAsync();// lấy danh sách người dùng trong database
                 // Chú ý lấy trước rồi mới tìm để phân biệt được chữ hoa, chữ thường
                 // Nếu tìm trực tiếp sẽ không phân biệt được chữ hoa, chữ thường
-                Guid idUser = listUser.FirstOrDefault(x => x.UserName == username).Id;// Lấy ra ìd người dùng
+                Guid idUser = listUser.FirstOrDefault().Id;// Lấy ra ìd người dùng//x => x.UserName == username
                 // Dùng CartItemDto để hiển thị kết quả
                 List<CartItemDto> cartItem = new List<CartItemDto>();// Khởi tao 1 list
                 cartItem = (

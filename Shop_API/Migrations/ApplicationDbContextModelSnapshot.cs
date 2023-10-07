@@ -22,117 +22,6 @@ namespace Shop_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<Guid>");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
-
             modelBuilder.Entity("Shop_Models.Entities.Bill", b =>
                 {
                     b.Property<Guid>("Id")
@@ -174,7 +63,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("Bill", (string)null);
+                    b.ToTable("Bill");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.BillDetail", b =>
@@ -187,6 +76,9 @@ namespace Shop_API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CodeProductDetail")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Price")
@@ -202,7 +94,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("BillId");
 
-                    b.ToTable("BillDetail", (string)null);
+                    b.ToTable("BillDetail");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.CardVGA", b =>
@@ -228,7 +120,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CardVGA", (string)null);
+                    b.ToTable("CardVGA");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Cart", b =>
@@ -242,7 +134,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Cart", (string)null);
+                    b.ToTable("Cart");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.CartDetail", b =>
@@ -269,7 +161,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductDetailId");
 
-                    b.ToTable("CartDetail", (string)null);
+                    b.ToTable("CartDetail");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Color", b =>
@@ -291,7 +183,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Color", (string)null);
+                    b.ToTable("Color");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Contact", b =>
@@ -324,7 +216,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contact", (string)null);
+                    b.ToTable("Contact");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Cpu", b =>
@@ -346,7 +238,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CPU", (string)null);
+                    b.ToTable("CPU");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.GiamGia", b =>
@@ -384,7 +276,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GiamGia", (string)null);
+                    b.ToTable("GiamGia");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.HardDrive", b =>
@@ -406,7 +298,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HardDrive", (string)null);
+                    b.ToTable("HardDrive");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Image", b =>
@@ -434,7 +326,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductDetailId");
 
-                    b.ToTable("Image", (string)null);
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.LichSuTieuDiem", b =>
@@ -467,7 +359,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ViDiemId");
 
-                    b.ToTable("LichSuTieuDiem", (string)null);
+                    b.ToTable("LichSuTieuDiem");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ManagePost", b =>
@@ -496,7 +388,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ManagePost", (string)null);
+                    b.ToTable("ManagePost");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Manufacturer", b =>
@@ -518,7 +410,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Manufacturer", (string)null);
+                    b.ToTable("Manufacturer");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Product", b =>
@@ -547,7 +439,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ProductDetail", b =>
@@ -556,7 +448,7 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CardVGAId")
+                    b.Property<Guid?>("CardVGAId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -564,16 +456,16 @@ namespace Shop_API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("ColorId")
+                    b.Property<Guid?>("ColorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CpuId")
+                    b.Property<Guid?>("CpuId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("HardDriveId")
+                    b.Property<Guid?>("HardDriveId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("ImportPrice")
@@ -585,10 +477,10 @@ namespace Shop_API.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RamId")
+                    b.Property<Guid?>("RamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ScreenId")
+                    b.Property<Guid?>("ScreenId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -613,7 +505,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ScreenId");
 
-                    b.ToTable("ProductDetail", (string)null);
+                    b.ToTable("ProductDetail");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ProductType", b =>
@@ -632,7 +524,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductType", (string)null);
+                    b.ToTable("ProductType");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.QuyDoiDiem", b =>
@@ -652,7 +544,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuyDoiDiem", (string)null);
+                    b.ToTable("QuyDoiDiem");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Ram", b =>
@@ -675,7 +567,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ram", (string)null);
+                    b.ToTable("Ram");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Role", b =>
@@ -684,29 +576,18 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
+                    b.Property<string>("Descripion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.SanPhamGiamGia", b =>
@@ -736,7 +617,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductDetailId");
 
-                    b.ToTable("SanPhamGiamGia", (string)null);
+                    b.ToTable("SanPhamGiamGia");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Screen", b =>
@@ -766,7 +647,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Screen", (string)null);
+                    b.ToTable("Screen");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Serial", b =>
@@ -794,45 +675,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductDetailId");
 
-                    b.ToTable("Serial", (string)null);
-                });
-
-            modelBuilder.Entity("Shop_Models.Entities.Token", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Expired")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Iaced")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("IsCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tokens", (string)null);
+                    b.ToTable("Serial");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.User", b =>
@@ -841,79 +684,34 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
                     b.Property<Guid?>("RoleId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                    b.HasIndex("RoleId");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ViDiem", b =>
@@ -935,7 +733,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("ViDiem", (string)null);
+                    b.ToTable("ViDiem");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Voucher", b =>
@@ -970,65 +768,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Voucher", (string)null);
-                });
-
-            modelBuilder.Entity("Shop_Models.Entities.UserRole", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
-
-                    b.HasDiscriminator().HasValue("UserRole");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.HasOne("Shop_Models.Entities.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.HasOne("Shop_Models.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.HasOne("Shop_Models.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.HasOne("Shop_Models.Entities.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Shop_Models.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.HasOne("Shop_Models.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("Voucher");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Bill", b =>
@@ -1138,27 +878,19 @@ namespace Shop_API.Migrations
                 {
                     b.HasOne("Shop_Models.Entities.CardVGA", "CardVGA")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("CardVGAId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CardVGAId");
 
                     b.HasOne("Shop_Models.Entities.Color", "Color")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ColorId");
 
                     b.HasOne("Shop_Models.Entities.Cpu", "Cpu")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("CpuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CpuId");
 
                     b.HasOne("Shop_Models.Entities.HardDrive", "HardDrive")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("HardDriveId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HardDriveId");
 
                     b.HasOne("Shop_Models.Entities.Product", "Product")
                         .WithMany("ProductDetails")
@@ -1168,15 +900,11 @@ namespace Shop_API.Migrations
 
                     b.HasOne("Shop_Models.Entities.Ram", "Ram")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("RamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RamId");
 
                     b.HasOne("Shop_Models.Entities.Screen", "Screen")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("ScreenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ScreenId");
 
                     b.Navigation("CardVGA");
 
@@ -1214,7 +942,7 @@ namespace Shop_API.Migrations
 
             modelBuilder.Entity("Shop_Models.Entities.Serial", b =>
                 {
-                    b.HasOne("Shop_Models.Entities.BillDetail", null)
+                    b.HasOne("Shop_Models.Entities.BillDetail", "BillDetail")
                         .WithMany("Serials")
                         .HasForeignKey("BillDetailId");
 
@@ -1222,18 +950,16 @@ namespace Shop_API.Migrations
                         .WithMany("Serials")
                         .HasForeignKey("ProductDetailId");
 
+                    b.Navigation("BillDetail");
+
                     b.Navigation("ProductDetail");
                 });
 
-            modelBuilder.Entity("Shop_Models.Entities.Token", b =>
+            modelBuilder.Entity("Shop_Models.Entities.User", b =>
                 {
-                    b.HasOne("Shop_Models.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                    b.HasOne("Shop_Models.Entities.Role", null)
+                        .WithMany("User")
+                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ViDiem", b =>
@@ -1317,6 +1043,11 @@ namespace Shop_API.Migrations
             modelBuilder.Entity("Shop_Models.Entities.Ram", b =>
                 {
                     b.Navigation("ProductDetails");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.Role", b =>
+                {
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Screen", b =>

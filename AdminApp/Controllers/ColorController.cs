@@ -33,7 +33,7 @@ namespace AdminApp.Controllers
 
 			using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
 			{
-				HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/Color/GetColorFSP");
+				HttpResponseMessage response = await client.GetAsync($"/api/Color/GetColorFSP");
 
 				if (response.IsSuccessStatusCode)
 				{
@@ -58,7 +58,7 @@ namespace AdminApp.Controllers
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
 			{
 				//    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-				HttpResponseMessage response = await client.PostAsJsonAsync($"https://localhost:44333/api/Color/CreateColor", p);
+				HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Color/CreateColor", p);
 				if (response.IsSuccessStatusCode)
 				{
 					var result = response.Content.ReadAsStringAsync().Result;
@@ -141,7 +141,7 @@ namespace AdminApp.Controllers
 				{
 					// Gửi yêu cầu DELETE với id trong URL
 					//HttpResponseMessage response = await client.DeleteAsync($"{urlApi}/api/Color/{id}");
-					HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/Color/id?id={id}");
+					HttpResponseMessage response = await client.DeleteAsync($"/api/Color/id?id={id}");
 
 					if (response.IsSuccessStatusCode)
 					{

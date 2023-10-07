@@ -50,78 +50,52 @@ namespace Shop_API.Repository
         {
             return await _context.Bills.ToListAsync();
         }
-
-        public async Task<IEnumerable<BillDetailDto>> GetBillByUsername(string username)
+        public async Task<Bill> GetBillByPhoneNumber(string phoneNumber)
         {
-            // Truyền vào tên tào khoản của người dùng
+            return await _context.Bills.AsNoTracking().FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        }
+
+        public async Task<IEnumerable<BillDto>> GetBillDetailByPhoneNumber(string phoneNumber)
+        {
             try
             {
-                //var listUser = await _context.Users.ToListAsync();// lấy danh sách người dùng trong database
-                //// Chú ý lấy trước rồi mới tìm để phân biệt được chữ hoa, chữ thường
-                //// Nếu tìm trực tiếp sẽ không phân biệt được chữ hoa, chữ thường
-                //Guid idUser = listUser.FirstOrDefault(x => x.Username == username).Id;// Lấy ra ìd người dùng
-                //// Dùng BillDetailDto để hiển thị kết quả
-                //List<BillDetailDto> BillDetail = new List<BillDetailDto>();// Khởi tao 1 list
-                //BillDetail = (
-                //           // Join các bảng lại để lấy dữ liệu
-                //           from o in await _context.Users.ToListAsync()
-                //           join x in await _context.Bills.ToListAsync() on o.Id equals x.UserId
-                //           join y in await _context.BillDetails.ToListAsync() on x.Id equals y.BillId
-                //           //  join a in await _context.ProductDetails.ToListAsync() on y.ProductDetailId equals a.Id
-                //           join b in await _context.Rams.ToListAsync() on a.RamId equals b.Id
-                //           join c in await _context.Cpus.ToListAsync() on a.CpuId equals c.Id
-                //           join d in await _context.HardDrives.ToListAsync() on a.HardDriveId equals d.Id
-                //           join e in await _context.Colors.ToListAsync() on a.ColorId equals e.Id
-                //           join f in await _context.CardVGAs.ToListAsync() on a.CardVGAId equals f.Id
-                //           join g in await _context.Screens.ToListAsync() on a.ScreenId equals g.Id
-                //           // join h in await _context.Images.ToListAsync() on a.Id equals h.ProductDetailId
-                //           join i in await _context.Products.ToListAsync() on a.ProductId equals i.Id
-                //           join k in await _context.Manufacturers.ToListAsync() on i.ManufacturerId equals k.Id
-                //           select new BillDetailDto// Dùng kiểu đối tượng ẩn danh (anonymous type)
-                //           {
-                //               IdBill = x.Id,
-                //               SDTKhachHang = x.SDTKhachHang,
-                //               HoTenKhachHang = x.HoTenKhachHang,
-                //               DiaChiKhachHang = x.DiaChiKhachHang,
-                //               UserId = o.Id,
-                //               //        Quantity = y.Quantity,
-                //               //IdProductDetails = a.Id,
-                //               //MaProductDetail = a.Ma,
-                //               //Price = a.Price,
-                //               //Description = a.Description,
-                //               ThongSoRam = b.ThongSo,
-                //               MaRam = b.Ma,
-                //               TenCpu = c.Ten,
-                //               MaCpu = c.Ma,
-                //               ThongSoHardDrive = d.ThongSo,
-                //               MaHardDrive = d.Ma,
-                //               NameColor = e.Name,
-                //               MaColor = e.Ma,
-                //               MaCardVGA = f.Ma,
-                //               TenCardVGA = f.Ten,
-                //               ThongSoCardVGA = f.ThongSo,
-                //               MaManHinh = g.Ma,
-                //               KichCoManHinh = g.KichCo,
-                //               TanSoManHinh = g.TanSo,
-                //               ChatLieuManHinh = g.ChatLieu,
-                //               NameProduct = i.Name,
-                //               NameManufacturer = k.Name
-                //               //  LinkImage = h.LinkImage
-                //           }
-                //    ).ToList();
-                //return BillDetail.Where(x => x.UserId == idUser);// Trả về list với điểu kiện 
-                return null;
+                var billDetails = await (
+                    from x in _context.Bills.AsNoTracking().Where(a => a.PhoneNumber == phoneNumber)
+                    join y in _context.BillDetails.AsNoTracking() on x.Id equals y.BillId
+                    join z in _context.Serials.AsNoTracking() on y.Id equals z.BillDetailId
+                    join o in _context.ProductDetails.AsNoTracking().Where(a => a.Status > 0) on z.ProductDetailId equals o.Id
+                    select new BillDto
+                    {
+                        IdBill = x.Id,
+                        CodeBill = x.InvoiceCode,
+                        MaProductDetail = o.Code,
+                        Price = o.Price,
+                        Status = x.Status,
+                        Description = o.Description,
+                        Quantity = y.Quantity,
+                        ThongSoRam = o.Ram.ThongSo,
+                        TenCpu = o.Cpu.Ten,
+                        ThongSoHardDrive = o.HardDrive.ThongSo,
+                        NameColor = o.Color.Name,
+                        TenCardVGA = o.CardVGA.Ten,
+                        ThongSoCardVGA = o.CardVGA.ThongSo,
+                        KichCoManHinh = o.Screen.KichCo,
+                        TanSoManHinh = o.Screen.TanSo,
+                        ChatLieuManHinh = o.Screen.ChatLieu,
+                        NameProduct = o.Product.Name
+                    }).ToListAsync();
+
+                return billDetails;
             }
             catch (Exception)
             {
-                // Nếu idUser bị null tức là không tìm thấy, sẽ xảy ra Exception
-                // Sau đó trả về null
                 return null;
             }
 
         }
 
-        public Task<IEnumerable<BillDetailDto>> GetBillDetail(string username)
+
+        public Task<IEnumerable<BillDto>> GetBillDetail(string username)
         {
             throw new NotImplementedException();
         }

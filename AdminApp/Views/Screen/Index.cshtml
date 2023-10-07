@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Ram";
+    ViewBag.Title = "Screen";
 
 }
 <span id="notification" style="display:none;">222</span>
@@ -51,44 +51,27 @@
                 }
             }
 
-            // // Cấu hình Kendo UI Notification
-            // $("#notification").kendoNotification({
-            //     position: {
-            //         top: 50,
-            //         right: 20
-            //     }
-            // });
-            // Function hiển thị thông báo
-            // function showNotification(message, type) {
-            //     $("#notification").data("kendoNotification").show({
-            //         message: message,
-            //         hideAfter: 40000, // Thời gian hiển thị thông báo (3 giây)
-            //         width: 300,
-            //         type: type // Loại thông báo: "success" hoặc "error"
-            //     });
-            // }
-
             $("#grid").kendoGrid({
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/Ram/GetRam",
+                            url: "/Screen/GetScreen",
                             type: "GET",
                             dataType: "json"
                         },
                         create: {
-                            url: "/Ram/CreateRam",
+                            url: "/Screen/CreateScreen",
                             type: "POST",
                             dataType: "json",
 
                         },
                         update: {
-                            url: "/Ram/UpdateRam",
+                            url: "/Screen/UpdateScreen",
                             type: "PUT",
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/Ram/DeleteRam2",
+                            url: "/Screen/DeleteScreen2",
                             type: "DELETE",
                             dataType: "json"
                         },
@@ -101,7 +84,11 @@
                             id: "id",
                             fields: {
                                 ma: { type: "string", validation: { required: true } },
-                                thongSo: { type: "string", validation: { required: true } },
+                                kichCo: { type: "string", validation: { required: true } },
+                                tanSo: { type: "string", validation: { required: true } },
+                                chatLieu: { type: "string", validation: { required: true } },
+                                
+
                                 //  status: { type: "int" }
                             }
                         }
@@ -186,8 +173,15 @@
                         title: "Mã"
                     },
                     {
-                        field: "thongSo",
-                        title: "Thông Số"
+                        field: "kichCo",
+                        title: "Kích cỡ"
+                    }, 
+                    {
+                        field: "tanSo",
+                        title: "Tần Số"
+                    }, {
+                        field: "chatLieu",
+                        title: "Chất liệu"
                     },
                     {
                         command: [
