@@ -174,7 +174,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("Bill");
+                    b.ToTable("Bill", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.BillDetail", b =>
@@ -187,9 +187,6 @@ namespace Shop_API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CodeProductDetail")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Price")
@@ -205,7 +202,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("BillId");
 
-                    b.ToTable("BillDetail");
+                    b.ToTable("BillDetail", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.CardVGA", b =>
@@ -231,7 +228,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CardVGA");
+                    b.ToTable("CardVGA", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Cart", b =>
@@ -245,7 +242,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Cart", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.CartDetail", b =>
@@ -272,7 +269,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductDetailId");
 
-                    b.ToTable("CartDetail");
+                    b.ToTable("CartDetail", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Color", b =>
@@ -294,7 +291,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Color");
+                    b.ToTable("Color", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Contact", b =>
@@ -327,7 +324,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contact");
+                    b.ToTable("Contact", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Cpu", b =>
@@ -349,7 +346,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CPU");
+                    b.ToTable("CPU", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.GiamGia", b =>
@@ -387,7 +384,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GiamGia");
+                    b.ToTable("GiamGia", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.HardDrive", b =>
@@ -409,7 +406,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HardDrive");
+                    b.ToTable("HardDrive", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Image", b =>
@@ -437,7 +434,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductDetailId");
 
-                    b.ToTable("Image");
+                    b.ToTable("Image", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.LichSuTieuDiem", b =>
@@ -470,7 +467,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ViDiemId");
 
-                    b.ToTable("LichSuTieuDiem");
+                    b.ToTable("LichSuTieuDiem", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ManagePost", b =>
@@ -499,7 +496,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ManagePost");
+                    b.ToTable("ManagePost", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Manufacturer", b =>
@@ -521,7 +518,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Manufacturer");
+                    b.ToTable("Manufacturer", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Product", b =>
@@ -550,7 +547,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ProductDetail", b =>
@@ -559,7 +556,7 @@ namespace Shop_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CardVGAId")
+                    b.Property<Guid>("CardVGAId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -567,16 +564,16 @@ namespace Shop_API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("ColorId")
+                    b.Property<Guid>("ColorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CpuId")
+                    b.Property<Guid>("CpuId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("HardDriveId")
+                    b.Property<Guid>("HardDriveId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("ImportPrice")
@@ -588,10 +585,10 @@ namespace Shop_API.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RamId")
+                    b.Property<Guid>("RamId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ScreenId")
+                    b.Property<Guid>("ScreenId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -616,7 +613,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ScreenId");
 
-                    b.ToTable("ProductDetail");
+                    b.ToTable("ProductDetail", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ProductType", b =>
@@ -635,7 +632,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductType");
+                    b.ToTable("ProductType", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.QuyDoiDiem", b =>
@@ -655,7 +652,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuyDoiDiem");
+                    b.ToTable("QuyDoiDiem", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Ram", b =>
@@ -678,7 +675,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ram");
+                    b.ToTable("Ram", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Role", b =>
@@ -739,7 +736,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductDetailId");
 
-                    b.ToTable("SanPhamGiamGia");
+                    b.ToTable("SanPhamGiamGia", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Screen", b =>
@@ -769,7 +766,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Screen");
+                    b.ToTable("Screen", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Serial", b =>
@@ -797,7 +794,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("ProductDetailId");
 
-                    b.ToTable("Serial");
+                    b.ToTable("Serial", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Token", b =>
@@ -835,7 +832,7 @@ namespace Shop_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tokens");
+                    b.ToTable("Tokens", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.User", b =>
@@ -938,7 +935,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("ViDiem");
+                    b.ToTable("ViDiem", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.Voucher", b =>
@@ -973,7 +970,7 @@ namespace Shop_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Voucher");
+                    b.ToTable("Voucher", (string)null);
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.UserRole", b =>
@@ -1141,19 +1138,27 @@ namespace Shop_API.Migrations
                 {
                     b.HasOne("Shop_Models.Entities.CardVGA", "CardVGA")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("CardVGAId");
+                        .HasForeignKey("CardVGAId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Shop_Models.Entities.Color", "Color")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("ColorId");
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Shop_Models.Entities.Cpu", "Cpu")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("CpuId");
+                        .HasForeignKey("CpuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Shop_Models.Entities.HardDrive", "HardDrive")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("HardDriveId");
+                        .HasForeignKey("HardDriveId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Shop_Models.Entities.Product", "Product")
                         .WithMany("ProductDetails")
@@ -1163,11 +1168,15 @@ namespace Shop_API.Migrations
 
                     b.HasOne("Shop_Models.Entities.Ram", "Ram")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("RamId");
+                        .HasForeignKey("RamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Shop_Models.Entities.Screen", "Screen")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("ScreenId");
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CardVGA");
 
@@ -1205,15 +1214,13 @@ namespace Shop_API.Migrations
 
             modelBuilder.Entity("Shop_Models.Entities.Serial", b =>
                 {
-                    b.HasOne("Shop_Models.Entities.BillDetail", "BillDetail")
+                    b.HasOne("Shop_Models.Entities.BillDetail", null)
                         .WithMany("Serials")
                         .HasForeignKey("BillDetailId");
 
                     b.HasOne("Shop_Models.Entities.ProductDetail", "ProductDetail")
                         .WithMany("Serials")
                         .HasForeignKey("ProductDetailId");
-
-                    b.Navigation("BillDetail");
 
                     b.Navigation("ProductDetail");
                 });

@@ -9,5 +9,6 @@ namespace Shop_Models.Entities
 {
     public class UserRole: IdentityUserRole<Guid>
     {
+        public Guid IdUserRole { get; set; }
     }
 }

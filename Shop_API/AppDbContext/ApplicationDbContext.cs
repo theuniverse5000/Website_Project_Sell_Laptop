@@ -44,7 +44,16 @@ namespace Shop_API.AppDbContext
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
-      
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<IdentityUserRole<Guid>>().HasKey(x=>new {x.RoleId,x.UserId });
+            builder.Ignore<IdentityUserClaim<Guid>>();
+            builder.Ignore<IdentityUserLogin<Guid>>();
+            builder.Ignore<IdentityUserToken<Guid>>();
+            builder.Ignore<IdentityRoleClaim<Guid>>();
+            
+        }
     }
 
 }

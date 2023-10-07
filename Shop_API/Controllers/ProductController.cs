@@ -9,7 +9,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,Roles ="CLIENT")]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -39,6 +39,7 @@ namespace Shop_API.Controllers
             return Ok(await _productRepository.GetAll());
         }
         [HttpPost]
+        
         public async Task<IActionResult> Create(Product obj)
         {
 
