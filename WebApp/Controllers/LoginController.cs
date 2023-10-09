@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using Shop_Models.Dto.Account;
 using Shop_Models.Dto;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
@@ -39,29 +38,30 @@ public class LoginController : Controller
         var result = await _httpClient.PostAsJsonAsync("https://localhost:7286/api/Account/Login", loginRequest);
         if (result.IsSuccessStatusCode)
         {
-            var token = await result.Content.ReadAsStringAsync();
-            var objToken = JsonConvert.DeserializeObject<LoginResponesDto>(token);
-            if (objToken != null)
-            {
-                TokenDto jsonObject = JsonConvert.DeserializeObject<TokenDto>(objToken.Data.ToString());
-                if (jsonObject != null)
-                {
-                    _httpContextAccessor.HttpContext.Session.SetString("_tokenAuthorization", jsonObject.AccessToken);
-                    var handler = new JwtSecurityTokenHandler();
+            //var token = await result.Content.ReadAsStringAsync();
+            //var objToken = JsonConvert.DeserializeObject<LoginResponesDto>(token);
+            //if (objToken != null)
+            //{
+            //    TokenDto jsonObject = JsonConvert.DeserializeObject<TokenDto>(objToken.Data.ToString());
+            //    if (jsonObject != null)
+            //    {
+            //        _httpContextAccessor.HttpContext.Session.SetString("_tokenAuthorization", jsonObject.AccessToken);
+            //        var handler = new JwtSecurityTokenHandler();
 
-                    var jwt = handler.ReadJwtToken(jsonObject.AccessToken);
+            //        var jwt = handler.ReadJwtToken(jsonObject.AccessToken);
 
-                    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-                    var value = jwt.Claims;
-                    identity.AddClaims(value);
+            //        var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            //        var value = jwt.Claims;
+            //        identity.AddClaims(value);
 
 
-                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jsonObject.AccessToken);
+            //        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jsonObject.AccessToken);
 
-                    return RedirectToPage("/_Host");
-                }
+                    
+            //    }
 
-            }
+            //}
+            return RedirectToPage("/_Host");
             return BadRequest("Token is null");
         }
 

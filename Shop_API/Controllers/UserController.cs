@@ -10,16 +10,16 @@ namespace Shop_API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        private readonly ReponseDto _reponseDto;
+        private readonly ResponseDto _reponseDto;
         private readonly IConfiguration _config;
         public UserController(IUserRepository userRepository, IConfiguration config)
         {
             _userRepository = userRepository;
-            _reponseDto = new ReponseDto();
+            _reponseDto = new ResponseDto();
             _config = config;
         }
         [HttpGet]
-        public async Task<ReponseDto> GetAllUser()
+        public async Task<ResponseDto> GetAllUser()
         {
 
             string apiKey = _config.GetSection("ApiKey").Value;
@@ -56,7 +56,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ReponseDto> CreateUser(User obj)
+        public async Task<ResponseDto> CreateUser(User obj)
         {
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
@@ -91,7 +91,7 @@ namespace Shop_API.Controllers
             }
         }
         [HttpPut]
-        public async Task<ReponseDto> UpdateUser(User obj)
+        public async Task<ResponseDto> UpdateUser(User obj)
         {
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
@@ -127,7 +127,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpDelete]
-        public async Task<ReponseDto> DeleteUser(Guid id)
+        public async Task<ResponseDto> DeleteUser(Guid id)
         {
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)

@@ -13,14 +13,14 @@ namespace Shop_API.Controllers
     {
         private readonly IScreenRepository _repository;
         private readonly IConfiguration _config; 
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
         private readonly IPagingRepository _iPagingRepository;
         public ScreenController(IScreenRepository repository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _repository = repository;
             _config = config;
             _iPagingRepository=pagingRepository;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
         }
         [HttpGet]
         public async Task<IActionResult> GetAllScreens()

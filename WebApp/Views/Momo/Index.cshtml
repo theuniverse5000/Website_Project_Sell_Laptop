@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Thanh toán Momo</h1>
+
+    <div class="container">
+        <form action="/Momo/CreatePaymentUrl" id="frmCreateOrder" method="POST">
+            <div class="form-group">
+                <label for="FullName">Tên khách hàng</label>
+                <input class="form-control"
+                       id="FullName"
+                       name="FullName"
+                       type="text"
+                       value="Phương Thảo">
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="Amount">Số tiền</label>
+                <input class="form-control"
+                       id="Amount"
+                       name="Amount"
+                       type="text"
+                       value="10000">
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="OrderInfo">Nội dung thanh toán</label>
+                <textarea class="form-control"
+                          cols="20"
+                          id="OrderInfo"
+                          name="OrderInfo"
+                          rows="2">Thanh toán tại Phương Thảo Laptop</textarea>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-primary">Thanh toán (Checkout)</button>
+        </form>
+    </div>
+</div>

@@ -1,15 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Pqc.Crypto.Crystals.Dilithium;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
-using Shop_Models.Dto.Account;
-using Shop_Models.Entities;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Shop_API.Controllers
 {

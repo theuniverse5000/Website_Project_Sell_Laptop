@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -7,6 +10,7 @@ using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service;
 using Shop_API.Service.IService;
+using Shop_Models.Entities;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -51,38 +55,56 @@ builder.Services.AddTransient<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddTransient<IGiamGiaHangLoatServices, GiamGiaHangLoatServices>();
 builder.Services.AddTransient<IBillService, BillService>();
 builder.Services.AddTransient<ICartService, CartService>();
-builder.Services.AddTransient<ITichDiemServices, TichDiemServices>();
 //builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IPagingRepository, PagingRepository>();
-//builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IUserService, UserService>();
-//builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
+builder.Services.AddTransient<IRoleService, RoleService>();
+builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
 #endregion
 builder.Services.RegisterServiceComponents();
+
+
 #region Đăng ký JWT
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                .AddSignInManager<SignInManager<User>>();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme=JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme=JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme=JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateLifetime = true,
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidAudience=  builder.Configuration["JWT:Audience"],
+        ValidIssuer= builder.Configuration["JWT:Issuer"],
+        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"])),
+    };
+});
+
 builder.Services.AddSwaggerGen(options =>
 {
+
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-
     options.OperationFilter<SecurityRequirementsOperationFilter>();
+
+
 });
-builder.Services.AddAuthentication().AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        ValidateAudience = false,
-        ValidateIssuer = false,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication"))
-    };
-});
+
+
 #endregion
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration).CreateLogger();

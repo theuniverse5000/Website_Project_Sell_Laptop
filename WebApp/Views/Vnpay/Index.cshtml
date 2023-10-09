@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Thanh toán VnPay</a></h1>
+</div>
+
+<div class="table-responsive">
+    <form action="/Vnpay/CreatePaymentUrl" id="frmCreateOrder" method="POST">
+        <div class="form-group">
+            <label for="ordertype">Loại hàng hóa </label>
+            <select name="OrderType" id="ordertype" class="form-control">
+                <option value="electric">Laptop Acer</option>
+                <option value="fashion">Laptop Dell</option>
+                <option value="other">Laptop Hp</option>
+            </select>
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="Name">Tên khách hàng</label>
+            <input class="form-control"
+                   id="Name"
+                   name="Name"
+                   type="text"
+                   value="Phương Thảo">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="Amount">Số tiền</label>
+            <input class="form-control"
+                   id="Amount"
+                   name="Amount"
+                   type="text"
+                   value="20000000">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="OrderDescription">Nội dung thanh toán</label>
+            <textarea class="form-control"
+                      cols="20"
+                      id="OrderDescription"
+                      name="OrderDescription"
+                      rows="2">Thanh toán tại Phương Thảo Laptop</textarea>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Thanh toán (Checkout)</button>
+    </form>
+</div>

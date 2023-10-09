@@ -14,14 +14,14 @@ namespace Shop_API.Controllers
         private readonly IRamRepository _repository;
         private readonly IConfiguration _config;
         private readonly IPagingRepository _iPagingRepository;
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
 
 
         public RamController(IRamRepository repository, IConfiguration config, IPagingRepository iPagingRepository)
         {
             _repository = repository;
             _config = config;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
             _iPagingRepository = iPagingRepository;
 
         }

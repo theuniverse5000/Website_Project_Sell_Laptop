@@ -11,7 +11,7 @@ namespace Shop_API.Service
         private readonly ICartDetailRepository _cartDetailRepository;
         private readonly IProductDetailRepository _productDetailRepository;
         private readonly IUserRepository _userRepository;
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
         private static Guid getUserId;  // Tạo 1 biết static phạm vi private dùng trong controller
         /*
           Các trạng thái của cart detail
@@ -26,9 +26,9 @@ namespace Shop_API.Service
             _cartDetailRepository = cartDetailRepository;
             _productDetailRepository = productDetailRepository;
             _userRepository = userRepository;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
         }
-        public async Task<ReponseDto> AddCart(string username, string codeProductDetail)
+        public async Task<ResponseDto> AddCart(string username, string codeProductDetail)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace Shop_API.Service
                 return _reponse;
             }
         }
-        public async Task<ReponseDto> CongQuantityCartDetail(Guid idCartDetail)
+        public async Task<ResponseDto> CongQuantityCartDetail(Guid idCartDetail)
         {
             try
             {
@@ -187,7 +187,7 @@ namespace Shop_API.Service
                 return _reponse;
             }
         }
-        public async Task<ReponseDto> TruQuantityCartDetail(Guid idCartDetail)
+        public async Task<ResponseDto> TruQuantityCartDetail(Guid idCartDetail)
         {
             try
             {
@@ -250,7 +250,7 @@ namespace Shop_API.Service
                 return _reponse;
             }
         }
-        public async Task<ReponseDto> GetAllCarts()
+        public async Task<ResponseDto> GetAllCarts()
         {
             var cartItem = await _cartRepository.GetAll();
             if (cartItem == null)
@@ -269,7 +269,7 @@ namespace Shop_API.Service
             }
 
         }
-        public async Task<ReponseDto> GetCartByUsername(string username)
+        public async Task<ResponseDto> GetCartByUsername(string username)
         {
             var cartItem = await _cartRepository.GetCartByUsername(username);
             if (cartItem == null)
@@ -288,7 +288,7 @@ namespace Shop_API.Service
             }
 
         }
-        public async Task<ReponseDto> GetCartJoinForUser(string username)
+        public async Task<ResponseDto> GetCartJoinForUser(string username)
         {
             var cartItem = await _cartRepository.GetCartItem(username);
             if (cartItem == null)

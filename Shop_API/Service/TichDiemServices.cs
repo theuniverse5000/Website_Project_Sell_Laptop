@@ -14,13 +14,13 @@ namespace Shop_API.Service
         private readonly ILichSuTieuDiemRepository _lichSuTieuDiemRepository;
         private readonly IViDiemRepository _viDiemRepository;
         private readonly ReponseDto _reponseDto;
-        public TichDiemServices(ApplicationDbContext context, IQuyDoiDiemRepository quyDoiDiemRepository, ILichSuTieuDiemRepository lichSuTieuDiemRepository, IViDiemRepository viDiemRepository)
+        public TichDiemServices(ApplicationDbContext context, QuyDoiDiemRepository quyDoiDiemRepository, LichSuTieuDiemRepository lichSuTieuDiemRepository, ViDiemRepository viDiemRepository)
         {
             _context = context;
             _quyDoiDiemRepository = quyDoiDiemRepository;
             _lichSuTieuDiemRepository = lichSuTieuDiemRepository;
             _viDiemRepository = viDiemRepository;
-            _reponseDto = new ReponseDto();
+            _reponseDto = new ResponseDto();
 
 
         }

@@ -13,15 +13,15 @@ namespace Shop_API.Controllers
         private readonly ICardVGARepository _repository;
         private readonly IConfiguration _config;
         private readonly IPagingRepository _iPagingRepository;
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
         public CardVGAController(ICardVGARepository repository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _repository = repository;
             _config = config;
             _iPagingRepository = pagingRepository;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
         }
-        [HttpGet, Authorize(Roles = "Admin,User")]
+        [HttpGet]
         public async Task<IActionResult> GetAllCardVGA()
         {
 

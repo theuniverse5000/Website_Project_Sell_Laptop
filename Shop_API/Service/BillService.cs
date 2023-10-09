@@ -15,7 +15,7 @@ namespace Shop_API.Service
         private readonly IUserRepository _userRepository;
         private readonly ICartRepository _cartRepository;
         private readonly IVoucherRepository _voucherRepository;
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
         private readonly ReponseBillDto _reponseBill;
         private static Guid getUserId;  // Tạo 1 biết static phạm vi private dùng trong controller
         private static IEnumerable<CartItemDto>? cartItem;
@@ -28,12 +28,12 @@ namespace Shop_API.Service
             _productDetailRepository = productDetailRepository;
             _cartRepository = cartRepository;
             _userRepository = userRepository;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
             _reponseBill = new ReponseBillDto();
             _voucherRepository = voucherRepository;
         }
 
-        public async Task<ReponseDto> CreateBill(string username, string? maVoucher)
+        public async Task<ResponseDto> CreateBill(string username, string? maVoucher)
         {
             try
             {
@@ -147,7 +147,7 @@ namespace Shop_API.Service
             }
         }
 
-        public async Task<ReponseDto> CreateBillDetail(string invoiceCode, string serialNumber, string username)
+        public async Task<ResponseDto> CreateBillDetail(string invoiceCode, string serialNumber, string username)
         {
             var billX = _billRepository.GetAll().Result.FirstOrDefault(x => x.InvoiceCode == invoiceCode);
             var user = _userRepository.GetAllUsers().Result.FirstOrDefault();//x => x.UserName == username
@@ -186,7 +186,7 @@ namespace Shop_API.Service
             throw new NotImplementedException();
         }
 
-        public Task<ReponseDto> CreateBillDetail(string invoiceCode, string serialNumber)
+        public Task<ResponseDto> CreateBillDetail(string invoiceCode, string serialNumber)
         {
             throw new NotImplementedException();
         }

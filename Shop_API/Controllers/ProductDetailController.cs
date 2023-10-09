@@ -11,12 +11,12 @@ namespace Shop_API.Controllers
     public class ProductDetailController : LaptopShopController
     {
         private readonly IProductDetailRepository _repository;
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
         private readonly IConfiguration _config;
         public ProductDetailController(IProductDetailRepository repository, IConfiguration config)
         {
             _repository = repository;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
             _config = config;
         }
         [HttpGet("GetAllNoJoin")]

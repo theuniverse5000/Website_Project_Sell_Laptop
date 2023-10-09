@@ -1,5 +1,4 @@
-﻿using Shop_Models.Dto.User;
-using Shop_Models.Entities;
+﻿using Shop_Models.Dto;
 
 namespace Shop_API.Repository.IRepository
 {

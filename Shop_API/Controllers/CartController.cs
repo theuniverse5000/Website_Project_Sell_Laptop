@@ -11,11 +11,11 @@ namespace Shop_API.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
         public CartController(ICartService cartService)
         {
             _cartService = cartService;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
         }
         [AllowAnonymous]// For admin
         [HttpGet("GetAllCarts")]
@@ -61,7 +61,7 @@ namespace Shop_API.Controllers
             }
         }
         //[HttpGet("GetAllCartJoin")]
-        //public async Task<ReponseDto> GetAllCartJoin()
+        //public async Task<ResponseDto> GetAllCartJoin()
         //{
         //    var cartItem = await _cartRepository.GetAllCarts();
         //    if (cartItem == null)

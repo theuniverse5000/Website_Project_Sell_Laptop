@@ -1,0 +1,22 @@
+﻿@model WebApp.Models.Momo.MomoExecuteResponseModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Thanh toán Momo</h1>
+
+    <div class="container">
+        <h1 class="text-success">Thanh Toán Thành Công</h1>
+        <p>Order ID: <strong>@Model.OrderId</strong></p>
+        <p>Amount: <strong>@Model.Amount</strong></p>
+        <p>Order Info: <strong>@Model.OrderInfo</strong></p>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
