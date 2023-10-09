@@ -4,6 +4,6 @@ namespace Shop_API.Service.IService
 {
     public interface IGiamGiaHangLoatServices
     {
-        Task<ReponseDto> ApplyDiscountByPromotionType(string promotionType, double discountAmount);
+        Task<ResponseDto> ApplyDiscountByPromotionType(string promotionType, double discountAmount);
     }
 }

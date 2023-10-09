@@ -13,12 +13,12 @@ namespace Shop_API.Controllers
         private readonly IColorRepository _colorRepository;
 		private readonly IPagingRepository _iPagingRepository;
 		private readonly IConfiguration _config;
-		private readonly ReponseDto _reponse;
+		private readonly ResponseDto _reponse;
 		public ColorController(IColorRepository colorRepository, IConfiguration config, IProductDetailRepository repository, IPagingRepository pagingRepository)
         {
             _colorRepository = colorRepository;
             _config = config;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
             _iPagingRepository = pagingRepository;
         }
 

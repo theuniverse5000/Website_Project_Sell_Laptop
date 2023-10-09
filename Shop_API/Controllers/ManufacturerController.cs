@@ -12,13 +12,13 @@ namespace Shop_API.Controllers
         private readonly IManufacturerRepository _manufacturer;
         private readonly IConfiguration _config;
         private readonly IPagingRepository _iPagingRepository;
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
         public ManufacturerController(IManufacturerRepository manufacturerRepository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _manufacturer = manufacturerRepository;
             _config = config;
             _iPagingRepository = pagingRepository;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
         }
 
         [HttpGet]

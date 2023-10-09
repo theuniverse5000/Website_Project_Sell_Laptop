@@ -12,7 +12,7 @@ namespace Shop_API.Service
         private readonly ISanPhamGiamGiaRepository _sanPhamGiamGiaRepository;
         private readonly IProductDetailRepository _productDetailRepository;
         private readonly IGiamGiaRepository _giamGiaRepository;
-        private readonly ReponseDto _reponseDto;
+        private readonly ResponseDto _reponseDto;
         public GiamGiaHangLoatServices()
         {
 
@@ -27,10 +27,10 @@ namespace Shop_API.Service
             _sanPhamGiamGiaRepository = sanPhamGiamGiaRepository;
             _productDetailRepository = productDetailRepository;
             _giamGiaRepository = giamGiaRepository;
-            _reponseDto = new ReponseDto();
+            _reponseDto = new ResponseDto();
         }
 
-        public async Task<ReponseDto> ApplyDiscountByPromotionType(string promotionType, double discountAmount)
+        public async Task<ResponseDto> ApplyDiscountByPromotionType(string promotionType, double discountAmount)
         {
             try
             {

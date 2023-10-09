@@ -10,14 +10,14 @@ namespace Shop_API.Controllers
     public class LichSuTieuDiemController : ControllerBase
     {
         private readonly ILichSuTieuDiemRepository _lichSuTieuDiem;
-        private readonly ReponseDto _reponseDto;
+        private readonly ResponseDto _reponseDto;
         public LichSuTieuDiemController(ILichSuTieuDiemRepository lichSuTieuDiem)
         {
             _lichSuTieuDiem = lichSuTieuDiem;
-            _reponseDto = new ReponseDto();
+            _reponseDto = new ResponseDto();
         }
         [HttpGet]
-        public async Task<ReponseDto> GetAllLichSuTieuDiem()
+        public async Task<ResponseDto> GetAllLichSuTieuDiem()
         {
             var list = await _lichSuTieuDiem.GetAllLichSuTieuDiems();
             if (list != null)
@@ -36,7 +36,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ReponseDto> CreateLichSuTieuDiem(LichSuTieuDiem obj)
+        public async Task<ResponseDto> CreateLichSuTieuDiem(LichSuTieuDiem obj)
         {
             if (await _lichSuTieuDiem.Create(obj))
             {
@@ -54,7 +54,7 @@ namespace Shop_API.Controllers
 
         }
         [HttpPut]
-        public async Task<ReponseDto> UpdateLichSuTieuDiem(LichSuTieuDiem obj)
+        public async Task<ResponseDto> UpdateLichSuTieuDiem(LichSuTieuDiem obj)
         {
             if (await _lichSuTieuDiem.Update(obj))
             {
@@ -73,7 +73,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpDelete]
-        public async Task<ReponseDto> DeleteLichSuTieuDiem(Guid id)
+        public async Task<ResponseDto> DeleteLichSuTieuDiem(Guid id)
         {
             if (await _lichSuTieuDiem.Delete(id))
             {

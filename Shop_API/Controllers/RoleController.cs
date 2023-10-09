@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
-using Shop_Models.Dto.Role;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+   
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService; 

@@ -10,16 +10,16 @@ namespace Shop_API.Controllers
     public class ViDiemController : ControllerBase
     {
         private readonly IViDiemRepository _viDiemRepository;
-        private ReponseDto _reponseDto;
+        private ResponseDto _reponseDto;
         private readonly IConfiguration _config;
         public ViDiemController(IViDiemRepository viDiemRepository, IConfiguration config)
         {
             _viDiemRepository = viDiemRepository;
-            _reponseDto = new ReponseDto();
+            _reponseDto = new ResponseDto();
             _config = config;
         }
         [HttpGet]
-        public async Task<ReponseDto> GetAllViDiem()
+        public async Task<ResponseDto> GetAllViDiem()
         {
 
             string apiKey = _config.GetSection("ApiKey").Value;
@@ -58,7 +58,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ReponseDto> CreateViDiem(ViDiem obj)
+        public async Task<ResponseDto> CreateViDiem(ViDiem obj)
         {
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
@@ -95,7 +95,7 @@ namespace Shop_API.Controllers
 
         }
         [HttpPut]
-        public async Task<ReponseDto> UpdateViDiem(ViDiem obj)
+        public async Task<ResponseDto> UpdateViDiem(ViDiem obj)
         {
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
@@ -133,7 +133,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpDelete]
-        public async Task<ReponseDto> DeleteViDiem(Guid id)
+        public async Task<ResponseDto> DeleteViDiem(Guid id)
         {
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)

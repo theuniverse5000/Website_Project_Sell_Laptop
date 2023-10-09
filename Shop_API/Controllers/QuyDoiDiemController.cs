@@ -10,14 +10,14 @@ namespace Shop_API.Controllers
     public class QuyDoiDiemController : ControllerBase
     {
         private readonly IQuyDoiDiemRepository _quyDoiDiemRepository;
-        private readonly ReponseDto _reponseDto;
+        private readonly ResponseDto _reponseDto;
         public QuyDoiDiemController(IQuyDoiDiemRepository quyDoiDiemRepository)
         {
             _quyDoiDiemRepository = quyDoiDiemRepository;
-            _reponseDto = new ReponseDto();
+            _reponseDto = new ResponseDto();
         }
         [HttpGet]
-        public async Task<ReponseDto> GetAllQuyDoi()
+        public async Task<ResponseDto> GetAllQuyDoi()
         {
             var list = await _quyDoiDiemRepository.GetAllQuyDoiDiems();
             if (list != null)
@@ -37,7 +37,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost]
-        public async Task<ReponseDto> CreateQuyDoiDiem(QuyDoiDiem obj)
+        public async Task<ResponseDto> CreateQuyDoiDiem(QuyDoiDiem obj)
         {
             obj.Id = Guid.NewGuid();
             if (await _quyDoiDiemRepository.Create(obj))
@@ -57,7 +57,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPut]
-        public async Task<ReponseDto> UpdateQuyDoiDiem(QuyDoiDiem obj)
+        public async Task<ResponseDto> UpdateQuyDoiDiem(QuyDoiDiem obj)
         {
             if (await _quyDoiDiemRepository.Update(obj))
             {
@@ -76,7 +76,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpDelete]
-        public async Task<ReponseDto> DeleteQuyDoiDiem(Guid id)
+        public async Task<ResponseDto> DeleteQuyDoiDiem(Guid id)
         {
             if (await _quyDoiDiemRepository.Delete(id))
             {

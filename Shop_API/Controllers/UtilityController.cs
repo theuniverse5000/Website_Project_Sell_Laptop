@@ -9,16 +9,16 @@ namespace Shop_API.Controllers
     public class UtilityController : ControllerBase
     {
         private readonly IEmailService _emailService;
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
         private readonly IConfiguration _config;
         public UtilityController(IEmailService emailService, IConfiguration config)
         {
             _emailService = emailService;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
             _config = config;
         }
         [HttpPost]
-        public ReponseDto SendEmail(EmailDto request)
+        public ResponseDto SendEmail(EmailDto request)
         {
 
             //string apiKey = _config.GetSection("ApiKey").Value;

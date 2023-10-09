@@ -1,6 +1,6 @@
 ﻿namespace Shop_Models.Dto
 {
-    public class ReponseDto
+    public class ResponseDto
     {
         public object? Result { get; set; }
         public bool IsSuccess { get; set; } = true;

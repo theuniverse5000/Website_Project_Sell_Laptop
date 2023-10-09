@@ -14,12 +14,12 @@ namespace Shop_API.Controllers
         private readonly IProductTypeRepository _repository;
         private readonly IPagingRepository _iPagingRepository;
         private readonly IConfiguration _config;
-        private readonly ReponseDto _reponse;
+        private readonly ResponseDto _reponse;
         public ProductTypeController(IProductTypeRepository repository, IConfiguration config, IPagingRepository pagingRepository)
         {
             _repository = repository;
             _config = config;
-            _reponse = new ReponseDto();
+            _reponse = new ResponseDto();
             _iPagingRepository = pagingRepository;
 
         }
