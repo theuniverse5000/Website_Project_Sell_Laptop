@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Shop_API.AppDbContext;
 using Shop_Models.Entities;
 using System.Text;
+using WebApp.Models.Momo;
 using WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
+builder.Services.AddScoped<IMomoService, MomoService>();
 
 // Đăng ký HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
