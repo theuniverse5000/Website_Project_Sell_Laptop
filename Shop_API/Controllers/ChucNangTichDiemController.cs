@@ -5,18 +5,18 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChucNangTichDiem : ControllerBase
+    public class ChucNangTichDiemController : ControllerBase
     {
         private readonly ITichDiemServices _tichDiemServices;
         private readonly IConfiguration _config;
-        public ChucNangTichDiem(ITichDiemServices tichDiemServices, IConfiguration config)
+        public ChucNangTichDiemController(ITichDiemServices tichDiemServices, IConfiguration config)
         {
             _tichDiemServices = tichDiemServices;
             _config = config;
 
         }
 
-        [HttpPost]
+        [HttpPost("first-buy")]
         public async Task<IActionResult> TieuDiemChoLanDauMuaAsync(Guid IdBill, double TongTienThanhToan)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
