@@ -1,5 +1,5 @@
 
-
+/*
 @media screen and (max-width: 768px) {
     .col-sm-6 {
         flex: 0 0 100%;
@@ -10,7 +10,7 @@
         flex: 0 0 50%;
         max-width: 50%;
     }
-}
+}*/
 
 .text-align-center {
     text-align: center;
@@ -24,7 +24,7 @@ img {
 
 /* Make product boxes responsive */
 
-@media (min-width: 768px)
+/*@media (min-width: 768px)
 .col-md-4 {
     flex: 0 0 auto;
     width: 33.33333333%;
@@ -39,7 +39,7 @@ img {
     #menu {
         width: 100% !important;
     }
-}
+}*/
 
 
 

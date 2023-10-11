@@ -37,7 +37,7 @@ namespace Shop_API.Service
             //cấp token
             var token = await GenerateToken(loginRequest);
             var respone = new LoginResponesDto();
-            if (token==null)
+            if (token.AccessToken==null)
             {
                 respone.Mess="Login Fail";
                 respone.Successful=false;
@@ -75,6 +75,7 @@ namespace Shop_API.Service
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
             var ClaimIdentity = new ClaimsIdentity(claims);
+
 
 
 

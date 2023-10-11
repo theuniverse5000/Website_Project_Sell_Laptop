@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace WebApp.Controllers;
+[AllowAnonymous]
 public class LoginController : Controller
 {
     private readonly HttpClient _httpClient;
@@ -20,26 +21,27 @@ public class LoginController : Controller
         _httpClient = httpClient;
 
     }
-    [AllowAnonymous]
+   
     public IActionResult Login(string ReturnUrl = "/")
     {
         var jwtToken = _httpContextAccessor.HttpContext.Session.GetString("_tokenAuthorization");
         LoginRequestDto objLoginModel = new LoginRequestDto();
         objLoginModel.ReturnUrl = ReturnUrl;
-        if (jwtToken == null)
-        {
-            return View(objLoginModel);
-        }
-        return RedirectToPage("/_Host");
+
+        return PartialView("_Login");
     }
-    [AllowAnonymous]
-    public async Task<IActionResult> LoginWithJWT(LoginRequestDto loginRequest)
+    
+    [HttpPost]
+   
+    public async Task<IActionResult> LoginWithJWT(string abc)
     {
-        var result = await _httpClient.PostAsJsonAsync("https://localhost:7286/api/Account/Login", loginRequest);
-        if (result.IsSuccessStatusCode)
-        {
+        var b = abc;
+        //var result = await _httpClient.PostAsJsonAsync("https://localhost:7286/api/Account/Login", loginRequest);
+        //if (result.IsSuccessStatusCode)
+        //{
             //var token = await result.Content.ReadAsStringAsync();
-            //var objToken = JsonConvert.DeserializeObject<LoginResponesDto>(token);
+            //var objToken = JsonConvert.Deserializ
+            //eObject<LoginResponesDto>(token);
             //if (objToken != null)
             //{
             //    TokenDto jsonObject = JsonConvert.DeserializeObject<TokenDto>(objToken.Data.ToString());
@@ -61,9 +63,9 @@ public class LoginController : Controller
             //    }
 
             //}
-            return RedirectToPage("/_Host");
-            return BadRequest("Token is null");
-        }
+        //    return RedirectToPage("/_Host");
+        //    return BadRequest("Token is null");
+        //}
 
         return RedirectToAction("Login");
     }

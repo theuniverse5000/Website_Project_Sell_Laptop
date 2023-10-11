@@ -21,7 +21,7 @@ namespace Shop_API.Controllers
         }
         
         [HttpGet]
-       
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPro()
         {
             string apiKey = _config.GetSection("ApiKey").Value;
