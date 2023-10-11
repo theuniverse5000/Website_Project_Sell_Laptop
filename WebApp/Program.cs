@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Shop_API.AppDbContext;
@@ -24,6 +25,36 @@ builder.Services.AddHttpClient("PhuongThaoHttpWeb", thao =>
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(options => {
+
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie();
+
+builder.Services.AddAuthentication()
+    .AddFacebook(options =>
+    {
+        options.AppId = builder.Configuration["Facebook:AppId"];
+        options.AppSecret = builder.Configuration["Facebook:AppSecret"];
+        options.SaveTokens = true;
+        options.CallbackPath = builder.Configuration["Facebook:CallbackPath"];
+    })
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Google:AppId"];
+        options.ClientSecret = builder.Configuration["Google:AppSecret"];
+        options.ClaimActions.MapJsonKey("Picture", "picture", "url");
+        options.SaveTokens = true;
+        options.CallbackPath = builder.Configuration["Google:CallbackPath"];
+    });
+
 builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
 builder.Services.AddScoped<IMomoService, MomoService>();
@@ -39,7 +70,8 @@ builder.Services.AddResponseCompression(otp =>
 builder.Services.AddControllersWithViews();
 
 
-builder.Services.Configure<IdentityOptions>(options => {
+builder.Services.Configure<IdentityOptions>(options =>
+{
     // Thiết lập về Password
     options.Password.RequireDigit = false; // Không bắt phải có số
     options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
