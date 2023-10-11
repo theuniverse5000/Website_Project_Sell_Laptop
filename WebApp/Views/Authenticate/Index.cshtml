@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Shop_Models.Entities;
+@inject SignInManager<User> _signInManager
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+
+    .btn-google {
+        color: white;
+        background-color: #ea4335 !important;
+    }
+
+    .btn-facebook {
+        color: white;
+        background-color: #3b5998 !important;
+    }
+
+</style>
+
+<div class="text-center">
+   
+    @{
+        var loginProviders = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+        if (loginProviders.Count == 0)
+        {
+            <div>
+                <p>
+                    There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                    for details on setting up this ASP.NET application to support logging in via external services.
+                </p>
+            </div>
+        }
+        else
+        {
+            <form asp-controller="Authenticate" asp-action="ExternalLogin" method="POST" class="form-horizontal" style="text-align: center">
+                @foreach (var provider in loginProviders)
+                {
+                    if (string.Equals(provider.Name, "facebook", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <button type="submit"
+                                class="btn btn-lg btn-facebook btn-block text-uppercase"
+                                name="provider" value="@provider.Name"
+                                title="sử dụng tài khoản @provider.DisplayName của bạn để đăng nhập hoặc đăng ký">
+                            <i class="fab fa-facebook-f mr-2"></i> Login Facebook
+                        </button>
+                    }
+                    else if (string.Equals(provider.Name, "google", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <button type="submit"
+                                class="btn btn-lg btn-google btn-block text-uppercase"
+                                name="provider" value="@provider.Name"
+                                title="sử dụng tài khoản @provider.DisplayName của bạn để đăng nhập hoặc đăng ký">
+                            <i class="fab fa-google mr-2"></i> Login Google
+                        </button>
+                    }
+                }
+            </form>
+        }
+    }
+</div>
