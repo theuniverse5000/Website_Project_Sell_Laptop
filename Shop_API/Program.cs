@@ -60,6 +60,7 @@ builder.Services.AddTransient<IPagingRepository, PagingRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
+builder.Services.AddTransient<ITichDiemServices, TichDiemServices>();
 #endregion
 builder.Services.RegisterServiceComponents();
 
