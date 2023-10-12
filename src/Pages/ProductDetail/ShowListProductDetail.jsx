@@ -6,11 +6,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
-import Heading from "./Heading";
+import Heading from "../Home/Heading";
 import { Link } from "react-router-dom";
 import uuid from "react-uuid";
 
-const ListProductDetails = ({ type, heading }) => {
+const ShowListProductDetails = ({ type, heading }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -151,4 +151,4 @@ const ListProductDetails = ({ type, heading }) => {
   );
 };
 
-export {ListProductDetails};
+export {ShowListProductDetails};

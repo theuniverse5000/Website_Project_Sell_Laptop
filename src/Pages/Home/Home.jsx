@@ -34,7 +34,7 @@ const Home = () => {
      <ItemCard1 type={ItemDetails1} />
       {/*  <ItemCard1 type={ItemDetails2} /> */}
      
-      <ItemCard5 type={ItemDetails8} heading="Top Laptop Bán Chạy | " />
+      <ItemCard5 heading="Top Laptop Bán Chạy | " />
       <br />
       <hr />
       {/* <ItemCard2

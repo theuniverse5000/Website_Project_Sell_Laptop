@@ -8,7 +8,7 @@ const AllRoutes = () => {
     <div>
         <Routes>
           
-            <Route path="/kitchen" element={<Products typeOfProduct="kitchen" />}></Route>
+            {/* <Route path="/kitchen" element={<Products typeOfProduct="kitchen" />}></Route>
             <Route path="/kitchen/:id" element={<SingleProduct typeOfProduct="kitchen" />}></Route>
             <Route path="/mobilesandtablets" element={<Products typeOfProduct="mobilesandtablets" />}></Route>
             <Route path="/mobilesandtablets/:id" element={<SingleProduct typeOfProduct="mobilesandtablets" />}></Route>
@@ -23,7 +23,7 @@ const AllRoutes = () => {
             <Route path="/cameras" element={<Products typeOfProduct="cameras" />}></Route>
             <Route path="/cameras/:id" element={<SingleProduct typeOfProduct="cameras" />}></Route>
             <Route path="/personalcare" element={<Products typeOfProduct="personalcare" />}></Route>
-            <Route path="/personalcare/:id" element={<SingleProduct typeOfProduct="personalcare" />}></Route>
+            <Route path="/personalcare/:id" element={<SingleProduct typeOfProduct="personalcare" />}></Route> */}
         </Routes>
     </div>
   )

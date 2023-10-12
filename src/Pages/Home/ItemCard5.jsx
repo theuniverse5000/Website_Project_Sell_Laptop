@@ -89,8 +89,8 @@ const ItemCard5 = ({ type, heading }) => {
                             fontSize="15px"
                             _hover={{ color: "red" }}
                           >
-                            {i.nameProduct} {i.code}({i.tenCpu}, {i.thongSoRam},{i.thongSoHardDrive},{i.kichCoManHinh} {i.tanSoManHinh}
-                            {i.chatLieuManHinh})
+                            {i.nameProduct} {i.code}({i.tenCpu}, {i.thongSoRam},{i.thongSoHardDrive},{i.kichCoManHinh}-{i.tanSoManHinh}-
+                            {i.chatLieuManHinh}, {i.tenCardVGA} {i.thongSoCardVGA})
                           </Text>
                           <Box mt="2.5">
                             <Flex>

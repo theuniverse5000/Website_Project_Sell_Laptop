@@ -1,26 +1,26 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import MainCartPage from "../Pages/cartPage/MainCartPage";
-import Home from "../Pages/Home/Home";
-import Login from "../Pages/Login/Login";
-import Products from "../Pages/Products/Products";
-import SingleProduct from "../Pages/SingleProduct/SingleProduct";
-import Wishlist from "../Pages/Wishlist/Wishlist";
-import SearchPage from "../Pages/SearchPage/SearchPage";
-import Payments from "../Pages/payment/Payments";
-import Checkout from "../Pages/checkout/checkout";
-import { LastPage } from "../Pages/cartPage/LastPage";
-import Signup from "../Pages/Signup/Signup";
-import PrivateRoute from "./PrivateRoute/PrivateRoutes";
-import { ListProductDetail } from '../Pages/Home/ListProductDetail';  
+import MainCartPage from "../cartPage/MainCartPage";
+import Home from "../Home/Home";
+import Login from "../Login/Login";
+import Products from "../Products/Products";
+import SingleProduct from "../SingleProduct/SingleProduct";
+import Wishlist from "../Wishlist/Wishlist";
+import SearchPage from "../SearchPage/SearchPage";
+import Payments from "../payment/Payments";
+import Checkout from "../checkout/checkout";
+import { LastPage } from "../cartPage/LastPage";
+import Signup from "../Signup/Signup";
+import PrivateRoute from "../../Components/PrivateRoute/PrivateRoutes";
+import { ShowListProductDetails } from "../ProductDetail/ShowListProductDetail";  
 
 const AllRoutes = () => {
   return (
     <div>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/sanpham" element={<ListProductDetail/>} />
-        <Route
+        <Route path="/sanpham" element={<ShowListProductDetails/>} />
+        {/* <Route
           path="/mobilesandtablets"
           element={<PrivateRoute><Products typeOfProduct="mobilesandtablets" /></PrivateRoute>}
         ></Route>
@@ -91,7 +91,7 @@ const AllRoutes = () => {
         <Route
           path="/accessories/:id"
           element={<PrivateRoute><SingleProduct typeOfProduct="accessories" /></PrivateRoute>}
-        ></Route>
+        ></Route> */}
         <Route path="/cart" element={<PrivateRoute><MainCartPage /></PrivateRoute>}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route

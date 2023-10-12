@@ -35,7 +35,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { GrLogin, GrReturn, GrServices } from "react-icons/gr";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../Redux/Auth/auth.action";
+import { logout } from "../../Redux/Auth/auth.action";
 
 function Navbar() {
   const [isLargerThan1100] = useMediaQuery("(min-width: 1100px)");
