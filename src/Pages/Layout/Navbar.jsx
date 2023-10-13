@@ -72,16 +72,6 @@ function Navbar() {
           bg="red"
           pt="10px"
         >
-          <Box>
-            <Heading
-              cursor={"pointer"}
-              fontSize={"17px"}
-              color="white"
-              _hover={{ bg: "red", textDecoration: "underline" }}
-            >
-               Phương Thảo Shop
-            </Heading>
-          </Box>
           <Flex>
             <GrReturn color="white" size="25px" />
             <Heading
@@ -90,7 +80,7 @@ function Navbar() {
               color="white"
               _hover={{ bg: "red", textDecoration: "underline" }}
             >
-             Phương Thảo Shop
+              Phương Thảo Shop
             </Heading>
           </Flex>
           <Flex>
@@ -112,7 +102,7 @@ function Navbar() {
               color="white"
               _hover={{ bg: "red", textDecoration: "underline" }}
             >
-             Dịch Vụ 
+              Dịch Vụ
             </Heading>
           </Flex>
           <Flex>
@@ -123,7 +113,7 @@ function Navbar() {
               color="white"
               _hover={{ bg: "red", textDecoration: "underline" }}
             >
-             Giới thiệu
+              Giới thiệu
             </Heading>
           </Flex>
           <Flex>
@@ -134,7 +124,7 @@ function Navbar() {
               color="white"
               _hover={{ bg: "red", textDecoration: "underline" }}
             >
-              Vị trí 
+              Vị trí
             </Heading>
           </Flex>
           <Link to="contactus">
@@ -288,7 +278,7 @@ function Navbar() {
                       my="8px"
                       fontSize={"15px"}
                     >
-                      Smartphones
+                      Laptop Dell
                     </Heading>
                   </Box>
 
@@ -318,82 +308,29 @@ function Navbar() {
                       AI Learning Robots
                     </Heading>
                   </Box>
-
                   <Box>
                     <Heading
                       _hover={{
                         textDecoration: "underline",
-
                         cursor: "pointer",
                       }}
                       my="8px"
                       fontSize={"15px"}
                     >
-                      Wearable Technology
+                      Laptop Dell
                     </Heading>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Top Selling Smartwatches
-                    </Text>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Apple Price Drop
-                    </Text>
                   </Box>
 
                   <Box>
                     <Heading
                       _hover={{
                         textDecoration: "underline",
-
                         cursor: "pointer",
                       }}
                       my="8px"
                       fontSize={"15px"}
                     >
-                      Tablets & eReaders
-                    </Heading>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Every Day use Tablets below 15000
-                    </Text>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Premium Tablets, Above 15001
-                    </Text>
-                  </Box>
-
-                  <Box>
-                    <Heading
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                      my="8px"
-                      fontSize={"15px"}
-                    >
-                      Power Banks
+                      Headphones & Headsets
                     </Heading>
                   </Box>
 
@@ -407,74 +344,7 @@ function Navbar() {
                       my="8px"
                       fontSize={"15px"}
                     >
-                      Accessories
-                    </Heading>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Mobile Accessories
-                    </Text>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Tablet Accessories
-                    </Text>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Car Mobile Holders
-                    </Text>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Memory Cards
-                    </Text>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Cables & Cords
-                    </Text>
-                    <Text
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                    >
-                      Chargers & Adapters
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Heading
-                      _hover={{
-                        textDecoration: "underline",
-
-                        cursor: "pointer",
-                      }}
-                      my="8px"
-                      fontSize={"15px"}
-                    >
-                      eSlates
+                      AI Learning Robots
                     </Heading>
                   </Box>
                 </Grid>
@@ -675,9 +545,9 @@ function Navbar() {
                 </Grid>
               </Link>
             </MenuList>
-           </Menu>
+          </Menu>
 
-         {/* <Menu>
+          {/* <Menu>
             <MenuButton
               px={4}
               py={2}
@@ -2586,7 +2456,7 @@ function Navbar() {
                       color="white"
                       _hover={{ bg: "red", textDecoration: "underline" }}
                     >
-                     Laptop Mới
+                      Laptop Mới
                     </Heading>
                   </Link>
                   <Link to="televisions">
@@ -2802,7 +2672,7 @@ function Navbar() {
                       color="white"
                       _hover={{ bg: "red", textDecoration: "underline" }}
                     >
-                     Laptop Mới
+                      Laptop Mới
                     </Heading>
                   </Link>
                   <Link to="televisions">

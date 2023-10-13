@@ -25,10 +25,10 @@ const Footer = () => {
         p="2"
         lineHeight="32px"
       >
-        <FooterCard1 type={ProductCategories} heading="PRODUCT CATEGORIES" />
+        {/* <FooterCard1 type={ProductCategories} heading="PRODUCT CATEGORIES" />
         <FooterCard1 type={SiteInfo} heading="SITE INFO" />
         <FooterCard1 type={ResourcesCenter} heading="RESOURCES CENTER" />
-        <FooterCard1 type={Policies} heading="POLICIES" />
+        <FooterCard1 type={Policies} heading="POLICIES" /> */}
         <br />
       </Grid>
       <FooterCard2 />

@@ -9,7 +9,6 @@ import "swiper/css/autoplay";
 import Heading from "../Home/Heading";
 import { Link } from "react-router-dom";
 import uuid from "react-uuid";
-
 const ShowListProductDetails = ({ type, heading }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,16 +81,18 @@ const ShowListProductDetails = ({ type, heading }) => {
                           <Image src={`https://laptopaz.vn/media/product/3015_`} alt={i.code} boxSize="160px" />
                         </Square>
                         <Box p="2" mt="4">
-                          <Text
-                            color="#275293"
-                            noOfLines={2}
-                            textAlign="left"
-                            fontSize="15px"
-                            _hover={{ color: "red" }}
-                          >
-                            {i.nameProduct} {i.code}({i.tenCpu}, {i.thongSoRam},{i.thongSoHardDrive},{i.kichCoManHinh}-{i.tanSoManHinh}-
-                            {i.chatLieuManHinh}, {i.tenCardVGA} {i.thongSoCardVGA})
-                          </Text>
+                        <Link to={`/San-Pham-Chi-Tiet/${i.code}`}> 
+                            <Text
+                              color="#275293"
+                              noOfLines={2}
+                              textAlign="left"
+                              fontSize="15px"
+                              _hover={{ color: "red" }}
+                            >
+                              {i.nameProduct} {i.code}({i.tenCpu}, {i.thongSoRam},{i.thongSoHardDrive},{i.kichCoManHinh}-{i.tanSoManHinh}-
+                              {i.chatLieuManHinh}, {i.tenCardVGA} {i.thongSoCardVGA})
+                            </Text>
+                          </Link>
                           <Box mt="2.5">
                             <Flex>
                               <Square>
@@ -151,4 +152,4 @@ const ShowListProductDetails = ({ type, heading }) => {
   );
 };
 
-export {ShowListProductDetails};
+export { ShowListProductDetails };
