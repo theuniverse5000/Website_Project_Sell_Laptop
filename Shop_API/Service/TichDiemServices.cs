@@ -14,7 +14,7 @@ namespace Shop_API.Service
         private readonly ILichSuTieuDiemRepository _lichSuTieuDiemRepository;
         private readonly IViDiemRepository _viDiemRepository;
         private readonly ResponseDto _reponseDto;
-        public TichDiemServices(ApplicationDbContext context, QuyDoiDiemRepository quyDoiDiemRepository, LichSuTieuDiemRepository lichSuTieuDiemRepository, ViDiemRepository viDiemRepository)
+        public TichDiemServices(ApplicationDbContext context, IQuyDoiDiemRepository quyDoiDiemRepository, ILichSuTieuDiemRepository lichSuTieuDiemRepository, IViDiemRepository viDiemRepository)
         {
             _context = context;
             _quyDoiDiemRepository = quyDoiDiemRepository;
@@ -92,6 +92,21 @@ namespace Shop_API.Service
                 var soTienTichDuoc = DoiDiemSangTien(soDiemDuocCong);
 
                 var viDiem = _context.ViDiems.FirstOrDefault(x => x.UserId == user.Id);
+
+
+                if (viDiem == null) 
+                {
+                    viDiem = new ViDiem()
+                    {
+                        UserId = user.Id,
+                        TongDiem = 0,
+                        SoDiemDaCong = 0,
+                        SoDiemDaDung = 0,
+                    };
+                    _context.ViDiems.Add(viDiem);
+                    _context.SaveChanges();
+                }
+
 
                 // thêm lịch sử quyDoiDiem 
                 QuyDoiDiem objQuyDoiDiem = new QuyDoiDiem();
