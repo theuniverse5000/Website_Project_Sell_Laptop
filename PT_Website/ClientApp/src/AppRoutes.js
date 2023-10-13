@@ -2,6 +2,7 @@ import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import { GioiThieu } from "./components/GioiThieu";
+import { GetProductDetail } from "./components/ProductDetail";
 
 const AppRoutes = [
   {
@@ -19,6 +20,11 @@ const AppRoutes = [
     {
         path: '/gioi-thieu',
         element: <GioiThieu/>
+    }
+    ,
+    {
+        path: '/San-Pham',
+        element: <GetProductDetail />
     }
 ];
 
