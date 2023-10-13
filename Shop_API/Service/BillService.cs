@@ -16,7 +16,7 @@ namespace Shop_API.Service
         private readonly ICartRepository _cartRepository;
         private readonly IVoucherRepository _voucherRepository;
         private readonly ResponseDto _reponse;
-        private readonly ReponseBillDto _reponseBill;
+        private readonly BillDto _reponseBill;
         private static Guid getUserId;  // Tạo 1 biết static phạm vi private dùng trong controller
         private static IEnumerable<CartItemDto>? cartItem;
         public BillService(IBillRepository billRepository, IBillDetailRepository billDetailRepository,
@@ -29,7 +29,7 @@ namespace Shop_API.Service
             _cartRepository = cartRepository;
             _userRepository = userRepository;
             _reponse = new ResponseDto();
-            _reponseBill = new ReponseBillDto();
+            _reponseBill = new BillDto();
             _voucherRepository = voucherRepository;
         }
 
@@ -191,18 +191,23 @@ namespace Shop_API.Service
             throw new NotImplementedException();
         }
 
-        public async Task<ReponseBillDto> GetBillByPhoneNumber(string phoneNumber)
+        public async Task<ResponseDto> GetBillByPhoneNumber(string phoneNumber)
         {
             Bill billT = await _billRepository.GetBillByPhoneNumber(phoneNumber);
+            if (billT != null)
+            {
+                var listBillDetail = await _billRepository.GetBillDetailByPhoneNumber(phoneNumber);
+                _reponseBill.InvoiceCode = billT.InvoiceCode;
+                _reponseBill.PhoneNumber = billT.PhoneNumber;
+                _reponseBill.FullName = billT.FullName;
+                _reponseBill.Address = billT.Address;
+                _reponseBill.Status = billT.Status;
+                _reponseBill.BillDetail = listBillDetail;
+                _reponseBill.Count = listBillDetail.Count();
+                _reponse.Result = _reponseBill;
 
-            var listBillDetail = await _billRepository.GetBillDetailByPhoneNumber(phoneNumber);
-            _reponseBill.InvoiceCode = billT.InvoiceCode;
-            _reponseBill.BillDetail = listBillDetail;
-            _reponseBill.Count = listBillDetail.Count();
-            _reponseBill.Code = 201;
-            _reponseBill.IsSuccess = true;
-            _reponseBill.Message = "Lấy thành công";
-            return _reponseBill;
+            }
+            return _reponse;
         }
 
         public async Task<Bill> GetAllBill(string phoneNumber)
@@ -211,3 +216,5 @@ namespace Shop_API.Service
         }
     }
 }
+
+

@@ -7,7 +7,7 @@ namespace Shop_API.Service.IService
     {
         Task<ResponseDto> CreateBill(string username, string maVoucher);//Khách hàng chỉ được phép tạo hóa đơn
         Task<ResponseDto> CreateBillDetail(string invoiceCode, string serialNumber);// Do nhân viên tạo, truyền vào mã hóa đơn và số serial
-        Task<ReponseBillDto> GetBillByPhoneNumber(string phoneNumber);
+        Task<ResponseDto> GetBillByPhoneNumber(string phoneNumber);
         // Task<ResponseDto> GetAllBill();
         Task<Bill> GetAllBill(string phoneNumber);
     }

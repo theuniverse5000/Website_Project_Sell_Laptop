@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{572A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NUniTestWeb", "NUniTestWeb\NUniTestWeb.csproj", "{47A5A114-F478-4E62-A3D3-32F3DA2479C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PT_Website", "PT_Website\PT_Website.csproj", "{B7F9A2C8-855D-49D1-BB4B-6670BA3429B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{47A5A114-F478-4E62-A3D3-32F3DA2479C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A5A114-F478-4E62-A3D3-32F3DA2479C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47A5A114-F478-4E62-A3D3-32F3DA2479C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F9A2C8-855D-49D1-BB4B-6670BA3429B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F9A2C8-855D-49D1-BB4B-6670BA3429B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F9A2C8-855D-49D1-BB4B-6670BA3429B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F9A2C8-855D-49D1-BB4B-6670BA3429B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{14D8CA20-B541-4295-B041-EFB6EA204AB3} = {6FA34CA9-53F4-43DA-8CD4-307D2FC6F165}
 		{8EC47125-6612-42C6-8BEA-697945824F0F} = {1655A1E8-E8F9-4F08-9675-C1BFC08A9C77}
 		{47A5A114-F478-4E62-A3D3-32F3DA2479C1} = {572A8F15-D5B8-4EA2-99A5-E662348456FA}
+		{B7F9A2C8-855D-49D1-BB4B-6670BA3429B8} = {1655A1E8-E8F9-4F08-9675-C1BFC08A9C77}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F6D7FFB8-A344-49FC-AE66-9DDF94875744}

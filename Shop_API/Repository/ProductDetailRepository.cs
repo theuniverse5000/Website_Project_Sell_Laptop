@@ -58,15 +58,15 @@ namespace Shop_API.Repository
 
         public async Task<Pagination<ProductDetail>> GetAll(ProductDetailQueryModel productDetailQueryModel)
         {
-            var page = productDetailQueryModel.CurrentPage??1;
-            var size = productDetailQueryModel.PageSize??20;
+            var page = productDetailQueryModel.CurrentPage ?? 1;
+            var size = productDetailQueryModel.PageSize ?? 20;
 
             var query = _context.ProductDetails
             .Where(x => x.Status > 0).AsQueryable();
 
             if (string.IsNullOrEmpty(productDetailQueryModel.Sort))
             {
-                query=query.OrderBy(x => x.Product.Name).AsQueryable();
+                query = query.OrderBy(x => x.Product.Name).AsQueryable();
             }
             var resut = await query.GetPagedAsync<ProductDetail>(page, size);
             return resut;
@@ -316,13 +316,105 @@ namespace Shop_API.Repository
 
         public async Task<ProductDetail> GetByCode(string code)
         {
-            var result = await _context.ProductDetails.FirstOrDefaultAsync(x=>x.Code==code && x.Status>0);
+            var result = await _context.ProductDetails.FirstOrDefaultAsync(x => x.Code == code && x.Status > 0);
             return result;
         }
 
         public Task<ProductDetailDto> GetProductDetail()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<ProductDetailDto>> GetProductDetailPubic(string? search, string? typeProduct, double? from, double? to, string? sortBy, int page = 1)
+        {
+            var query = _context.ProductDetails
+                .AsNoTracking()
+                .Where(a => a.Status > 0)
+                .Select(a => new ProductDetailDto
+                {
+                    Id = a.Id,
+                    Code = a.Code,
+                    ImportPrice = a.ImportPrice,
+                    Price = a.Price,
+                    Status = a.Status,
+                    Upgrade = a.Upgrade,
+                    Description = a.Description,
+                    ThongSoRam = a.Ram.ThongSo,
+                    MaRam = a.Ram.Ma,
+                    TenCpu = a.Cpu.Ten,
+                    MaCpu = a.Cpu.Ma,
+                    ThongSoHardDrive = a.HardDrive.ThongSo,
+                    MaHardDrive = a.HardDrive.Ma,
+                    NameColor = a.Color.Name,
+                    MaColor = a.Color.Ma,
+                    MaCardVGA = a.CardVGA.Ma,
+                    TenCardVGA = a.CardVGA.Ten,
+                    ThongSoCardVGA = a.CardVGA.ThongSo,
+                    MaManHinh = a.Screen.Ma,
+                    KichCoManHinh = a.Screen.KichCo,
+                    TanSoManHinh = a.Screen.TanSo,
+                    ChatLieuManHinh = a.Screen.ChatLieu,
+                    NameProduct = a.Product.Name,
+                    NameProductType = a.Product.ProductType.Name,
+                    NameManufacturer = a.Product.Manufacturer.Name
+                });
+
+            #region Filltering
+            if (!string.IsNullOrEmpty(typeProduct))
+            {
+                query = query.Where(x => x.NameProductType == typeProduct);
+            }
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.NameProduct.Contains(search));
+            }
+            if (from.HasValue)
+            {
+                query = query.Where(x => x.Price >= from);
+            }
+            if (to.HasValue)
+            {
+                query = query.Where(x => x.Price <= to);
+            }
+            #endregion
+
+            #region Sorting
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "nameproduct_desc":
+                        query = query.OrderByDescending(x => x.NameProduct);
+                        break;
+                    case "price_asc":
+                        query = query.OrderBy(x => x.Price);
+                        break;
+                    case "price_desc":
+                        query = query.OrderByDescending(x => x.Price);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            #endregion
+
+            #region Paging
+            var pageSize = Page_Size;
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            if (page < 1)
+            {
+                page = 1;
+            }
+            else if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            #endregion
+            var result = await query.ToListAsync();
+            return result; ;
         }
     }
 }

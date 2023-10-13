@@ -61,8 +61,8 @@ namespace Shop_API.Controllers
             _reponse.Count = 10;
             return Ok(_reponse);
         }
-        [HttpGet("GetById")]
-        public async Task<IActionResult> GetProductDetailById(Guid id)
+        [HttpGet("GetProductDetailsPublic")]
+        public async Task<IActionResult> GetProductDetailsPublic(string? search, string? productType, double? from, double? to, string? sortBy, int page)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
             //if (apiKey == null)
@@ -75,9 +75,30 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            //var list = await _repository.GetAllProductDetail();
-            //var proX = list.Where(x => x.Id == id);
-            return Ok();
+            _reponse.Result = await _repository.GetProductDetailPubic(search, productType, from, to, sortBy, page);
+            _reponse.Count = 10;
+            return Ok(_reponse);
+        }
+        [HttpGet("GetByCode")]
+        public async Task<IActionResult> GetProductDetailByCode(string code, string? search, string? productType, double? from, double? to, string? sortBy, int page)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+
+            var list = await _repository.GetProductDetailPubic(search, productType, from, to, sortBy, page);
+            var proX = list.Where(x => x.Code == code);
+            _reponse.Result = proX;
+            _reponse.Count = 1;
+            return Ok(_reponse);
         }
         [HttpPost]
         public async Task<IActionResult> CreateProductDetail(ProductDetail obj)

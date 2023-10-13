@@ -55,7 +55,7 @@ namespace Shop_API.Repository
             return await _context.Bills.AsNoTracking().FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         }
 
-        public async Task<IEnumerable<BillDto>> GetBillDetailByPhoneNumber(string phoneNumber)
+        public async Task<IEnumerable<BillDetailDto>> GetBillDetailByPhoneNumber(string phoneNumber)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace Shop_API.Repository
                     join y in _context.BillDetails.AsNoTracking() on x.Id equals y.BillId
                     join z in _context.Serials.AsNoTracking() on y.Id equals z.BillDetailId
                     join o in _context.ProductDetails.AsNoTracking().Where(a => a.Status > 0) on z.ProductDetailId equals o.Id
-                    select new BillDto
+                    select new BillDetailDto
                     {
                         IdBill = x.Id,
                         CodeBill = x.InvoiceCode,
@@ -95,7 +95,7 @@ namespace Shop_API.Repository
         }
 
 
-        public Task<IEnumerable<BillDto>> GetBillDetail(string username)
+        public Task<IEnumerable<BillDetailDto>> GetBillDetail(string username)
         {
             throw new NotImplementedException();
         }

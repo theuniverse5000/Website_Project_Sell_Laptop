@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -74,9 +73,9 @@ builder.Services.AddIdentity<User, Role>()
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme=JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme=JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme=JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -84,9 +83,9 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
         ValidateAudience = true,
         ValidateIssuer = true,
-        ValidAudience=  builder.Configuration["JWT:Audience"],
-        ValidIssuer= builder.Configuration["JWT:Issuer"],
-        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"])),
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"])),
     };
 });
 
@@ -123,5 +122,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers(
     );
+app.UseCors(t => t.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 
 app.Run();

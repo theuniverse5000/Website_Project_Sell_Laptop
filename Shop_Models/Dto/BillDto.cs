@@ -2,25 +2,13 @@
 {
     public class BillDto
     {
-        public Guid IdBill { get; set; }
-        public string? CodeBill { get; set; }
-        public Guid UserId { get; set; }
-        public Guid IdProductDetails { get; set; }
-        public int Quantity { get; set; }
+
+        public string? InvoiceCode { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? FullName { get; set; }
+        public string? Address { get; set; }
         public int Status { get; set; }
-        public string? MaProductDetail { get; set; }
-        public float Price { get; set; }
-        public string? Description { get; set; }
-        public string? ThongSoRam { get; set; }
-        public string? ThongSoHardDrive { get; set; }
-        public string? TenCpu { get; set; }
-        public string? NameColor { get; set; }
-        public string? NameProduct { get; set; }
-        public string? NameManufacturer { get; set; }
-        public string? KichCoManHinh { get; set; }
-        public string? TanSoManHinh { get; set; }
-        public string? ChatLieuManHinh { get; set; }
-        public string? TenCardVGA { get; set; }
-        public string? ThongSoCardVGA { get; set; }
+        public object? BillDetail { get; set; }
+        public int Count { get; set; } = 0;
     }
 }

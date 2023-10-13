@@ -37,7 +37,6 @@ namespace Shop_API.Controllers
             var result = await _billService.GetBillByPhoneNumber(phoneNumber);
             Log.Information("GetBill => {@_reponse}", result);
             return Ok(result);
-
             // }
 
         }
