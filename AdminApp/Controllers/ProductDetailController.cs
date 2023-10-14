@@ -489,7 +489,7 @@ namespace AdminApp.Controllers
 
 
             var getProductDetails = await client.GetFromJsonAsync<ProductDetailDto>($"/api/ProductDetail/ProductDetailByIdReturnProDetailDTO?guid={guid}");
-            return View(getProductDetails);
+            return PartialView("_Update", getProductDetails);
         }
 
 

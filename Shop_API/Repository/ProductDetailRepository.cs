@@ -416,5 +416,55 @@ namespace Shop_API.Repository
             var result = await query.ToListAsync();
             return result; ;
         }
+
+        public Task<ProductDetail> GetById(Guid guid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ProductDetailDto> GetProductDetailByIdReturnDto(Guid id)
+        {
+            var productDetail = await _context.ProductDetails
+                .AsNoTracking()
+                .Where(a => a.Status > 0 && a.Id == id)
+                .Select(a => new ProductDetailDto
+                {
+                    Id = a.Id,
+                    Code = a.Code,
+                    ImportPrice = a.ImportPrice,
+                    Price = a.Price,
+                    Status = a.Status,
+                    Upgrade = a.Upgrade,
+                    Description = a.Description,
+                    AvailableQuantity = 1,
+                    ThongSoRam = a.Ram.ThongSo,
+                    MaRam = a.Ram.Ma,
+                    TenCpu = a.Cpu.Ten,
+                    MaCpu = a.Cpu.Ma,
+                    ThongSoHardDrive = a.HardDrive.ThongSo,
+                    MaHardDrive = a.HardDrive.Ma,
+                    NameColor = a.Color.Name,
+                    MaColor = a.Color.Ma,
+                    MaCardVGA = a.CardVGA.Ma,
+                    TenCardVGA = a.CardVGA.Ten,
+                    ThongSoCardVGA = a.CardVGA.ThongSo,
+                    MaManHinh = a.Screen.Ma,
+                    KichCoManHinh = a.Screen.KichCo,
+                    TanSoManHinh = a.Screen.TanSo,
+                    ChatLieuManHinh = a.Screen.ChatLieu,
+                    NameProduct = a.Product.Name,
+                    NameProductType = a.Product.ProductType.Name,
+                    NameManufacturer = a.Product.Manufacturer.Name
+                })
+                .FirstOrDefaultAsync();
+
+            if (productDetail != null)
+            {
+                productDetail.AvailableQuantity = GetCountProductDetail(productDetail.Code);
+            }
+
+            return productDetail;
+        }
+
     }
 }

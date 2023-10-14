@@ -180,176 +180,6 @@
 </div>
 
 
-<div id="updateModal" tabindex="-1"  aria-hidden="true" class="modal fade" >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="updateLabel">Update Product</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form asp-controller="ProductDetail" asp-action="Update" method="post">
-                    <!-- Add fields to update product information -->
-                    <div class="form-group col-md-6">
-                        <div class="form-group">
-                            <label asp-for="Code">Product Code</label>
-                            <input asp-for="Code" class="form-control" />
-                            <span asp-validation-for="Code" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Tên Sản Phẩm</label>
-                        <div class="form-group col-md-6">
-                            @* <select class="form-select" asp-for="ProductId" id="selectProductName" required>
-                            <option value="">Chọn tên Sản phẩm</option>
-                            @foreach (var t in (List<Product>)ViewBag.GetProduct)
-                            {
-                            <option value="@t.Id">@t.Name</option>
-                            }
-                            </select>  <div asp-validation-for="IdProduct" id="nameError" class="text-danger"></div>  *@<!-- Thông báo lỗi -->
-
-                            <select asp-for="NameProduct" class="form-select" id="selectProductName" required>
-                                <option value="">Chọn tên Sản phẩm</option>
-                                @*  @if (ViewBag.GuidDetail != null)
-                                { *@
-                                @foreach (var item in ViewBag.GetProduct)
-                                {
-                                    <option>@item.Name</option>
-                                }
-                                @*   }else{
-                                @foreach (var item in ViewBag.GetProduct)
-                                {
-                                <option value="@item.Id" selected >@item.Name</option>
-                                }
-                                } *@
-                            </select>
-                            @*   <select asp-for="ProductId" asp-items="ViewBag.GetProduct" class="form-select" id="selectProductName" required>
-                            <option value="">Chọn tên Sản phẩm</option>
-                            </select> *@
-
-
-                        </div>
-                    </div>
-
-                    @*  <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label"> Màu Sắc</label>
-                    <div class="form-group col-md-6">
-                    <select class="form-select" asp-for="ColorId" id="selectColor" required>
-                    <option value="">Chọn Màu Sắc</option>
-                    @foreach (var t in ViewBag.GetColor)
-                    {
-                    <option value="@t.Id">@t.Name</option>
-                    }
-
-                    </select> <div asp-validation-for="IdColor" id="colorError" class="text-danger"></div> <!-- Thông báo lỗi -->
-                    </div>
-                    </div> *@
-
-                    @*  <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Ram</label>
-                    <div class="form-group col-md-6">
-                    <select class="form-select" asp-for="IdRam" id="selectRam" required>
-                    <option value="">Chọn Ram</option>
-                    @foreach (var t in (List<Ram>)ViewBag.GetRam)
-                    {
-                    <option value="@t.Id">@t.Ma</option>
-                    }
-
-                    </select>
-                    <div asp-validation-for="IdRam" id="ramError" class="text-danger"></div> <!-- Thông báo lỗi -->
-                    </div>
-                    </div>
-
-                    <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>
-                    <div class="form-group col-md-6">
-                    <select class="form-select" asp-for="IdCpu" id="selectCPU" required>
-                    <option value="">Chọn Vi Xử Lí</option>
-                    @foreach (var t in (List<Cpu>)ViewBag.GetCPU)
-                    {
-                    <option value="@t.Id">@t.Ma</option>
-                    }
-
-                    </select>
-                    <div asp-validation-for="IdCpu" id="cpuError" class="text-danger"></div> <!-- Thông báo lỗi -->
-                    </div>
-                    </div>
-
-                    <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Màn Hình</label>
-                    <div class="form-group col-md-6">
-                    <select class="form-select" asp-for="IdScreen" id="selectScreen" required>
-                    <option value="">Chọn Màn Hình</option>
-                    @foreach (var t in (List<Screen>)ViewBag.GetScreen)
-                    {
-                    <option value="@t.Id">@t.Ma</option>
-                    }
-
-                    </select> <div asp-validation-for="IdScreen" id="screenError" class="text-danger"></div> <!-- Thông báo lỗi -->
-                    </div>
-                    </div>
-
-                    <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">HardDrive</label>
-                    <div class="form-group col-md-6">
-                    <select class="form-select" asp-for="IdHardDrive" id="selectHardDrive" required>
-                    <option value="">Chọn HardDrive</option>
-                    @foreach (var t in (List<HardDrive>)ViewBag.GetHardDrive)
-                    {
-                    <option value="@t.Id">@t.Ma</option>
-                    }
-
-                    </select> <div asp-validation-for="IdHardDrive" id="hardDriveError" class="text-danger"></div> <!-- Thông báo lỗi -->
-                    </div>
-                    </div>
-                    <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">CardVGA</label>
-                    <div class="form-group col-md-6">
-                    <select class="form-select" asp-for="IdCardVGA" id="selectCardVGA" required>
-                    <option value="">Chọn CardVGA</option>
-                    @foreach (var t in (List<CardVGA>)ViewBag.GetlistCardVGA)
-                    {
-                    <option value="@t.Id">@t.Ma</option>
-                    }
-
-                    </select> <div asp-validation-for="IdCardVGA" id="cardVgaError" class="text-danger"></div> <!-- Thông báo lỗi -->
-                    </div>
-                    </div>
-                    <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Upgrade</label>
-                    <input type="string" class="form-control" id="exampleFormControlInput1" asp-for="Upgrade" placeholder="Nhập Upgrade" required>
-                    </div>
-                    <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Price" placeholder="Nhập Price" required>
-                    </div>
-                    <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">ImportPrice</label>
-                    <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder="Nhập ImportPrice" required>
-                    </div> *@
-                    <div id="error-toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; top: 0; right: 0; z-index: 1050;"></div>
-
-                    <div class="demo-section wide">
-                        <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
-                        @* <textarea name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor"  required></textarea> *@
-                        <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
-
-                        <div class="k-editor">
-                            <textarea asp-for="Description" class="form-control is-invalid" name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea>
-                        </div>
-
-                        <div class="invalid-feedback">
-                            Vui lòng nhập nội dung trường này.
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -413,11 +243,6 @@
     </script>
 }
 <script>
-
-
- 
-
-
 
     var editor = $("#description").kendoEditor({
         // stylesheets: [
@@ -827,12 +652,14 @@
         $.ajax({
             url: "/ProductDetail/Update?guid=" + Id,
             type: "GET",
-            dataType: "data", // Đổi dataType thành "html" để tải lại nội dung HTML
-            // success: function (html) {
-            //     // Cập nhật modal với nội dung mới
-            //     $("#updateModal").modal("show");
-            //     // $("#updateModal .modal-body").html(html);
-            // },
+            dataType: "html", // Đổi dataType thành "html" để tải lại nội dung HTML
+            success: function (respone) {
+                // Cập nhật modal với nội dung mới
+                
+                console.log(respone)
+                $("#rootAdmin").html(respone);
+                $("#updateModal").modal("show");
+            },
             error: function () {
                 // Xử lý lỗi
             }
