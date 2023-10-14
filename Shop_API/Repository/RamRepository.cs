@@ -55,6 +55,13 @@ namespace Shop_API.Repository
             var listRam = list.Where(x => x.TrangThai != 0).ToList();// lấy tất cả ram với điều kiện trạng thái khác 0
             return listRam;
         }
+
+        public async Task<Ram> GetById(Guid id)
+        {
+            var result = await _context.Rams.FindAsync(id);
+            return result;
+        }
+
         public async Task<bool> Update(Ram obj)
         {
             var ram = await _context.Rams.FindAsync(obj.Id);

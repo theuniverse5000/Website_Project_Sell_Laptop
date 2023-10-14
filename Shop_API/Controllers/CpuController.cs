@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -10,10 +13,12 @@ namespace Shop_API.Controllers
     {
         private readonly ICpuRepository _cpuRepository;
         private readonly IConfiguration _config;
+        private readonly ResponseDto _reponse;
         public CpuController(ICpuRepository cpuRepository, IConfiguration config)
         {
             _cpuRepository = cpuRepository;
-            _config = config;
+            _config = config; _reponse = new ResponseDto();
+
         }
 
         [HttpGet]
@@ -97,6 +102,25 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Xóa thất bại");
 
+        }
+
+        [HttpGet("GetCpuById")]
+        public async Task<IActionResult> GetCpuById(Guid guid)
+        {
+
+            //    string apiKey = _config.GetSection("ApiKey").Value;
+            //    if (apiKey == null)
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //    if (keyDomain != apiKey.ToLower())
+            //    {
+            //        return Unauthorized();
+            //    }
+            _reponse.Result = await _cpuRepository.GetById(guid);
+            return Ok(_reponse);
         }
     }
 }

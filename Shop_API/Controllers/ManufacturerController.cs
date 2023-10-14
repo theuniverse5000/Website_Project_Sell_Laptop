@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -127,5 +128,23 @@ namespace Shop_API.Controllers
             return Ok(_reponse);
         }
 
+        [HttpGet("ManufacturerById")]
+        public async Task<IActionResult> ManufacturerById(Guid guid)
+        {
+
+            //    string apiKey = _config.GetSection("ApiKey").Value;
+            //    if (apiKey == null)
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //    if (keyDomain != apiKey.ToLower())
+            //    {
+            //        return Unauthorized();
+            //    }
+            _reponse.Result = await _manufacturer.GetById(guid);
+            return Ok(_reponse);
+        }
     }
 }

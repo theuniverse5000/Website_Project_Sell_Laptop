@@ -8,5 +8,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(HardDrive obj);
         Task<bool> Delete(Guid id);
         Task<List<HardDrive>> GetAllHardDrives();
+        Task<HardDrive> GetById(Guid id);
     }
 }

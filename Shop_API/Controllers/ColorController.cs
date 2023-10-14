@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -22,7 +23,7 @@ namespace Shop_API.Controllers
             _iPagingRepository = pagingRepository;
         }
 
-        [HttpGet, Authorize(Roles = "Admin,User")]
+        [HttpGet/*, Authorize(Roles = "Admin,User")*/]
         public async Task<IActionResult> GetAllColor()
         {
 
@@ -126,6 +127,25 @@ namespace Shop_API.Controllers
 			_reponse.Count = 10;
 			return Ok(_reponse);
 		}
+
+        [HttpGet("GetColorById")]
+        public async Task<IActionResult> GetColorById(Guid guid)
+        {
+
+            //    string apiKey = _config.GetSection("ApiKey").Value;
+            //    if (apiKey == null)
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //    if (keyDomain != apiKey.ToLower())
+            //    {
+            //        return Unauthorized();
+            //    }
+            //_reponse.Result = _colorRepository.GetById(guid);
+            return Ok( await _colorRepository.GetById(guid));
+        }
 
     }
 }

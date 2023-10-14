@@ -60,6 +60,12 @@ namespace Shop_API.Repository
             return listCpu;
         }
 
+        public async Task<Cpu> GetById(Guid id)
+        {
+            var result = await _dbContext.Cpus.FindAsync(id);
+            return result;
+        }
+
         public async Task<bool> Update(Cpu obj)
         {
             var cpu = await _dbContext.Cpus.FindAsync(obj.Id);

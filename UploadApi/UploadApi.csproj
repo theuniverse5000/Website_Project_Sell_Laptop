@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\bai_dang_images\" />
     <Folder Include="wwwroot\manufacturer_images\" />
     <Folder Include="wwwroot\card_VGA_images\" />

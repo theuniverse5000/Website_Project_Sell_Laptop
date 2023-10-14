@@ -60,6 +60,12 @@ namespace Shop_API.Repository
             return listHardDrives;
         }
 
+        public async Task<HardDrive> GetById(Guid id)
+        {
+            var result = await _context.HardDrives.FindAsync(id);
+            return result;
+        }
+
         public async Task<bool> Update(HardDrive obj)
         {
             var hardDrive = await _context.HardDrives.FindAsync(obj.Id);

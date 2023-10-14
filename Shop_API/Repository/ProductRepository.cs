@@ -60,6 +60,12 @@ namespace Shop_API.Repository
             return listx;
         }
 
+        public async Task<Product> GetById(Guid id)
+        {
+            var result = await dbContext.Products.FindAsync(id);
+            return result;
+        }
+
         public async Task<bool> Update(Product obj)
         {
             var x = await dbContext.Products.FindAsync(obj.Id);

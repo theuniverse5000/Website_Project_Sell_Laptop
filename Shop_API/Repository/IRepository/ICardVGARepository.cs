@@ -8,5 +8,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(CardVGA obj);
         Task<bool> Delete(Guid id);
         Task<List<CardVGA>> GetAllCardVGA();
+        Task<CardVGA> GetById(Guid id);
     }
 }

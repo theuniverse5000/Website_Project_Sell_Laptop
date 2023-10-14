@@ -8,5 +8,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(Cpu obj);
         Task<bool> Delete(Guid id);
         Task<List<Cpu>> GetAllCpus();
+        Task<Cpu> GetById(Guid id);
     }
 }
