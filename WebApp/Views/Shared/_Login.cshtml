@@ -1,5 +1,4 @@
-﻿@page "/Login"
-@model Shop_Models.Dto.LoginRequestDto;
+﻿
 
 <div style="border: #4c4949 1px solid; width: 1087px; height: 864px; margin: 65px auto;">
     @using (Html.BeginForm("LoginWithJWT", "Login"))
@@ -7,18 +6,18 @@
     <form>
         <!-- Email input -->
         <div class="form-outline mb-4" style="margin-top: 234px;">
-            <input type="email" id="form2Example1" class="form-control" placeholder="Vui lòng nhập email hoặc SĐT"
+            <input type="text" id="UserName" class="form-control" placeholder="Vui lòng nhập email hoặc SĐT"
                    style="border-radius: 50px; width: 718px; height: 94px; margin-left: 185px; font-size: 30px; padding-left: 24px;" />
         </div>
 
         <!-- Password input -->
         <div class="form-outline mb-4">
-            <input type="password" id="form2Example2" class="form-control" placeholder="Vui lòng nhập mật khẩu"
+            <input type="password" id="PassWord" class="form-control" placeholder="Vui lòng nhập mật khẩu"
                    style="border-radius: 50px; width: 718px; height: 94px; margin-left: 185px; font-size: 30px; padding-left: 24px;" />
         </div>
 
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4"
+            <button onclick="loginWithJWT(event)" id="login_button"  class="btn btn-primary btn-block mb-4"
                 style="border-radius: 50px; width: 717px; height: 110px; background-color: #73BBFE; margin-left: 185px; font-size: 40px; font-weight: bold; border: none">
             ĐĂNG NHẬP
         </button>
@@ -46,5 +45,4 @@
     }
 </div>
 
-<script src="./js/Login.js">
-    <script>
+<script src="./js/Login.js"><script>

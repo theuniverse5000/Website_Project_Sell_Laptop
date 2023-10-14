@@ -1,5 +1,5 @@
 ﻿
-var loginButton = document.getElementById('LoginButton');
+var loginButton = document.getElementById('LoginIcon');
 loginButton.addEventListener('click', function (event) {
     event.preventDefault();
     $.ajax({

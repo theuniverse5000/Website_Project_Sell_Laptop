@@ -7,65 +7,48 @@ using System.Security.Claims;
 using Shop_Models.Dto;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Azure.Core;
 
 namespace WebApp.Controllers;
 [AllowAnonymous]
 public class LoginController : Controller
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    public LoginController(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
+    public LoginController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
     {
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
         _httpContextAccessor = httpContextAccessor;
-        _httpClient = httpClient;
-
     }
    
     public IActionResult Login(string ReturnUrl = "/")
     {
-        var jwtToken = _httpContextAccessor.HttpContext.Session.GetString("_tokenAuthorization");
-        LoginRequestDto objLoginModel = new LoginRequestDto();
-        objLoginModel.ReturnUrl = ReturnUrl;
+        string accessToken = HttpContext.Request.Cookies["access_token"];
+        if(accessToken != null)
+        {
+            return Content(accessToken);
+        }
 
         return PartialView("_Login");
-    }
-    
+    }                                                                                                                                                                                                                               
     [HttpPost]
-   
-    public async Task<IActionResult> LoginWithJWT(string abc)
+    public async Task<IActionResult> LoginWithJWT([FromBody]LoginRequestDto  loginRequestDto)
     {
-        var b = abc;
-        //var result = await _httpClient.PostAsJsonAsync("https://localhost:7286/api/Account/Login", loginRequest);
-        //if (result.IsSuccessStatusCode)
-        //{
-            //var token = await result.Content.ReadAsStringAsync();
-            //var objToken = JsonConvert.Deserializ
-            //eObject<LoginResponesDto>(token);
-            //if (objToken != null)
-            //{
-            //    TokenDto jsonObject = JsonConvert.DeserializeObject<TokenDto>(objToken.Data.ToString());
-            //    if (jsonObject != null)
-            //    {
-            //        _httpContextAccessor.HttpContext.Session.SetString("_tokenAuthorization", jsonObject.AccessToken);
-            //        var handler = new JwtSecurityTokenHandler();
-
-            //        var jwt = handler.ReadJwtToken(jsonObject.AccessToken);
-
-            //        var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            //        var value = jwt.Claims;
-            //        identity.AddClaims(value);
+        var apiUrl = "https://localhost:7286/api/Account/Login";
+        var httpclient = _httpClientFactory.CreateClient("MyHttpClient");
+        var requestdata= new StringContent(JsonConvert.SerializeObject(loginRequestDto),Encoding.UTF8, "application/json");
+        var respone = await httpclient.PostAsync(apiUrl, requestdata);
+        //var LoginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(respone.Content);
+        var jsonRespone = await respone.Content.ReadAsStringAsync();
+        var LoginRespones= JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
+        // Lưu trữ access token trong một cookie
+        HttpContext.Response.Cookies.Append("access_token", LoginRespones.Data.ToString(), new CookieOptions
+        {
+            Expires = DateTime.Now.AddHours(3), // Thời gian sống của cookie (ở đây là 30 ngày)
+        });
 
 
-            //        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jsonObject.AccessToken);
-
-                    
-            //    }
-
-            //}
-        //    return RedirectToPage("/_Host");
-        //    return BadRequest("Token is null");
-        //}
 
         return RedirectToAction("Login");
     }

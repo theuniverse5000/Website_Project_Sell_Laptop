@@ -1,79 +1,100 @@
-﻿<header>
+﻿@{
+    var httpContext = ViewContext.HttpContext;
+    string accessToken = httpContext.Request.Cookies["access_token"];
+}
+<header>
     <div class="Nav-header justify-content-center d-flex" style="background-color: #73BBFE;margin:auto;">
         <div class="navbar navbar-expand-lg align-items-center justify-content-between" style="background-color:transparent;max-width:1440px;">
             <div class="head-session justify-content-center d-flex">
-             <form class="d-flex" role="search">
+                <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
-         
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <div id="CartButton" class="Hot-Line col-2" >
-                                <a class="nav-link" style="text-decoration: none;">
-                            <i class="fa-solid fa-bag-shopping"></i>
-                            <span>Giỏ Hàng</span>
-                        </a>
+                        <div id="CartButton" class="Hot-Line col-2">
+                            <a class="nav-link" style="text-decoration: none;">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                                <span>Giỏ Hàng</span>
+                            </a>
                         </div>
                     </li>
                     <li class="nav-item">
-                             <div id="HotLineButton" class="Hot-Line col-2">
-                        <a style="text-decoration: none;">
-                            <i class="fa-solid fa-phone"></i>
-                            <span>SĐT: 1800.1516</span>
-                        </a>
-                    </div>
+                        <div id="HotLineButton" class="Hot-Line col-2">
+                            <a style="text-decoration: none;">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>SĐT: 1800.1516</span>
+                            </a>
+                        </div>
                     </li>
-                    <li class="nav-item">
-                            <div id="LoginButton" class="Hot-Line col-2">
-                                <a style="text-decoration: none;">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span>Tài Khoản</span>
-                                </a>
-                            </div>
-                    </li>
+                    @{
+
+                        if (accessToken != null)
+                        {
+                            <li class="nav-item">
+                                <div id="LoginIcon" class="Hot-Line col-2">
+                                    <a style="text-decoration: none;">
+                                        <i class="fa-solid fa-user"></i>
+                                        <span>Tài Khoản</span>
+                                    </a>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <div id="LoginIcon" class="Hot-Line col-2">
+                                    <a style="text-decoration: none;">
+                                        <i class="fa-solid fa-user"></i>
+                                        <span>Đăng Nhập</span>
+                                    </a>
+                                </div>
+                            </li>
+                        }
+                    }
                 </ul>
-               
+
             </div>
         </div>
     </div>
-        <div class="Menu" id="menu" style="width:1440px">
-            <div class="Menu-list" style=" width:100%;">
-                <div class="item">
-                    <a href="">
-                        <span> LAPTOP </span>
-                    </a>
-                </div>
-                <div class="item">
-                    <a href="">
-                        <span> HỌC TẬP, VĂN PHÒNG </span>
-                    </a>
-                </div>
-                <div class="item">
-                    <a href="">
-                        <span> GAMING </span>
-                    </a>
-                </div>
-                <div class="item">
-                    <a href="">
-                        <span> MỎNG NHẸ </span>
-                    </a>
-                </div>
-                <div class="item">
-                    <a href="">
-                        <span> ĐỒ HỌA, KỸ THUẬT </span>
-                    </a>
-                </div>
-                <div class="item">
-                    <a href="">
-                        <span> PHỤ KIỆN </span>
-                    </a>
-                </div>
+    <div class="Menu" id="menu" style="width:1440px">
+        <div class="Menu-list" style=" width:100%;">
+            <div class="item">
+                <a href="">
+                    <span> LAPTOP </span>
+                </a>
+            </div>
+            <div class="item">
+                <a href="">
+                    <span> HỌC TẬP, VĂN PHÒNG </span>
+                </a>
+            </div>
+            <div class="item">
+                <a href="">
+                    <span> GAMING </span>
+                </a>
+            </div>
+            <div class="item">
+                <a href="">
+                    <span> MỎNG NHẸ </span>
+                </a>
+            </div>
+            <div class="item">
+                <a href="">
+                    <span> ĐỒ HỌA, KỸ THUẬT </span>
+                </a>
+            </div>
+            <div class="item">
+                <a href="">
+                    <span> PHỤ KIỆN </span>
+                </a>
             </div>
         </div>
+    </div>
 </header>

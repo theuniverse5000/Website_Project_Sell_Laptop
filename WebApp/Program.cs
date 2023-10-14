@@ -37,7 +37,10 @@ builder.Services.AddAuthentication(options => {
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 }).AddCookie();
-
+builder.Services.AddHttpClient("MyHttpClient", client =>
+{
+    client.DefaultRequestHeaders.Add("key-domain", builder.Configuration["TokenGetApiAdmin"]);
+});
 builder.Services.AddAuthentication()
     .AddFacebook(options =>
     {

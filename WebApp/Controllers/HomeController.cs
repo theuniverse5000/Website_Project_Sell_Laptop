@@ -5,8 +5,8 @@ namespace WebApp.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
-
         {
+            var apiUrl= "{{baseUrl}}/api/ProductDetail/GetAllNoJoin"
             return View();
         }
         public IActionResult GoLogin()
