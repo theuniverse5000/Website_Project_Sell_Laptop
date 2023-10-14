@@ -1,0 +1,225 @@
+﻿@model Shop_Models.Dto.ProductDetailDto
+
+@{
+    ViewData["Title"] = "Update Product Detail";
+    @* @using Shop_Models;
+    @using Shop_Models.Entities; *@
+
+}
+
+<style>
+    /* Đặt kích thước modal mặc định */
+    .modal-dialog {
+        max-width: 90%;
+        width: auto;
+    }
+
+    /* Thiết lập thuộc tính cho việc kéo modal */
+    .modal-content {
+        overflow: hidden; /* Ngăn chặn nội dung bên ngoài khỏi modal */
+    }
+
+    /* Thiết lập kích thước của modal-body khi kéo */
+    .modal-body {
+        max-height: 80vh; /* Điều chỉnh kích thước tùy ý dựa trên nhu cầu của bạn */
+        overflow-y: auto;
+    }
+
+</style>
+
+
+<h2>Update Product Detail</h2>
+
+
+<div class="modal-header">
+    <h1 class="modal-title fs-5" id="updateLabel">Update Product</h1>
+    <button type="button" class="btn btn-resize" id="resizeModal">Resize</button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+
+<div id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="updateLabel">Update Product</h1>
+                <button type="button" class="btn btn-resize" id="resizeModal">Resize</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+
+            </div>
+            <div class="modal-body">
+
+                <div id="example">
+                    <form asp-action="Update" asp-route-guid="@Model.Id" method="post">
+                        <div class="form-group col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Code">Product Code</label>
+                                <input asp-for="Code" class="form-control" disabled="disabled" />
+                                <span asp-validation-for="Code" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Tên Sản Phẩm</label>
+                            <div class="form-group col-md-6">
+                                <select asp-for="NameProduct" class="form-select" id="selectProductName" disabled="disabled">
+                                    <option value="">Chọn tên Sản phẩm</option>
+                                    @foreach (var item in ViewBag.GetProduct)
+                                    {
+                                        <option>@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Ram</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="MaRam" id="selectRam" disabled="disabled">
+                                    <option value="">Chọn Ram</option>
+                                    @foreach (var t in ViewBag.GetRam)
+                                    {
+                                        <option>@t.Ma</option>
+                                    }
+
+                                </select>
+                                <div asp-validation-for="IdRam" id="ramError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="MaCpu" id="selectCPU" disabled="disabled">
+                                    <option value="">Chọn Vi Xử Lí</option>
+                                    @foreach (var t in ViewBag.GetCPU)
+                                    {
+                                        <option>@t.Ma</option>
+                                    }
+
+                                </select>
+                                <div asp-validation-for="IdCpu" id="cpuError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Màn Hình</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="MaManHinh" id="selectScreen" disabled="disabled">
+                                    <option value="">Chọn Màn Hình</option>
+                                    @foreach (var t in ViewBag.GetScreen)
+                                    {
+                                        <option>@t.Ma</option>
+                                    }
+
+                                </select> <div asp-validation-for="IdScreen" id="screenError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+                       @*  <div class="mb-3">
+                             <label for="exampleFormControlInput1" class="form-label">HardDrive</label> 
+                            <div class="form-group col-md-6">
+                                <label for="Name">Hard Drive</label>
+                                    <select class="form-select" asp-for="MaHardDrive" id="selectHardDrive" disabled="disabled">
+
+                                    @foreach (var t in ViewBag.GetHardDrive)
+                                    {
+                                        <option>@t.Ma</option>
+                                    }
+                                </select> <div asp-validation-for="IdHardDrive" id="hardDriveError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div> *@
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">CardVGA</label>
+                            <div class="form-group col-md-6">
+                                <select class="form-select" asp-for="MaCardVGA" id="selectCardVGA" disabled="disabled">
+                                    <option value="">Chọn CardVGA</option>
+                                    @foreach (var t in ViewBag.GetlistCardVGA)
+                                    {
+                                        <option>@t.Ma</option>
+                                    }
+
+                                </select> <div asp-validation-for="IdCardVGA" id="cardVgaError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Price">Price</label>
+                            <input asp-for="Price" class="form-control" required />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ImportPrice">Import Price</label>
+                            <input asp-for="ImportPrice" class="form-control" required />
+                            <span asp-validation-for="ImportPrice" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Upgrade">Upgrade</label>
+                            <input asp-for="Upgrade" class="form-control" required />
+                            <span asp-validation-for="Upgrade" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description">Description</label>
+                            <textarea asp-for="Description" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+
+                            <div class="demo-section wide">
+                                <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
+                                @* <textarea name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea> *@
+                                <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
+
+                                <div class="k-editor">
+                                    <textarea asp-for="Description" class="form-control is-invalid" name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea>
+                                </div>
+
+                                <div class="invalid-feedback">
+                                    Vui lòng nhập nội dung trường này.
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Status">Status</label>
+                            <input asp-for="Status" class="form-control" required />
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var editor = $("#description").kendoEditor({
+        // stylesheets: [
+        //     "../content/shared/styles/editor.css",
+        // ],
+        tools: [
+            "bold",
+            "italic",
+            "underline",
+            "strikethrough",
+            "fontName",
+            "fontSize",
+            "foreColor",
+            "backColor",
+            "insertImage",
+            "createLink",
+            "undo",
+            "redo",
+            "justifyLeft",
+            "justifyCenter",
+            "justifyRight",
+            "insertUnorderedList",
+            "insertOrderedList",
+            "indent",
+            "outdent",
+            "formatBlock",
+            "clearFormat"
+        ]
+    });
+</script>
+
