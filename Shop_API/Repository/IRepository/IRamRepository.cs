@@ -8,5 +8,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(Ram obj);
         Task<bool> Delete(Guid id);
         Task<List<Ram>> GetAllRams();
+        Task<Ram> GetById(Guid id);
     }
 }

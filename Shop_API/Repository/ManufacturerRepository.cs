@@ -55,6 +55,12 @@ namespace Shop_API.Repository
             }
         }
 
+        public async Task<Manufacturer> GetById(Guid id)
+        {
+            var result = await dbContext.Manufacturers.FindAsync(id);
+            return result;
+        }
+
         public async Task<IEnumerable<Manufacturer>> GetAll()
         {
             var list = await dbContext.Manufacturers.ToListAsync();

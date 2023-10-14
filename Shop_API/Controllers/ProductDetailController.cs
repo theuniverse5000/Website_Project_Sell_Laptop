@@ -170,5 +170,44 @@ namespace Shop_API.Controllers
             return BadRequest("Xóa thất bại");
 
         }
+
+        [HttpGet("ProductDetailById")]
+        public async Task<IActionResult> ProductDetailById(Guid guid)
+        {
+
+            //    string apiKey = _config.GetSection("ApiKey").Value;
+            //    if (apiKey == null)
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //    if (keyDomain != apiKey.ToLower())
+            //    {
+            //        return Unauthorized();
+            //    }
+            _reponse.Result = await _repository.GetById(guid);
+            return Ok(await _repository.GetById(guid));
+        }
+
+        [HttpGet("ProductDetailByIdReturnProDetailDTO")]
+        public async Task<IActionResult> ProductDetailByIdReturnProDetailDTO(Guid guid)
+        {
+
+            //    string apiKey = _config.GetSection("ApiKey").Value;
+            //    if (apiKey == null)
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //    if (keyDomain != apiKey.ToLower())
+            //    {
+            //        return Unauthorized();
+            //    }
+            //_reponse.Result = await _repository.GetProductDetailByIdReturnDto(guid);
+            return Ok(await _repository.GetProductDetailByIdReturnDto(guid));
+        }
+
     }
 }

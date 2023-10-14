@@ -128,5 +128,25 @@ namespace Shop_API.Controllers
             return Ok(_reponse);
         }
 
+
+        [HttpGet("RamById")]
+        public async Task<IActionResult> RamById(Guid guid)
+        {
+
+            //    string apiKey = _config.GetSection("ApiKey").Value;
+            //    if (apiKey == null)
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //    if (keyDomain != apiKey.ToLower())
+            //    {
+            //        return Unauthorized();
+            //    }
+            _reponse.Result = await _repository.GetById(guid);
+            return Ok(_reponse);
+        }
+
     }
 }

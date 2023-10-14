@@ -18,5 +18,7 @@ namespace Shop_API.Repository.IRepository
         Task<ProductDetailDto> GetProductDetail();
         Task<bool> UpdateSoLuong(Guid id, int soLuong);
         Task<bool> Update(ProductDetailDto productDetail);
+        Task<ProductDetail> GetById(Guid guid);
+        Task<ProductDetailDto> GetProductDetailByIdReturnDto(Guid id);
     }
 }

@@ -8,5 +8,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(Color obj);
         Task<bool> Delete(Guid id);
         Task<List<Color>> GetAllColors();
+        Task<Color> GetById(Guid id);
     }
 }

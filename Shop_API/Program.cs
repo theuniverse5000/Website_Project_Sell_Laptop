@@ -9,6 +9,8 @@ using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service;
 using Shop_API.Service.IService;
+using Shop_API.Services;
+using Shop_API.Services.IServices;
 using Shop_Models.Entities;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
@@ -60,6 +62,7 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
 builder.Services.AddTransient<ITichDiemServices, TichDiemServices>();
+builder.Services.AddTransient<IImagesServies, ImagesServies>();
 #endregion
 builder.Services.RegisterServiceComponents();
 

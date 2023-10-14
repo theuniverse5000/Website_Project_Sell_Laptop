@@ -55,6 +55,13 @@ namespace Shop_API.Repository
             var listCardVGA = list.Where(x => x.TrangThai != 0).ToList();
             return listCardVGA;
         }
+
+        public async Task<CardVGA> GetById(Guid id)
+        {
+            var result = await _context.CardVGAs.FindAsync(id);
+            return result;
+        }
+
         public async Task<bool> Update(CardVGA obj)
         {
             var cardVGA = await _context.CardVGAs.FindAsync(obj.Id);

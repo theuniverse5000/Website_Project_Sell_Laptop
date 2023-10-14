@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 using System.Data;
 
@@ -13,11 +16,12 @@ namespace Shop_API.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly IConfiguration _config;
-
+        private readonly ResponseDto _response;
         public ProductController(IProductRepository Ipr, IConfiguration config)
         {
             _productRepository = Ipr;
             _config = config;
+            _response = new ResponseDto();
         }
         
         [HttpGet]
@@ -103,6 +107,24 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Xóa thất bại");
 
+        }
+        [HttpGet("ProductById")]
+        public async Task<IActionResult> ProductById(Guid guid)
+        {
+
+            //    string apiKey = _config.GetSection("ApiKey").Value;
+            //    if (apiKey == null)
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //    if (keyDomain != apiKey.ToLower())
+            //    {
+            //        return Unauthorized();
+            //    }
+            _response.Result = await _productRepository.GetById(guid);
+            return Ok(await _productRepository.GetById(guid));
         }
     }
 }

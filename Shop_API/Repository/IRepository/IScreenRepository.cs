@@ -8,5 +8,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(Screen obj);
         Task<bool> Delete(Guid id);
         Task<IEnumerable<Screen>> GetAll();
+        Task<Screen> GetById(Guid id);
     }
 }

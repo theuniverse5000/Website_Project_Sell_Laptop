@@ -60,6 +60,12 @@ namespace Shop_API.Repository
             return listColor;
         }
 
+        public  async Task<Color> GetById(Guid id)
+        {
+            var result = await _dbContext.Colors.FindAsync(id);
+            return result;
+        }
+
         public async Task<bool> Update(Color obj)
         {
             var color = await _dbContext.Colors.FindAsync(obj.Id);

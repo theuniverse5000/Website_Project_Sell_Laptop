@@ -10,5 +10,7 @@ namespace Shop_API.Repository.IRepository
 
         Task<IEnumerable<Manufacturer>> GetAll();
 
+        Task<Manufacturer> GetById(Guid id);
+
     }
 }

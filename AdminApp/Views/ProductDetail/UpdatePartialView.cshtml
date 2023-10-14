@@ -1,0 +1,202 @@
+﻿@model Shop_Models.Dto.ProductDetailDto;
+@{
+	ViewBag.Title = "Index";
+}
+
+
+
+<main class=" col-12 ">
+	<h5>Danh sách công việc</h5>
+	<div class="smgrid" data-title="HaiToDoList" data-grid="grid_ToDoList"
+		 data-form="" data-formwidth="1300">
+		<div class="accordion" id="accordionZone2">
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<a class="btn btn-link btn-block text-left" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						Thông tin tìm kiếm
+					</a>
+
+				</div>
+				<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionZone2">
+					<div class="card-body">
+
+						<form class="form-inline zone_search">
+
+							<div class="col-lg-4">
+								<div class="floating-label">
+									<input class="floating-input" name="keyword" type="text" placeholder=" ">
+									<span class="highlight"></span>
+									<label>Từ khóa tìm kiếm</label>
+								</div>
+							</div>
+
+							<div class="col-12 d-flex justify-content-center">
+								<button type="button" class="btn btn-primary act-search mb-1">
+									<i class="fas fa-search"></i>Tìm kiếm
+								</button>
+							</div>
+
+
+						</form>
+
+
+					</div>
+				</div>
+			</div>
+
+			<div class="card mt-3">
+				<div class="card-body">
+					<div class="d-flex flex-row-reverse mb-1">
+						<button class="btn pull-right btn-primary vibtn-approve-reject-multi ml-1" data-url="/HaiToDoList/PendingMulti" id="" title="" data-PhongBan="0" type="button">
+							<i class="fal fa-times-circle"></i>Hủy duyệt
+						</button>
+						<button class="btn pull-right btn-primary vibtn-approve-reject-multi ml-1" data-url="/HaiToDoList/ApproveMulti" id="" title="" data-PhongBan="0" type="button">
+							<i class="fal fa-share"></i>Duyệt
+						</button>
+						<button class="btn pull-right btn-primary vibtn  ml-1" data-url="/HaiToDoList/Edit" id="btnAddUser" title="Thêm mới " type="button">
+							<i class="fas fa-plus-circle"></i>Thêm mới
+						</button>
+					</div>
+					<div id="grid_ToDoList">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</main>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		UpdateBreadcrumb(["Bàn Làm Việc", "Thực tập", "Hải"])
+		$("#grid_ToDoList").siKendoGrid({
+
+
+			Sort: [{ field: "id", dir: "desc" }],
+			UrlPost: "/HaiToDoList/GetData",
+			odata: {
+				"SearchIn": ["Title"],
+			},
+			parameterPlus: function (option) {
+
+			},
+			scrollable: true,
+			sortable: true,
+			groupable: true,
+			striped: false,
+			isColumSTT: true,
+			height: 0,
+			maxheight: 50,
+			pageable: {
+				refresh: true,
+				pageSizes: true,
+				buttonCount: 7
+			},
+			modelID: "id",
+			fields: {
+
+			},
+			columns: [
+				{
+					field: "Title",
+					title: "Tiêu đề"
+				},
+
+				{
+					field: "MoTa",
+					title: "Nội dung"
+				},
+
+				{
+					field: "CreatedBy",
+					title: "Người tạo",
+				},
+				{
+					field: "ModifiedBy",
+					title: "Người sửa",
+				},
+				{
+					field: "Created",
+					title: "Ngày tạo",
+					template: function (dataItem) { return new Date(parseInt(dataItem.Created.substr(6))).toLocaleDateString(); }
+				},
+				{
+					field: "StartDay",
+					title: "Ngày bắt đầu",
+					template: function (dataItem1) {
+						if (dataItem1.StartDay != null) {
+							return new Date(parseInt(dataItem1.StartDay.substr(6))).toLocaleDateString();
+						}
+						else {
+							return "";
+						}
+
+					}
+				},
+				{
+					field: "EndDay",
+					title: "Ngày kết thúc",
+					template: function (dataItem2) {
+						if (dataItem2.EndDay != null) {
+							return new Date(parseInt(dataItem2.EndDay.substr(6))).toLocaleDateString();
+						}
+						else {
+							return "";
+						}
+					}
+				},
+				{
+					title: "Trạng thái",
+					template: function (os) {
+						if (os.C_ModerationStatus == 0) {
+							return `<i class="fad fa-circle" style="--fa-primary-color: #0c8edf; --fa-secondary-color: #0b55d5;"></i>&ensp;Đã duyệt`;
+						} else {
+							return `<i class="fad fa-circle" style="--fa-primary-color: #908989; --fa-secondary-color: #9e9e9e;"></i>&ensp;Chưa duyệt`;
+						}
+					}
+				},
+				{
+					title: "Chức Năng",
+					width: "120px",
+					template: function (o) {
+						if (o.C_ModerationStatus == 1) {
+							return `
+						 <a data-Title='${o.Title}' data-Id="${o.Id}" data-url ="/HaiToDoList/Approve" class="vibtnpostconfirmV2 " href="javascript:;" Title="Duyệt"><i class="fal fa-share" aria-hidden="true"></i></a>
+							<a data-Id="${o.Id}" data-width ="1000" class="vibtn" data-url="/HaiToDoList/Edit" href="javascript:;" Title="Sửa"><i class="far fa-edit" aria-hidden="true"></i></a>
+							<a data-url="/HaiToDoList/Delete" data-Id="${o.Id}" class="vibtnpostconfirmV2" href="javascript:;" Title="Xóa công việc"><i class="far fa-trash" aria-hidden="true"></i></a> `;
+						}
+						else {
+							return `
+							<a data-Id="${o.Id}"data-Title='${o.Titlle}'data-url ="/HaiToDoList/Pending" class="vibtnpostconfirmV2 text-danger " href="javascript:;" Title="Hủy Duyệt"><i class="fal fa-times-circle"></i></a>
+							<a data-Id="${o.Id}" data-width ="1000" class="vibtn" data-url="/HaiToDoList/Edit" href="javascript:;" Title="Sửa"><i class="far fa-edit" aria-hidden="true"></i></a>`;
+						}
+
+					}
+				},
+				{
+
+					sortable: false,
+					width: "35px",
+					template: function (o) {
+						return `<input type="checkbox" data-Id="${o.Id}" id="checkbox_${o.Id}" name="selectCheckbox"/>`;
+
+					}
+				}
+
+
+			],
+			dataBound: function () {
+
+
+			},
+		});
+	});
+
+
+</script>
+
+
+
+

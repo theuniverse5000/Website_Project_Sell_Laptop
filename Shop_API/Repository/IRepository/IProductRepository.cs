@@ -8,5 +8,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Delete(Guid idobj);
 
         Task<IEnumerable<Product>> GetAll();
+        Task<Product> GetById(Guid id);
     }
 }

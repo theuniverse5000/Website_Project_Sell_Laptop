@@ -58,6 +58,12 @@ namespace Shop_API.Repository
             return listScreen;
         }
 
+        public async Task<Screen> GetById(Guid id)
+        {
+            var result = await _context.Screens.FindAsync(id);
+            return result;
+        }
+
         public async Task<bool> Update(Screen obj)
         {
             var screen = await _context.Screens.FindAsync(obj.Id);
