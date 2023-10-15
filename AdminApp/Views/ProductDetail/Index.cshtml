@@ -2,8 +2,8 @@
     ViewBag.Title = "Product Details";
     @using Shop_Models;
     @using Shop_Models.Entities;
-    @model Shop_Models.Dto.ProductDetailDto;  
-      // @model Shop_Models.Entities.ProductDetail;
+    @model Shop_Models.Dto.ProductDetailDto;
+    // @model Shop_Models.Entities.ProductDetail;
 
 }
 <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.common.min.css">
@@ -16,12 +16,35 @@
 
 <div id="example">
     @* button thêm mới *@
-   @*  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Product Detail</button>*@
+    @*  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Product Detail</button>*@
 
     <div id="grid"></div>
 
-</div> 
-@*  create product details  *@   
+</div>
+<div id="modalContent" style="display: block;"></div>
+
+
+<style>
+    /* Đặt kích thước modal mặc định */
+    .modal-dialog {
+        max-width: 90%;
+        width: auto;
+    }
+
+    /* Thiết lập thuộc tính cho việc kéo modal */
+    .modal-content {
+        overflow: hidden; /* Ngăn chặn nội dung bên ngoài khỏi modal */
+    }
+
+    /* Thiết lập kích thước của modal-body khi kéo */
+    .modal-body {
+        max-height: 80vh; /* Điều chỉnh kích thước tùy ý dựa trên nhu cầu của bạn */
+        overflow-y: auto;
+    }
+
+</style>
+
+@*  create product details  *@
 <div id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -29,7 +52,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Create New</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" >
+            <div class="modal-body">
 
                 <div id="example">
                     <form asp-controller="ProductDetail" asp-action="Index" method="post">
@@ -37,24 +60,24 @@
                         <div class="form-group col-md-6">
                             <div class="form-group">
                                 <label asp-for="Code">Product Code</label>
-                                <input asp-for="Code" class="form-control" placeholder="nhap codee "/>
+                                <input asp-for="Code" class="form-control" placeholder="nhap codee " />
                                 <span asp-validation-for="Code" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Tên Sản Phẩm</label>
-                            <div class="form-group col-md-6">                            
-                                <select asp-for="IdProduct"  class="form-select" id="selectProductName" required>
+                            <div class="form-group col-md-6">
+                                <select asp-for="IdProduct" class="form-select" id="selectProductName" required>
                                     <option value="">Chọn tên Sản phẩm</option>
-                                        @foreach (var item in ViewBag.GetProduct)
-                                        {
-                                            <option >@item.Name</option>
-                                        }
-                                 
+                                    @foreach (var item in ViewBag.GetProduct)
+                                    {
+                                        <option>@item.Name</option>
+                                    }
+
                                 </select>
                                 <span asp-validation-for="Code" class="text-danger"></span>
-                        </div>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -69,7 +92,7 @@
 
                                 </select> <div asp-validation-for="IdColor" id="colorError" class="text-danger"></div> <!-- Thông báo lỗi -->
                             </div>
-                        </div> 
+                        </div>
 
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Ram</label>
@@ -157,7 +180,7 @@
 
                         <div class="demo-section wide">
                             <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
-                             <textarea name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor"  required></textarea> 
+                            <textarea name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea>
                             <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
 
                             <div class="k-editor">
@@ -178,42 +201,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-@* <script>
-    $(document).ready(function () {
-        // Khi nhấn vào nút "C rết"
-        $(".k-grid-other").click(function () {
-            // Hiển thị modal
-            $("#exampleModal").modal("show");
-        });
-    });
-</script> *@
-
-<style>
-    /* Đặt kích thước modal mặc định */
-    .modal-dialog {
-        max-width: 90%;
-        width: auto;
-    }
-
-    /* Thiết lập thuộc tính cho việc kéo modal */
-    .modal-content {
-        overflow: hidden; /* Ngăn chặn nội dung bên ngoài khỏi modal */
-    }
-
-    /* Thiết lập kích thước của modal-body khi kéo */
-    .modal-body {
-        max-height: 80vh; /* Điều chỉnh kích thước tùy ý dựa trên nhu cầu của bạn */
-        overflow-y: auto;
-    }
-
-</style>
-
-@* create product details *@
 
 
 
@@ -272,131 +259,10 @@
             "clearFormat"
         ]
     });
-    // $(document).ready(function () {
-    //     var dataSource = new kendo.data.DataSource({
-    //         transport: {
-    //             read: {
-    //                 url: "/ProductDetail/GetProductDetail",
-    //                 dataType: "json"
-    //             },
-    //             update: {
-    //                 url: "/ProductDetail/Update", // Chỉnh sửa đường dẫn URL nếu cần
-    //                 dataType: "json"
-    //             },
-    //             destroy: {
-    //                 url: "/ProductDetail/Destroy", // Chỉnh sửa đường dẫn URL nếu cần
-    //                 dataType: "json"
-    //             },
-    //             create: {
-    //                 url: "/ProductDetail/CreateProductDetail", // Chỉnh sửa đường dẫn URL nếu cần
-    //                 dataType: "json"
-    //             },
-    //             parameterMap: function (options, operation) {
-    //                 if (operation !== "read" && options.models) {
-    //                     return { models: kendo.stringify(options.models) };
-    //                 }
-    //             }
-    //         },
-    //         batch: true,
-    //         pageSize: 20,
-    //         schema: {
-    //             data: "result",
-    //             model: {
-    //                 id: "id",
-    //                 fields: {
-    //                     code: {
-    //                         type: "string", validate: { required: true }
-    //                     },
-    //                     status: { type: "int", validate: { required: true } }
-    //                 }
-    //             }
-    //         }
-    //     });
-
-    //     $("#grid").kendoGrid({
-    //         dataSource: dataSource,
-    //         pageable: false,
-    //         height: 550,
-    //         toolbar: ["create"],
-    //         columns: [
-    //             { field: "code", title: "Product Name" },
-    //             { field: "status", title: "Unit Price", format: "{0:c}", width: "120px" },
-
-    //             { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
-    //         ],
-    //         editable: "popup"
-    //     });
-    // });
-
-
-
-
-    // cửa sổ
-
-    // $(document).ready(function () {
-    //     $("#openCreateModal").on("click", function () {
-    //         // Đường dẫn đến trang "Create.cshtml"
-    //         var url = "/ProductDetail/Create";
-
-    //         // Tạo modal
-    //         var modal = $('<div class="modal fade" id="createModal" tabindex="-1" role="dialog">\
-    //             <div class="modal-dialog" role="document">\
-    //                 <div class="modal-content">\
-    //                     <div class="modal-header" >\
-    //                                 <h5 class="modal-title" style="width:1000px;">Create Page</h5>\
-    //                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">\
-    //                             <span aria-hidden="true">&times;</span>\
-    //                         </button>\
-    //                     </div>\
-    //                             <div class="modal-body" style="width:1000px; height:1000px;">\
-    //                         <iframe src="' + url + '" style="width:1000px; height:1000px;"></iframe>\
-    //                     </div>\
-    //                 </div>\
-    //             </div>\
-    //         </div>');
-
-    //         // Thêm modal vào trang
-    //         modal.modal("show");
-
-    //         // Xử lý sự kiện khi modal đóng
-    //         modal.on("hidden.bs.modal", function () {
-    //             $(this).remove();
-    //         });
-    //     });
-    // });
 
 
     $(document).ready(function () {
 
-
-        // // Đặt sự kiện click cho nút "Create"
-        // $("#grid").on("click", ".k-grid-other", function () {
-        //     // Chuyển hướng người dùng đến trang "Create.cshtml"
-        //     window.location.href = "/ProductDetail/Create";
-        // });
-
-
-        // $("form").submit(function (e) {
-        //     if (this.checkValidity() === false) {
-        //         e.preventDefault(); // Ngăn chặn việc gửi biểu mẫu nếu có lỗi
-
-        //         // Hiển thị Toast thông báo lỗi
-        //         var toast = `<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
-        //                         <div class="toast-header">
-        //                             <strong class="me-auto">Lỗi</strong>
-        //                             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        //                         </div>
-        //                         <div class="toast-body">
-        //                             Vui lòng kiểm tra lại thông tin biểu mẫu.
-        //                         </div>
-        //                     </div>`;
-
-        //         $("#error-toast-container").html(toast);
-
-        //         var errorToast = new bootstrap.Toast($(".toast"));
-        //         errorToast.show();
-        //     }
-        // });
 
 
 
@@ -411,7 +277,7 @@
                         $('#exampleModal').modal('show');
                     console.log("Nút 'Sửa' đã được nhấn");
     @* Thực hiện các tác vụ khác tại đây*@
-                });
+                    });
             });
 
 
@@ -495,40 +361,40 @@
 
                 // },
 
-                    "pdf"],
-                pdf: {
-                    allPages: true,
-                    avoidLinks: true,
-                    paperSize: "A4",
-                    margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
-                    landscape: true,
-                    repeatHeaders: true,
-                    template: $("#page-template").html(),
-                    scale: 0.8,
+                "pdf"],
+            pdf: {
+                allPages: true,
+                avoidLinks: true,
+                paperSize: "A4",
+                margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
+                landscape: true,
+                repeatHeaders: true,
+                template: $("#page-template").html(),
+                scale: 0.8,
+            },
+            editable: {
+                mode: "popup",
+                window: { width: 1500, height: 1000 }, // Chỉnh chiều rộng ở đây
+            },
+            columns: [
+                {
+                    field: "code",
+                    title: "Mã"
                 },
-                editable: {
-                    mode: "popup",
-                    window: { width: 1500, height: 1000 }, // Chỉnh chiều rộng ở đây
+                {
+                    field: "nameProduct",
+                    title: "Tên sản phẩm"
                 },
-                columns: [
-                    {
-                        field: "code",
-                        title: "Mã"
-                    },
-                    {
-                        field: "nameProduct",
-                        title: "Tên sản phẩm"
-                    },
-                    {
-                        field: "nameManufacturer",
-                        title: "Hãng sản xuất",
+                {
+                    field: "nameManufacturer",
+                    title: "Hãng sản xuất",
 
-                       
-                    },
-                    {
-                        field: "nameProductType",
-                        title: "Dòng sản phẩm",
-                        hidden: true, // Ẩn cột này
+
+                },
+                {
+                    field: "nameProductType",
+                    title: "Dòng sản phẩm",
+                    hidden: true, // Ẩn cột này
 
 
 
@@ -623,7 +489,7 @@
         var newButton = $('<a type="button" class="k-button k-button-icontext k-grid-create" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Product Detail</a> ');
         // Find elements with the specified class and prepend the textarea before them
         $(".k-grid-pdf").before(newButton);
-       
+
 
     });
 
@@ -639,7 +505,7 @@
     //             $("#selectProductName").val(data.IdProduct);
     //             // Điền các trường biểu mẫu khác tương tự
 
-                
+
     //         },
     //         error: function () {
     //             // Xử lý lỗi
@@ -652,12 +518,12 @@
         $.ajax({
             url: "/ProductDetail/Update?guid=" + Id,
             type: "GET",
-            dataType: "html", // Đổi dataType thành "html" để tải lại nội dung HTML
-            success: function (respone) {
-                // Cập nhật modal với nội dung mới
-                
-                console.log(respone)
-                $("#rootAdmin").html(respone);
+            dataType: "html",
+            success: function (response) {
+                // Tải nội dung modal vào div ẩn
+                $("#modalContent").html(response);
+
+                // Mở modal
                 $("#updateModal").modal("show");
             },
             error: function () {
@@ -665,6 +531,7 @@
             }
         });
     }
+
 
 
 

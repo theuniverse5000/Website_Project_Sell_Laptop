@@ -8,6 +8,10 @@
 }
 
 <style>
+    #updateModal {
+        z-index: 9999; /* Adjust the value as needed */
+    }
+
     /* Đặt kích thước modal mặc định */
     .modal-dialog {
         max-width: 90%;
@@ -38,7 +42,7 @@
 </div>
 
 
-<div id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
+<div id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
