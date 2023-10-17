@@ -86,5 +86,12 @@ namespace Shop_API.Repository
                 return false;
             }
         }
+
+        public async Task<User> GetUserById(Guid? id)
+        {
+            var result = await _context.Users.FindAsync(id);
+            return result;
+        }
+
     }
 }
