@@ -17,7 +17,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost("first-buy")]
-        public async Task<IActionResult> TieuDiemChoLanDauMuaAsync(Guid IdBill, double TongTienThanhToan)
+        public async Task<IActionResult> TieuDiemChoLanDauMuaAsync(string phoneNumber, double TongTienThanhToan)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
             //if (apiKey == null)
@@ -30,11 +30,11 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            return Ok(_tichDiemServices.TichDiemChoLanDauMuaHang(IdBill, TongTienThanhToan));
+            return Ok(await _tichDiemServices.TichDiemChoLanDauMuaHangAsync(phoneNumber, TongTienThanhToan));
         }
 
         [HttpPost]
-        public async Task<IActionResult> TieuDiemChoLanMuaSauAsync(Guid IdBill, double TongTienThanhToan,double SoDiemMuonDung)
+        public async Task<IActionResult> TieuDiemChoLanMuaSauAsync(string phoneNumber, double TongTienThanhToan,double SoDiemMuonDung)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
             //if (apiKey == null)
@@ -47,7 +47,7 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            return Ok(_tichDiemServices.TichDiemChoNhungLanMuaSau(IdBill, TongTienThanhToan, SoDiemMuonDung));
+            return Ok( await _tichDiemServices.TichDiemChoNhungLanMuaSauAsync(phoneNumber, TongTienThanhToan, SoDiemMuonDung));
         }
 
     }
