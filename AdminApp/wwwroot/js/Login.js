@@ -1,7 +1,11 @@
-﻿var loginButton = document.getElementById('login_button');
+﻿
+var loginButton = document.getElementById("lgbutton");
 
-function loginWithJWT(ev) {
-    ev.preventDefault();
+// Thêm một trình nghe sự kiện cho sự kiện "click" (bấm nút)
+loginButton.addEventListener("click", function (event) {
+    // Thực hiện các hành động bạn muốn khi nút "ĐĂNG NHẬP" được bấm
+
+    event.preventDefault();
 
     var UserNameInput = document.getElementById('UserName').value;
     var passwordInput = document.getElementById('PassWord').value;
@@ -15,7 +19,7 @@ function loginWithJWT(ev) {
     }
     console.log(dataToSend.UserName)
     $.ajax({
-        url: "/Login/LoginWithJWT",
+        url: "/Home/LoginWithJWT",
         type: "POST",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
@@ -29,7 +33,5 @@ function loginWithJWT(ev) {
             console.error(error);
         }
     });
-}
-
-
+});
 

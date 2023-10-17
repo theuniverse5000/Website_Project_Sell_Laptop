@@ -48,8 +48,6 @@ public class LoginController : Controller
             Expires = DateTime.Now.AddHours(3), // Thời gian sống của cookie (ở đây là 30 ngày)
         });
 
-
-
         return RedirectToAction("Login");
     }
     public async Task<IActionResult> LogOut()

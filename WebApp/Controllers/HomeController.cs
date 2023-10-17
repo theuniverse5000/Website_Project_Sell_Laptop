@@ -6,7 +6,7 @@ namespace WebApp.Controllers
     {
         public IActionResult Index()
         {
-            var apiUrl= "{{baseUrl}}/api/ProductDetail/GetAllNoJoin"
+            var apiUrl = "{{baseUrl}}/api/ProductDetail/GetAllNoJoin";
             return View();
         }
         public IActionResult GoLogin()
