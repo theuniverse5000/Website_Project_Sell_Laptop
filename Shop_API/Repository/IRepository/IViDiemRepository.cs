@@ -8,5 +8,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(ViDiem obj);
         Task<bool> Delete(Guid Id);
         Task<List<ViDiem>> GetAllViDiems();
+        Task<ViDiem> GetViDiemById(Guid? id);
     }
 }

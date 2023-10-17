@@ -79,5 +79,12 @@ namespace Shop_API.Repository
                 return false;
             }
         }
+
+        public async Task<ViDiem> GetViDiemById(Guid? id)
+        {
+            var result = await _context.ViDiems.FindAsync(id);
+            return result;
+        }
+
     }
 }
