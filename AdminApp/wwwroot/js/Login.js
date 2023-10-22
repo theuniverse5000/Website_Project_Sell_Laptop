@@ -9,7 +9,7 @@ loginButton.addEventListener("click", function (event) {
 
     var UserNameInput = document.getElementById('UserName').value;
     var passwordInput = document.getElementById('PassWord').value;
-    console.log(1)
+    var apiUrl = "https://localhost:7286/api/Account/Login";
     // Create an object containing the data to send to the server
     var dataToSend = {
         UserName: UserNameInput,
@@ -19,14 +19,14 @@ loginButton.addEventListener("click", function (event) {
     }
     console.log(dataToSend.UserName)
     $.ajax({
-        url: "/Home/LoginWithJWT",
+        url: apiUrl,
         type: "POST",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(dataToSend), // Thay đổi ở đây
         success: function (response) {
-            // Xử lý kết quả thành công
-            alert(response);
+            Cookies.set('account', JSON.stringify(response))
+            window.location.href = "/Home/Index";
         },
         error: function (xhr, status, error) {
             // Xử lý lỗi nếu cuộc gọi API thất bại

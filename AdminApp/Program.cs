@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,12 @@ builder.Services.AddHttpClient("PhuongThaoHttpAdmin", thao =>
     thao.BaseAddress = new Uri(builder.Configuration["UrlApiAdmin"]);
     thao.DefaultRequestHeaders.Add("Key-Domain", builder.Configuration["TokenGetApiAdmin"]);
 });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option =>
+    {
+        option.LoginPath="/Home/Login";
+        option.Cookie.Name="Myaccount";
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,12 +33,13 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCookiePolicy();
+app.UseStaticFiles();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");

@@ -17,7 +17,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(LoginRequestDto loginRequest)
+        public async Task<IActionResult> Login([FromBody]LoginRequestDto loginRequest)
         
         {
             var result = await _userServiece.Validate(loginRequest);
