@@ -76,7 +76,7 @@ namespace Shop_API.Repository
             try
             {
                 cpu.Ten = obj.Ten;
-                cpu.TrangThai = obj.TrangThai;
+                //cpu.TrangThai = obj.TrangThai;
                 _dbContext.Cpus.Update(cpu);
                 await _dbContext.SaveChangesAsync();
                 return true;

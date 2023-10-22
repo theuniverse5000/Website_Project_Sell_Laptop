@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Color";
+    ViewBag.Title = "Cpu";
 
 }
 <span id="notification" style="display:none;">222</span>
@@ -55,23 +55,23 @@
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/Color/GetColor",
+                            url: "/Cpu/GetCpu",
                             type: "GET",
                             dataType: "json"
                         },
                         create: {
-                            url: "/Color/CreateColor",
+                            url: "/Cpu/CreateCpu",
                             type: "POST",
                             dataType: "json",
 
                         },
                         update: {
-                            url: "/Color/UpdateColor",
+                            url: "/Cpu/UpdateCpu",
                             type: "PUT",
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/Color/DeleteColor2",
+                            url: "/Cpu/DeleteCpu2",
                             type: "DELETE",
                             dataType: "json"
                         },
@@ -84,7 +84,7 @@
                             id: "id",
                             fields: {
                                 ma: { type: "string", validation: { required: true } },
-                                name: { type: "string", validation: { required: true } },
+                                ten: { type: "string", validation: { required: true } },
                                 //  status: { type: "int" }
                             }
                         }
@@ -140,7 +140,7 @@
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
 
                         if (status === 'success') {
-                            Response 
+                            Response
                             showNotification("Lưu thành công", "success");
                         } else {
                             showNotification("Lưu thất bại", "error");
@@ -168,12 +168,15 @@
 
                 columns: [
                     {
-
                         field: "ma",
-                        title: "Mã"
+                        title: "Mã",
+                        // Make "Mã" field editable when adding a new record
+                        editable: function (dataItem) {
+                            return dataItem.isNew();
+                        }
                     },
                     {
-                        field: "name",
+                        field: "ten",
                         title: "Tên"
                     },
                     {

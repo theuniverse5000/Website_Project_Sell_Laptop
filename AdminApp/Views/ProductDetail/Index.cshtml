@@ -20,11 +20,22 @@
 
     <div id="grid"></div>
 
+
+    <div id="modalContent" style="display: block;">
+    </div>
 </div>
-<div id="modalContent" style="display: block;"></div>
 
 
 <style>
+
+    #grid {
+        margin: 0;
+        padding: 0;
+        border-width: 0;
+        height: 100%; /* DO NOT USE !important for setting the Grid height! */
+    }
+
+
     /* Đặt kích thước modal mặc định */
     .modal-dialog {
         max-width: 90%;
@@ -57,130 +68,118 @@
                 <div id="example">
                     <form asp-controller="ProductDetail" asp-action="Index" method="post">
 
-                        <div class="form-group col-md-6">
-                            <div class="form-group">
+                        <div class="row">
+                            <div class=" col-md-3">
                                 <label asp-for="Code">Product Code</label>
                                 <input asp-for="Code" class="form-control" placeholder="nhap codee " />
                                 <span asp-validation-for="Code" class="text-danger"></span>
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Tên Sản Phẩm</label>
-                            <div class="form-group col-md-6">
-                                <select asp-for="IdProduct" class="form-select" id="selectProductName" required>
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">Tên Sản Phẩm</label>
+                                <select asp-for="IdProduct" class="form-select">
                                     <option value="">Chọn tên Sản phẩm</option>
                                     @foreach (var item in ViewBag.GetProduct)
                                     {
-                                        <option>@item.Name</option>
+                                        <option value="@item.Id">@item.Name</option>
                                     }
 
                                 </select>
-                                <span asp-validation-for="Code" class="text-danger"></span>
+                                @*  <span asp-validation-for="IdProduct" class="text-danger"></span> *@
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label"> Màu Sắc</label>
-                            <div class="form-group col-md-6">
-                                <select class="form-select" asp-for="NameColor" id="selectColor" required>
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label"> Màu Sắc</label>
+                                <select class="form-select" @* asp-for="IdColor" id="selectColor"*@>
                                     <option value="">Chọn Màu Sắc</option>
                                     @foreach (var t in ViewBag.GetColor)
                                     {
                                         <option value="@t.Id">@t.Name</option>
                                     }
-
-                                </select> <div asp-validation-for="IdColor" id="colorError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                                </select>
+                                @* <span asp-validation-for="IdColor" id="colorError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Ram</label>
-                            <div class="form-group col-md-6">
-                                <select class="form-select" asp-for="MaRam" id="selectRam" required>
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">Ram</label>
+                                <select class="form-select" @* asp-for="IdRam" *@ id="selectRam">
                                     <option value="">Chọn Ram</option>
                                     @foreach (var t in (List<Ram>)ViewBag.GetRam)
                                     {
                                         <option value="@t.Id">@t.Ma</option>
                                     }
-
                                 </select>
-                                <div asp-validation-for="IdRam" id="ramError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                                @* <span asp-validation-for="IdRam" id="ramError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>
-                            <div class="form-group col-md-6">
-                                <select class="form-select" asp-for="MaCpu" id="selectCPU" required>
-                                    <option value="">Chọn Vi Xử Lí</option>
-                                    @foreach (var t in (List<Cpu>)ViewBag.GetCPU)
-                                    {
-                                        <option value="@t.Id">@t.Ma</option>
-                                    }
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>                              
+                                    <select class="form-select" @* asp-for="IdCpu" *@ id="selectCPU">
+                                        <option value="">Chọn Vi Xử Lí</option>
+                                        @foreach (var t in (List<Cpu>)ViewBag.GetCPU)
+                                        {
+                                            <option value="@t.Id">@t.Ma</option>
+                                        }
 
-                                </select>
-                                <div asp-validation-for="IdCpu" id="cpuError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                                    </select>
+                                    @* <span asp-validation-for="IdCpu" id="cpuError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">Màn Hình</label>
+                                    <select class="form-select" @* asp-for="IdScreen" *@ id="selectScreen">
+                                        <option value="">Chọn Màn Hình</option>
+                                        @foreach (var t in (List<Screen>)ViewBag.GetScreen)
+                                        {
+                                            <option value="@t.Id">@t.Ma</option>
+                                        }
+
+                                    </select> @*<span asp-validation-for="IdScreen" id="screenError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
+                                </div>
+
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">HardDrive</label>
+                                    <select class="form-select" @* asp-for="IdHardDrive" *@ id="selectHardDrive">
+                                        <option value="">Chọn HardDrive</option>
+                                        @foreach (var t in (List<HardDrive>)ViewBag.GetHardDrive)
+                                        {
+                                            <option value="@t.Id">@t.Ma</option>
+                                        }
+
+                                    </select> @*<span asp-validation-for="IdHardDrive" id="hardDriveError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
+                            </div>
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">CardVGA</label>
+                                    <select class="form-select" @* asp-for="IdCardVGA" *@ id="selectCardVGA">
+                                        <option value="">Chọn CardVGA</option>
+                                        @foreach (var t in (List<CardVGA>)ViewBag.GetlistCardVGA)
+                                        {
+                                            <option value="@t.Id">@t.Ma</option>
+                                        }
+
+                                    </select>
+                                    @* <span asp-validation-for="IdCardVGA" id="cardVgaError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Màn Hình</label>
-                            <div class="form-group col-md-6">
-                                <select class="form-select" asp-for="MaManHinh" id="selectScreen" required>
-                                    <option value="">Chọn Màn Hình</option>
-                                    @foreach (var t in (List<Screen>)ViewBag.GetScreen)
-                                    {
-                                        <option value="@t.Id">@t.Ma</option>
-                                    }
-
-                                </select> <div asp-validation-for="IdScreen" id="screenError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">Upgrade</label>
+                                <input type="string" class="form-control" id="exampleFormControlInput1" asp-for="Upgrade" placeholder="Nhập Upgrade">
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">HardDrive</label>
-                            <div class="form-group col-md-6">
-                                <select class="form-select" asp-for="MaHardDrive" id="selectHardDrive" required>
-                                    <option value="">Chọn HardDrive</option>
-                                    @foreach (var t in (List<HardDrive>)ViewBag.GetHardDrive)
-                                    {
-                                        <option value="@t.Id">@t.Ma</option>
-                                    }
-
-                                </select> <div asp-validation-for="IdHardDrive" id="hardDriveError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">Price</label>
+                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Price" placeholder="Nhập Price" required>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">CardVGA</label>
-                            <div class="form-group col-md-6">
-                                <select class="form-select" asp-for="MaCardVGA" id="selectCardVGA" required>
-                                    <option value="">Chọn CardVGA</option>
-                                    @foreach (var t in (List<CardVGA>)ViewBag.GetlistCardVGA)
-                                    {
-                                        <option value="@t.Id">@t.Ma</option>
-                                    }
-
-                                </select> <div asp-validation-for="IdCardVGA" id="cardVgaError" class="text-danger"></div> <!-- Thông báo lỗi -->
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">ImportPrice</label>
+                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder="Nhập ImportPrice" required>
                             </div>
+                            <div id="error-toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; top: 0; right: 0; z-index: 1050;"></div>
                         </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Upgrade</label>
-                            <input type="string" class="form-control" id="exampleFormControlInput1" asp-for="Upgrade" placeholder="Nhập Upgrade" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Price</label>
-                            <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Price" placeholder="Nhập Price" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">ImportPrice</label>
-                            <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder="Nhập ImportPrice" required>
-                        </div>
-                        <div id="error-toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; top: 0; right: 0; z-index: 1050;"></div>
 
                         <div class="demo-section wide">
-                            <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
-                            <textarea name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea>
+                            @* <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label> *@
+                            @* <textarea name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea> *@
                             <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
 
                             <div class="k-editor">
@@ -277,7 +276,7 @@
                         $('#exampleModal').modal('show');
                     console.log("Nút 'Sửa' đã được nhấn");
     @* Thực hiện các tác vụ khác tại đây*@
-                    });
+                                    });
             });
 
 
@@ -358,10 +357,13 @@
 
                 //     }
 
-
                 // },
 
-                "pdf"],
+                {
+                    name: "pdf",
+                    text: "Xuất file PDF" // Change the text of the "PDF" button to "Xuất file PDF"
+                }
+            ],
             pdf: {
                 allPages: true,
                 avoidLinks: true,
@@ -370,8 +372,9 @@
                 landscape: true,
                 repeatHeaders: true,
                 template: $("#page-template").html(),
-                scale: 0.8,
-            },
+                scale: 0.8
+            }
+            ,
             editable: {
                 mode: "popup",
                 window: { width: 1500, height: 1000 }, // Chỉnh chiều rộng ở đây
@@ -422,32 +425,28 @@
                 {
                     field: "availableQuantity",
                     title: "Số lượng"
-                }, {
-                    field: "availableQuantity",
-                    title: "Số lượng"
                 },
+                // {
+                //     field: "yourFieldName", // Replace with your actual field name
+                //     title: "Your Field Title",
+                //     editor: function (container, options) {
+                //         // Create a textarea element
+                //         var textarea = $('<textarea name="description" id="editor"  style="width:1000; heigpxht:840px" aria-label="editor"></textarea>')
+                //             .attr("name", options.field)
+                //             .appendTo(container);
 
-                {
-                    field: "yourFieldName", // Replace with your actual field name
-                    title: "Your Field Title",
-                    editor: function (container, options) {
-                        // Create a textarea element
-                        var textarea = $('<textarea name="description" id="editor"  style="width:1000; heigpxht:840px" aria-label="editor"></textarea>')
-                            .attr("name", options.field)
-                            .appendTo(container);
+                //         // Bind the field's value to the textarea
+                //         textarea.val(options.model[options.field]);
 
-                        // Bind the field's value to the textarea
-                        textarea.val(options.model[options.field]);
+                //         // Enable the textarea
+                //         textarea.prop("disabled", false);
 
-                        // Enable the textarea
-                        textarea.prop("disabled", false);
-
-                        // Handle changes in the textarea
-                        textarea.on("change", function () {
-                            options.model[options.field] = textarea.val();
-                        });
-                    }
-                },
+                //         // Handle changes in the textarea
+                //         textarea.on("change", function () {
+                //             options.model[options.field] = textarea.val();
+                //         });
+                //     }
+                // },
 
 
 
@@ -473,7 +472,8 @@
                         },
                     ],
                     title: "Hành động",
-                    width: "250px"
+                    width: "250px",
+                    exportable: false
                 }
             ],
 
@@ -486,7 +486,7 @@
 
 
         // tạo 1 nút thêm(Create New) trước class k-grid-pdf
-        var newButton = $('<a type="button" class="k-button k-button-icontext k-grid-create" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Product Detail</a> ');
+        var newButton = $('<a type="button" class="k-button k-button-icontext k-grid-create" data-bs-toggle="modal" data-bs-target="#exampleModal">Thêm</a> ');
         // Find elements with the specified class and prepend the textarea before them
         $(".k-grid-pdf").before(newButton);
 
@@ -513,10 +513,14 @@
     //     });
     // }
 
+    $(document).ready(function () {
+        // Change the text of the button
+        $("#pdf-export-button").text("Xuất file PDF");
+    });
 
     function openEditModal(Id) {
         $.ajax({
-            url: "/ProductDetail/Update?guid=" + Id,
+            url: "/ProductDetail/Update?id=" + Id,
             type: "GET",
             dataType: "html",
             success: function (response) {
@@ -531,7 +535,6 @@
             }
         });
     }
-
 
 
 

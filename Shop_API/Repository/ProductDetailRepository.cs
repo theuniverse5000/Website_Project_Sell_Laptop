@@ -175,6 +175,7 @@ namespace Shop_API.Repository
             {
                 productDetail.AvailableQuantity = GetCountProductDetail(productDetail.Code);
             }
+
             return result;
         }
         public async Task<bool> Update(ProductDetail obj)
@@ -417,9 +418,9 @@ namespace Shop_API.Repository
             return result; ;
         }
 
-        public Task<ProductDetail> GetById(Guid guid)
+        public async Task<ProductDetail> GetById(Guid guid)
         {
-            throw new NotImplementedException();
+            var result = await _context.ProductDetails.FindAsync(guid); return result;
         }
 
         public async Task<ProductDetailDto> GetProductDetailByIdReturnDto(Guid id)

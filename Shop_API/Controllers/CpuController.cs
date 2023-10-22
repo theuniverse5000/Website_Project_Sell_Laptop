@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Core.Types;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -14,11 +15,12 @@ namespace Shop_API.Controllers
         private readonly ICpuRepository _cpuRepository;
         private readonly IConfiguration _config;
         private readonly ResponseDto _reponse;
-        public CpuController(ICpuRepository cpuRepository, IConfiguration config)
+        private readonly IPagingRepository _iPagingRepository;
+        public CpuController(ICpuRepository cpuRepository, IConfiguration config, IPagingRepository iPagingRepository)
         {
             _cpuRepository = cpuRepository;
             _config = config; _reponse = new ResponseDto();
-
+            _iPagingRepository = iPagingRepository;
         }
 
         [HttpGet]
@@ -38,7 +40,7 @@ namespace Shop_API.Controllers
             }
             return Ok(await _cpuRepository.GetAllCpus());
         }
-        [HttpPost]
+        [HttpPost("CreateCpu")]
         public async Task<IActionResult> CreateCpu(Cpu obj)
         {
 
@@ -54,6 +56,7 @@ namespace Shop_API.Controllers
                 return Unauthorized();
             }
             obj.Id = Guid.NewGuid();
+            obj.TrangThai = 1;
             if (await _cpuRepository.Create(obj))
             {
                 return Ok("Thêm thành công");
@@ -120,6 +123,25 @@ namespace Shop_API.Controllers
             //        return Unauthorized();
             //    }
             _reponse.Result = await _cpuRepository.GetById(guid);
+            return Ok(_reponse);
+        }
+
+        [HttpGet("GetCPUFSP")]
+        public async Task<IActionResult> GetCPUFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+            _reponse.Result = _iPagingRepository.GetAllCpu(search, from, to, sortBy, page);
+            _reponse.Count = _iPagingRepository.GetAllCpu(search, from, to, sortBy, page).Count;
             return Ok(_reponse);
         }
     }
