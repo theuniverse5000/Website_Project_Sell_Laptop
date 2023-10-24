@@ -9,7 +9,7 @@ loginButton.addEventListener("click", function (event) {
 
     var UserNameInput = document.getElementById('UserName').value;
     var passwordInput = document.getElementById('PassWord').value;
-    var apiUrl = "https://localhost:7286/api/Account/Login";
+    var apiUrl = "https://localhost:44333/api/Account/Login";
     // Create an object containing the data to send to the server
     var dataToSend = {
         UserName: UserNameInput,

@@ -1,5 +1,4 @@
 ﻿using Shop_API.AppDbContext;
-using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
@@ -73,9 +72,9 @@ namespace Shop_API.Service
 
         }
 
-        public async Task<ResponseDto> TichDiemChoLanDauMuaHangAsync(string phoneNumber, double TongTienThanhToan)
+        public async Task<ResponseDto> TichDiemChoLanDauMuaHangAsync(string invoiceCode, double TongTienThanhToan)
         {
-            var billT = await _billRepository.GetBillByPhoneNumber(phoneNumber);
+            var billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);
             //var user2 = _context.Users.Find(billT.UserId);
             var user = await _userRepository.GetUserById(billT.UserId);
 
@@ -129,7 +128,7 @@ namespace Shop_API.Service
                 objQuyDoiDiem.TienTieuDiem = 0;// lần đầu mua không có tiền tiêu điểm
                 objQuyDoiDiem.TienTichDiem = soTienTichDuoc; // số tiền được đổi từ điểm tích được trong lần mua hàng hiện tại
                 objQuyDoiDiem.TrangThai = 1;
-                 _quyDoiDiemRepository.Create(objQuyDoiDiem);
+                _quyDoiDiemRepository.Create(objQuyDoiDiem);
 
                 // thêm lịch sử tiêu điểm 
                 LichSuTieuDiem objLSTieuDiem = new LichSuTieuDiem();
@@ -140,14 +139,14 @@ namespace Shop_API.Service
                 objLSTieuDiem.TrangThai = 1;
                 objLSTieuDiem.QuyDoiDiemId = objQuyDoiDiem.Id;
                 objLSTieuDiem.ViDiemId = viDiem.UserId;
-                 _lichSuTieuDiemRepository.Create(objLSTieuDiem);
+                _lichSuTieuDiemRepository.Create(objLSTieuDiem);
 
                 // vi diem
                 viDiem.TongDiem += soDiemDuocCong; // số điểm hiện có sẽ được cộng thêm số điểm được cộng
                 viDiem.SoDiemDaCong += soDiemDuocCong;// tổng toàn bộ đã được cộng từ trước đến thời điểm hiện tại
                 viDiem.SoDiemDaDung += 0; // lần đầu mua không dùng điểm
                 viDiem.TrangThai = 2; // trạng thái 2 sẽ là đánh dấu người người đã mua lần đầu
-                 _viDiemRepository.Update(viDiem);
+                _viDiemRepository.Update(viDiem);
 
 
                 TichDiemDto tichDiemDto = new TichDiemDto()
@@ -158,8 +157,8 @@ namespace Shop_API.Service
                     SoDiemCongTrongHoaDon = objLSTieuDiem.SoDiemCong,
                     NgaySD = objLSTieuDiem.NgaySD,
                     TongDiemTrongViDiem = viDiem.TongDiem,
-                    SoDiemDaCongTrongVi=viDiem.SoDiemDaCong,
-                    SoDiemDaDungTrongVi=viDiem.SoDiemDaDung,
+                    SoDiemDaCongTrongVi = viDiem.SoDiemDaCong,
+                    SoDiemDaDungTrongVi = viDiem.SoDiemDaDung,
 
                 };
                 _reponseDto.Result = tichDiemDto;
@@ -305,10 +304,10 @@ namespace Shop_API.Service
             }
         }
 
-        public async Task<ResponseDto> TichDiemChoNhungLanMuaSauAsync(string phoneNumber, double TongTienThanhToan, double SoDiemMuonDung)
+        public async Task<ResponseDto> TichDiemChoNhungLanMuaSauAsync(string invoiceCode, double TongTienThanhToan, double SoDiemMuonDung)
         {
 
-            var billT = await _billRepository.GetBillByPhoneNumber(phoneNumber);
+            var billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);
             var user = await _userRepository.GetUserById(billT.UserId);
 
             if (billT == null && TongTienThanhToan <= 0)

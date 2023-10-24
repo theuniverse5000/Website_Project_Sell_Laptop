@@ -1,0 +1,304 @@
+﻿@{
+    ViewBag.Title = "Hóa đơn";
+
+}
+<span id="notification" style="display:none;">222</span>
+<div style="width: 1300px; margin: 0 auto;">
+    <div id="gridBill"></div>
+</div>
+<br />
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+       @*  <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin chi tiết</h4>
+            </div> *@
+            <div class="modal-body">
+                <!-- Nội dung của modal sẽ được hiển thị ở đây -->
+                <div id="newGrid"></div>
+            </div>
+         @*    <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div> 
+        </div>*@
+    </div>
+</div>
+
+
+@section scripts {
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        kendo.pdf.defineFont({
+            "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+            "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+            "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var grid;
+            var dataSource = new kendo.data.DataSource({
+                data: [], // null
+            });
+            grid = $("#newGrid").kendoGrid({
+                dataSource: dataSource,
+                columns: [
+                    {
+                        field: "maProductDetail",
+                        title: "Mã sản phẩm",
+                    },
+                    {
+                        field: "nameProduct",
+                        title: "Tên sản phẩm",
+                    },
+                    {
+                        field: "price",
+                        title: "Giá",
+                    },
+                    
+                    {
+                        field: "quantity",
+                        title: "Số lượng",
+                    },
+                ],
+                width: "800px", // Đặt chiều rộng
+                height: "700px", // Đặt chiều cao
+                editable: {
+                    mode: "popup",
+                    window: { width: 550, height: 500 }, // Chỉnh chiều rộng ở đây
+                },
+            }).data("kendoGrid");
+            //end
+            // Function hiển thị thông báo
+            function showNotification(message, type) {
+                toastr.options = {
+                    positionClass: "toast-top-right", // Điều chỉnh vị trí của thông báo
+                    closeButton: true // Hiển thị nút đóng thông báo
+                };
+
+                // Hiển thị thông báo theo loại
+                if (type === "success") {
+                    toastr.success(message);
+                } else {
+                    toastr.error(message);
+                }
+            }
+            $("#gridBill").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "/Bill/GetListBills",
+                            type: "GET",
+                            dataType: "json"
+                        },
+                        create: {
+                            url: "/",
+                            type: "POST",
+                            dataType: "json",
+
+                        },
+                        update: {
+                            url: "/Bill/EditBill",
+                            type: "PUT",
+                            dataType: "json"
+                        },
+                        destroy: {
+                            url: "/Ram/DeleteRam2",
+                            type: "DELETE",
+                            dataType: "json"
+                        },
+
+                    },
+                    schema: {
+                        data: "result",
+                        total: "count", // Chỉ định tên trường tổng số dòng,
+                        model: {
+                            id: "id",
+                            fields: {
+                                invoiceCode: { type: "string", validation: { required: true },editable: false  },
+                                createDate: { type: "datetime", editable: false },
+                                thongSo: { type: "string", validation: { required: true } },
+                                status: { type: "int",validation: { required: true } }
+                            }
+                        }
+                    },
+
+                    pageSize: 20,
+
+                },
+                height: 550,
+                groupable: false,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: [5, 10, 20, "All"],
+                    buttonCount: 3,
+                    messages: {
+                        itemsPerPage: "Số dòng trên mỗi trang",
+                        display: "{0}-{1} trong {2} dòng"
+                    }
+                },
+
+                toolbar: [
+                    // {
+                    //      name: "create",
+                    //      text: "Thêm",
+
+                    // },
+
+                    "pdf"],
+                pdf: {
+                    allPages: true,
+                    avoidLinks: true,
+                    paperSize: "A4",
+                    margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
+                    landscape: true,
+                    repeatHeaders: true,
+                    template: $("#page-template").html(),
+                    scale: 0.8,
+                },
+                editable: {
+                    mode: "popup",
+                    window: { width: 550, height: 500 }, // Chỉnh chiều rộng ở đây
+                },
+                dataBound: function (e) {
+                    // Gắn sự kiện nhấp vào mỗi dòng
+                    e.sender.tbody.find("tr").on("click", function () {
+                        // Lấy dữ liệu của dòng được nhấp
+                        var dataItem = e.sender.dataItem(this);
+                        $.ajax({
+                            type: "GET",
+                            url: "/Bill/GetListBillDetailByInvoiceCode", // Thay thế bằng URL của API bạn muốn gọi
+                            data: { invoiceCode: dataItem.invoiceCode }, // Truyền tham số cần thiết
+                            success: function (apiData) {
+                                // Cập nhật dữ liệu trong dataSource
+                                dataSource.data(apiData.result);
+
+                                // Làm mới Grid để hiển thị dữ liệu mới
+                                grid.refresh();
+
+                                // Hiển thị modal
+                                $("#myModal").modal("show");
+                            },
+                            error: function () {
+                                // Xử lý lỗi khi cuộc gọi API thất bại
+                                alert("Lỗi khi gọi API.");
+                            }
+                        });
+                        // Hiển thị dữ liệu của dòng trong modal
+                        // $("#myModal .modal-body").html("Mã hóa đơn: " + dataItem.invoiceCode + "<br />" +
+                        //     "Họ tên: " + dataItem.fullName + "<br />" +
+                        //     "Địa chỉ: " + dataItem.address + "<br />" +
+                        //     "Số điện thoại: " + dataItem.phoneNumber + "<br />" +
+                        //     "Ngày mua: " + kendo.toString(dataItem.createDate, "yyyy-MM-dd") + "<br />" +
+                        //     "Trạng thái: " + (dataItem.status === 1 ? "Chờ xác nhận" : "OK"));
+
+                        // Hiển thị modal
+                        $("#myModal").modal("show");
+                    });
+                },
+
+
+                save: function (e) {
+                    if (e.model.isNew()) {
+                        // Thay đổi status thành biến thực tế của bạn
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+
+                        if (status === 'success') {
+                            Response
+                            showNotification("Lưu thành công", "success");
+                        } else {
+                            showNotification("Lưu thất bại", "error");
+                        }
+                    } else if (e.model.dirty) {
+                        // Trường hợp cập nhật
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+
+                        if (status === 'success') {
+                            showNotification("Cập nhật thành công", "success");
+                        } else {
+                            showNotification("Cập nhật thất bại", "error");
+                        }
+                    } else if (e.model.isNew() && e.model.isDestroyed()) {
+                        // Trường hợp xóa
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+
+                        if (status === 'success') {
+                            showNotification("Xóa thành công", "success");
+                        } else {
+                            showNotification("Xóa thất bại", "error");
+                        }
+                    }
+                },
+
+                columns: [
+                    {
+                        field: "invoiceCode",
+                        title: "Mã hóa đơn",
+                    },
+                    {
+                        field: "fullName",
+                        title: "Họ tên"
+                    },
+
+                    {
+                        field: "address",
+                        title: "Địa chỉ"
+                    },
+                    {
+                        field: "phoneNumber",
+                        title: "Số điện thoại"
+                    },
+                    {
+                        field: "createDate",
+                        title: "Ngày mua"
+                    },
+                    {
+                        field: "status",
+                        title: "Trạng thái",
+                        template: function (data) {
+                            if (data.status === 1) {
+                                return "Chờ xác nhận";
+                            } else {
+                                return "OK";
+                            }
+                        }
+                    },
+                    {
+                        command: [
+                            {
+                                name: "edit",
+                                text: "Sửa",
+                            },
+                            {
+                                name: "destroy",
+                                text: "Xóa",
+                            },
+                        ],
+                        title: "Hành động",
+                        width: "250px",
+                        exportable: false
+                    }
+                ],
+
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+

@@ -2,10 +2,7 @@
 {
     public class BillDetailDto
     {
-        public Guid IdBill { get; set; }
-        public string? CodeBill { get; set; }
         public Guid UserId { get; set; }
-        public Guid IdProductDetails { get; set; }
         public int Quantity { get; set; }
         public int Status { get; set; }
         public string? MaProductDetail { get; set; }
@@ -22,5 +19,6 @@
         public string? ChatLieuManHinh { get; set; }
         public string? TenCardVGA { get; set; }
         public string? ThongSoCardVGA { get; set; }
+        public string? SerialNumber { get; set; }
     }
 }

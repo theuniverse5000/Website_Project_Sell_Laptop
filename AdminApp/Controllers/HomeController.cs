@@ -1,13 +1,8 @@
-﻿using AdminApp.Models;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using Shop_Models.Dto;
-using System.Diagnostics;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 
@@ -20,9 +15,9 @@ namespace AdminApp.Controllers
         public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
-            _httpClientFactory=httpClientFactory;
+            _httpClientFactory = httpClientFactory;
         }
-        
+
         public async Task<IActionResult> Index()
         {
             if (HttpContext.Request.Cookies.ContainsKey("account"))
@@ -34,7 +29,7 @@ namespace AdminApp.Controllers
                 return View("Login");
             }
         }
-        
+
         public async Task<IActionResult> Main()
         {
             return View("Index");
@@ -48,10 +43,10 @@ namespace AdminApp.Controllers
         public async Task<IActionResult> LoginWithJWT([FromBody] LoginRequestDto loginRequestDto)
         {
 
-            var apiUrl = "https://localhost:7286/api/Account/Login";
+            //  var apiUrl = "https://localhost:7286/";
             var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
             var requestdata = new StringContent(JsonConvert.SerializeObject(loginRequestDto), Encoding.UTF8, "application/json");
-            var respone = await httpclient.PostAsync(apiUrl, requestdata);
+            var respone = await httpclient.PostAsync("api/Account/Login", requestdata);
             //var LoginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(respone.Content);
             var jsonRespone = await respone.Content.ReadAsStringAsync();
             var LoginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);

@@ -1,14 +1,14 @@
 ﻿using Shop_Models.Dto;
-using Shop_Models.Entities;
 
 namespace Shop_API.Service.IService
 {
     public interface IBillService
     {
         Task<ResponseDto> CreateBill(string username, string maVoucher);//Khách hàng chỉ được phép tạo hóa đơn
-        Task<ResponseDto> CreateBillDetail(string invoiceCode, string serialNumber);// Do nhân viên tạo, truyền vào mã hóa đơn và số serial
-        Task<ResponseDto> GetBillByPhoneNumber(string phoneNumber);
+                                                                        //   Task<ResponseDto> CreateBillDetail(string invoiceCode, string serialNumber);// Do nhân viên tạo, truyền vào mã hóa đơn và số serial
+        Task<ResponseDto> GetBillByInvoiceCode(string invoiceCode);
+        Task<ResponseDto> GetBillDetailByInvoiceCode(string invoiceCode);
         // Task<ResponseDto> GetAllBill();
-        Task<Bill> GetAllBill(string phoneNumber);
+        Task<ResponseDto> GetAllBill(string? phoneNumber);
     }
 }

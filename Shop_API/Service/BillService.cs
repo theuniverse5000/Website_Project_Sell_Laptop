@@ -102,15 +102,6 @@ namespace Shop_API.Service
                     var cartItemToBill = cartItem.Where(x => x.Status == 3).ToList();
                     foreach (var x in cartItemToBill)
                     {
-                        //var productDetailX = _productDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == x.Id);
-                        //if (productDetailX == null)
-                        //{
-                        //    _reponse.IsSuccess = false;
-                        //    _reponse.Code = 404;
-                        //    _reponse.Message = "Sản phẩm không tồn tại";
-                        //    return _reponse;
-                        //}
-
                         BillDetail billDetail = new BillDetail();
                         billDetail.Id = Guid.NewGuid();
                         billDetail.Code = bill.InvoiceCode + RamdomString.GenerateRandomString(6);
@@ -119,8 +110,6 @@ namespace Shop_API.Service
                         billDetail.Quantity = x.Quantity;
                         billDetail.BillId = bill.Id;
                         await _billDetailRepository.CreateBillDetail(billDetail);
-
-
                     }
                     _reponse.Result = bill;
                     _reponse.IsSuccess = true;
@@ -146,57 +135,12 @@ namespace Shop_API.Service
                 return _reponse;
             }
         }
-
-        public async Task<ResponseDto> CreateBillDetail(string invoiceCode, string serialNumber, string username)
+        public async Task<ResponseDto> GetBillByInvoiceCode(string invoiceCode)
         {
-            var billX = _billRepository.GetAll().Result.FirstOrDefault(x => x.InvoiceCode == invoiceCode);
-            var user = _userRepository.GetAllUsers().Result.FirstOrDefault();//x => x.UserName == username
-            if (user == null)
-            {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = "Không tìm thấy tài khoản người dùng";
-                return _reponse;// Nếu chưa có sản phẩm trong giỏ hàng thì không thể tạo hóa đơn
-            }
-            getUserId = user.Id;
-            cartItem = await _cartRepository.GetCartItem(username);// Tìm  ra giỏ hàng của user
-            if (cartItem == null)// Kiểm tra giỏ hàng của người dùng 
-            {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = "Không có sản phẩm trong giỏ hàng";
-                return _reponse;// Nếu chưa có sản phẩm trong giỏ hàng thì không thể tạo hóa đơn
-            }
-            BillDetail billDetail = new BillDetail();
-            billDetail.Id = Guid.NewGuid();
-            billDetail.BillId = billX.Id;
-            //   billDetail.ProductDetailId = x.IdProductDetails;
-            //   billDetail.Quantity = x.Quantity;
-            billDetail.Price = 1000;
-            if (!await _billDetailRepository.CreateBillDetail(billDetail))
-            {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = "Lỗi khi thêm sản phẩm vào hóa đơn";
-                return _reponse;
-            }
-            throw new NotImplementedException();
-        }
-
-        public Task<ResponseDto> CreateBillDetail(string invoiceCode, string serialNumber)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ResponseDto> GetBillByPhoneNumber(string phoneNumber)
-        {
-            Bill billT = await _billRepository.GetBillByPhoneNumber(phoneNumber);
+            Bill billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);
             if (billT != null)
             {
-                var listBillDetail = await _billRepository.GetBillDetailByPhoneNumber(phoneNumber);
+                var listBillDetail = await _billRepository.GetBillDetailByInvoiceCode(invoiceCode);
                 _reponseBill.InvoiceCode = billT.InvoiceCode;
                 _reponseBill.PhoneNumber = billT.PhoneNumber;
                 _reponseBill.FullName = billT.FullName;
@@ -204,15 +148,28 @@ namespace Shop_API.Service
                 _reponseBill.Status = billT.Status;
                 _reponseBill.BillDetail = listBillDetail;
                 _reponseBill.Count = listBillDetail.Count();
+                _reponse.Message = $"Lấy hóa đơn của khách hàng {invoiceCode} thành công.";
                 _reponse.Result = _reponseBill;
-
+                return _reponse;
             }
+            _reponse.Code = 404;
+            _reponse.IsSuccess = false;
+            _reponse.Message = $"Không tìm thấy hóa đơn của khách hàng {invoiceCode}.";
+            return _reponse;
+        }
+        public async Task<ResponseDto> GetAllBill(string? phoneNumber)
+        {
+            _reponse.Count = _billRepository.GetAll().Result.Count();
+            _reponse.Result = await _billRepository.GetAll();
             return _reponse;
         }
 
-        public async Task<Bill> GetAllBill(string phoneNumber)
+        public async Task<ResponseDto> GetBillDetailByInvoiceCode(string invoiceCode)
         {
-            return await _billRepository.GetBillByPhoneNumber(phoneNumber);
+            _reponseBill.Count = 1;
+            _reponse.Message = $"thành công.";
+            _reponse.Result = await _billRepository.GetBillDetailByInvoiceCode(invoiceCode);
+            return _reponse;
         }
     }
 }
