@@ -1,0 +1,59 @@
+﻿/*body {
+}
+*/
+/* Tùy chỉnh popup bằng CSS */
+.k-popup-edit-form {
+	background-color: #f5f5f5; /* Màu nền của popup chỉnh sửa */
+	border: 1px solid #ddd; /* Viền xung quanh popup */
+}
+
+.k-edit-form-container {
+	padding: 20px; /* Khoảng cách giữa nội dung và viền popup */
+}
+
+.k-edit-label {
+	font-weight: bold; /* Định dạng kiểu font cho nhãn */
+}
+
+.k-edit-field {
+	width: 100%; /* Kích thước trường nhập liệu */
+}
+
+.k-grid-update, .k-grid-cancel {
+	background-color: #337ab7; /* Màu nền của nút Lưu và Hủy */
+	color: #fff; /* Màu chữ của nút Lưu và Hủy */
+}
+
+	.k-grid-update:hover, .k-grid-cancel:hover {
+		background-color: #23527c; /* Màu nền khi di chuột qua nút */
+	}
+
+
+
+
+/* Tùy chỉnh popup */
+.k-popup-content {
+	border-radius: 10px; /* Điều này sẽ làm cho các góc tròn */
+	background-color: #f5f5f5; /* Màu nền */
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng đổ */
+}
+
+/* Tùy chỉnh header của popup */
+.k-popup-title {
+	background-color: #007bff; /* Màu header */
+	color: #fff; /* Màu chữ */
+	border-radius: 10px 10px 0 0; /* Góc trên của header là tròn, dưới là vuông */
+}
+
+/* Tùy chỉnh nút đóng popup */
+.k-popup .k-i-close {
+	color: #fff; /* Màu của nút đóng */
+	font-size: 20px; /* Kích thước của biểu tượng đóng */
+	top: 5px; /* Điều chỉnh vị trí nút đóng */
+	right: 5px;
+}
+
+/* Tùy chỉnh nội dung của popup */
+.k-popup-content .k-edit-form-container {
+	padding: 20px; /* Khoảng cách nội dung từ biên của popup */
+}

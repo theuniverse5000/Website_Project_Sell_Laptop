@@ -76,9 +76,7 @@ body {
     }
 /* Phần thanh chọn loại sản phẩm*/
 .Menu {
-    width: 1440px;
     height: 85px;
-    
     margin: auto;
     border-radius: 10px;
 }
@@ -89,8 +87,9 @@ body {
     grid-gap: 10px; /* Khoảng cách giữa các item */
     justify-content: center;
     align-items: center;
-    background-color: rgb(64, 69, 73,0.6);
+    background-color: rgb(5, 125,182,0.3);
     height: 100%; /* Đảm bảo chiều cao của Menu-list */
+    border-radius:10px;
 }
 
 .Menu-list {

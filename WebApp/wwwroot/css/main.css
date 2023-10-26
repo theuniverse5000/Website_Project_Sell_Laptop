@@ -1,7 +1,4 @@
 ﻿
-.Main {
-    margin: auto;
-}
 /*carousel*/
 .carousel {
     margin-bottom: 15px;
@@ -14,14 +11,14 @@
 }
 /*Company categories*/
 
-.Company-list {
+/*.Company-list {
     display: grid;
     grid-template-columns: repeat(10,0.9fr);
     grid-gap: 10px;
     max-width: 1440px;
     margin: auto;
     margin-top: 5px;
-}
+}*/
 
 .Company-icons {
     height: 35px;
@@ -36,7 +33,14 @@
     height: auto;
 }
 /*Menu danh mục sản phảm item box*/
-
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Số dòng muốn hiển thị */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: white;
+    font-weight:600;
+}
 
 .item-categories-outer {
     display: flex;
@@ -69,9 +73,6 @@
 }
 
 .block-hot-sale {
-    max-width: 1440px;
-    margin: auto;
-    height: auto; /* Sử dụng height:auto để chiều cao thích ứng với nội dung */
     background-color: #73BBFE;
     border-radius: 20px;
 }
@@ -98,6 +99,20 @@
     height: auto;
 }
 
+.custom-toggler {
+    background-color: #fff; /* Màu nền của nút (trắng) */
+    border: none; /* Xóa viền */
+}
+@media (max-width: 576px) { /* Điều kiện này có thể thay đổi tùy theo thiết lập của bạn */
+    .item {
+        display: none; /* Ẩn tất cả các thẻ item ban đầu */
+    }
+
+        .item:first-child {
+            display: block; /* Hiển thị thẻ item đầu tiên */
+        }
+}
+
 @media screen and (max-width: 768px) {
     .List-products .hot-product {
         flex-basis: calc(50% - 40px);
@@ -119,7 +134,7 @@
 
 .hot-product {
     max-width: 215px;
-    margin: 20px;
+    margin: 10px;
     background-color: #ffffff;
     border-radius: 15px;
     display: flex;
@@ -134,13 +149,6 @@
     padding-top: 10px;
 }
 
-*, ::after, ::before {
-    box-sizing: border-box;
-}
-
-*, ::after, ::before {
-    box-sizing: border-box;
-}
 
 .hot-product a {
     text-decoration: none;

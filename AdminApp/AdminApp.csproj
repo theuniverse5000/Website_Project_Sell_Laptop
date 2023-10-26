@@ -14,6 +14,42 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="AdminResources\css\layout_kendo_grid\canchinhfilepdf.css" />
+    <None Remove="AdminResources\css\layout_kendo_grid\popup.css" />
+    <None Remove="AdminResources\css\Login\Login.css" />
+    <None Remove="AdminResources\css\slidebar.css" />
+    <None Remove="AdminResources\js\animation.js" />
+    <None Remove="AdminResources\js\Login.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AdminResources\css\layout_kendo_grid\canchinhfilepdf.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="AdminResources\css\layout_kendo_grid\popup.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="AdminResources\css\Login\Login.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="AdminResources\css\slidebar.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="AdminResources\js\animation.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="AdminResources\js\Login.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.7">

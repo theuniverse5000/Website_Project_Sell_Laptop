@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Shop_API.AppDbContext;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +40,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCookiePolicy();
-app.UseStaticFiles();
+app.UseStaticFiles( new StaticFileOptions
+{
+    FileProvider= new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath,"AdminResources")),
+    RequestPath="/AdminResources"
+});
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
