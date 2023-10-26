@@ -72,7 +72,7 @@ namespace Shop_API.Repository
             return resut;
 
         }
-        public int GetCountProductDetail(string codeProductDetail)
+        private int GetCountProductDetail(string codeProductDetail)
         {
             int getCount = _context.ProductDetails.Where(x => x.Status > 0 && x.Code == codeProductDetail)
            .Join(_context.Serials, a => a.Id, b => b.ProductDetailId, (a, b) => new ProductDetail
@@ -82,42 +82,41 @@ namespace Shop_API.Repository
            .Count();
             return getCount;
         }
-        public async Task<IEnumerable<ProductDetailDto>> GetProductDetail(string? search, double? from, double? to, string? sortBy, int page = 1)
+        public async Task<IEnumerable<ProductDetailDto>> PGetProductDetail(string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int page = 10)
         {
             var query = _context.ProductDetails
-                .AsNoTracking()
-                .Where(a => a.Status > 0)
-                .Select(a => new ProductDetailDto
-                {
-                    Id = a.Id,
-                    Code = a.Code,
-                    ImportPrice = a.ImportPrice,
-                    Price = a.Price,
-                    Status = a.Status,
-                    Upgrade = a.Upgrade,
-                    Description = a.Description,
-                    AvailableQuantity = 1,
-                    ThongSoRam = a.Ram.ThongSo,
-                    MaRam = a.Ram.Ma,
-                    TenCpu = a.Cpu.Ten,
-                    MaCpu = a.Cpu.Ma,
-                    ThongSoHardDrive = a.HardDrive.ThongSo,
-                    MaHardDrive = a.HardDrive.Ma,
-                    NameColor = a.Color.Name,
-                    MaColor = a.Color.Ma,
-                    MaCardVGA = a.CardVGA.Ma,
-                    TenCardVGA = a.CardVGA.Ten,
-                    ThongSoCardVGA = a.CardVGA.ThongSo,
-                    MaManHinh = a.Screen.Ma,
-                    KichCoManHinh = a.Screen.KichCo,
-                    TanSoManHinh = a.Screen.TanSo,
-                    ChatLieuManHinh = a.Screen.ChatLieu,
-                    NameProduct = a.Product.Name,
-                    NameProductType = a.Product.ProductType.Name,
-                    NameManufacturer = a.Product.Manufacturer.Name
-                });
+          .AsNoTracking()
+          .Where(a => a.Status > 0 && (codeProductDetail != null ? a.Code == codeProductDetail : true))
+          .Select(a => new ProductDetailDto
+          {
+              Id = a.Id,
+              Code = a.Code,
+              ImportPrice = a.ImportPrice,
+              Price = a.Price,
+              Status = a.Status,
+              Upgrade = a.Upgrade,
+              Description = a.Description,
+              AvailableQuantity = 1,
+              ThongSoRam = a.Ram.ThongSo,
+              MaRam = a.Ram.Ma,
+              TenCpu = a.Cpu.Ten,
+              MaCpu = a.Cpu.Ma,
+              ThongSoHardDrive = a.HardDrive.ThongSo,
+              MaHardDrive = a.HardDrive.Ma,
+              NameColor = a.Color.Name,
+              MaColor = a.Color.Ma,
+              MaCardVGA = a.CardVGA.Ma,
+              TenCardVGA = a.CardVGA.Ten,
+              ThongSoCardVGA = a.CardVGA.ThongSo,
+              MaManHinh = a.Screen.Ma,
+              KichCoManHinh = a.Screen.KichCo,
+              TanSoManHinh = a.Screen.TanSo,
+              ChatLieuManHinh = a.Screen.ChatLieu,
+              NameProduct = a.Product.Name,
+              NameProductType = a.Product.ProductType.Name,
+              NameManufacturer = a.Product.Manufacturer.Name
+          });
 
-            #region Filltering
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.NameProduct.Contains(search));
@@ -130,9 +129,7 @@ namespace Shop_API.Repository
             {
                 query = query.Where(x => x.Price <= to);
             }
-            #endregion
 
-            #region Sorting
             if (!string.IsNullOrEmpty(sortBy))
             {
                 switch (sortBy)
@@ -146,31 +143,17 @@ namespace Shop_API.Repository
                     case "price_desc":
                         query = query.OrderByDescending(x => x.Price);
                         break;
-                    default:
-                        break;
                 }
             }
-            #endregion
 
-            #region Paging
             var pageSize = Page_Size;
             var totalItems = await query.CountAsync();
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-            if (page < 1)
-            {
-                page = 1;
-            }
-            else if (page > totalPages)
-            {
-                page = totalPages;
-            }
-
+            page = Math.Clamp(page, 1, totalPages);
             query = query.Skip((page - 1) * pageSize).Take(pageSize);
-            #endregion
+
             var result = await query.ToListAsync();
-            // Lấy danh sách mã sản phẩm để thực hiện một lần duy nhất truy vấn cơ sở dữ liệu.
-            var productCodes = result.Select(p => p.Code).ToList();
-            // Gán AvailableQuantity cho từng sản phẩm trong danh sách.
+
             foreach (var productDetail in result)
             {
                 productDetail.AvailableQuantity = GetCountProductDetail(productDetail.Code);
