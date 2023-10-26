@@ -7,22 +7,21 @@
     <div id="gridBill"></div>
 </div>
 <br />
-<div id="myModal" class="modal fade" role="dialog">
+@* <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-       @*  <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Thông tin chi tiết</h4>
-            </div> *@
             <div class="modal-body">
-                <!-- Nội dung của modal sẽ được hiển thị ở đây -->
-                <div id="newGrid"></div>
+            <div id="detailsGrid"></div>
             </div>
-         @*    <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-            </div> 
-        </div>*@
+    </div>
+</div> *@
+<div id="myModal" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <div id="detailsGrid"></div>
+        </div>
     </div>
 </div>
+
 
 
 @section scripts {
@@ -84,7 +83,6 @@
                     positionClass: "toast-top-right", // Điều chỉnh vị trí của thông báo
                     closeButton: true // Hiển thị nút đóng thông báo
                 };
-
                 // Hiển thị thông báo theo loại
                 if (type === "success") {
                     toastr.success(message);
@@ -120,7 +118,7 @@
                     },
                     schema: {
                         data: "result",
-                        total: "count", // Chỉ định tên trường tổng số dòng,
+                        total: "count",
                         model: {
                             id: "id",
                             fields: {
@@ -171,42 +169,71 @@
                     window: { width: 550, height: 500 }, // Chỉnh chiều rộng ở đây
                 },
                 dataBound: function (e) {
-                    // Gắn sự kiện nhấp vào mỗi dòng
-                    e.sender.tbody.find("tr").on("click", function () {
-                        // Lấy dữ liệu của dòng được nhấp
-                        var dataItem = e.sender.dataItem(this);
-                        $.ajax({
-                            type: "GET",
-                            url: "/Bill/GetListBillDetailByInvoiceCode", // Thay thế bằng URL của API bạn muốn gọi
-                            data: { invoiceCode: dataItem.invoiceCode }, // Truyền tham số cần thiết
-                            success: function (apiData) {
-                                // Cập nhật dữ liệu trong dataSource
-                                dataSource.data(apiData.result);
+                    var grid = e.sender;
+                    grid.tbody.find("tr").each(function () {
+                        var dataItem = grid.dataItem(this);
+                        var button = $(this).find("td a.k-button:contains('Xem')");
 
-                                // Làm mới Grid để hiển thị dữ liệu mới
-                                grid.refresh();
+                        button.click(function (e) {
+                            e.preventDefault();
 
-                                // Hiển thị modal
-                                $("#myModal").modal("show");
-                            },
-                            error: function () {
-                                // Xử lý lỗi khi cuộc gọi API thất bại
-                                alert("Lỗi khi gọi API.");
-                            }
+                            // Fetch the details data for the clicked row
+                            $.ajax({
+                                type: "GET",
+                                url: "/Bill/GetListBillDetailByInvoiceCode", // Replace with the actual API URL
+                                data: { invoiceCode: dataItem.invoiceCode }, // Pass any required parameters
+                                success: function (detailsData) {
+                                    // Create a new Kendo Grid for details
+                                    var detailsGrid = $("#detailsGrid").kendoGrid({
+                                        dataSource: {
+                                            data: detailsData.result,
+                                        },
+                                        columns: [
+                                            {
+                                                field: "maProductDetail",
+                                                title: "Mã sản phẩm",
+                                            },
+                                            {
+                                                field: "nameProduct",
+                                                title: "Tên sản phẩm",
+                                            },
+                                            {
+                                                field: "price",
+                                                title: "Giá",
+                                            },
+                                            {
+                                                field: "quantity",
+                                                title: "Số lượng",
+                                            },
+                                            {
+                                                command: [
+                                                    {
+                                                        name: "edit",
+                                                        text: "Sửa",
+                                                    },
+                                                    {
+                                                        name: "destroy",
+                                                        text: "Xóa",
+                                                    }
+                                                ],
+                                                title: "Hành động",
+                                                width: "250px",
+                                                exportable: false
+                                            }
+                                        ],
+                                        editable: false,
+                                    }).data("kendoGrid");
+
+                                    // Show the details grid in a modal or another container as needed
+                                    $("#myModal").modal("show");
+                                },
+                                error: function () {
+                                    alert("Lỗi khi gọi API.");
+                                }
+                            });
                         });
-                        // Hiển thị dữ liệu của dòng trong modal
-                        // $("#myModal .modal-body").html("Mã hóa đơn: " + dataItem.invoiceCode + "<br />" +
-                        //     "Họ tên: " + dataItem.fullName + "<br />" +
-                        //     "Địa chỉ: " + dataItem.address + "<br />" +
-                        //     "Số điện thoại: " + dataItem.phoneNumber + "<br />" +
-                        //     "Ngày mua: " + kendo.toString(dataItem.createDate, "yyyy-MM-dd") + "<br />" +
-                        //     "Trạng thái: " + (dataItem.status === 1 ? "Chờ xác nhận" : "OK"));
-
-                        // Hiển thị modal
-                        $("#myModal").modal("show");
                     });
                 },
-
 
                 save: function (e) {
                     if (e.model.isNew()) {
@@ -282,6 +309,10 @@
                             {
                                 name: "destroy",
                                 text: "Xóa",
+                            },
+                            {
+                                name: "details",
+                                text: "Xem",
                             },
                         ],
                         title: "Hành động",
