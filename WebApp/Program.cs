@@ -75,52 +75,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    // Thiết lập về Password
-    options.Password.RequireDigit = false; // Không bắt phải có số
-    options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
-    options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
-    options.Password.RequireUppercase = false; // Không bắt buộc chữ in
-    options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
-    options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
-
-    // Cấu hình Lockout - khóa user
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
-    options.Lockout.MaxFailedAccessAttempts = 5; // Thất bại 5 lầ thì khóa
-    options.Lockout.AllowedForNewUsers = true;
-
-    // Cấu hình về User.
-    options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    options.User.RequireUniqueEmail = true;  // Email là duy nhất
-
-    // Cấu hình đăng nhập.
-    options.SignIn.RequireConfirmedEmail = false;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
-    options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
     options.SignIn.RequireConfirmedAccount = true;
-
 });
-builder.Services.AddAuthentication(options =>
-{
-    // DefaultAuthenticateScheme: Đây là Scheme sẽ được sử dụng để xác thực yêu cầu đã được xác thực thành công.
-    // Trong trường hợp này,CookieAuthenticationDefaults.AuthenticationScheme  được sử dụng, điều này có nghĩa là sử dụng xác thực bằng cookie.
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-})
-            .AddJwtBearer(opt =>
-            {
-                opt.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
-                };
+builder.Services.AddControllersWithViews();
 
-            });
 
 
 builder.Services.AddAuthorization(options =>
@@ -130,6 +88,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ClinetOld", policy => { policy.RequireAuthenticatedUser(); policy.RequireRole("ClientOld"); });
 
 });
+
 
 builder.Services.AddSession();
 

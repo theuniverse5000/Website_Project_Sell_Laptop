@@ -6,6 +6,7 @@ namespace Shop_API.RequestModel
 {
     public class ProductDetailQueryModel : PaginationRequest
     {
-
+        public double? FromPrice { get; set; }
+        public double? ToPrice { get; set;}
     }
 }
