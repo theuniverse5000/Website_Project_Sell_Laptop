@@ -45,7 +45,7 @@ namespace Shop_API.Controllers
             }
             return Ok(await _productRepository.GetAll());
         }
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<IActionResult> Create(Product obj)
         {
 
@@ -146,8 +146,11 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            _response.Result = _iPagingRepository.GetAllProduct(search, from, to, sortBy, page);
-            _response.Count = _iPagingRepository.GetAllProduct(search, from, to, sortBy, page).Count;
+            //_response.Result = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page);
+            //_response.Count = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page).Count;
+
+            _response.Result =await _productRepository.GetProductDtos(search, from, to, sortBy, page);
+            _response.Count = _productRepository.GetProductDtos(search, from, to, sortBy, page).Result.Count();
             return Ok(_response);
         }
 

@@ -80,17 +80,20 @@
                     schema: {
                         data: "result",
                         total: "count", // Chỉ định tên trường tổng số dòng,
+                        serverPaging: true, // tai lai data sau khi update
                         model: {
                             id: "id",
                             fields: {
                                 // ma: { type: "string", validation: { required: true } },
                                 name: { type: "string", validation: { required: true } },
-                                //  status: { type: "int" }
+                                status: { type: "int" },
+                                manufacturerId: { type: "string", validation: { required: true } },
+                                productTypeId: { type: "string", validation: { required: true } },
                             }
                         }
                     },
 
-                    pageSize: 20,
+                    pageSize: 10,
 
                 },
                 height: 550,
@@ -140,7 +143,6 @@
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
 
                         if (status === 'success') {
-                            Response
                             showNotification("Lưu thành công", "success");
                         } else {
                             showNotification("Lưu thất bại", "error");
@@ -166,6 +168,7 @@
                     }
                 },
 
+
                 columns: [
                     // {
                     //     field: "ma",
@@ -178,6 +181,53 @@
                     {
                         field: "name",
                         title: "Tên"
+                    },
+                    {
+                        field: "manuName",
+                        title: "Nhà sản xuất",
+                        editor: function (container, options) {
+                            // Tạo dropdownlist
+                            $("<input name='manufacturerId' />")
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    // Cấu hình tải dữ liệu từ API hoặc nguồn dữ liệu của bạn
+                                    dataSource: {
+                                        transport: {
+                                            read: {
+                                                url: "/Manufacturer/GetList", // Thay thế đường dẫn bằng API của bạn
+                                                type: "GET"
+                                            }
+                                        }
+                                    },
+                                    dataValueField: "id", // Thay thế bằng trường ID thực tế
+                                    dataTextField: "name", // Thay thế bằng trường hiển thị thực tế
+                                    optionLabel: "Chọn hãng" // Đây là giá trị mặc định (null)
+
+                                });
+                        }
+                    },
+                    {
+                        field: "productTypeName",
+                        title: "Loại sản phẩm",
+                        editor: function (container, options) {
+                            // Tạo dropdownlist
+                            $("<input name='productTypeId' />")
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    // Cấu hình tải dữ liệu từ API hoặc nguồn dữ liệu của bạn
+                                    dataSource: {
+                                        transport: {
+                                            read: {
+                                                url: "/ProductType/GetList", // Thay thế đường dẫn bằng API của bạn
+                                                type: "GET"
+                                            }
+                                        }
+                                    },
+                                    dataValueField: "id", // Thay thế bằng trường ID thực tế
+                                    dataTextField: "name", // Thay thế bằng trường hiển thị thực tế
+                                    optionLabel: "Chọn loại sản phẩm" // Đây là giá trị mặc định (null)
+                                });
+                        }
                     },
                     {
                         command: [

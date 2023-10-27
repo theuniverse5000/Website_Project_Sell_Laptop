@@ -26,6 +26,27 @@ namespace AdminApp.Controllers
             return View();
         }
 
+        public async Task<IActionResult> GetList()
+        {
+            using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
+            {
+                HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/ProductType");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    var count = result.Count();
+                    ViewBag.Count = count;
+
+
+                    return Content(result, "application/json");
+                }
+                else
+                {
+                    return Json(null);
+                }
+            }
+        }
         public async Task<IActionResult> GetProductType()
         {
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))

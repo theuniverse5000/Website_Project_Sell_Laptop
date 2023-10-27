@@ -8,7 +8,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace Shop_API.Repository
 {
     public class PagingRepository : IPagingRepository     /* public class PagingRepository<T> : IPagingRepository<T> where T : class*/
-    { 
+    {
         private readonly ApplicationDbContext _context;
         //public static int PAGE_SIZE { get; set; } = 20;
         public PagingRepository(ApplicationDbContext context)
@@ -30,13 +30,13 @@ namespace Shop_API.Repository
         }
 
 
-        public  List<PagingDto> GetAll(string search, double? from, double? to, string sortBy, int page)
-        
+        public List<PagingDto> GetAll(string search, double? from, double? to, string sortBy, int page)
+
         {
             //var allProducts = _context.ProductTypes.Include(pt => pt.Name).AsQueryable();
 
 
-            var allProducts = _context.ProductTypes.Where(x=>x.Status>0).AsQueryable();
+            var allProducts = _context.ProductTypes.Where(x => x.Status > 0).AsQueryable();
 
 
             #region Filtering
@@ -61,7 +61,8 @@ namespace Shop_API.Repository
             {
                 //switch (sortBy)
                 //{
-                   /* case "tenhh_desc":*/ allProducts = allProducts.OrderByDescending(hh => hh.Name); /*break;*/
+                /* case "tenhh_desc":*/
+                allProducts = allProducts.OrderByDescending(hh => hh.Name); /*break;*/
                 //}
             }
             #endregion
@@ -80,9 +81,9 @@ namespace Shop_API.Repository
             }).ToList();
         }
 
-		public List<PagingDto> GetAllColor(string? search, double? from, double? to, string? sortBy, int page)
+        public List<PagingDto> GetAllColor(string? search, double? from, double? to, string? sortBy, int page)
         {
-			var allColors = _context.Colors.Where(x=>x.TrangThai>0).AsQueryable();
+            var allColors = _context.Colors.Where(x => x.TrangThai > 0).AsQueryable();
 
 
             #region Filtering
@@ -103,27 +104,27 @@ namespace Shop_API.Repository
             #region Sorting
             //Default sort by Name (TenHh)
             allColors = allColors.OrderBy(hh => hh.Name);
-			if (!string.IsNullOrEmpty(sortBy))
-			{
+            if (!string.IsNullOrEmpty(sortBy))
+            {
 
-				allColors = allColors.OrderByDescending(hh => hh.Name); /*break;*/
-				
-			}
-			#endregion
+                allColors = allColors.OrderByDescending(hh => hh.Name); /*break;*/
 
-			//var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+            }
+            #endregion
 
-			//var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
-			int totalCount = allColors.Count();
+            //var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+            //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            int totalCount = allColors.Count();
 
 
-			return allColors.Select(hh => new PagingDto
-			{
-				Id = hh.Id,
-                Ma=hh.Ma,
-				Name = hh.Name,
-			}).ToList();
-		}
+            return allColors.Select(hh => new PagingDto
+            {
+                Id = hh.Id,
+                Ma = hh.Ma,
+                Name = hh.Name,
+            }).ToList();
+        }
 
 
         public List<PagingDto> GetAllScreen(string? search, double? from, double? to, string? sortBy, int page)
@@ -177,7 +178,7 @@ namespace Shop_API.Repository
 
         public List<PagingDto> GetAllRam(string? search, double? from, double? to, string? sortBy, int page)
         {
-			var allRams = _context.Rams.Where(x=>x.TrangThai>0).AsQueryable();
+            var allRams = _context.Rams.Where(x => x.TrangThai > 0).AsQueryable();
 
 
             #region Filtering
@@ -198,30 +199,30 @@ namespace Shop_API.Repository
             #region Sorting
             //Default sort by ThongSo 
             allRams = allRams.OrderBy(hh => hh.ThongSo);
-			if (!string.IsNullOrEmpty(sortBy))
-			{
+            if (!string.IsNullOrEmpty(sortBy))
+            {
 
-				allRams = allRams.OrderByDescending(hh => hh.ThongSo); /*break;*/
-				
-			}
-			#endregion
+                allRams = allRams.OrderByDescending(hh => hh.ThongSo); /*break;*/
 
-			//var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+            }
+            #endregion
 
-			//var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
-			int totalCount = allRams.Count();
+            //var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+            //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            int totalCount = allRams.Count();
 
 
-			return allRams.Select(hh => new PagingDto
-			{
-				Id = hh.Id,
-                Ma=hh.Ma,
-				ThongSo = hh.ThongSo,
-			}).ToList();
-		}
+            return allRams.Select(hh => new PagingDto
+            {
+                Id = hh.Id,
+                Ma = hh.Ma,
+                ThongSo = hh.ThongSo,
+            }).ToList();
+        }
         public List<PagingDto> GetAllHardDrive(string? search, double? from, double? to, string? sortBy, int page)
         {
-			var allRams = _context.HardDrives.Where(x=>x.TrangThai>0).AsQueryable();
+            var allRams = _context.HardDrives.Where(x => x.TrangThai > 0).AsQueryable();
 
 
             #region Filtering
@@ -242,31 +243,31 @@ namespace Shop_API.Repository
             #region Sorting
             //Default sort by ThongSo 
             allRams = allRams.OrderBy(hh => hh.ThongSo);
-			if (!string.IsNullOrEmpty(sortBy))
-			{
+            if (!string.IsNullOrEmpty(sortBy))
+            {
 
-				allRams = allRams.OrderByDescending(hh => hh.ThongSo); /*break;*/
-				
-			}
-			#endregion
+                allRams = allRams.OrderByDescending(hh => hh.ThongSo); /*break;*/
 
-			//var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+            }
+            #endregion
 
-			//var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
-			int totalCount = allRams.Count();
+            //var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+            //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            int totalCount = allRams.Count();
 
 
-			return allRams.Select(hh => new PagingDto
-			{
-				Id = hh.Id,
-                Ma=hh.Ma,
-				ThongSo = hh.ThongSo,
-			}).ToList();
-		}
-        
+            return allRams.Select(hh => new PagingDto
+            {
+                Id = hh.Id,
+                Ma = hh.Ma,
+                ThongSo = hh.ThongSo,
+            }).ToList();
+        }
+
         public List<PagingDto> GetAllCardVGA(string? search, double? from, double? to, string? sortBy, int page)
         {
-			var allRams = _context.CardVGAs.Where(x=>x.TrangThai>0).AsQueryable();
+            var allRams = _context.CardVGAs.Where(x => x.TrangThai > 0).AsQueryable();
 
 
             #region Filtering
@@ -287,31 +288,31 @@ namespace Shop_API.Repository
             #region Sorting
             //Default sort by ThongSo 
             allRams = allRams.OrderBy(hh => hh.ThongSo);
-			if (!string.IsNullOrEmpty(sortBy))
-			{
+            if (!string.IsNullOrEmpty(sortBy))
+            {
 
-				allRams = allRams.OrderByDescending(hh => hh.ThongSo); /*break;*/
-				
-			}
-			#endregion
+                allRams = allRams.OrderByDescending(hh => hh.ThongSo); /*break;*/
 
-			//var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+            }
+            #endregion
 
-			//var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
-			int totalCount = allRams.Count();
+            //var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+            //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            int totalCount = allRams.Count();
 
 
-			return allRams.Select(hh => new PagingDto
-			{
-				Id = hh.Id,
-                Ma=hh.Ma,
-                Ten=hh.Ten,
-				ThongSo = hh.ThongSo,
-			}).ToList();
-		}  
+            return allRams.Select(hh => new PagingDto
+            {
+                Id = hh.Id,
+                Ma = hh.Ma,
+                Ten = hh.Ten,
+                ThongSo = hh.ThongSo,
+            }).ToList();
+        }
         public List<PagingDto> GetAllManufacturer(string? search, double? from, double? to, string? sortBy, int page)
         {
-			var allManufacturer = _context.Manufacturers.Where(x=>x.Status>0).AsQueryable();
+            var allManufacturer = _context.Manufacturers.Where(x => x.Status > 0).AsQueryable();
 
 
             #region Filtering
@@ -332,27 +333,27 @@ namespace Shop_API.Repository
             #region Sorting
             //Default sort by Name 
             allManufacturer = allManufacturer.OrderBy(hh => hh.Name);
-			if (!string.IsNullOrEmpty(sortBy))
-			{
+            if (!string.IsNullOrEmpty(sortBy))
+            {
 
                 allManufacturer = allManufacturer.OrderByDescending(hh => hh.Name); /*break;*/
-				
-			}
-			#endregion
 
-			//var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+            }
+            #endregion
 
-			//var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
-			int totalCount = allManufacturer.Count();
+            //var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+            //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            int totalCount = allManufacturer.Count();
 
 
-			return allManufacturer.Select(hh => new PagingDto
-			{
-				Id = hh.Id,
+            return allManufacturer.Select(hh => new PagingDto
+            {
+                Id = hh.Id,
                 Name = hh.Name,
-				LinkImage = hh.LinkImage,
-			}).ToList();
-		}
+                LinkImage = hh.LinkImage,
+            }).ToList();
+        }
 
         public List<PagingDto> GetAllCpu(string? search, double? from, double? to, string? sortBy, int page)
         {
@@ -400,7 +401,7 @@ namespace Shop_API.Repository
             }).ToList();
         }
 
-        public List<PagingDto> GetAllProduct(string? search, double? from, double? to, string? sortBy, int page)
+        public List<ProductDto> GetAllProduct(string? search, double? from, double? to, string? sortBy, int page)
         {
             var allProduct = _context.Products.Where(x => x.Status > 0).AsQueryable();
 
@@ -437,12 +438,17 @@ namespace Shop_API.Repository
             int totalCount = allProduct.Count();
 
 
-            return allProduct.Select(hh => new PagingDto
+            return allProduct.Select(hh => new ProductDto
             {
                 Id = hh.Id,
-                Name = hh.Name,          
+                Name = hh.Name,
+                ManufacturerId = hh.ManufacturerId,
+                ProductTypeId = hh.ProductTypeId,
+                ManuName = hh.Manufacturer.Name,
                 Status = hh.Status,
             }).ToList();
         }
+     
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Shop_Models.Dto;
+using Shop_Models.Entities;
 
 namespace Shop_API.Repository.IRepository
 {
@@ -8,7 +9,7 @@ namespace Shop_API.Repository.IRepository
 
         List<PagingDto> GetAll(string search, double? from, double? to, string sortBy, int page);
 		List<PagingDto> GetAllColor(string? search, double? from, double? to, string? sortBy, int page);
-		List<PagingDto> GetAllProduct(string? search, double? from, double? to, string? sortBy, int page);
+		List<ProductDto> GetAllProduct(string? search, double? from, double? to, string? sortBy, int page);
 		List<PagingDto> GetAllRam(string? search, double? from, double? to, string? sortBy, int page);
         List<PagingDto> GetAllScreen(string? search, double? from, double? to, string? sortBy, int page);
         List<PagingDto> GetAllHardDrive(string? search, double? from, double? to, string? sortBy, int page);

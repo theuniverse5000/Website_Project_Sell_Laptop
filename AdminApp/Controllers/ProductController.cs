@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.AppDbContext;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 using System.Net.Http;
 
@@ -58,7 +59,7 @@ namespace AdminApp.Controllers
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Product/CreateProduct", p);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Product/Create", p);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;

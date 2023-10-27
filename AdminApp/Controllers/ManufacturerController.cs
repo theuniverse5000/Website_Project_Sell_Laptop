@@ -45,9 +45,31 @@ namespace AdminApp.Controllers
 
         //  return  ViewBag.ListManufacturer = new Microsoft.AspNetCore.Mvc.Rendering.SelectList((System.Collections.IEnumerable)_manufacturer.GetAll(),"Id","Name");
 
-           
+
         //}
 
+        public async Task<IActionResult> GetList()
+        {
+
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
+            {
+                HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/Manufacturer");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    var count = result.Count();
+                    ViewBag.Count = count;
+
+
+                    return Content(result, "application/json");
+                }
+                else
+                {
+                    return Json(null);
+                }
+            }
+        }
 
         public async Task<IActionResult> GetManufacturer()
         {
