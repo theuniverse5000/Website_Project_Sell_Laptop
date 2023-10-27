@@ -1,4 +1,5 @@
-﻿using Shop_Models.Entities;
+﻿using Shop_Models.Dto;
+using Shop_Models.Entities;
 
 namespace Shop_API.Repository.IRepository
 {
@@ -9,5 +10,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Delete(Guid Id);
         Task<List<ViDiem>> GetAllViDiems();
         Task<ViDiem> GetViDiemById(Guid? id);
+        Task<List<PointWalletDto>> GetAllPointWallet(string? search, double? from, double? to, string? sortBy, int page);
     }
 }

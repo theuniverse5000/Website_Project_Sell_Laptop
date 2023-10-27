@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -168,6 +170,29 @@ namespace Shop_API.Controllers
                 _reponseDto.Message = "Thất bại";
                 return _reponseDto;
             }
+        }
+
+
+        [HttpGet("GetPointWallet")]
+        public async Task<IActionResult> GetPointWallet(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+            //_response.Result = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page);
+            //_response.Count = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page).Count;
+
+            _reponseDto.Result = await _viDiemRepository.GetAllPointWallet(search, from, to, sortBy, page);
+            _reponseDto.Count = _viDiemRepository.GetAllPointWallet(search, from, to, sortBy, page).Result.Count();
+            return Ok(_reponseDto);
         }
     }
 }

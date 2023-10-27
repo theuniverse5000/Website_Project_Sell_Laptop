@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Repository
@@ -84,6 +85,49 @@ namespace Shop_API.Repository
         {
             var result = await _context.ViDiems.FindAsync(id);
             return result;
+        }
+        public async Task<List<PointWalletDto>> GetAllPointWallet(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            try
+            {
+                List<PointWalletDto> _PointWalletDtoult = new List<PointWalletDto>();
+                _PointWalletDtoult = (
+                    from a in await _context.ViDiems.ToListAsync()
+                    join b in await _context.Users.ToListAsync() on a.UserId equals b.Id
+
+                    select new PointWalletDto
+                    {
+                        UserId = a.UserId,
+                        UserName = b.UserName,
+                        TongDiem = a.TongDiem,
+                        SoDiemDaCong = a.SoDiemDaCong,
+                        SoDiemDaDung = a.SoDiemDaDung,
+                        TrangThai = a.TrangThai
+                    }).ToList();
+
+                #region Filtering
+                //if (!string.IsNullOrEmpty(search))
+                //{
+                //    _PointWalletDtoult = (List<PointWalletDto>)_PointWalletDtoult.Where(pt => pt.UserName.Contains(search));
+                //}
+                if (from.HasValue)
+                {
+                    _PointWalletDtoult = (List<PointWalletDto>)_PointWalletDtoult.Where(hh => hh.TongDiem >= from);
+                }
+                if (to.HasValue)
+                {
+                    _PointWalletDtoult = (List<PointWalletDto>)_PointWalletDtoult.Where(hh => hh.TongDiem <= to);
+                }
+                #endregion
+                //return _PointWalletDtoult.Where(x => x.TrangThai > 0);
+                return _PointWalletDtoult;
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
     }
