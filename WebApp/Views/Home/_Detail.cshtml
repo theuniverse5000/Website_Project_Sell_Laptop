@@ -1,4 +1,6 @@
-﻿<div id="Detail">
+﻿@using Shop_Models.Dto;
+@model ProductDetailDto
+<div id="Detail">
     <div id="breadcrumb">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -46,7 +48,7 @@
                                 </label>
                             </div>
                             <div class="block-content">
-                                <span>Ryzen 9 - 6900HX, 16GB, 1TB, RTX 3070Ti 8GB, 16 WQXGA 165Hz</span>
+                                <span>@Model.NameProduct</span>
 
                                 <b class="giaTien"> 37.890.000đ </b>
                             </div>
