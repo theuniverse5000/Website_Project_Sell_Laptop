@@ -10,6 +10,6 @@
         public string? DiaChi { get; set; }
         public DateTime Dateofbirth { get; set; }
         public int Status { get; set; } = 0;
-        public Guid IdRole { get; set; }
+        public Guid? IdRole { get; set; }
     }
 }

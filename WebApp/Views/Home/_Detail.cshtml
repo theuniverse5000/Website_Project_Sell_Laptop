@@ -1,14 +1,15 @@
-﻿<div id="Detail">
+﻿@using Shop_Models.Dto;
+@model ProductDetailDto
+<div id="Detail">
     <div id="breadcrumb">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-                <li class="breadcrumb-item"><a href="#">LAP TOP GAMING</a></li>
-                <li class="breadcrumb-item active" aria-current="page">LAP TOP Lenovo</li>
+                <li class="breadcrumb-item"><a href="#">@Model.NameProductType</a></li>
             </ol>
         </nav>
     </div>
-    <b id="Product-name">[New 100%] Lenovo Legion 5 Pro Y9000P (Core i9-12900H, 16GB, 512GB, RTX 3060 6GB, 16'' WQXGA 165Hz)</b>
+    <b id="Product-name">@Model.Code</b>
     <div class="Product-detail">
         <div class="row">
             <div class="col-md-4">
@@ -20,12 +21,12 @@
                     <img src="./img/Product-detail-img/msi-gf63-thin-10sc-804vn-5_2 1.png">
                     <img src="./img/Product-detail-img/msi-gf63-thin-10sc-804vn-6_2 1.png" alt="">
                     <img src="./img/Product-detail-img/text_ng_n_21_ 2.png">
-                </div>                
+                </div>
             </div>
             <div class="Product-price-detail col-md-4">
                 <div class="Product-price">
-                    <span class="giaKhuyenMai">Deal: 32.890.000đ</span>
-                    <p class="giaGoc">37.890.000đ</p>
+                    <span class="giaKhuyenMai">@Model.Price</span>
+                    <p class="giaGoc">@Model.ImportPrice</p>
                     <br>
                     <span class="hot-price">
                         Bảo hành: 12 tháng Laptop AZ
@@ -46,7 +47,7 @@
                                 </label>
                             </div>
                             <div class="block-content">
-                                <span>Ryzen 9 - 6900HX, 16GB, 1TB, RTX 3070Ti 8GB, 16 WQXGA 165Hz</span>
+                                <span>@Model.NameProduct</span>
 
                                 <b class="giaTien"> 37.890.000đ </b>
                             </div>
@@ -127,18 +128,70 @@
             </div>
             <div class="col-md-4">
                 <div class="buying-polici-title">
-                  <b class="title-buying-policy">YÊN TÂM MUA SẮM TẠI LAPTOP ABC XYZ</b>
-                  <ul class="buy-policies">
-                    <li>⭐ Chất lượng sản phẩm là hàng đầu</li>
-                    <li>⭐ Dùng test máy 15 ngày đầu lỗi 1 đổi 1</li>
-                    <li>⭐ Hỗ trợ và hậu mãi sau bán hàng tốt nhất</li>
-                    <li>⭐ Trả góp lãi suất 0% qua thẻ visa</li>
-                    <li>⭐ Giao hàng miễn phí toàn quốc nhanh nhất</li>
-                  </ul>
+                    <b class="title-buying-policy">YÊN TÂM MUA SẮM TẠI LAPTOP ABC XYZ</b>
+                    <ul class="buy-policies">
+                        <li>⭐ Chất lượng sản phẩm là hàng đầu</li>
+                        <li>⭐ Dùng test máy 15 ngày đầu lỗi 1 đổi 1</li>
+                        <li>⭐ Hỗ trợ và hậu mãi sau bán hàng tốt nhất</li>
+                        <li>⭐ Trả góp lãi suất 0% qua thẻ visa</li>
+                        <li>⭐ Giao hàng miễn phí toàn quốc nhanh nhất</li>
+                    </ul>
                 </div>
                 <!-- bang thong so ki thuat -->
                 <div class="configuration-block-table">
                     <b class="thongSoKyThuat">THÔNG SỐ KỸ THUẬT</b>
+                </div>
+                <div class="col column-4 pl-0" id="sec3">
+                    <div class="bg-white parameter">
+                        <div class="pro-parameter">
+                            <div class="prodetail-spec-full" style="font-size: 11px;font-family: Times New Roman;">
+
+                                <p><strong><span style="font-size: 10pt; font-family: arial, helvetica, sans-serif; color: #3366ff;">@Model.Code</span></strong></p>
+                                <table class="table table-striped table-bordered" width="277">
+                                    <tbody>
+                                        <tr>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;"><strong>CPU</strong></span></td>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;">@Model.MaCpu / @Model.TenCpu </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;"><strong>RAM</strong></span></td>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;">@Model.MaRam  /  @Model.ThongSoRam</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;"><strong>Ổ cứng</strong></span></td>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;">@Model.MaHardDrive / @Model.ThongSoHardDrive</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;"><strong>Card VGA</strong></span></td>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;">@Model.MaCardVGA / @Model.TenCardVGA  </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;"><strong>Màn hình</strong></span></td>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;">@Model.MaManHinh, @Model.KichCoManHinh, @Model.ChatLieuManHinh, @Model.TanSoManHinh</span></td>
+                                        </tr>
+                                        >
+                                        <tr>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;"><strong>Màu Sắc, </strong></span></td>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;">@Model.NameColor / @Model.MaColor </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;"><strong>Nhà Sản Xuất</strong></span></td>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;">@Model.NameManufacturer</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;"><strong>Dòng Sản Phẩm</strong></span></td>
+                                            <td scope="row"><span style="font-size: 8pt; font-family: arial, helvetica, sans-serif;">@Model.NameProduct</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <
+                            </div>
+                        </div>
+                    </div>
+
+                
+
                 </div>
             </div>
         </div>

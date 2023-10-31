@@ -1,28 +1,28 @@
 ﻿<div style="border: #4c4949 1px solid; width: 1087px; height: 1604px; margin: 120px auto;">
     <form>
         <div class="form-outline mb-4" style="margin-top: 408px;">
-            <input type="email" id="form2Example1" class="form-control" placeholder="Vui lòng nhập họ tên"
-                   style="border-radius: 50px; width: 718px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
+            <input type="text" id="SignUpUserName" class="form-control" placeholder="Vui lòng nhập họ tên"
+                   style="border-radius: 50px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
         </div>
 
         <div class="form-outline mb-4" style="margin-top: 56px;">
-            <input type="password" id="form2Example2" class="form-control" placeholder="Vui lòng nhập SĐT (bắt buộc)"
-                   style="border-radius: 50px; width: 718px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
+            <input type="text" id="SignUpPhoneNumber" class="form-control" placeholder="Vui lòng nhập SĐT (bắt buộc)"
+                   style="border-radius: 50px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
         </div>
 
         <div class="form-outline mb-4" style="margin-top: 56px;">
-            <input type="password" id="form2Example3" class="form-control" placeholder="Vui lòng nhập email (bắt buộc)"
-                   style="border-radius: 50px; width: 718px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
+            <input type="email" id="SignUpEmail" class="form-control" placeholder="Vui lòng nhập email (bắt buộc)"
+                   style="border-radius: 50px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
         </div>
 
         <div class="form-outline mb-4" style="margin-top: 56px;">
-            <input type="password" id="form2Example4" class="form-control" placeholder="Nhập mật khẩu của bạn"
-                   style="border-radius: 50px; width: 718px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
+            <input type="password" id="SignUpPassWord" class="form-control" placeholder="Nhập mật khẩu của bạn"
+                   style="border-radius: 50px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
         </div>
 
         <div class="form-outline mb-4" style="margin-top: 56px;">
-            <input type="password" id="form2Example5" class="form-control" placeholder="Xác nhận mật khẩu"
-                   style="border-radius: 50px; width: 718px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
+            <input type="password" id="SignUpComfirmPassWord" class="form-control" placeholder="Xác nhận mật khẩu"
+                   style="border-radius: 50px; height: 94px; margin-left: 202px; font-size: 30px; padding-left: 24px;" />
         </div>
 
         <div class="form-check" style="margin-top: 27px;">
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4"
+        <button type="submit" class="btn btn-primary btn-block mb-4" onclick="getFormValues()"
                 style="border-radius: 50px; font-weight: bold; font-size: 40px; width: 717px; height: 110px; margin-left: 203px; margin-top: 42px; background-color: #73BBFE; border: none">
             ĐĂNG KÝ
         </button>
