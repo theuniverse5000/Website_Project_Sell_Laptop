@@ -1,0 +1,95 @@
+﻿
+@{
+    float thanhTien = 0;
+    float total = 0;
+}
+    <title>Hóa Đơn Bán Laptop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .invoice {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .header {
+            text-align: center;
+        }
+        .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .invoice-details div {
+            flex: 1;
+        }
+        .customer-details {
+            margin-top: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th, .table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        .total {
+            margin-top: 20px;
+            text-align: right;
+        }
+    </style>
+    <div class="invoice">
+        <div class="header">
+            <h1>HÓA ĐƠN BÁN LAPTOP</h1>
+        <p>Ngày: @ViewBag.Bill.CreateDate</p>
+        </div>
+        <div class="invoice-details">
+            <div>
+                <p>Mã Hóa Đơn: @ViewBag.Bill.InvoiceCode</p>
+            <p>Người bán: </p>
+            </div>
+            <div>
+                <p>Khách hàng: @ViewBag.Bill.FullName</p>
+                <p>Địa chỉ: @ViewBag.Bill.Address</p>
+                <p>Số điện thoại: @ViewBag.Bill.PhoneNumber</p>
+            </div>
+        </div>
+        <div class="customer-details">
+            <h2>Danh Sách Sản Phẩm</h2>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã Sản Phẩm</th>
+                    <th>Số Lượng</th>
+                    <th>Đơn Giá</th>
+                    <th>Thành Tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in ViewBag.ListBillItem)
+                {
+                    thanhTien = i.price * i.quantity;
+                    total += thanhTien;
+                    <tr>
+                    <td>@i.codeProductDetail</td>
+                    <td>@i.quantity</td>
+                    <td>@i.price</td>
+                    <td>@thanhTien</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <div class="total">
+            <p>Tổng cộng: @total</p>
+            <p>Giảm giá: 0</p>
+            <p>Thành tiền: @total</p>
+        </div>
+    </div>
+
+
