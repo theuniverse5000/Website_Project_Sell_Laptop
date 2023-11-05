@@ -28,7 +28,6 @@ namespace WebApp.Controllers
         {
             return RedirectToAction("Login","Login");
         }
-        
         public async Task<IActionResult> ProductDetail(string code)
         {
             var  x = HttpContext.Request;
@@ -38,6 +37,7 @@ namespace WebApp.Controllers
             var content = JsonConvert.DeserializeObject<ResponseDto>(apiRespone);
             var productDetails = JsonConvert.DeserializeObject<List<ProductDetailDto>>(content.Result.ToString());
             return PartialView("_Detail", productDetails.FirstOrDefault());
+
         }
     }
 }

@@ -5,7 +5,7 @@
         public Guid UserId { get; set; }
         public int Quantity { get; set; }
         public int Status { get; set; }
-        public string? MaProductDetail { get; set; }
+        public string? CodeProductDetail { get; set; }
         public float Price { get; set; }
         public string? Description { get; set; }
         public string? ThongSoRam { get; set; }
