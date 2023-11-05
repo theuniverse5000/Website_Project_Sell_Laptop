@@ -17,7 +17,7 @@ loginButton.addEventListener("click", function (event) {
         RememberMe: true,
         ReturnUrl: "/" // Fixed the syntax error here (changed semicolon to colon)
     }
-    console.log(dataToSend.UserName)
+
     $.ajax({
         url: apiUrl,
         type: "POST",

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Entities;
@@ -8,9 +9,11 @@ namespace Shop_API.Repository
     public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
-        public UserRepository(ApplicationDbContext context)
+        private readonly UserManager<User> _userManager; 
+        public UserRepository(ApplicationDbContext context , UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public async Task<bool> Create(User obj)
         {
@@ -57,7 +60,7 @@ namespace Shop_API.Repository
 
         public async Task<List<User>> GetAllUsers()
         {
-            var list = await _context.Users.Where(x => x.Status > 0).ToListAsync();// Lấy tất cả danh sách user
+            var list = await _userManager.Users.Where(x=>x.Status!=0).ToListAsync();
             return list;
         }
 

@@ -255,6 +255,7 @@ namespace Shop_API.Service
 
         public async Task<SignUpRespone> SignUp(SignUpDto p)
         {
+            var defaultClienRole = _roleService.GetAllRole().Result.FirstOrDefault(x=>x.NormalizedName=="CLIENT");
             try
             {
                 var user = new User()
@@ -262,31 +263,31 @@ namespace Shop_API.Service
                     Id = Guid.NewGuid(),
                     UserName = p.UserName,
                     PhoneNumber = p.PhoneNumber,
-                    Status = 0,   // quy uoc 0 có nghĩa là đang hđ
+                    Status = 1,   // quy uoc 1 có nghĩa là đang hđ
                     Address = p.DiaChi,
                     Password = p.Password,
-                    RoleId=p.IdRole
+                    RoleId=p.IdRole??defaultClienRole.Id
                 };
                 var result = await _userManager.CreateAsync(user, p.Password);
                 SignUpRespone res = new SignUpRespone();
                 if (result.Succeeded)
                 {
-                    var role = await _roleService.GetRoleById(p.IdRole);
+                    var role = await _roleService.GetRoleById(user.RoleId);
                     //await _rolema.AddToRoleAsync(user, role.Name);
                     await _userManager.AddToRoleAsync(user,role.Name);
                     res.Mess=result.Succeeded.ToString();
-                    res.Data=null;
+                    res.Data=user;
                 }
                 else
                 {
                     res.Mess=result.Succeeded.ToString();
-                    res.Data = new List<IdentityError>();
+                    var listError= new List<IdentityError>();
                   foreach(var er in result.Errors)
                     {
                         if (er==null) continue;
-                        res.Data.Add(er); 
+                        listError.Add(er); 
                     }
-
+                  res.Data=listError;
                 }
                 return res;
             }
