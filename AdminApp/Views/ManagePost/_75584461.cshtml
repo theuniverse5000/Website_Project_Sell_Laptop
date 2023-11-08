@@ -1,0 +1,35 @@
+﻿@using System.Net;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "ckfinder Page";
+}
+<script src="https://cdn.ckeditor.com/ckeditor5/29.2.0/classic/ckeditor.js"></script>
+<script src="https://ckeditor.com/apps/ckfinder/3.5.1/ckfinder.js"></script>
+
+<div id="editor">
+    <p>Here goes the initial content of the editor.</p>
+</div>
+
+
+@section Scripts {
+    @{
+
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+            ClassicEditor
+                .create(document.querySelector('#editor'), {
+                    ckfinder: {
+                        uploadUrl: '/ckfinder/core/connector/aspx?command=QuickUpload&type=Files&responseType=json'
+                    },
+                    toolbar: ['ckfinder', 'imageUpload', '|', 'heading', '|', 'bold', 'italic', '|', 'undo', 'redo']
+                })
+                .then(editor => {
+                    console.log('Editor was initialized', editor);
+                })
+                .catch(error => {
+                    console.error(error.stack);
+                });
+        </script>
+
+    }
+    }

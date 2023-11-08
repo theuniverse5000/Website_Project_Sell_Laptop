@@ -1,0 +1,178 @@
+﻿@using Shop_Models.Entities;
+@model ManagePost;
+@section  Scripts  {
+    <script src="~/lib/summernote/summernote-bs4.js"></script>
+    @*    <link href="~/lib/summernote/summernote-bs4.min.css" rel="stylesheet" /> *@
+    <script src="~/js/animation.js"></script>
+
+    <link href="~/lib/summernote/summernote.css" rel="stylesheet" />
+    <link href="~/lib/summernote/summernote.min.css" rel="stylesheet" />
+    <script src="~/lib/summernote/summernote.js"></script>
+    <script src="~/lib/summernote/summernote.min.js"></script>
+    <a href="~/lib/summernote/summernote.js.map"></a>
+    <a href="~/lib/summernote/summernote.min.js.map"></a>
+    <link href="~/lib/summernote/summernote-bs4.css" rel="stylesheet" />
+    <link href="~/lib/summernote/summernote-bs4.min.css" rel="stylesheet" />
+    <script src="~/lib/summernote/summernote-bs4.js"></script>
+    <script src="~/lib/summernote/summernote-bs4.min.js"></script>
+    <a href="~/lib/summernote/summernote-bs4.js.map"></a>
+    <a href="~/lib/summernote/summernote-bs4.min.js.map"></a>
+    <script src="~/lib/summernote/summernote-lite.js"></script>
+    <script src="~/lib/summernote/summernote-lite.min.js"></script>
+    <a href="~/lib/summernote/summernote-lite.js.map"></a>
+    <a href="~/lib/summernote/summernote-lite.min.js.map"></a>
+    <link href="~/lib/summernote/summernote-lite.css" rel="stylesheet" />
+    <link href="~/lib/summernote/summernote-lite.min.css" rel="stylesheet" />
+
+
+}
+
+<style>
+    /* Custom CSS to fix Summernote fullscreen mode */
+    .note-editing-area .note-editable {
+        background-color: #fff; /* Set a white background color or your desired color */
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        $('#description').summernote({
+            toolbar: [
+                ['style', ['style']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']],
+            ],
+        });
+    });
+
+</script>
+
+
+
+<!-- Thêm modal Bootstrap cho thông báo -->
+@* <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resultModalLabel">Kết quả</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="resultMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div> *@
+
+<!-- Thêm modal Bootstrap cho thông báo -->
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resultModalLabel">Kết quả</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="resultMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="example">
+    <form asp-controller="ManagePost" asp-action="DetailsManagePost" method="post" id="saveForm">
+
+        <div class="row">
+            <input type="hidden" name="id" value="@Model.Id">
+            <div class=" col-md-3">
+                <label asp-for="Code">Code</label>
+                <input asp-for="Code" class="form-control" placeholder="nhap Mã " />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class=" col-md-3">
+                <label asp-for="LinkImage">LinkImage</label>
+                <input asp-for="LinkImage" class="form-control" placeholder="nhap LinkImage " />
+                <span asp-validation-for="LinkImage" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="demo-section wide">
+            <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
+            <div class="k-editor">
+                <textarea asp-for="Description" name="Description" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea>
+            </div>
+            <div class="invalid-feedback">
+                Vui lòng nhập nội dung trường này.
+            </div>
+        </div>
+        <button class="btn btn-primary" id="saveButton">Lưu</button>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#saveButton").click(function () {
+            // Display a confirmation dialog
+            let text = "Press a button!\nEither OK or Cancel.";
+            if (confirm(text) == true) {
+                // Nếu người dùng chấp nhận lưu, thực hiện AJAX
+                $.ajax({
+                    type: $("#saveForm").attr("method"),
+                    url: $("#saveForm").attr("action"),
+                    data: $("#saveForm").serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            // Nếu lưu thành công, cập nhật nội dung của modal và hiển thị modal
+                            $("#resultMessage").text("Lưu thành công").css("color", "green");
+                        } else {
+                            // Nếu không lưu thành công, cập nhật nội dung của modal và hiển thị modal
+                            $("#resultMessage").text("Lưu thất bại").css("color", "red");
+                        }
+                        // Hiển thị modal
+                        $("#resultModal").modal("show");
+                    },
+                    error: function () {
+                        // Xử lý lỗi
+                        alert("Lỗi trong quá trình lưu dữ liệu");
+                    }
+                });
+
+                // // Ngăn chặn chuyển hướng mặc định
+                return false;
+            } else {
+                // Nếu người dùng không muốn lưu, không làm gì cả
+                $.ajax({
+                    url: "/ManagePost/GetAll",
+                    type: "GET",
+                    dataType: "html",
+                    success: function (response) {
+
+                        $("#resultMessage").text("Huy luu thanh cong").css("color", "red");
+                        // Hiển thị modal
+                        $("#resultModal").modal("show");
+                        window.location.href = url;
+                    }
+                })
+            }
+        });
+    });
+
+
+</script>

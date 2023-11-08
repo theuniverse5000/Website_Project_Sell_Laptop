@@ -77,7 +77,7 @@ namespace AdminApp.Controllers
         {
 
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
-            string result = await client.GetStringAsync($"/api/ProductDetail/GetProductDetailsFSP");
+            string result = await client.GetStringAsync($"/api/ProductDetail/PGetProductDetail");
             return Content(result, "application/json");
         }
 

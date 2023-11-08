@@ -1,0 +1,308 @@
+﻿@{
+    ViewBag.Title = "Manage Post";
+    @using Shop_Models;
+    @using Shop_Models.Entities;
+    @model Shop_Models.Entities.ManagePost;
+    // @model Shop_Models.Entities.ManagePost;
+
+}
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.common.min.css">
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.default.min.css">
+<script src="https://kendo.cdn.telerik.com/2021.3.1207/js/jquery.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2021.3.1207/js/kendo.all.min.js"></script>
+
+
+<button id="openNewWindowButton">Open New Window</button>
+
+<div id="example">
+    @* button thêm mới *@
+    @*  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Product Detail</button>*@
+
+    <div id="grid"></div>
+
+
+    <div id="modalContent" style="display: block;">
+    </div>
+</div>
+
+
+<style>
+    #grid {
+        margin: 0;
+        padding: 0;
+        border-width: 0;
+        height: 100%; /* DO NOT USE !important for setting the Grid height! */
+    }
+
+
+    /* Đặt kích thước modal mặc định */
+    .modal-dialog {
+        max-width: 90%;
+        width: auto;
+    }
+
+    /* Thiết lập thuộc tính cho việc kéo modal */
+    .modal-content {
+        overflow: hidden; /* Ngăn chặn nội dung bên ngoài khỏi modal */
+    }
+
+    /* Thiết lập kích thước của modal-body khi kéo */
+    .modal-body {
+        max-height: 80vh; /* Điều chỉnh kích thước tùy ý dựa trên nhu cầu của bạn */
+        overflow-y: auto;
+    }
+
+</style>
+@section scripts {
+   
+}
+<script>
+
+    var editor = $("#description").kendoEditor({
+        // stylesheets: [
+        //     "../content/shared/styles/editor.css",
+        // ],
+        tools: [
+            "bold",
+            "italic",
+            "underline",
+            "strikethrough",
+            "fontName",
+            "fontSize",
+            "foreColor",
+            "backColor",
+            "insertImage",
+            "createLink",
+            "undo",
+            "redo",
+            "justifyLeft",
+            "justifyCenter",
+            "justifyRight",
+            "insertUnorderedList",
+            "insertOrderedList",
+            "indent",
+            "outdent",
+            "formatBlock",
+            "clearFormat"
+        ]
+    });
+
+
+    $(document).ready(function () {
+
+
+        // gọi form khi nhấn edit
+
+        var editButtons = document.querySelectorAll('.k-button k-button-icontext k-grid-capnhat');
+
+    @* Gán sự kiện click cho từng nút "Sửa"*@
+            editButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+    @* Gọi hàm hay thực hiện các đoạn mã tương ứng khi nút "Sửa" được nhấn*@
+                        $('#exampleModal').modal('show');
+                    console.log("Nút 'Sửa' đã được nhấn");
+    @* Thực hiện các tác vụ khác tại đây*@
+                                                    });
+            });
+
+
+        $("#grid").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "/ManagePost/GetAll",
+                        type: "GET",
+                        dataType: "json"
+                    },
+                    capnhat: {
+                        url: "/ManagePost/DetailsManagePost({guid})",
+                        type: "GET",
+                        dataType: "object",
+
+                    },
+                    destroy: {
+                        url: "/",
+                        type: "DELETE",
+                        dataType: "json"
+                    },
+
+                },
+                schema: {
+                    data: "result",
+                    total: "count", // Chỉ định tên trường tổng số dòng,
+                    model: {
+                        id: "id",
+                        fields: {
+                            code: { type: "string", validation: { required: true } },
+                            price: { type: "int", validate: { required: true } },
+                            status: { type: "int", validate: { required: true } }
+                        }
+                    }
+                },
+
+                pageSize: 20,
+            },
+            height: 550,
+            groupable: false,
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSizes: [5, 10, 20, "All"],
+                buttonCount: 3,
+                messages: {
+                    itemsPerPage: "Số dòng trên mỗi trang",
+                    display: "{0}-{1} trong {2} dòng"
+                }
+            },
+
+            toolbar: [
+                {
+                    name: "pdf",
+                    text: "Xuất file PDF" // Change the text of the "PDF" button to "Xuất file PDF"
+                }
+            ],
+            pdf: {
+                allPages: true,
+                avoidLinks: true,
+                paperSize: "A4",
+                margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
+                landscape: true,
+                repeatHeaders: true,
+                template: $("#page-template").html(),
+                scale: 0.8
+            }
+            ,
+            editable: {
+                mode: "popup",
+                window: { width: 1500, height: 1000 }, // Chỉnh chiều rộng ở đây
+            },
+            columns: [
+                {
+                    field: "code",
+                    title: "Mã"
+                },
+                {
+                    field: "createDate",
+                    title: "createDate"
+                },
+                {
+                    field: "linkImage",
+                    title: "linkImage"
+                },
+                {
+                    field: "description",
+                    title: "description",
+                    template: function (dataItem) {
+                        return decodeHtmlEntities(dataItem.description);
+                    }
+
+                },
+                {
+                    field: "status",
+                    title: "status",
+                    hidden: false, // Ẩn cột này
+                },             
+                {
+                    command: [
+                        {
+
+                            // return '<button type="button" class="k-button k-button-icontext k-grid-capnhat">capnhat</button>'
+                            name: "capnhat",
+                            text: "sửa",
+                            click: function (e) {
+                                e.preventDefault();
+                                var dataItem = this.dataItem($(e.target).closest("tr"));
+                                var managePostId = dataItem.id; // Assuming 'Id' is the property that holds the ID
+                                openEditModal(managePostId);
+                            }
+
+                        },
+                        {
+                            name: "destroy",
+                            text: "Xóa",
+
+                        },
+                    ],
+                    title: "Hành động",
+                    width: "250px",
+                    exportable: false
+                }
+            ],
+
+        });
+        var newTextarea = $('<textarea id="editor" rows="10" cols="30" style="width:100%; height:840px" aria-label="editor"></textarea>');
+
+        // Find elements with the specified class and prepend the textarea before them
+        $(".k-edit-buttons.k-state-default").prepend(newTextarea);
+
+        // tạo 1 nút thêm(Create New) trước class k-grid-pdf
+        var newButton = $('<a type="button" class="k-button k-button-icontext k-grid-create" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openCreateModal()">Thêm</a> ');
+        // Find elements with the specified class and prepend the textarea before them
+        $(".k-grid-pdf").before(newButton);
+
+    });
+
+
+
+    document.getElementById('openNewWindowButton').addEventListener('click', function () {
+        // Specify the URL you want to open
+        var newUrl = "/ManagePost/CreateWithOtherPage";
+
+        // Open the URL in a new browser window or tab
+        // window.open(newUrl);
+
+
+        window.location.href = newUrl;
+    });
+
+    function openCreateModal() {
+
+        var url = "/ManagePost/CreateWithOtherPage";
+        window.location.href = url;
+    }
+
+    function openEditModal(Id) {
+        var newUrl = "/ManagePost/DetailsManagePost?id=" + Id;
+
+        // Change the current page's URL to the new URL
+        window.location.href = newUrl;
+    }
+
+
+    $(document).ready(function () {
+        // Change the text of the button
+        $("#pdf-export-button").text("Xuất file PDF");
+    });
+
+    // function openEditModal(Id) {
+    //     $.ajax({
+    //         url: "/ManagePost/Update?id=" + Id,
+    //         type: "GET",
+    //         dataType: "html",
+    //         success: function (response) {
+    //             // Tải nội dung modal vào div ẩn
+    //             $("#modalContent").html(response);
+
+    //             // Mở modal
+    //             $("#updateModal").modal("show");
+    //         },
+    //         error: function () {
+    //             // Xử lý lỗi
+    //         }
+    //     });
+    // }
+
+    function decodeHtmlEntities(text) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = text;
+        return txt.value;
+    }
+
+
+
+</script>
+
+
+
+
+

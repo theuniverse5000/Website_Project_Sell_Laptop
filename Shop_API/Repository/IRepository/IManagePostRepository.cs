@@ -7,6 +7,8 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Create(ManagePost managePost);
         Task<bool> Update(ManagePost managePost);
         Task<bool> Delete(Guid Id);
+        Task<ManagePost> GetById(Guid Id);
+        Task<bool> GetByCode(Guid Id);
         Task<List<ManagePost>> GetAllManagePosts();
     }
 }

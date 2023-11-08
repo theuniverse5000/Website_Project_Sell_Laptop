@@ -54,8 +54,19 @@ namespace Shop_API.Repository
         public async Task<List<ManagePost>> GetAllManagePosts()
         {
             var list = await _dbContext.ManagePosts.ToListAsync();
-            var listMP = list.Where(x => x.Status != false).ToList();
-            return listMP;
+            //var listMP = list.Where(x => x.Status != false).ToList();
+            return list;
+        }
+
+        public Task<bool> GetByCode(Guid Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ManagePost> GetById(Guid Id)
+        {
+            var getById = await _dbContext.ManagePosts.FindAsync(Id);
+            return getById;
         }
 
         public async Task<bool> Update(ManagePost managePost)

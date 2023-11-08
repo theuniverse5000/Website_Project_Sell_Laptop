@@ -64,6 +64,7 @@ builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
 builder.Services.AddTransient<ITichDiemServices, TichDiemServices>();
 builder.Services.AddTransient<IImagesServies, ImagesServies>();
+builder.Services.AddTransient<IManagePostRepository, ManagePostRepository>();
 #endregion
 builder.Services.RegisterServiceComponents();
 
