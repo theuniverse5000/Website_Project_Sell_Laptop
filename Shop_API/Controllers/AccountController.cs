@@ -9,10 +9,12 @@ namespace Shop_API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _userServiece;
+        private readonly ResponseDto _reponse;
 
         public AccountController(IAccountService userServiece)
         {
             _userServiece = userServiece;
+            _reponse = new ResponseDto();
 
         }
 
@@ -37,7 +39,8 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> SignUpAsync([FromBody] SignUpDto signUp)
         {
             var result = await _userServiece.SignUp(signUp);
-            return Ok(result);
+            _reponse.Result=result.Data;
+            return Ok(_reponse);
         }
 
 

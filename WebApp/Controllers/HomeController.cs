@@ -28,15 +28,16 @@ namespace WebApp.Controllers
         {
             return RedirectToAction("Login","Login");
         }
-        
-        public async Task<IActionResult> ProductDetail(Guid id)
+        public async Task<IActionResult> ProductDetail(string code)
         {
+            var  x = HttpContext.Request;
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-            var apiUrl = $@"/api/ProductDetail/ProductDetailById?guid={id}";
+            var apiUrl = $@"/api/ProductDetail/PGetProductDetail?codeProductDetail={code}";
             var apiRespone = await httpClient.GetStringAsync(apiUrl);
-            var content = JsonConvert.DeserializeObject<ProductDto>(apiRespone);
-            ViewBag.ProductDetail = content;
-            return PartialView("_Detail",content);
+            var content = JsonConvert.DeserializeObject<ResponseDto>(apiRespone);
+            var productDetails = JsonConvert.DeserializeObject<List<ProductDetailDto>>(content.Result.ToString());
+            return PartialView("_Detail", productDetails.FirstOrDefault());
+
         }
     }
 }

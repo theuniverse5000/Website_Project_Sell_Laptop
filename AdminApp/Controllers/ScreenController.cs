@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shop_API.AppDbContext;
 using Shop_Models.Entities;
-using System.Net.Http;
 
 namespace AdminApp.Controllers
 {
@@ -10,15 +8,13 @@ namespace AdminApp.Controllers
         private readonly ILogger<ScreenController> _logger;
         private readonly IConfiguration _config;
         HttpClient client = new HttpClient();
-        ApplicationDbContext context;
         private readonly IHttpClientFactory _httpClientFactory;
         int Check = 1;
 
-        public ScreenController(ILogger<ScreenController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)
+        public ScreenController(ILogger<ScreenController> logger, IConfiguration config, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _config = config;
-            context = ctext;
             _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()
@@ -85,7 +81,7 @@ namespace AdminApp.Controllers
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
                     // Gửi yêu cầu PUT dưới dạng JSON
-                    HttpResponseMessage response = await client.PutAsJsonAsync($"https://localhost:44333/api/Screen", p);
+                    HttpResponseMessage response = await client.PutAsJsonAsync($"/api/Screen", p);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -128,8 +124,6 @@ namespace AdminApp.Controllers
 
             }
         }
-
-
         public async Task<JsonResult> DeleteScreen2(Guid id)
         {
             try
@@ -161,8 +155,5 @@ namespace AdminApp.Controllers
                 return Json(new { status = "Error", message = ex.Message });
             }
         }
-
-
-
     }
 }

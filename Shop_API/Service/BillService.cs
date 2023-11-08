@@ -135,7 +135,7 @@ namespace Shop_API.Service
                 return _reponse;
             }
         }
-        public async Task<ResponseDto> GetBillByInvoiceCode(string invoiceCode)
+        public async Task<ResponseDto> PGetBillByInvoiceCode(string invoiceCode)
         {
             Bill billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);
             if (billT != null)

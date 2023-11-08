@@ -23,8 +23,8 @@ namespace Shop_API.Controllers
             _billRepository = billRepository;
         }
         [AllowAnonymous]
-        [HttpGet("GetBillByInvoiceCodeP/{invoiceCode}")]
-        public async Task<IActionResult> GetBillByInvoiceCodeP(string invoiceCode)
+        [HttpGet("PGetBillByInvoiceCode")]
+        public async Task<IActionResult> PGetBillByInvoiceCode(string invoiceCode)
         {
 
             //string? apiKey = _config.GetSection("ApiKey").Value;
@@ -38,7 +38,7 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            var result = await _billService.GetBillByInvoiceCode(invoiceCode);
+            var result = await _billService.PGetBillByInvoiceCode(invoiceCode);
             Log.Information("GetBill => {@_reponse}", result);
             if (result.IsSuccess)
             {

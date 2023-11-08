@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shop_API.Controllers;
 
 namespace AdminApp.Controllers
 {
     public class PointWalletController : Controller
     {
-        private readonly ILogger<ViDiemController> _logger;
+
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
-        public PointWalletController(ILogger<ViDiemController> logger, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public PointWalletController( IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
 
             _configuration = configuration;
-            _logger = logger;
             _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()

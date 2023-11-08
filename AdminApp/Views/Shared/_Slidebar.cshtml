@@ -1,67 +1,76 @@
-﻿<!-- Add Bootstrap CSS and JavaScript (Use Bootstrap 5.0.0) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+﻿    <div class="profile">
+        <img src="~/Image/avt1.webp" alt="profile_picture">
+        <h3>Quản trị</h3>
+    </div>
+    <ul>
+        <li>
+            <a href="#" class="active">
+                <span class="icon"><i class="fas fa-home"></i></span>
+                <span class="item">Home</span>
+            </a>
+        </li>
+        <li>
+            <div id="Bill">
+                <a>
+                    <span class="icon"><i class="fas fa-desktop"></i></span>
+                    <span class="item">Hóa đơn</span>
+                </a>
+            </div>
+        </li>
+        <li>
+            <a id="ProductDetail" href="#">
+                <span class="icon"><i class="fas fa-user-friends"></i></span>
+                <span class="item">Sản phẩm</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
+                <span class="item">Perfomance</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="icon"><i class="fas fa-database"></i></span>
+                <span class="item">Development</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="icon"><i class="fas fa-chart-line"></i></span>
+                <span class="item">Reports</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="icon"><i class="fas fa-user-shield"></i></span>
+                <span class="item">Admin</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="icon"><i class="fas fa-cog"></i></span>
+                <span class="item">Settings</span>
+            </a>
+        </li>
+    </ul>
 
-<!-- User Profile -->
-<div class="profile">
-    <img src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg" alt="profile_picture">
-    <h3>Anamika Roy</h3>
-    <p>Designer</p>
-</div>
+    <script>
+    var loginButton = document.getElementById('Bill');
+    loginButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: "/Bill/Index",
+            type: "GET",
+            success: function (result) {
+                $("#rootAdmin").html(result); // Cập nhật nội dung của phần tử trên trang web
+            },
+            error: function () {
+                alert("Có lỗi xảy ra.");
+            }
+        });
 
-<!-- Navigation Menu using Bootstrap dropdowns -->
-<ul class="navbar-nav navigation-menu">
-    <li class="nav-item">
-        <a href="#" class="nav-link active">
-            <span class="icon"><i class="fas fa-home"></i></span>
-            <span class="item">Home</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="/ManagePost" class="nav-link">
-            <span class="icon"><i class="fas fa-desktop"></i></span>
-            <span class="item">ManagePost</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="/ProductDetail" class="nav-link">
-            <span class="icon"><i class="fas fa-user-friends"></i></span>
-            <span class="item">Product Detail</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="#" class="nav-link">
-            <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
-            <span class="item">Performance</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="#" class="nav-link">
-            <span class="icon"><i class="fas fa-database"></i></span>
-            <span class="item">Development</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="#" class="nav-link">
-            <span class="icon"><i class="fas fa-chart-line"></i></span>
-            <span class="item">Reports</span>
-        </a>
-    </li>
-    <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="icon"><i class="fas fa-user-shield"></i></span>
-            <span class="item">Admin</span>
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-            <li><a class="dropdown-item" href="#">Admin Option 1</a></li>
-            <li><a class="dropdown-item" href="#">Admin Option 2</a></li>
-            <!-- Add more admin options as needed -->
-        </ul>
-    </li>
-    <li class="nav-item">
-        <a href="#" class="nav-link">
-            <span class="icon"><i class="fas fa-cog"></i></span>
-            <span class="item">Settings</span>
-        </a>
-    </li>
-</ul>
+    })
+    </script>
+
+

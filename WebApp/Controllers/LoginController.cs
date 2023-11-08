@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.DotNet.MSIdentity.Shared;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using Shop_Models.Entities;
 
 namespace WebApp.Controllers;
 [AllowAnonymous]
@@ -29,18 +30,14 @@ public class LoginController : Controller
     public IActionResult Login(string ReturnUrl = "/")
     {
         string accessToken = HttpContext.Request.Cookies["access_token"];
-        if (accessToken != null)
-        {
-            return Content(accessToken);
-        }
 
         return PartialView("_Login");
     }
     [HttpPost]
     public async Task<IActionResult> LoginWithJWT([FromBody] LoginRequestDto loginRequestDto)
     {
-        var apiUrl = "https://localhost:7286/api/Account/Login";
-        var httpclient = _httpClientFactory.CreateClient("MyHttpClient");
+        var apiUrl = "/api/Account/Login";
+        var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
         var requestdata = new StringContent(JsonConvert.SerializeObject(loginRequestDto), Encoding.UTF8, "application/json");
         var respone = await httpclient.PostAsync(apiUrl, requestdata);
         //var LoginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(respone.Content);
@@ -98,7 +95,33 @@ public class LoginController : Controller
         }
     }
 
+    public async Task<IActionResult> SignUp()
+    {
+        return PartialView("_SignUp");
+    }
+    [HttpPost]
+    public async void AccountSignUp(
+        [FromBody] SignUpDto signUpdata)
+    {
+        var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+        var apiUrl = "/api/Account/SignUp";
+        var requestData = new StringContent(JsonConvert.SerializeObject(signUpdata), Encoding.UTF8, "application/json");
+        var respone = await httpClient.PostAsync(apiUrl, requestData);
+        var content = JsonConvert.DeserializeObject<ResponseDto>( await respone.Content.ReadAsStringAsync());
+        var signUpRespone = JsonConvert.DeserializeObject<SignUpRespone>(content.Result.ToString());
+        if (signUpRespone.Mess=="true")
+        {
+            var userInformation = JsonConvert.DeserializeObject<User>(signUpRespone.Data.ToString());
+            LoginRequestDto userLogin = new LoginRequestDto()
+            {
+                UserName=userInformation.UserName,
+                Password=userInformation.Password,
+                RememberMe=true,
+            };
+            RedirectToAction("LoginWithJWT", userLogin);
+        }
 
+    }
     public IActionResult LoginWithFacebook(string returnUrl = "/")
     {
         var properties = new AuthenticationProperties

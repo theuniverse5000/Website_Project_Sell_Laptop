@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shop_API.AppDbContext;
 using Shop_Models.Entities;
-using System.Net.Http;
 
 namespace AdminApp.Controllers
 {
@@ -10,19 +8,17 @@ namespace AdminApp.Controllers
         private readonly ILogger<ProductTypeController> _logger;
         private readonly IConfiguration _config;
         HttpClient client = new HttpClient();
-        ApplicationDbContext context;
-        static int Check {get;set;}
+        static int Check { get; set; }
         private readonly IHttpClientFactory _httpClientFactory;
-        public ProductTypeController(ILogger<ProductTypeController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)
+        public ProductTypeController(ILogger<ProductTypeController> logger, IConfiguration config, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _config = config;
-            context = ctext;
             _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()
         {
-            
+
             return View();
         }
 
@@ -30,15 +26,13 @@ namespace AdminApp.Controllers
         {
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
-                HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/ProductType");
+                HttpResponseMessage response = await client.GetAsync($"/api/ProductType");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var count = result.Count();
                     ViewBag.Count = count;
-
-
                     return Content(result, "application/json");
                 }
                 else
@@ -51,15 +45,13 @@ namespace AdminApp.Controllers
         {
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
-                HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/ProductType/GetPagingProductsFSP");
+                HttpResponseMessage response = await client.GetAsync($"/api/ProductType/GetPagingProductsFSP");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var count = result.Count();
-                    ViewBag.Count = count; 
-                    
-
+                    ViewBag.Count = count;
                     return Content(result, "application/json");
                 }
                 else
@@ -68,7 +60,6 @@ namespace AdminApp.Controllers
                 }
             }
         }
-
         public async Task<JsonResult> CreateProductType(ProductType p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
@@ -76,10 +67,10 @@ namespace AdminApp.Controllers
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.PostAsJsonAsync($"https://localhost:44333/api/ProductType/CreateProductType", p);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/ProductType/CreateProductType", p);
                 if (response.IsSuccessStatusCode)
                 {
-                    var result =  response.Content.ReadAsStringAsync().Result;
+                    var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
                     Check = 1;
                     return Json(new { status = "success" });
@@ -89,10 +80,8 @@ namespace AdminApp.Controllers
                     Check = 0;
                     return Json(new { status = "error" });
                 }
-
             }
         }
-
         public async Task<JsonResult> UpdateProductType(ProductType p)
         {
             try
@@ -103,7 +92,7 @@ namespace AdminApp.Controllers
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
                     // Gửi yêu cầu PUT dưới dạng JSON
-                    HttpResponseMessage response = await client.PutAsJsonAsync($"https://localhost:44333/api/ProductType", p);
+                    HttpResponseMessage response = await client.PutAsJsonAsync($"/api/ProductType", p);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -123,8 +112,6 @@ namespace AdminApp.Controllers
                 return Json(new { status = "Error", message = ex.Message });
             }
         }
-
-
         public async Task<JsonResult> DeleteProductType(Guid id)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
@@ -132,7 +119,7 @@ namespace AdminApp.Controllers
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/ProductType/id?id={id}");
+                HttpResponseMessage response = await client.DeleteAsync($"/api/ProductType/id?id={id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
@@ -143,11 +130,8 @@ namespace AdminApp.Controllers
                 {
                     return Json(null);
                 }
-
             }
         }
-
-
         public async Task<JsonResult> DeleteProductType2(Guid id)
         {
             try
@@ -159,7 +143,7 @@ namespace AdminApp.Controllers
                 {
                     // Gửi yêu cầu DELETE với id trong URL
                     //HttpResponseMessage response = await client.DeleteAsync($"{urlApi}/api/ProductType/{id}");
-                    HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/ProductType/id?id={id}");
+                    HttpResponseMessage response = await client.DeleteAsync($"/api/ProductType/id?id={id}");
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -179,8 +163,5 @@ namespace AdminApp.Controllers
                 return Json(new { status = "Error", message = ex.Message });
             }
         }
-
-
-
     }
 }
