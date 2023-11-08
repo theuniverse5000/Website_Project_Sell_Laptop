@@ -1,4 +1,5 @@
-﻿<div class="cart " style="width: 1440PX; margin: auto;">
+﻿@model List<Shop_Models.Dto.CartItemDto>
+<div class="cart " style="width: 1440PX; margin: auto;">
     <!-- thong tin gio hang -->
     <div class="User-cart table-responsive">
         <table class="table table-bordered">
@@ -13,45 +14,49 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>
-                        <div class="product-in-cart-info d-flex align-items-center justify-content-center">
-                            <img src="./img/Product-detail-img/text_ng_n_21_ 1.png">
-                            <div class="info-incart d-flex flex-column text-align-center  justify-content-center">
-                                <span><b>[New 100%] Lenovo Legion 5 Pro Y9000P (Core i9-12900H, 16GB, 512GB, RTX 3060 6GB, 16'' WQXGA 165Hz)</b></span>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <div class="product-in-cart-info d-flex align-items-center justify-content-center">
+                                <img src="./img/Product-detail-img/text_ng_n_21_ 1.png">
+                                <div class="info-incart d-flex flex-column text-align-center  justify-content-center">
+                                    <span><b>@item.NameProduct (@item.TenCpu, @item.MaRam - @item.ThongSoRam, @item.ThongSoHardDrive, @item.MaCardVGA, @item.KichCoManHinh @item.TanSoManHinh)</b></span>
 
-                                <p>
-                                    Bảo hành: 12 tháng LaptopAbc XYZ
-                                </p>
+                                    <p>
+                                        Bảo hành: 12 tháng LaptopAbc XYZ
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td><span>32.890.000đ </span></td>
-                    <td>
-                        <div class="quantity">
-                            <button class="btn btn-sm btn-minus">-</button>
-                            <input type="text" value="1">
-                            <button class="btn btn-sm btn-plus">+</button>
-                        </div>
-                    </td>
-                    <td>
-                        <span>32.890.000đ </span>
-                    </td>
-                    <td>
-                        <button class="btn"> <i class="fa-solid fa-trash-can"></i></button>
-                    </td>
-                </tr>
-                <tr>
+                        </td>
+                        <td><span>@item.Price </span></td>
+                        <td>
+                            <div class="quantity">
+                                <button class="btn btn-sm btn-minus">-</button>
+                                <input type="text" value="1">
+                                <button class="btn btn-sm btn-plus">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <span>32.890.000đ </span>
+                        </td>
+                        <td>
+                            <button class="btn"> <i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                   
+                }
+                 <tr>
 
-                    <td colspan="2" class=""></td>
-                    <td colspan="4" class="text-right">
-                        <div class=" d-flex align-items-end flex-column">
-                            <span>Tổng cộng: 22.890.000 đ</span>
-                            <span style="color: red; font-size: larger;"><b>Thanh toán: 22.890.000 VND</b></span>
-                        </div>
-                    </td>
-                </tr>
+                        <td colspan="2" class=""></td>
+                        <td colspan="4" class="text-right">
+                            <div class=" d-flex align-items-end flex-column">
+                                <span>Tổng cộng: 22.890.000 đ</span>
+                                <span style="color: red; font-size: larger;"><b>Thanh toán: 22.890.000 VND</b></span>
+                            </div>
+                        </td>
+                    </tr>
             </tbody>
         </table>
     </div>

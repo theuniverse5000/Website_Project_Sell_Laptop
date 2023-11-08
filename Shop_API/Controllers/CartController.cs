@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Shop_API.Controllers
 {
@@ -33,8 +34,9 @@ namespace Shop_API.Controllers
         }
         [AllowAnonymous]// For admin
         [HttpGet("GetCartByUsername")]
-        public async Task<IActionResult> GetCartByUsername(string username)
+        public async Task<IActionResult> GetCartByUsername()
         {
+            var username = User.Identity.Name;
             var reponse = await _cartService.GetCartByUsername(username);
             if (reponse.IsSuccess)
             {
@@ -48,8 +50,9 @@ namespace Shop_API.Controllers
         }
         [AllowAnonymous]// For client
         [HttpGet("GetCartJoinForUser")]
-        public async Task<IActionResult> GetCartJoinForUser(string username)
+        public async Task<IActionResult> GetCartJoinForUser()
         {
+            var username = User.Identity.Name;
             var reponse = await _cartService.GetCartJoinForUser(username);
             if (reponse.IsSuccess)
             {

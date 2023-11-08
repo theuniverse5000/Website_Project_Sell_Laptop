@@ -59,9 +59,8 @@ namespace Shop_API.Repository
         {
             try
             {
-                var listUser = await _context.Users.ToListAsync();
-                Guid idUser = listUser.FirstOrDefault().Id;//x => x.UserName == username
-                var cart = await _context.Carts.FindAsync(idUser);
+                var user = await _context.Users.FirstOrDefaultAsync(x=>x.UserName== username);
+                var cart = await _context.Carts.FirstOrDefaultAsync(x=>x.UserId==user.Id);
                 return cart;
             }
             catch (Exception)
@@ -76,10 +75,10 @@ namespace Shop_API.Repository
             // Truyền vào tên tào khoản của người dùng
             try
             {
-                var listUser = await _context.Users.ToListAsync();// lấy danh sách người dùng trong database
+                var user = await _context.Users.FirstOrDefaultAsync(x=>x.UserName==username);// lấy danh sách người dùng trong database
                 // Chú ý lấy trước rồi mới tìm để phân biệt được chữ hoa, chữ thường
                 // Nếu tìm trực tiếp sẽ không phân biệt được chữ hoa, chữ thường
-                Guid idUser = listUser.FirstOrDefault().Id;// Lấy ra ìd người dùng//x => x.UserName == username
+                // Lấy ra ìd người dùng//x => x.UserName == username
                 // Dùng CartItemDto để hiển thị kết quả
                 List<CartItemDto> cartItem = new List<CartItemDto>();// Khởi tao 1 list
                 cartItem = (
@@ -126,7 +125,7 @@ namespace Shop_API.Repository
                                //  LinkImage = h.LinkImage
                            }
                     ).ToList();
-                return cartItem.Where(x => x.UserId == idUser);// Trả về list với điểu kiện 
+                return cartItem.Where(x => x.UserId == user.Id);// Trả về list với điểu kiện 
             }
             catch (Exception)
             {

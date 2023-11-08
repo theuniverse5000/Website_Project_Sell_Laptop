@@ -30,17 +30,13 @@ public class LoginController : Controller
     public IActionResult Login(string ReturnUrl = "/")
     {
         string accessToken = HttpContext.Request.Cookies["access_token"];
-        if (accessToken != null)
-        {
-            return Content(accessToken);
-        }
 
         return PartialView("_Login");
     }
     [HttpPost]
     public async Task<IActionResult> LoginWithJWT([FromBody] LoginRequestDto loginRequestDto)
     {
-        var apiUrl = "https://localhost:7286/api/Account/Login";
+        var apiUrl = "/api/Account/Login";
         var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
         var requestdata = new StringContent(JsonConvert.SerializeObject(loginRequestDto), Encoding.UTF8, "application/json");
         var respone = await httpclient.PostAsync(apiUrl, requestdata);

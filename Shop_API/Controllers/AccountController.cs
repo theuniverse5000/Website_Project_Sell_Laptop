@@ -40,7 +40,7 @@ namespace Shop_API.Controllers
         {
             var result = await _userServiece.SignUp(signUp);
             _reponse.Result=result.Data;
-            return Ok(result);
+            return Ok(_reponse);
         }
 
 
