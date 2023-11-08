@@ -1,36 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Shop_Models.Dto;
+using System.Net.Http.Headers;
 
 namespace WebApp.Controllers
 {
     public class CartController : Controller
     {
         private readonly IConfiguration _config;
-        HttpClient client = new HttpClient();
-        public CartController(IConfiguration config)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public CartController(IConfiguration config, IHttpClientFactory httpClientFactory)
         {
             _config = config;
+            _httpClientFactory = httpClientFactory;
         }
         [HttpGet]
-        //    [Route("UserCart")]
-
         public async Task<IActionResult> UserCart()
         {
-            //string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
-            //string? urlApi = _config.GetSection("UrlApiAdmin").Value;
-            //using (HttpClient client = new HttpClient())
-            //{
-            //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-            //    HttpResponseMessage response = client.GetAsync($"{urlApi}/api/Cart/GetCartJoinForUser?username=thienthan").Result;
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        var result = response.Content.ReadAsStringAsync().Result;
-            //        ViewBag.CartItem = result;
-            //    }
-            //    else
-            //    {
-            //        ViewBag.CartItem = "Co loi xay ra";
-            //    }
-            //}
+            var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+            var accessToken = JsonConvert.DeserializeObject<TokenDto>(Request.Cookies["access_token"]);
+            //Get userCart
+            var apiUrl = "/api/Cart/GetCartJoinForUser?username=duykhanh12";
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
+            var respone = await httpClient.GetAsync(apiUrl);
+            var responeContent = respone.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ResponseDto>(responeContent.Result.ToString());
+            var listProductDetail= JsonConvert.DeserializeObject<List<CartItemDto>>(result.Result.ToString());
+            //var listProductOfCart = JsonConvert.DeserializeObject<CartItemDto>(content.Result.ToString());
+
             return PartialView("_UserCart");
         }
     }
