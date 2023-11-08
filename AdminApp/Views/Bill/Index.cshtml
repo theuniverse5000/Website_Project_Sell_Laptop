@@ -14,13 +14,13 @@
             </div>
     </div>
 </div> *@
-<div id="myModal" class="modal fade" role="dialog" data-backdrop="static">
+@* <div id="myModal" class="modal fade" role="dialog" data-backdrop="static"> 
     <div class="modal-dialog">
-        <div class="modal-body">
+        <div class="modal-body">*@
             <div id="detailsGrid"></div>
-        </div>
+@*        </div>
     </div>
-</div>
+ </div> *@
 
 
 
@@ -62,6 +62,7 @@
                     {
                         field: "price",
                         title: "Giá",
+                        editable: true
                     },
                     
                     {
@@ -110,7 +111,7 @@
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/Ram/DeleteRam2",
+                            url: "/",
                             type: "DELETE",
                             dataType: "json"
                         },

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shop_API.AppDbContext;
 using Shop_Models.Entities;
 
 namespace AdminApp.Controllers
@@ -8,26 +7,20 @@ namespace AdminApp.Controllers
     {
         private readonly ILogger<RamController> _logger;
         private readonly IConfiguration _config;
-        HttpClient client = new HttpClient();
-        ApplicationDbContext context;
         private readonly IHttpClientFactory _httpClientFactory;
         int Check = 1;
-        public RamController(ILogger<RamController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)
+        public RamController(ILogger<RamController> logger, IConfiguration config, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _config = config;
-            context = ctext;
             _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()
         {
             return View();
         }
-
         public async Task<IActionResult> GetRam()
         {
-
-
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 HttpResponseMessage response = await client.GetAsync($"/api/Ram/GetRamsFSP");

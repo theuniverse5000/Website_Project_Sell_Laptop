@@ -1,67 +1,38 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Shop_API.AppDbContext;
-using static Org.BouncyCastle.Math.EC.ECCurve;
-using System.Net.Http;
-using Shop_API.Repository.IRepository;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_Models.Entities;
-
 namespace AdminApp.Controllers
 {
-  
+
     public class ManufacturerController : Controller
     {
 
         private readonly ILogger<ManufacturerController> _logger;
         private readonly IConfiguration _config;
         private readonly IHttpClientFactory _httpClientFactory;
-        //private string? urlApi;
-        //private readonly IManufacturerRepository _manufacturer;
 
         public ManufacturerController(ILogger<ManufacturerController> logger, IConfiguration config, IHttpClientFactory httpClientFactory/*, IManufacturerRepository manufacturerRepository*/)
         {
             _logger = logger;
             _config = config;            //urlApi = _config.GetSection("UrlApiAdmin").Value;
             _httpClientFactory = httpClientFactory;
-
-
-            //_manufacturer = manufacturerRepository;
         }
         public IActionResult Index()
         {
 
             return View();
         }
-        //public async Task<IActionResult> GetList()
-        //{
-        //    string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
-        //    var client = _httpClientFactory.CreateClient();
-        //    string result = await client.GetStringAsync($"{urlApi}/api/Manufacturer");
-        //    return Content(result, "application/json");
-        //}
-
-        //public async Task<IActionResult> GetListViewBag()
-        //{
-
-        //  return  ViewBag.ListManufacturer = new Microsoft.AspNetCore.Mvc.Rendering.SelectList((System.Collections.IEnumerable)_manufacturer.GetAll(),"Id","Name");
-
-
-        //}
-
         public async Task<IActionResult> GetList()
         {
 
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
-                HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/Manufacturer");
+                HttpResponseMessage response = await client.GetAsync($"/api/Manufacturer");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var count = result.Count();
                     ViewBag.Count = count;
-
-
                     return Content(result, "application/json");
                 }
                 else
@@ -73,19 +44,15 @@ namespace AdminApp.Controllers
 
         public async Task<IActionResult> GetManufacturer()
         {
-
-
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
-                HttpResponseMessage response = await client.GetAsync($"https://localhost:44333/api/Manufacturer/GetManuFSP");
+                HttpResponseMessage response = await client.GetAsync($"/api/Manufacturer/GetManuFSP");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var count = result.Count();
                     ViewBag.Count = count;
-
-
                     return Content(result, "application/json");
                 }
                 else
@@ -107,18 +74,16 @@ namespace AdminApp.Controllers
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
-                 
+
                     return Json(new { status = "success" });
                 }
                 else
                 {
-                    
+
                     return Json(new { status = "error" });
                 }
-
             }
         }
-
         public async Task<JsonResult> UpdateManufacturer(Manufacturer p)
         {
             try
@@ -172,8 +137,6 @@ namespace AdminApp.Controllers
 
             }
         }
-
-
         public async Task<JsonResult> DeleteManufacturer2(Guid id)
         {
             try

@@ -1,13 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
-using Shop_API.AppDbContext;
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
-
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 // Add Service cho 1 Httpclient và cấu hình 
@@ -19,8 +11,8 @@ builder.Services.AddHttpClient("PhuongThaoHttpAdmin", thao =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(option =>
     {
-        option.LoginPath="/Home/Login";
-        option.Cookie.Name="Myaccount";
+        option.LoginPath = "/Home/Login";
+        option.Cookie.Name = "Myaccount";
     });
 var app = builder.Build();
 

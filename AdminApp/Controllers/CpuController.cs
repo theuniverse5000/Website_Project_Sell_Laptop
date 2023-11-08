@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shop_API.AppDbContext;
 using Shop_Models.Entities;
-using System.Net.Http;
 
 namespace AdminApp.Controllers
 {
@@ -10,27 +8,21 @@ namespace AdminApp.Controllers
         private readonly ILogger<CpuController> _logger;
         private readonly IConfiguration _config;
         HttpClient client = new HttpClient();
-        ApplicationDbContext context;
         private readonly IHttpClientFactory _httpClientFactory;
         int Check = 1;
 
-        public CpuController(ILogger<CpuController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)
+        public CpuController(ILogger<CpuController> logger, IConfiguration config, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _config = config;
-            context = ctext;
             _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()
         {
-
             return View();
         }
-
         public async Task<IActionResult> GetCpu()
         {
-
-
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 HttpResponseMessage response = await client.GetAsync($"/api/Cpu/GetCPUFSP");
@@ -40,8 +32,6 @@ namespace AdminApp.Controllers
                     var result = await response.Content.ReadAsStringAsync();
                     var count = result.Count();
                     ViewBag.Count = count;
-
-
                     return Content(result, "application/json");
                 }
                 else
@@ -50,7 +40,6 @@ namespace AdminApp.Controllers
                 }
             }
         }
-
         public async Task<JsonResult> CreateCpu(Cpu p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
@@ -71,17 +60,14 @@ namespace AdminApp.Controllers
                     Check = 0;
                     return Json(new { status = "error" });
                 }
-
             }
         }
-
         public async Task<JsonResult> UpdateCpu(Cpu p)
         {
             try
             {
                 string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
                 string? urlApi = _config.GetSection("UrlApiAdmin").Value;
-
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
                     // Gửi yêu cầu PUT dưới dạng JSON
@@ -105,8 +91,6 @@ namespace AdminApp.Controllers
                 return Json(new { status = "Error", message = ex.Message });
             }
         }
-
-
         public async Task<JsonResult> DeleteCpu(Guid id)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
@@ -127,16 +111,13 @@ namespace AdminApp.Controllers
                 }
 
             }
-        }
-
-
-        public async Task<JsonResult> DeleteCpu2(Guid id)
+       }
+       public async Task<JsonResult> DeleteCpu2(Guid id)
         {
             try
             {
                 string apiKey = _config.GetSection("TokenGetApiAdmin").Value;
                 string urlApi = _config.GetSection("UrlApiAdmin").Value;
-
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
                     // Gửi yêu cầu DELETE với id trong URL

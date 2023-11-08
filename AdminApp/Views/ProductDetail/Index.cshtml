@@ -3,7 +3,6 @@
     @using Shop_Models;
     @using Shop_Models.Entities;
     @model Shop_Models.Dto.ProductDetailDto;
-    // @model Shop_Models.Entities.ProductDetail;
 
 }
 <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.common.min.css">
@@ -11,21 +10,18 @@
 <script src="https://kendo.cdn.telerik.com/2021.3.1207/js/jquery.min.js"></script>
 <script src="https://kendo.cdn.telerik.com/2021.3.1207/js/kendo.all.min.js"></script>
 
-
-
-
+<form asp-controller="Excel" asp-action="Import" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="excelFile">Chọn file excel</label>
+        <input type="file" name="excelFile" class="form-control-file" accept=".xlsx" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu lại</button>
+</form>
 <div id="example">
-    @* button thêm mới *@
-    @*  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Product Detail</button>*@
-
     <div id="grid"></div>
-
-
     <div id="modalContent" style="display: block;">
     </div>
 </div>
-
-
 <style>
 
     #grid {

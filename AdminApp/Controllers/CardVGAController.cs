@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shop_API.AppDbContext;
 using Shop_Models.Entities;
-using System.Net.Http;
 
 namespace AdminApp.Controllers
 {
@@ -9,16 +7,13 @@ namespace AdminApp.Controllers
     {
         private readonly ILogger<CardVGAController> _logger;
         private readonly IConfiguration _config;
-        HttpClient client = new HttpClient();
-        ApplicationDbContext context;
         private readonly IHttpClientFactory _httpClientFactory;
         int Check = 1;
 
-        public CardVGAController(ILogger<CardVGAController> logger, IConfiguration config, ApplicationDbContext ctext, IHttpClientFactory httpClientFactory)
+        public CardVGAController(ILogger<CardVGAController> logger, IConfiguration config,IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _config = config;
-            context = ctext;
             _httpClientFactory = httpClientFactory;
         }
         public IActionResult Index()

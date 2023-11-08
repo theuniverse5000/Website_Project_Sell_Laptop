@@ -1,7 +1,6 @@
 ﻿    <div class="profile">
-        <img src="https://1.bp.blogspot.com/-vhmWFWO2r8U/YLjr2A57toI/AAAAAAAACO4/0GBonlEZPmAiQW4uvkCTm5LvlJVd_-l_wCNcBGAsYHQ/s16000/team-1-2.jpg" alt="profile_picture">
-        <h3>Anamika Roy</h3>
-        <p>Designer</p>
+        <img src="~/Image/avt1.webp" alt="profile_picture">
+        <h3>Quản trị</h3>
     </div>
     <ul>
         <li>
@@ -11,17 +10,17 @@
             </a>
         </li>
         <li>
-            <div id="12345">
+            <div id="Bill">
                 <a>
                     <span class="icon"><i class="fas fa-desktop"></i></span>
-                    <span class="item">My Dashboard</span>
+                    <span class="item">Hóa đơn</span>
                 </a>
             </div>
         </li>
         <li>
-            <a href="#">
+            <a id="ProductDetail" href="#">
                 <span class="icon"><i class="fas fa-user-friends"></i></span>
-                <span class="item">People</span>
+                <span class="item">Sản phẩm</span>
             </a>
         </li>
         <li>
@@ -55,5 +54,23 @@
             </a>
         </li>
     </ul>
+
+    <script>
+    var loginButton = document.getElementById('Bill');
+    loginButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: "/Bill/Index",
+            type: "GET",
+            success: function (result) {
+                $("#rootAdmin").html(result); // Cập nhật nội dung của phần tử trên trang web
+            },
+            error: function () {
+                alert("Có lỗi xảy ra.");
+            }
+        });
+
+    })
+    </script>
 
 
