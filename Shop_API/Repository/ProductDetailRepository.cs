@@ -35,6 +35,27 @@ namespace Shop_API.Repository
                 return false;
             }
         }
+        public async Task<bool> CreateMany(List<ProductDetail> list)
+        {
+            foreach (var i in list)
+            {
+                var checkMa = await _context.ProductDetails.AnyAsync(x => x.Code == i.Code);
+                if (checkMa == true)
+                {
+                    return false;
+                }
+            }
+            try
+            {
+                await _context.ProductDetails.AddRangeAsync(list);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
         public async Task<bool> Delete(Guid id)
         {
@@ -82,7 +103,7 @@ namespace Shop_API.Repository
            .Count();
             return getCount;
         }
-        public async Task<IEnumerable<ProductDetailDto>> PGetProductDetail(string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int page = 10)
+        public async Task<IEnumerable<ProductDetailDto>> PGetProductDetail(int? getNumber, string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int page = 10)
         {
             var query = _context.ProductDetails
           .AsNoTracking()
@@ -116,7 +137,10 @@ namespace Shop_API.Repository
               NameProductType = a.Product.ProductType.Name,
               NameManufacturer = a.Product.Manufacturer.Name
           });
-
+            if (getNumber > 0)
+            {
+                query = query.Take(Convert.ToInt32(getNumber));
+            }
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.NameProduct.Contains(search));

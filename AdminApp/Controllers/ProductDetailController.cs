@@ -320,12 +320,11 @@ namespace AdminApp.Controllers
             var getProductDetails = await client.GetFromJsonAsync<ProductDetailDto>($"/api/ProductDetail/ProductDetailByIdReturnProDetailDTO?guid={guid}");
             return PartialView(getProductDetails);
         }
-        public IActionResult ImportProductsFromExcel()
-        {
-            return View();
-        }
-        [HttpPost("import-products-from-excel")]
-        public IActionResult ImportProductsFromExcel(IFormFile excelFile)
+        //public IActionResult ImportProductsFromExcel()
+        //{
+        //    return View();
+        //}
+        public async Task<IActionResult> ImportProductsFromExcel(IFormFile excelFile)
         {
             try
             {
@@ -334,7 +333,7 @@ namespace AdminApp.Controllers
                     var worksheet = package.Workbook.Worksheets[0];
                     var rowCount = worksheet.Dimension.Rows;
                     var products = new List<ProductDetail>();
-
+                    var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
                     for (int row = 2; row <= rowCount; row++)
                     {
                         var product = new ProductDetail
@@ -355,10 +354,17 @@ namespace AdminApp.Controllers
                             CardVGAId = null,
                         };
                         products.Add(product);
+                        var result = await client.PostAsJsonAsync($"/api/ProductDetail/Create", product);
+                        //if (result.IsSuccessStatusCode)
+                        //{
+                        //    return RedirectToAction("Index", "ProductDetail");
+                        //}
+
+                        //return BadRequest(result);
                     }
-                    //_db.ProductDetails.AddRange(products);
-                    //_db.SaveChanges();
-                    return Ok("successfully.");
+                    return RedirectToAction("Index", "ProductDetail");
+
+
                 }
             }
             catch (Exception ex)
@@ -367,15 +373,16 @@ namespace AdminApp.Controllers
             }
         }
         [HttpGet("export-products-to-excel")]
-        public IActionResult ExportProductsToExcel()
+        public async Task<IActionResult> ExportProductsToExcel()
         {
             try
             {
-                //  var products = _db.ProductDetails.ToList(); // Thay thế bằng truy vấn cơ sở dữ liệu thích hợp
+                var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+                var getProductDetails = await client.GetFromJsonAsync<ProductDetail>($"/api/ProductDetail/PGetProductDetail");
 
                 using (var package = new ExcelPackage())
                 {
-                    var worksheet = package.Workbook.Worksheets.Add("Products");
+                    var worksheet = package.Workbook.Worksheets.Add("getProductDetails");
                     worksheet.Cells[1, 1].Value = "Code";
                     worksheet.Cells[1, 2].Value = "ImportPrice";
                     worksheet.Cells[1, 3].Value = "Price";

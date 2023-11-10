@@ -3,7 +3,6 @@ using Shop_API.Repository.IRepository;
 using Shop_API.RequestModel;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
-
 namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
@@ -44,7 +43,7 @@ namespace Shop_API.Controllers
             return Ok(_reponse);
         }
         [HttpGet("PGetProductDetail")]
-        public async Task<IActionResult> PGetProductDetail(string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int page)
+        public async Task<IActionResult> PGetProductDetail(int? getNumber, string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int page)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
             //if (apiKey == null)
@@ -57,8 +56,9 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            _reponse.Result = await _repository.PGetProductDetail(codeProductDetail, search, from, to, sortBy, page);
-            _reponse.Count = _repository.PGetProductDetail(codeProductDetail, search, from, to, sortBy, page).Result.Count();
+            var listProductDetail = await _repository.PGetProductDetail(getNumber, codeProductDetail, search, from, to, sortBy, page);
+            _reponse.Result = listProductDetail;
+            _reponse.Count = listProductDetail.ToList().Count;
             return Ok(_reponse);
         }
         [HttpGet("GetProductDetailsPublic")]
@@ -100,7 +100,7 @@ namespace Shop_API.Controllers
             _reponse.Count = 1;
             return Ok(_reponse);
         }
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<IActionResult> CreateProductDetail(ProductDetail obj)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
@@ -125,6 +125,17 @@ namespace Shop_API.Controllers
             _reponse.Message = "Thất bại";
             return BadRequest(_reponse);
         }
+        [HttpPost("CreateMany")]
+        public async Task<IActionResult> CreateMany(List<ProductDetail> list)
+        {
+            // List<ProductDetail> list = new List<ProductDetail>();
+            if (await _repository.CreateMany(list))
+            {
+                return Ok(list);
+            }
+            return BadRequest("Lỗi");
+        }
+
         [HttpPut("UpdateProductDetail")]
         public async Task<IActionResult> UpdateProductDetail(ProductDetail obj)
         {
