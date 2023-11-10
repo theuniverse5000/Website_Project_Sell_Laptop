@@ -18,4 +18,25 @@ for (var i = 0; i < hotProducts.length; i++) {
         });
     });
 }
+function BuyProduct(productDetailCode) {
+    event.preventDefault();
+    console.log(productDetailCode);
+
+    // Mã hóa giá trị nếu cần
+    var encodedIdProductDetail = encodeURIComponent(productDetailCode);
+
+    // Gọi API hoặc xử lý sự kiện chính
+    $.ajax({
+        url: "/ProductDetail/AddProductToCart?productDetailCode=" + encodedIdProductDetail,
+        type: "POST",
+        success: function (result) {
+            // Xử lý kết quả thành công nếu cần
+            console.log(result);
+        },
+        error: function (error) {
+            // Xử lý lỗi nếu có
+            console.error(error);
+        }
+    });
+}
 

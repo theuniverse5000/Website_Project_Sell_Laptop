@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shop_API.Service.IService;
+using Shop_API.Utilitity;
 using Shop_Models.Dto;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -52,8 +54,8 @@ namespace Shop_API.Controllers
         [HttpGet("GetCartJoinForUser")]
         public async Task<IActionResult> GetCartJoinForUser()
         {
-            var username = User.Identity.Name;
-            var reponse = await _cartService.GetCartJoinForUser(username);
+            var (userId, userName) = TokenUtility.GetTokenInfor(Request);
+            var reponse = await _cartService.GetCartJoinForUser(userName);
             if (reponse.IsSuccess)
             {
                 return Ok(reponse);
@@ -85,9 +87,10 @@ namespace Shop_API.Controllers
         //}
         [AllowAnonymous]// For client
         [HttpPost("AddCart")]
-        public async Task<IActionResult> AddCart(string username, string codeProductDetail)
+        public async Task<IActionResult> AddCart( string codeProductDetail)
         {
-            var reponse = await _cartService.AddCart(username, codeProductDetail);
+            var (userId, userName) = TokenUtility.GetTokenInfor(Request);
+            var reponse = await _cartService.AddCart(userId, userName,codeProductDetail);
             if (reponse.IsSuccess)
             {
                 return Ok(reponse);
