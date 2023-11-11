@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
-using Shop_API.RequestModel;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
 namespace Shop_API.Controllers
@@ -18,16 +17,10 @@ namespace Shop_API.Controllers
             _reponse = new ResponseDto();
             _config = config;
         }
-        [HttpGet("GetAllNoJoin")]
-        public async Task<IActionResult> GetAlls(
-            [FromQuery] int? page,
-            [FromQuery] int? size,
-            [FromQuery] string? sort,
-            [FromQuery] string? filter)
+        [HttpGet("GetAlls")]
+        public async Task<IActionResult> GetAlls()
         {
-            var queryModel = new ProductDetailQueryModel();
-            queryModel.CurrentPage = page ?? 1;
-            queryModel.PageSize = size ?? 20;
+
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
             {
@@ -39,7 +32,7 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            _reponse.Result = await _repository.GetAll(queryModel);
+            _reponse.Result = await _repository.GetAll();
             return Ok(_reponse);
         }
         [HttpGet("PGetProductDetail")]
