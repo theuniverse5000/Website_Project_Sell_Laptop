@@ -54,6 +54,27 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Thêm thất bại");
         }
+        [HttpPost("CreateMany")]
+        public async Task<IActionResult> CreateManySerial(List<Serial> listObj)
+        {
+
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+            if (await _repository.CreateMany(listObj))
+            {
+                return Ok("Thêm thành công");
+            }
+            return BadRequest("Thêm thất bại");
+        }
         [HttpPut]
         public async Task<IActionResult> UpdateSerial(Serial obj)
         {

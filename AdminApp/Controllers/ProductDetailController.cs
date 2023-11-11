@@ -340,8 +340,8 @@ namespace AdminApp.Controllers
                         {
                             Id = Guid.NewGuid(),
                             Code = worksheet.Cells[row, 1].Text,
-                            ImportPrice = float.Parse(worksheet.Cells[row, 2].Text),
-                            Price = float.Parse(worksheet.Cells[row, 3].Text),
+                            Price = float.Parse(worksheet.Cells[row, 2].Text),
+                            ImportPrice = float.Parse(worksheet.Cells[row, 3].Text),
                             Upgrade = worksheet.Cells[row, 4].Text,
                             Description = worksheet.Cells[row, 5].Text,
                             Status = int.Parse(worksheet.Cells[row, 6].Text),
@@ -354,7 +354,7 @@ namespace AdminApp.Controllers
                             CardVGAId = null,
                         };
                         products.Add(product);
-                        var result = await client.PostAsJsonAsync($"/api/ProductDetail/Create", product);
+
                         //if (result.IsSuccessStatusCode)
                         //{
                         //    return RedirectToAction("Index", "ProductDetail");
@@ -362,6 +362,7 @@ namespace AdminApp.Controllers
 
                         //return BadRequest(result);
                     }
+                    var result = await client.PostAsJsonAsync($"/api/ProductDetail/CreateMany", products);
                     return RedirectToAction("Index", "ProductDetail");
 
 
