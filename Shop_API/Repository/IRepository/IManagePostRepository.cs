@@ -10,5 +10,6 @@ namespace Shop_API.Repository.IRepository
         Task<ManagePost> GetById(Guid Id);
         Task<bool> GetByCode(Guid Id);
         Task<List<ManagePost>> GetAllManagePosts();
+        Task<IEnumerable<ManagePost>> GetManagePostDtos(string? search, DateTime? from, DateTime? to, string? sortBy, int page = 1);
     }
 }

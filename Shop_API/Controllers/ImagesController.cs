@@ -529,7 +529,7 @@ namespace Shop_API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet] // todo
         [Route("get-images-by-object-type/{objectType}")]
         public IActionResult GetImagesByObjectType(string objectType)
         {
@@ -565,6 +565,9 @@ namespace Shop_API.Controllers
                         break;
                     case "i":
                         objectFolder = "voucher_images";
+                        break;
+                    case "all":
+                        objectFolder = "allPhotoUploaded";
                         break;
                     default:
                         return BadRequest("Loại đối tượng không hợp lệ.");

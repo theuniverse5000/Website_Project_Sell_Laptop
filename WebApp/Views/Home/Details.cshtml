@@ -1,0 +1,20 @@
+﻿@model Shop_Models.Entities.ManagePost
+
+<div class="container">
+    <h1>Product Details</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="@Model.LinkImage" class="product-image" alt="Manage Image">
+                <div class="product-details">
+                    <h3 class="product-title">@Model.Code</h3>
+                    <p class="product-description">@Html.Raw(Model.Description)</p>
+                    <p class="product-price">@Model.CreateDate.ToString("yyyy-MM-dd")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p><a href="@Url.Action("GetAllManagePost")">Back to Product List</a></p>
+</div>
