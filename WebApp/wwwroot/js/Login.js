@@ -6,12 +6,12 @@ function loginWithJWT(ev) {
     var UserNameInput = document.getElementById('UserName').value;
     var passwordInput = document.getElementById('PassWord').value;
     console.log(1)
-    // Create an object containing the data to send to the server
+  
     var dataToSend = {
         UserName: UserNameInput,
         Password: passwordInput,
         RememberMe: true,
-        ReturnUrl: "/" // Fixed the syntax error here (changed semicolon to colon)
+        ReturnUrl: "/" 
     }
     console.log(dataToSend.UserName)
     $.ajax({
@@ -25,8 +25,7 @@ function loginWithJWT(ev) {
             alert(response);
         },
         error: function (xhr, status, error) {
-            // Xử lý lỗi nếu cuộc gọi API thất bại
-            console.error(error);
+          
         }
     });
 }

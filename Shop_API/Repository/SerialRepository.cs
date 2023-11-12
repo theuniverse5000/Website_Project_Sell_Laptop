@@ -30,7 +30,28 @@ namespace Shop_API.Repository
                 return false;
             }
         }
+        public async Task<bool> CreateMany(List<Serial> listObj)
+        {
+            foreach (var obj in listObj)
+            {
+                var checkMa = await _context.Serials.AnyAsync(x => x.SerialNumber == obj.SerialNumber);
+                if (checkMa == true)
+                {
+                    return false;
+                }
+            }
 
+            try
+            {
+                await _context.Serials.AddRangeAsync(listObj);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         public async Task<bool> Delete(Guid id)
         {
             var Serial = await _context.Serials.FindAsync(id);

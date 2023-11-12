@@ -17,7 +17,6 @@ namespace Shop_API.Service
         private readonly IVoucherRepository _voucherRepository;
         private readonly ResponseDto _reponse;
         private readonly BillDto _reponseBill;
-        private static Guid getUserId;  // Tạo 1 biết static phạm vi private dùng trong controller
         private static IEnumerable<CartItemDto>? cartItem;
         public BillService(IBillRepository billRepository, IBillDetailRepository billDetailRepository,
             IProductDetailRepository productDetailRepository, IUserRepository userRepository,
@@ -94,7 +93,7 @@ namespace Shop_API.Service
                     //PhoneNumber = user.PhoneNumber,
                     //Address = user.Address,
                     Status = 2,// Trạng thái 2: Chờ xác nhận
-                    UserId = getUserId,
+                               //  UserId = getUserId,
                     VoucherId = voucherX != null ? voucherX.Id : null
                 };
                 if (await _billRepository.Create(bill))

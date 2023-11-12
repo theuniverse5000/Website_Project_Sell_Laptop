@@ -320,12 +320,11 @@ namespace AdminApp.Controllers
             var getProductDetails = await client.GetFromJsonAsync<ProductDetailDto>($"/api/ProductDetail/ProductDetailByIdReturnProDetailDTO?guid={guid}");
             return PartialView(getProductDetails);
         }
-        public IActionResult ImportProductsFromExcel()
-        {
-            return View();
-        }
-        [HttpPost("import-products-from-excel")]
-        public IActionResult ImportProductsFromExcel(IFormFile excelFile)
+        //public IActionResult ImportProductsFromExcel()
+        //{
+        //    return View();
+        //}
+        public async Task<IActionResult> ImportProductsFromExcel(IFormFile excelFile)
         {
             try
             {
@@ -334,15 +333,15 @@ namespace AdminApp.Controllers
                     var worksheet = package.Workbook.Worksheets[0];
                     var rowCount = worksheet.Dimension.Rows;
                     var products = new List<ProductDetail>();
-
+                    var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
                     for (int row = 2; row <= rowCount; row++)
                     {
                         var product = new ProductDetail
                         {
                             Id = Guid.NewGuid(),
                             Code = worksheet.Cells[row, 1].Text,
-                            ImportPrice = float.Parse(worksheet.Cells[row, 2].Text),
-                            Price = float.Parse(worksheet.Cells[row, 3].Text),
+                            Price = float.Parse(worksheet.Cells[row, 2].Text),
+                            ImportPrice = float.Parse(worksheet.Cells[row, 3].Text),
                             Upgrade = worksheet.Cells[row, 4].Text,
                             Description = worksheet.Cells[row, 5].Text,
                             Status = int.Parse(worksheet.Cells[row, 6].Text),
@@ -355,10 +354,18 @@ namespace AdminApp.Controllers
                             CardVGAId = null,
                         };
                         products.Add(product);
+
+                        //if (result.IsSuccessStatusCode)
+                        //{
+                        //    return RedirectToAction("Index", "ProductDetail");
+                        //}
+
+                        //return BadRequest(result);
                     }
-                    //_db.ProductDetails.AddRange(products);
-                    //_db.SaveChanges();
-                    return Ok("successfully.");
+                    var result = await client.PostAsJsonAsync($"/api/ProductDetail/CreateMany", products);
+                    return RedirectToAction("Index", "ProductDetail");
+
+
                 }
             }
             catch (Exception ex)
@@ -367,15 +374,16 @@ namespace AdminApp.Controllers
             }
         }
         [HttpGet("export-products-to-excel")]
-        public IActionResult ExportProductsToExcel()
+        public async Task<IActionResult> ExportProductsToExcel()
         {
             try
             {
-                //  var products = _db.ProductDetails.ToList(); // Thay thế bằng truy vấn cơ sở dữ liệu thích hợp
+                var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+                var getProductDetails = await client.GetFromJsonAsync<ProductDetail>($"/api/ProductDetail/PGetProductDetail");
 
                 using (var package = new ExcelPackage())
                 {
-                    var worksheet = package.Workbook.Worksheets.Add("Products");
+                    var worksheet = package.Workbook.Worksheets.Add("getProductDetails");
                     worksheet.Cells[1, 1].Value = "Code";
                     worksheet.Cells[1, 2].Value = "ImportPrice";
                     worksheet.Cells[1, 3].Value = "Price";

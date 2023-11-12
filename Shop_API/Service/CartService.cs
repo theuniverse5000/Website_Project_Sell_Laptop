@@ -28,11 +28,12 @@ namespace Shop_API.Service
             _userRepository = userRepository;
             _reponse = new ResponseDto();
         }
-        public async Task<ResponseDto> AddCart(string username, string codeProductDetail)
+        public async Task<ResponseDto> AddCart(Guid userId, string userName, string codeProductDetail)
         {
             try
             {
-                var productDetailToCart = await _productDetailRepository.GetByCode(codeProductDetail);
+
+                var productDetailToCart = _productDetailRepository.PGetProductDetail(1, codeProductDetail, null, null, null, null, 1).Result.FirstOrDefault();
                 var userToCart = _userRepository.GetAllUsers().Result;//.FirstOrDefault(x => x.UserName == username);
                 if (userToCart == null)
                 {
@@ -51,8 +52,8 @@ namespace Shop_API.Service
                     return _reponse;
                 }
                 // Bước 1: Khi truyền vào username lấy ra được id của user
-                getUserId = Guid.NewGuid();// userToCart.Id;
-                var userCart = _cartRepository.GetAll().Result.FirstOrDefault(x => x.UserId == getUserId);
+
+                var userCart = _cartRepository.GetAll().Result.FirstOrDefault(x => x.UserId == userId);
                 int soLuongProductDetail = 1;// productDetailToCart.AvailableQuantity;
                 if (soLuongProductDetail <= 0)
                 {
@@ -86,9 +87,9 @@ namespace Shop_API.Service
                     else
                     {
                         CartDetail x = new CartDetail();
-                        x.Id = new Guid();
+                        x.Id = Guid.NewGuid();
                         x.ProductDetailId = productDetailToCart.Id;
-                        x.CartId = getUserId;
+                        x.CartId = userId;
                         x.Quantity = 1;
                         if (await _cartDetailRepository.Create(x))
                         {
@@ -109,7 +110,7 @@ namespace Shop_API.Service
                 {
                     Cart cart = new Cart();
                     cart.UserId = getUserId;
-                    cart.Description = $"Giỏ hàng của {username}";
+                    cart.Description = $"Giỏ hàng của {userName}";
                     if (await _cartRepository.Create(cart))
                     {
                         CartDetail b = new CartDetail();

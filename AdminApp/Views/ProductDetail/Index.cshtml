@@ -5,12 +5,12 @@
     @model Shop_Models.Dto.ProductDetailDto;
 
 }
-<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.common.min.css">
+@* <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.common.min.css">
 <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.1207/styles/kendo.default.min.css">
 <script src="https://kendo.cdn.telerik.com/2021.3.1207/js/jquery.min.js"></script>
-<script src="https://kendo.cdn.telerik.com/2021.3.1207/js/kendo.all.min.js"></script>
+<script src="https://kendo.cdn.telerik.com/2021.3.1207/js/kendo.all.min.js"></script> *@
 
-<form asp-controller="Excel" asp-action="Import" method="post" enctype="multipart/form-data">
+<form asp-controller="ProductDetail" asp-action="ImportProductsFromExcel" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="excelFile">Chọn file excel</label>
         <input type="file" name="excelFile" class="form-control-file" accept=".xlsx" required />

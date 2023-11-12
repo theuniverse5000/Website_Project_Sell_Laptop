@@ -152,11 +152,11 @@
         <div class="List-products row">
 
             @{
-                for(int i = 0; i<4; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     <div class="hot-product  col-md-3" data-code="@productDetails[i].Code.ToString()">
 
-                        <a >
+                        <a>
                             <img src="./img/Products/_0005_21675_laptop_asus_x515ma_br481w 1 (no bg).png">
                             <b>@productDetails[i].NameProduct</b>
                             <div class="Product-price">
@@ -175,10 +175,131 @@
                     </div>
                 }
             }
-           
-            
+
+
         </div>
     </div>
+
+    <section class="product-home-deal">
+        <div class="container">
+            <div class="box-home-deal">
+                <div class="title">
+                    <a href="/deal" class="txt">Giờ vàng giá sốc</a>
+                    <div class="time" id="js-time-dealgroup">
+                        Còn lại
+                        <span class="h">97</span> giờ
+                        <span class="m">43</span> phút
+                        <span class="s">32</span> giây
+                    </div>
+                    <a href="/deal" class="vm-deal">Xem tất cả <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                </div>
+                <div class="produt-list loaded" id="js-home-deal">
+                    @{
+                        // Định nghĩa phương thức GetProgressBarWidth ở đây
+                        string GetProgressBarWidth(int availableQuantity)
+                        {
+                            // Thực hiện tính toán giá trị chiều rộng dựa trên availableQuantity
+                            // Ví dụ: giá trị mặc định là 100%, và giá trị tối đa của availableQuantity là 10
+                            double maxWidth = 100; // Giá trị chiều rộng tối đa của thanh tiến trình
+                            double maxAvailableQuantity = 10; // Giá trị tối đa của availableQuantity
+
+                            double widthPercentage = (availableQuantity / maxAvailableQuantity) * maxWidth;
+
+                            return widthPercentage.ToString() + "%";
+                        }
+
+                        for (int i = 0; i < 5; i++)
+                        {
+                            double giamgia = ((@productDetails[i].ImportPrice - @productDetails[i].Price) / @productDetails[i].ImportPrice) * 100;
+                            <div class="item">
+                                <div class="p-container">
+                                    <a href="" class="p-img">
+                                        <img src="./img/Products/text_d_i_5__1 1.png">
+                                        <span class="percent">-@giamgia.ToString("0.")%</span>
+                                    </a>
+                                    <a href="" class="p-name">@productDetails[i].Code</a>
+                                    <div class="p-price-all">
+                                        <span class="p-price">
+                                            @productDetails[i].Price.ToString("N0")
+                                        </span>
+                                        <span class="p-old-price">@productDetails[i].ImportPrice.ToString("N0") </span>
+                                    </div>
+                                    <div class="deal-status">
+                                        <div>
+                                            <div class="p-order-status w-100">
+                                                @{
+                                                    double progressBarWidth = double.Parse(GetProgressBarWidth(productDetails[i].Status).Replace("%", ""));
+                                                }
+                                                @if (progressBarWidth > 50)
+                                                {
+                                                    <span class="text" style="right: initial; left: 60px; color: #000; transform: translateX(-100%)">
+                                                        Còn lại @productDetails[i].Status
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text" style="right: 10px; left: initial; color: #000">
+                                                        Còn lại @productDetails[i].Status
+                                                    </span>
+                                                }
+                                                <span class="bg-count-left" style="width: @GetProgressBarWidth(productDetails[i].Status)"></span>
+                                                <span class="icon-order-status icon-order-status-deal" style="left: @GetProgressBarWidth(productDetails[i].Status)"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <script>
+        // Lấy các phần tử HTML cần thao tác
+        const hoursElement = document.querySelector('.h');
+        const minutesElement = document.querySelector('.m');
+        const secondsElement = document.querySelector('.s');
+
+        // Đặt thời gian ban đầu
+        let hours = parseInt(hoursElement.textContent);
+        let minutes = parseInt(minutesElement.textContent);
+        let seconds = parseInt(secondsElement.textContent);
+
+        // Hàm đếm ngược
+        function countdown() {
+            if (seconds > 0) {
+                seconds--;
+            } else {
+                if (minutes > 0) {
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    if (hours > 0) {
+                        hours--;
+                        minutes = 59;
+                        seconds = 59;
+                    } else {
+                        // Khi hết thời gian, thực hiện các hành động mong muốn
+                        clearInterval(timer);
+                        console.log("Hết thời gian!");
+                    }
+                }
+            }
+
+            // Cập nhật giá trị mới lên giao diện
+            hoursElement.textContent = hours.toString().padStart(2, '0');
+            minutesElement.textContent = minutes.toString().padStart(2, '0');
+            secondsElement.textContent = seconds.toString().padStart(2, '0');
+        }
+
+        // Thiết lập đếm ngược mỗi giây
+        const timer = setInterval(countdown, 1000);
+    </script>
+   
+
+
     <!-- danh sách sản phẩm -->
     <div class="Products">
         <b>Sắp Xếp Theo</b>
@@ -204,94 +325,94 @@
             </div>
         </div>
         <div class="List-products-2">
-                <div class="product-box  col-sm-3" ">
-                    <a>
-                        <img src="./img/Products/text_d_i_5__1 1.png">
-                        <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                        <div class="computer-configuration">
-                            <div class="configuration-item">
-                                <span>16GB</span>
-                            </div>
-                            <div class="configuration-item">
-                                <span>512GB</span>
-                            </div>
-                            <div class="configuration-item">
-                                <span>15.6 inches</span>
-                            </div>
+            <div class="product-box  col-sm-3" ">
+                <a>
+                    <img src="./img/Products/text_d_i_5__1 1.png">
+                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
+                    <div class="computer-configuration">
+                        <div class="configuration-item">
+                            <span>16GB</span>
                         </div>
-                        <div class="Product-price">
-                            <span>15.490.000₫ </span>
-                            <p> 18.000.000₫</p>
+                        <div class="configuration-item">
+                            <span>512GB</span>
                         </div>
-                        <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                    </a>
-                </div>
-                <div class="product-box  col-sm-3" ">
-                    <a>
-                        <img src="./img/Products/text_d_i_5__1 1.png">
-                        <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                        <div class="computer-configuration">
-                            <div class="configuration-item">
-                                <span>16GB</span>
-                            </div>
-                            <div class="configuration-item">
-                                <span>512GB</span>
-                            </div>
-                            <div class="configuration-item">
-                                <span>15.6 inches</span>
-                            </div>
+                        <div class="configuration-item">
+                            <span>15.6 inches</span>
                         </div>
-                        <div class="Product-price">
-                            <span>15.490.000₫ </span>
-                            <p> 18.000.000₫</p>
+                    </div>
+                    <div class="Product-price">
+                        <span>15.490.000₫ </span>
+                        <p> 18.000.000₫</p>
+                    </div>
+                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
+                </a>
+            </div>
+            <div class="product-box  col-sm-3" ">
+                <a>
+                    <img src="./img/Products/text_d_i_5__1 1.png">
+                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
+                    <div class="computer-configuration">
+                        <div class="configuration-item">
+                            <span>16GB</span>
                         </div>
-                        <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                    </a>
-                </div>
-                <div class="product-box  col-sm-3" ">
-                    <a>
-                        <img src="./img/Products/text_d_i_5__1 1.png">
-                        <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                        <div class="computer-configuration">
-                            <div class="configuration-item">
-                                <span>16GB</span>
-                            </div>
-                            <div class="configuration-item">
-                                <span>512GB</span>
-                            </div>
-                            <div class="configuration-item">
-                                <span>15.6 inches</span>
-                            </div>
+                        <div class="configuration-item">
+                            <span>512GB</span>
                         </div>
-                        <div class="Product-price">
-                            <span>15.490.000₫ </span>
-                            <p> 18.000.000₫</p>
+                        <div class="configuration-item">
+                            <span>15.6 inches</span>
                         </div>
-                        <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                    </a>
-                </div>
-                <div class="product-box  col-sm-3 " ">
-                    <a>
-                        <img src="./img/Products/text_d_i_5__1 1.png">
-                        <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                        <div class="computer-configuration">
-                            <div class="configuration-item">
-                                <span>16GB</span>
-                            </div>
-                            <div class="configuration-item">
-                                <span>512GB</span>
-                            </div>
-                            <div class="configuration-item">
-                                <span>15.6 inches</span>
-                            </div>
+                    </div>
+                    <div class="Product-price">
+                        <span>15.490.000₫ </span>
+                        <p> 18.000.000₫</p>
+                    </div>
+                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
+                </a>
+            </div>
+            <div class="product-box  col-sm-3" ">
+                <a>
+                    <img src="./img/Products/text_d_i_5__1 1.png">
+                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
+                    <div class="computer-configuration">
+                        <div class="configuration-item">
+                            <span>16GB</span>
                         </div>
-                        <div class="Product-price">
-                            <span>15.490.000₫ </span>
-                            <p> 18.000.000₫</p>
+                        <div class="configuration-item">
+                            <span>512GB</span>
                         </div>
-                        <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                    </a>
-                </div>
+                        <div class="configuration-item">
+                            <span>15.6 inches</span>
+                        </div>
+                    </div>
+                    <div class="Product-price">
+                        <span>15.490.000₫ </span>
+                        <p> 18.000.000₫</p>
+                    </div>
+                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
+                </a>
+            </div>
+            <div class="product-box  col-sm-3 " ">
+                <a>
+                    <img src="./img/Products/text_d_i_5__1 1.png">
+                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
+                    <div class="computer-configuration">
+                        <div class="configuration-item">
+                            <span>16GB</span>
+                        </div>
+                        <div class="configuration-item">
+                            <span>512GB</span>
+                        </div>
+                        <div class="configuration-item">
+                            <span>15.6 inches</span>
+                        </div>
+                    </div>
+                    <div class="Product-price">
+                        <span>15.490.000₫ </span>
+                        <p> 18.000.000₫</p>
+                    </div>
+                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
+                </a>
+            </div>
 
         </div>
         <div class="categories-boxs-name">

@@ -20,7 +20,7 @@ namespace WebApp.Controllers
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
             var accessToken = JsonConvert.DeserializeObject<TokenDto>(Request.Cookies["access_token"]);
             //Get userCart
-            var apiUrl = "/api/Cart/GetCartJoinForUser?username=duykhanh12";
+            var apiUrl = "/api/Cart/GetCartJoinForUser";
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
             var respone = await httpClient.GetAsync(apiUrl);
             var responeContent = respone.Content.ReadAsStringAsync();
@@ -28,7 +28,7 @@ namespace WebApp.Controllers
             var listProductDetail= JsonConvert.DeserializeObject<List<CartItemDto>>(result.Result.ToString());
             //var listProductOfCart = JsonConvert.DeserializeObject<CartItemDto>(content.Result.ToString());
 
-            return PartialView("_UserCart");
+            return PartialView("_UserCart", listProductDetail);
         }
     }
 }

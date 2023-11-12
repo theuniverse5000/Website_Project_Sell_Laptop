@@ -17,6 +17,16 @@ namespace WebApp.Controllers
         {
             return View();
         }
+        public IActionResult ShowCart()
+        {
+            var UsernameToCart = HttpContext.Session.GetString("CheckLogin");
+            if (UsernameToCart == null)
+            {
+                // var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
+                return RedirectToAction("IndexForSession");
+            }
+            return View();
+        }
         public async Task<IActionResult> ShowBill()
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
