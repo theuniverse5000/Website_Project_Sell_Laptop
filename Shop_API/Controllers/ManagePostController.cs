@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -134,5 +135,28 @@ namespace Shop_API.Controllers
             _response.Count = _mpRepository.GetAllManagePosts().Result.Count();
             return Ok(_response);
         }
+
+        [HttpGet("GGetManagePostDtosFSP")]
+        public async Task<IActionResult> GGetManagePostDtosFSP(string? search, DateTime? from, DateTime? to, string? sortBy, int page)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+            //_response.Result = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page);
+            //_response.Count = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page).Count;
+
+            _response.Result = await _mpRepository.GetManagePostDtos(search, from, to, sortBy, page);
+            _response.Count = _mpRepository.GetManagePostDtos(search, from, to, sortBy, page).Result.Count();
+            return Ok(_response);
+        }
+
     }
 }

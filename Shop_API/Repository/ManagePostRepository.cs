@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Repository
@@ -92,5 +93,85 @@ namespace Shop_API.Repository
                 return false;
             }
         }
+
+        public async Task<IEnumerable<ManagePost>> GetManagePostDtos(string? search, DateTime? from, DateTime? to, string? sortBy, int page = 1)
+        {
+            var query = _dbContext.ManagePosts
+                .AsNoTracking()
+                //.Where(a => a.Status!=false)
+                .Select(a => new ManagePost
+                {
+                    Id = a.Id,
+                    Code = a.Code,
+                    CreateDate = a.CreateDate,
+                    LinkImage = a.LinkImage,
+                    Description = a.Description,
+                    Status = a.Status,                  
+
+                });
+
+            #region Filltering
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.Code.Contains(search));
+            }
+
+            if (from.HasValue)
+            {
+                query = query.Where(x => x.CreateDate >= from);
+            }
+            if (to.HasValue)
+            {
+                query = query.Where(x => x.CreateDate <= to);
+            }
+            #endregion
+
+            #region Sorting
+            //if (!string.IsNullOrEmpty(sortBy))
+            //{
+            //    switch (sortBy)
+            //    {
+            //        case "nameproduct_desc":
+            //            query = query.OrderByDescending(x => x.Code);
+            //            break;
+            //        case "price_asc":
+            //            query = query.OrderBy(x => x.Price);
+            //            break;
+            //        case "price_desc":
+            //            query = query.OrderByDescending(x => x.Price);
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            #endregion
+
+            #region Paging
+            var pageSize = page;
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            if (page < 1)
+            {
+                page = 1;
+            }
+            else if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            //query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            #endregion
+            var result = await query.ToListAsync();
+            // Lấy danh sách mã sản phẩm để thực hiện một lần duy nhất truy vấn cơ sở dữ liệu.
+            var productCodes = result.Select(p => p.Code).ToList();
+            // Gán AvailableQuantity cho từng sản phẩm trong danh sách.
+            //foreach (var productDetail in result)
+            //{
+            //    productDetail.AvailableQuantity = GetCountProductDetail(productDetail.Code);
+            //}
+
+            return result;
+        }
+
     }
 }

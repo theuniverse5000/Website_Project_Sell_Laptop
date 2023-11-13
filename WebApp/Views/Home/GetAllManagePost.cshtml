@@ -1,0 +1,93 @@
+﻿@using Shop_Models.Entities
+@using X.PagedList
+
+@{
+    IPagedList<ManagePost> managePost = ViewBag.ManagePost;
+}
+
+@functions {
+    // Hàm trợ giúp để cắt ngắn mô tả thành khoảng 20 từ
+    public string ShortenDescription(string description, int maxLength)
+    {
+        if (description.Length <= maxLength)
+        {
+            return description;
+        }
+        else
+        {
+            return description.Substring(0, maxLength) + " ...";
+        }
+    }
+}
+
+<style>
+    .product-card {
+        border: 1px solid #ccc;
+        margin: 10px;
+        padding: 10px;
+        width: 300px; /* Đặt kích thước cố định cho sản phẩm */
+        text-align: center;
+    }
+
+    .product-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .product-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .product-description {
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .product-price {
+        font-size: 16px;
+        color: #e74c3c;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container">
+    <h1>Tin tức, Sự Kiện</h1>
+
+    <div class="row">
+        @foreach (var item in managePost)
+        {
+            <div class="col-md-4">
+                <a href="@Url.Action("Details", "Home", new { guid = item.Id })">
+                    <div class="product-card">
+                        <img src="@item.LinkImage" class="product-image" alt="Manage Image">
+                        <div class="product-details">
+                            <h3 class="product-title">@item.Code</h3>
+                            <p class="product-description">@ShortenDescription(item.Description, 10)</p>
+                            <p class="product-price">@item.CreateDate.ToString("yyyy-MM-dd")</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+
+    <!-- Pagination -->
+    <div class="text-center">
+        @if (managePost.HasPreviousPage)
+        {
+            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber - 1 })" class="btn btn-primary">Previous</a>
+        }
+        @for (int i = 1; i <= managePost.PageCount; i++)
+        {
+            <a href="@Url.Action("GetAllManagePost", new { page = i })" class="btn @(i == managePost.PageNumber ? "btn-primary" : "btn-secondary")">@i</a>
+        }
+        @if (managePost.HasNextPage)
+        {
+            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber + 1 })" class="btn btn-primary">Next</a>
+        }
+    </div>
+
+    <p class="text-center">Page @managePost.PageNumber of @managePost.PageCount</p>
+</div>
