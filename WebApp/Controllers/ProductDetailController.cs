@@ -41,11 +41,10 @@ namespace WebApp.Controllers
             var responeApi =await httpClient.PostAsync(apiUrl_ProductDetail, null);
         }
         [HttpPost]
-        public async void AddCart(string idProductDetail)
+        public async void IncreaseQuantity(string idProductDetail)
         {
-            var username = User.Identity.Name;
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-            var apiurl = $"/api/Cart/AddCart?idCartDetail={idProductDetail}";
+            var apiurl = $"/api/Cart/CongQuantity?idCartDetail={Guid.Parse(idProductDetail)}";
             var responeApi = await httpClient.PutAsync(apiurl, null);
         }
         [HttpPost]

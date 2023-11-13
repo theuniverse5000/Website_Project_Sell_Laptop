@@ -1,9 +1,9 @@
-﻿
+﻿@{
+    Layout = "_Layout";
+}
 
 <div style="border: #4c4949 1px solid; width: 1087px; height: 864px; margin: 65px auto;">
-    @using (Html.BeginForm("LoginWithJWT", "Login"))
-        {
-    <form>
+      <form>
         <!-- Email input -->
         <div class="form-outline mb-4" style="margin-top: 234px;">
             <input type="text" id="UserName" class="form-control" placeholder="Vui lòng nhập email hoặc SĐT"
@@ -43,7 +43,6 @@
              <p style="margin-top: 29px; font-size: 30px; text-align: center;">Bạn chưa có tài khoản? <a onclick="OpenSignUp()" style="color: #685858; font-weight: bold;">ĐĂNG KÝ NGAY</a></p>
         </div
     </form>
-    }
 </div>
 
 
