@@ -103,9 +103,9 @@ namespace Shop_API.Controllers
         }
         [AllowAnonymous]// For client
         [HttpPut("CongQuantity")]
-        public async Task<IActionResult> CongQuantityCartDetail(Guid idCartDetail)
+        public async Task<IActionResult> CongQuantityCartDetail(Guid idCartDetail,Guid idProductDetail)
         {
-            var reponse = await _cartService.CongQuantityCartDetail(idCartDetail);
+            var reponse = await _cartService.CongQuantityCartDetail(idCartDetail, idProductDetail);
             if (reponse.IsSuccess)
             {
                 return Ok(reponse);
@@ -117,9 +117,9 @@ namespace Shop_API.Controllers
         }
         [AllowAnonymous]
         [HttpPut("TruQuantityCartDetail")]
-        public async Task<IActionResult> TruQuantityCartDetail(Guid idCartDetail)
+        public async Task<IActionResult> TruQuantityCartDetail(Guid idCartDetail, Guid idProductDetail)
         {
-            var reponse = await _cartService.TruQuantityCartDetail(idCartDetail);
+            var reponse = await _cartService.TruQuantityCartDetail(idCartDetail, idProductDetail);
             if (reponse.IsSuccess)
             {
                 return Ok(reponse);

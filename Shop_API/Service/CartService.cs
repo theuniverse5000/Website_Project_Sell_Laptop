@@ -145,11 +145,11 @@ namespace Shop_API.Service
                 return _reponse;
             }
         }
-        public async Task<ResponseDto> CongQuantityCartDetail(Guid idCartDetail)
+        public async Task<ResponseDto> CongQuantityCartDetail(Guid idCartDetail,Guid idProductDetail)
         {
             try
             {
-                var cartDetailX = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail);
+                var cartDetailX = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail && x.ProductDetailId==idProductDetail);
                 if (cartDetailX == null)
                 {
                     _reponse.Result = null;
@@ -188,11 +188,11 @@ namespace Shop_API.Service
                 return _reponse;
             }
         }
-        public async Task<ResponseDto> TruQuantityCartDetail(Guid idCartDetail)
+        public async Task<ResponseDto> TruQuantityCartDetail(Guid idCartDetail, Guid iDProductDetail)
         {
             try
             {
-                var cartDetailX = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail);
+                var cartDetailX = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail&& x.ProductDetailId==iDProductDetail);
                 if (cartDetailX == null)
                 {
                     _reponse.Result = null;

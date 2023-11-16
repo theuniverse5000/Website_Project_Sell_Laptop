@@ -40,3 +40,16 @@ function BuyProduct(productDetailCode) {
     });
 }
 
+function Decrement(idProducDetailt) {
+    $.ajax({
+        url: "/ProductDetail/DecreaseQuantity?idProductDetail=" + idProducDetailt,
+        type: "POST"
+    });
+}
+
+function Increment(idProducDetailt) {
+    $.ajax({
+        url: "/ProductDetail/IncreaseQuantity?idProductDetail=" + idProducDetailt,
+        type: "POST"
+    });
+}
