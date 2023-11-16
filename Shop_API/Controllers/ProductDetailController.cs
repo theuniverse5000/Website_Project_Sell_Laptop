@@ -17,6 +17,25 @@ namespace Shop_API.Controllers
             _reponse = new ResponseDto();
             _config = config;
         }
+        [HttpGet("GetAllPDD")]
+
+        public async Task<IActionResult> GetAllPDD()
+        {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            return Ok(await _repository.GetAll());
+        }
+
         [HttpGet("GetAlls")]
         public async Task<IActionResult> GetAlls()
         {
@@ -68,7 +87,7 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            obj.Id = Guid.NewGuid();
+            //obj.Id = Guid.NewGuid();
             if (await _repository.Create(obj))
             {
                 _reponse.Result = obj;
