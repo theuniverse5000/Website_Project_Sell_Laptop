@@ -448,7 +448,43 @@ namespace Shop_API.Repository
                 Status = hh.Status,
             }).ToList();
         }
-     
 
+        public List<SerialDto> GetAllSerial(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            var allSerial = _context.Serials.Where(x => x.Status > 0).AsQueryable();
+
+
+            #region Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                allSerial = allSerial.Where(pt => pt.SerialNumber.Contains(search));
+            }
+
+            #endregion
+
+            #region Sorting
+            //Default sort by Name 
+            allSerial = allSerial.OrderBy(hh => hh.SerialNumber);
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+
+                allSerial = allSerial.OrderByDescending(hh => hh.SerialNumber); /*break;*/
+
+            }
+            #endregion
+
+            int totalCount = allSerial.Count();
+
+
+            return allSerial.Select(hh => new SerialDto
+            {
+                Id = hh.Id,
+                SerialNumber = hh.SerialNumber,
+                ProductDetailId = hh.ProductDetailId,
+                BillDetailId = hh.BillDetailId,
+                ProductDetailCode = hh.ProductDetail.Code,
+                BillDetailCode = hh.BillDetail.Code,
+            }).ToList();
+        }
     }
 }
