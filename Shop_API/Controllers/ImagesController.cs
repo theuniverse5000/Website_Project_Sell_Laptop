@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
 using Shop_API.Services.IServices;
@@ -545,27 +547,7 @@ namespace Shop_API.Controllers
                     case "b":
                         objectFolder = "user_images";
                         break;
-                    case "c":
-                        objectFolder = "bai_dang_images";
-                        break;
-                    case "d":
-                        objectFolder = "card_VGA_images";
-                        break;
-                    case "e":
-                        objectFolder = "hard_drive_images";
-                        break;
-                    case "f":
-                        objectFolder = "manufacturer_images";
-                        break;
-                    case "g":
-                        objectFolder = "ram_images";
-                        break;
-                    case "h":
-                        objectFolder = "screen_images";
-                        break;
-                    case "i":
-                        objectFolder = "voucher_images";
-                        break;
+                    // (Thêm các case tương tự như trước)
                     default:
                         return BadRequest("Loại đối tượng không hợp lệ.");
                 }
@@ -580,9 +562,8 @@ namespace Shop_API.Controllers
                 }
 
                 // Lấy danh sách tên tệp ảnh trong thư mục
-                string[] imageFileNames = Directory.GetFiles(objectFolderPath).Select(Path.GetFileName).ToArray();
+                string[] imageFileNames = Directory.GetFiles(objectFolderPath);
 
-                // Trả về danh sách tên tệp ảnh
                 return Ok(imageFileNames);
             }
             catch (Exception ex)
@@ -590,6 +571,9 @@ namespace Shop_API.Controllers
                 return StatusCode(500, $"Lỗi: {ex.Message}");
             }
         }
+
+
+
 
 
 
@@ -658,27 +642,56 @@ namespace Shop_API.Controllers
 
 
         [HttpPost]
-        [Route("uploadManyImages")] // NO NO
-        public async Task<IActionResult> UploadImages(List<IFormFile> files)
+        [Route("uploadManyProductDetailImages")] // NO NO
+        public async Task<IActionResult> UploadImages([FromForm] List<IFormFile> files, [FromForm] Guid ProductId)
         {
+            var objectFolder = "product_images";
+             //var ProductId = Guid.Empty;
             try
             {
                 var uploadedFiles = new List<string>();
+                var spct = await _context.ProductDetails.FindAsync(ProductId);
 
-                foreach (var file in files)
+                if (spct != null)
                 {
-                    if (file != null && file.Length > 0)
+                    int i = 1;
+                    foreach (var file in files)
                     {
-                        // Tạo tên tệp duy nhất bằng cách sử dụng Guid và đuôi mở rộng
-                        string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-                        string filePath = Path.Combine(_uploadFolder, fileName);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        if (file != null && file.Length > 0)
                         {
-                            await file.CopyToAsync(stream);
-                        }
+                            string basePath = _hostingEnvironment.WebRootPath;
+                            // Tạo tên tệp duy nhất bằng cách sử dụng Guid và đuôi mở rộng
+                            string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                            //string filePath = Path.Combine(basePath, fileName);
 
-                        uploadedFiles.Add(fileName);
+                            
+                         
+                            string filePath = Path.Combine(basePath, objectFolder, fileName);
+
+
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+
+                            uploadedFiles.Add(fileName);
+
+                           
+
+                            var image = new Image
+                            {
+                                Id = Guid.NewGuid(),
+                                Ma = "Anh" + i++,
+                                LinkImage = $"/{objectFolder}/{fileName}",
+                                ProductDetailId = (Guid)ProductId,
+                                Status = 1
+
+                            };
+
+                            // Lưu ảnh vào cơ sở dữ liệu ở đây (sử dụng dịch vụ _imageUploadService)
+                            await _imageUploadService.SaveImageAsync(image);
+
+                        }
                     }
                 }
 
@@ -689,6 +702,42 @@ namespace Shop_API.Controllers
                 return StatusCode(500, $"Lỗi: {ex.Message}");
             }
         }
+
+
+        [HttpGet]
+        [Route("getProductDetailImages")]
+        public IActionResult GetProductDetailImages(Guid ProductId)
+        {
+            try
+            {
+                var productDetail = _context.ProductDetails
+                    .Include(p => p.Imagess)
+                    .FirstOrDefault(p => p.Id == ProductId);
+
+                if (productDetail != null)
+                {
+                    var imageDetails = productDetail.Imagess.Select(image => new
+                    {
+                        ImageId = image.Id,
+                        ImageCode = image.Ma,
+                        ImageUrl = image.LinkImage,
+
+                    });
+
+                    return Ok(imageDetails);
+                }
+                else
+                {
+                    return NotFound("Không tìm thấy sản phẩm chi tiết");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Ghi log lỗi ở đây
+                return StatusCode(500, $"Lỗi: {ex.Message}");
+            }
+        }
+
 
         [HttpPost]// DONE wwwroot, not done db
         [Route("uploadManyImageszszs")]
@@ -783,6 +832,55 @@ namespace Shop_API.Controllers
                 return StatusCode(500, $"Lỗi: {ex.Message}");
             }
         }
+
+
+
+        [HttpGet]
+        [Route("getProductDetailImages2")]
+        public IActionResult GetProductDetailImages2(Guid ProductId, [FromServices] IWebHostEnvironment hostingEnvironment)
+        {
+            try
+            {
+                var productDetail = _context.ProductDetails
+                    .Include(p => p.Imagess)
+                    .FirstOrDefault(p => p.Id == ProductId);
+
+                if (productDetail != null)
+                {
+                    var wwwRootPath = hostingEnvironment.WebRootPath;
+                    var objectFolder = "product_images";
+                    var objectFolderPath = Path.Combine(wwwRootPath, objectFolder);
+
+                    var imageDetails = productDetail.Imagess.Select(image => new Image
+                    {
+                        Id = image.Id,
+                        Ma = image.Ma,
+                        LinkImage = Path.Combine(wwwRootPath, objectFolder, image.LinkImage),
+                        Status = image.Status,
+                        ProductDetailId = image.ProductDetailId,
+                        ProductDetail = null  // Setting this to null to break the circular reference
+                    }).Where(x=>x.Status==1).ToList();
+
+                    return Ok(imageDetails);
+                }
+                else
+                {
+                    return NotFound("Không tìm thấy sản phẩm chi tiết");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Ghi log lỗi ở đây
+                return StatusCode(500, $"Lỗi: {ex.Message}");
+            }
+        }
+
+
+
+
+
+
+
 
 
 

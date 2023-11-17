@@ -34,9 +34,9 @@ namespace WebApp.Controllers
 
             return View();
         }
-        public IActionResult GoLogin()
+        public IActionResult Login()
         {
-            return RedirectToAction("Login","Login");
+            return View();
         }
         public async Task<IActionResult> ProductDetail(string code)
         {

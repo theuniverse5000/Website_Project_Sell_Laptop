@@ -3,6 +3,7 @@ using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
+using Shop_Models.Entities;
 
 namespace Shop_API.Service
 {
@@ -46,7 +47,7 @@ namespace Shop_API.Service
                 }
 
                 // Lấy danh sách sản phẩm cần áp dụng giảm giá từ repository
-                var productDetails = await _productDetailRepository.GetProductDetailsByPromotionType(promotionType);
+                var productDetails = new List<ProductDetail>();
 
                 if (productDetails == null || !productDetails.Any())
                 {
@@ -70,7 +71,7 @@ namespace Shop_API.Service
                             newPrice = 0;
                         }
 
-                        productDetail.Price = newPrice;
+                        productDetail.Price = 1;
 
                         // Lưu thay đổi vào repository
                         await _productDetailRepository.Update(productDetail);

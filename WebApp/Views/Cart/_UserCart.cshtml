@@ -14,40 +14,41 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach(var item in Model)
-                {
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <div class="product-in-cart-info d-flex align-items-center justify-content-center">
-                                <img src="./img/Product-detail-img/text_ng_n_21_ 1.png">
-                                <div class="info-incart d-flex flex-column text-align-center  justify-content-center">
-                                    <span><b>@item.NameProduct (@item.TenCpu, @item.MaRam - @item.ThongSoRam, @item.ThongSoHardDrive, @item.MaCardVGA, @item.KichCoManHinh @item.TanSoManHinh)</b></span>
+                @if (Model!=null){
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <div class="product-in-cart-info d-flex align-items-center justify-content-center">
+                                    <img src="./img/Product-detail-img/text_ng_n_21_ 1.png">
+                                    <div class="info-incart d-flex flex-column text-align-center  justify-content-center">
+                                        <span><b>@item.NameProduct (@item.TenCpu, @item.MaRam - @item.ThongSoRam, @item.ThongSoHardDrive, @item.MaCardVGA, @item.KichCoManHinh @item.TanSoManHinh)</b></span>
 
-                                    <p>
-                                        Bảo hành: 12 tháng LaptopAbc XYZ
-                                    </p>
+                                        <p>
+                                            Bảo hành: 12 tháng LaptopAbc XYZ
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td><span>@item.Price </span></td>
-                        <td>
-                            <div class="quantity">
-                                <button class="btn btn-sm btn-minus">-</button>
-                                <input type="text" value="1">
-                                <button class="btn btn-sm btn-plus">+</button>
-                            </div>
-                        </td>
-                        <td>
-                            <span>32.890.000đ </span>
-                        </td>
-                        <td>
-                            <button class="btn"> <i class="fa-solid fa-trash-can"></i></button>
-                        </td>
-                    </tr>
-                   
-                }
-                 <tr>
+                            </td>
+                            <td><span>@item.Price </span></td>
+                            <td>
+                                <div class="quantity">
+                                    <button onclick="Decrement('@item.Id')" class="btn btn-sm btn-minus">-</button>
+                                    <input type="text" value="1">
+                                    <button onclick="Increment('@item.Id')" class="btn btn-sm btn-plus">+</button>
+                                </div>
+                            </td>
+                            <td>
+                                <span>32.890.000đ </span>
+                            </td>
+                            <td>
+                                <button class="btn"> <i class="fa-solid fa-trash-can"></i></button>
+                            </td>
+                        </tr>
+
+                    }
+                    <tr>
 
                         <td colspan="2" class=""></td>
                         <td colspan="4" class="text-right">
@@ -57,6 +58,8 @@
                             </div>
                         </td>
                     </tr>
+                }
+
             </tbody>
         </table>
     </div>

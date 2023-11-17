@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
+using System.Net.Http.Headers;
 
 namespace WebApp.Controllers
 {
@@ -28,23 +31,27 @@ namespace WebApp.Controllers
             string result = await client.GetStringAsync($"{urlApi}/api/ProductDetail/GetProductDetailsFSP");
             return Content(result, "application/json");
         }
+        [HttpPost]
         public async void AddProductToCart(string productDetailCode)
         {
-            var userName = Request.Cookies["access_token"].ToString();
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-            var apiUrl_ProductDetail = $@"/api/Cart/AddCart?username={userName}&codeProductDetail={productDetailCode}";
-            var responeApi = httpClient.PostAsync(apiUrl_ProductDetail, null);
+            var accessToken = JsonConvert.DeserializeObject<TokenDto>(Request.Cookies["access_token"]);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
+            var apiUrl_ProductDetail = $@"/api/Cart/AddCart?codeProductDetail={productDetailCode}";
+            var responeApi =await httpClient.PostAsync(apiUrl_ProductDetail, null);
         }
-        public async void AddQuantity(Guid idProductDetail)
+        [HttpPost]
+        public async void IncreaseQuantity(string idProductDetail)
         {
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-            var apiurl = $"/api/Cart/CongQuantity?idCartDetail={idProductDetail}";
-            var responeApi = httpClient.PutAsync(apiurl, null);
+            var apiurl = $"/api/Cart/CongQuantity?idCartDetail={Guid.Parse(idProductDetail)}";
+            var responeApi = await httpClient.PutAsync(apiurl, null);
         }
-        public async void DecreaseQuantity(Guid idproductDetail)
+        [HttpPost]
+        public async void DecreaseQuantity(string idProductDetail)
         {
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-            var apiUrl = $"/api/Cart/TruQuantityCartDetail?idCartDetail={idproductDetail}";
+            var apiUrl = $"/api/Cart/TruQuantityCartDetail?idCartDetail={idProductDetail}";
             var responeApi = httpClient.PutAsync(apiUrl, null);
         }
 

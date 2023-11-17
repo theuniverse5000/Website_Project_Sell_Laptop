@@ -56,18 +56,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Create New</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm mới sản phẩm</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
                 <div id="example">
-                    <form asp-controller="ProductDetail" asp-action="Index" method="post">
+                    <form asp-controller="ProductDetail" asp-action="Index" method="post" enctype="multipart/form-data">
 
                         <div class="row">
                             <div class=" col-md-3">
-                                <label asp-for="Code">Product Code</label>
-                                <input asp-for="Code" class="form-control" placeholder="nhap codee " />
+                                <label asp-for="Code">Mã Sản Phẩm</label>
+                                <input asp-for="Code" class="form-control" placeholder="Nhập mã sản phẩm" />
                                 <span asp-validation-for="Code" class="text-danger"></span>
                             </div>
                             <div class="col-md-3">
@@ -84,7 +84,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label"> Màu Sắc</label>
-                                <select class="form-select" @* asp-for="IdColor" id="selectColor"*@>
+                                <select class="form-select"  asp-for="IdColor" id="selectColor">
                                     <option value="">Chọn Màu Sắc</option>
                                     @foreach (var t in ViewBag.GetColor)
                                     {
@@ -95,7 +95,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">Ram</label>
-                                <select class="form-select" @* asp-for="IdRam" *@ id="selectRam">
+                                <select class="form-select" asp-for="IdRam" id="selectRam">
                                     <option value="">Chọn Ram</option>
                                     @foreach (var t in (List<Ram>)ViewBag.GetRam)
                                     {
@@ -109,7 +109,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>                              
-                                    <select class="form-select" @* asp-for="IdCpu" *@ id="selectCPU">
+                                    <select class="form-select" asp-for="IdCpu" id="selectCPU">
                                         <option value="">Chọn Vi Xử Lí</option>
                                         @foreach (var t in (List<Cpu>)ViewBag.GetCPU)
                                         {
@@ -122,7 +122,7 @@
 
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">Màn Hình</label>
-                                    <select class="form-select" @* asp-for="IdScreen" *@ id="selectScreen">
+                                    <select class="form-select" asp-for="IdScreen" id="selectScreen">
                                         <option value="">Chọn Màn Hình</option>
                                         @foreach (var t in (List<Screen>)ViewBag.GetScreen)
                                         {
@@ -134,7 +134,7 @@
 
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">HardDrive</label>
-                                    <select class="form-select" @* asp-for="IdHardDrive" *@ id="selectHardDrive">
+                                    <select class="form-select" asp-for="IdHardDrive" id="selectHardDrive">
                                         <option value="">Chọn HardDrive</option>
                                         @foreach (var t in (List<HardDrive>)ViewBag.GetHardDrive)
                                         {
@@ -145,7 +145,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">CardVGA</label>
-                                    <select class="form-select" @* asp-for="IdCardVGA" *@ id="selectCardVGA">
+                                    <select class="form-select" asp-for="IdCardVGA" id="selectCardVGA">
                                         <option value="">Chọn CardVGA</option>
                                         @foreach (var t in (List<CardVGA>)ViewBag.GetlistCardVGA)
                                         {
@@ -159,24 +159,35 @@
 
                         <div class="row">
                             <div class="col-md-3">
-                                <label for="exampleFormControlInput1" class="form-label">Upgrade</label>
-                                <input type="string" class="form-control" id="exampleFormControlInput1" asp-for="Upgrade" placeholder="Nhập Upgrade">
+                                <label for="exampleFormControlInput1" class="form-label">Cập Nhật</label>
+                                <input type="string" class="form-control" id="exampleFormControlInput1" asp-for="Upgrade" placeholder="Cập Nhật">
                             </div>
                             <div class="col-md-3">
-                                <label for="exampleFormControlInput1" class="form-label">Price</label>
-                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Price" placeholder="Nhập Price" required>
+                                <label for="exampleFormControlInput1" class="form-label">Giá Bán</label>
+                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Price" placeholder="Nhập Giá Bán" required>
                             </div>
                             <div class="col-md-3">
-                                <label for="exampleFormControlInput1" class="form-label">ImportPrice</label>
-                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder="Nhập ImportPrice" required>
+                                <label for="exampleFormControlInput1" class="form-label">Giá Nhập</label>
+                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder=" Nhập Giá Nhập" required>
                             </div>
                             <div id="error-toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; top: 0; right: 0; z-index: 1050;"></div>
+                      
+
                         </div>
 
-                        <div class="demo-section wide">
-                            @* <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label> *@
-                            @* <textarea name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea> *@
-                            <label for="exampleFormControlInput1" class="form-label">bài đăng, chi tiết về sản phẩm</label>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="exampleFormControlInput1" class="form-label">Hình Ảnh</label>
+                                <div id="imageInputsContainer">
+                                    <input type="file" name="formFiles" class="form-control" accept="image/*" multiple />
+                                </div>
+                                <button type="button" class="btn btn-secondary mt-2" onclick="addImageInput()">Thêm 1 ảnh</button>
+                            </div>
+                        </div>
+
+
+                        <div class="demo-section wide">                         
+                            <label for="exampleFormControlInput1" class="form-label">Bài đăng, chi tiết về sản phẩm</label>
 
                             <div class="k-editor">
                                 <textarea class="form-control is-invalid" name="editor" id="description" rows="30" cols="30" style="width:100%; height:840px" aria-label="editor" required></textarea>
@@ -224,6 +235,27 @@
         });
     </script>
 }
+
+
+
+<script>
+    function addImageInput() {
+        var container = document.getElementById('imageInputsContainer');
+        var inputCount = container.getElementsByTagName('input').length;
+
+        if (inputCount < 6) {
+            var newInput = document.createElement('input');
+            newInput.type = 'file';
+            newInput.name = 'formFiles';
+            newInput.className = 'form-control';
+            newInput.accept = 'image/*';
+            newInput.multiple = true;  // Allow multiple file selection
+            container.appendChild(newInput);
+        }
+    }
+
+</script>
+
 <script>
 
     var editor = $("#description").kendoEditor({
@@ -443,9 +475,6 @@
                 //         });
                 //     }
                 // },
-
-
-
                 {
                     command: [
                         {

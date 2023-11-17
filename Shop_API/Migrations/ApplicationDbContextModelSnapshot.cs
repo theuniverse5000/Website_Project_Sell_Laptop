@@ -237,7 +237,6 @@ namespace Shop_API.Migrations
             modelBuilder.Entity("Shop_Models.Entities.Cart", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -891,7 +890,7 @@ namespace Shop_API.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("RoleId")
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SecurityStamp")
@@ -923,7 +922,6 @@ namespace Shop_API.Migrations
             modelBuilder.Entity("Shop_Models.Entities.ViDiem", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("SoDiemDaCong")
@@ -1060,6 +1058,17 @@ namespace Shop_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Bill");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.Cart", b =>
+                {
+                    b.HasOne("Shop_Models.Entities.User", "User")
+                        .WithOne("Cart")
+                        .HasForeignKey("Shop_Models.Entities.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.CartDetail", b =>
@@ -1222,6 +1231,17 @@ namespace Shop_API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Shop_Models.Entities.ViDiem", b =>
+                {
+                    b.HasOne("Shop_Models.Entities.User", "User")
+                        .WithOne("ViDiem")
+                        .HasForeignKey("Shop_Models.Entities.ViDiem", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Shop_Models.Entities.Bill", b =>
                 {
                     b.Navigation("BillDetails");
@@ -1299,6 +1319,13 @@ namespace Shop_API.Migrations
             modelBuilder.Entity("Shop_Models.Entities.Screen", b =>
                 {
                     b.Navigation("ProductDetails");
+                });
+
+            modelBuilder.Entity("Shop_Models.Entities.User", b =>
+                {
+                    b.Navigation("Cart");
+
+                    b.Navigation("ViDiem");
                 });
 
             modelBuilder.Entity("Shop_Models.Entities.ViDiem", b =>

@@ -30,8 +30,11 @@ public class LoginController : Controller
     public IActionResult Login(string ReturnUrl = "/")
     {
         string accessToken = HttpContext.Request.Cookies["access_token"];
-
-        return PartialView("_Login");
+        if (accessToken!=null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        return RedirectToAction("Login", "Home");
     }
     [HttpPost]
     public async Task<IActionResult> LoginWithJWT([FromBody] LoginRequestDto loginRequestDto)
@@ -49,7 +52,7 @@ public class LoginController : Controller
             Expires = DateTime.Now.AddHours(3), // Thời gian sống của cookie (ở đây là 30 ngày)
         });
 
-        return RedirectToAction("Login");
+        return RedirectToAction("Index", "Home");
     }
     public async Task<IActionResult> LogOut()
     {

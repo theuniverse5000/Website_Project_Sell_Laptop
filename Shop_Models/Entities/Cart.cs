@@ -10,6 +10,7 @@ namespace Shop_Models.Entities
         public Guid UserId { get; set; }
         [MaxLength(200)]
         public string? Description { get; set; }
+        public virtual User? User { get; set; }
         public virtual ICollection<CartDetail>? CartDetails { get; set; }
     }
 }

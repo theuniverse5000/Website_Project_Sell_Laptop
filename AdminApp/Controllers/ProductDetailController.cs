@@ -24,6 +24,12 @@ namespace AdminApp.Controllers
             _config = config;
             _httpClientFactory = httpClientFactory;
         }
+        public async Task<IActionResult> GetList()
+        {
+            var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+            string result = await client.GetStringAsync($"/api/ProductDetail/GetAllPDD");
+            return Content(result, "application/json");
+        }
         public async Task<IActionResult> GetProductDetail()
         {
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
@@ -162,7 +168,7 @@ namespace AdminApp.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> Index(ProductDetailDto productRequest, string editor)
+        public async Task<IActionResult> Index(ProductDetailDto productRequest, string editor, [FromForm] List<IFormFile> formFiles)
         {
             ProductDetail productDetail = new ProductDetail()
             {
@@ -183,14 +189,40 @@ namespace AdminApp.Controllers
             };
 
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
-            var result = await client.PostAsJsonAsync($"/api/ProductDetail", productDetail);
+            var result = await client.PostAsJsonAsync($"/api/ProductDetail/Create", productDetail);
 
-            if (result.IsSuccessStatusCode)
+
+            using (var formData = new MultipartFormDataContent())
+            {
+                foreach (var file in formFiles)
+                {
+                    formData.Add(new StreamContent(file.OpenReadStream())
+                    {
+                        Headers =
+            {
+                ContentLength = file.Length,
+                ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType)
+            }
+                    }, "files", file.FileName);
+                }
+
+                // Add other data if needed
+                formData.Add(new StringContent(productDetail.Id.ToString()), "ProductId");
+
+                // Send the request
+                var resultImage = await client.PostAsync("https://localhost:44333/api/Images/uploadManyProductDetailImages", formData);
+                
+            }
+
+
+            if (result.IsSuccessStatusCode /*&& resultImage.IsSuccessStatusCode*/)
             {
                 return RedirectToAction("Index", "ProductDetail");
             }
             return RedirectToAction("Index", "ProductDetail", BadRequest("loi"));
         }
+
+
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
@@ -210,11 +242,11 @@ namespace AdminApp.Controllers
         }
         [HttpGet]
         ////[HttpPost]
-        public async Task<IActionResult> Index(Guid guid)
+        public async Task<IActionResult> Index(/*Guid guid*/)
         {
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
             var getProduct = await client.GetStringAsync($"/api/Product");
-            ViewBag.GetProduct = JsonConvert.DeserializeObject<List<Product>>(getProduct); ;
+            ViewBag.GetProduct = JsonConvert.DeserializeObject<List<Product>>(getProduct);
             string getManufacturer = await client.GetStringAsync($"/api/Manufacturer");
             ViewBag.GetManufacturer = JsonConvert.DeserializeObject<List<Manufacturer>>(getManufacturer);
             string getColor = await client.GetStringAsync($"/api/Color");
@@ -237,30 +269,36 @@ namespace AdminApp.Controllers
             string getlistCardVGA = await client.GetStringAsync($"/api/CardVGA");
             ViewBag.GetlistCardVGA = JsonConvert.DeserializeObject<List<CardVGA>>(getlistCardVGA);
             listCardVGA = JsonConvert.DeserializeObject<List<CardVGA>>(getlistCardVGA);
-            if (guid == Guid.Empty)
-            {
-                return View();
-            }
-            else
-            {
-                var getProductDetails = await client.GetFromJsonAsync<ProductDetailDto>($"/api/ProductDetail/ProductDetailByIdReturnProDetailDTO?guid={guid}");
-                if (getProductDetails != null)
-                {
-                    return View(getProductDetails);
-                }
-                else
-                {
-                    return View();
-                }
-            }
+            //if (guid == Guid.Empty)
+            //{
+            return View();
+            //}
+            //else
+            //{
+            //    var getProductDetails = await client.GetFromJsonAsync<ProductDetailDto>($"/api/ProductDetail/ProductDetailByIdReturnProDetailDTO?guid={guid}");
+            //    if (getProductDetails != null)
+            //    {
+            //        return View(getProductDetails);
+            //    }
+            //    else
+            //    {
+            //        return View();
+            //    }
+            //}
         }
+
+
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
             var getProductDetails = await client.GetFromJsonAsync<ProductDetail>($"/api/ProductDetail/ProductDetailById?guid={id}");
+            var getProductDetailsImages = await client.GetStringAsync($"https://localhost:44333/api/Images/getProductDetailImages2?ProductId={id}");
+            var images = JsonConvert.DeserializeObject<List<Image>>(getProductDetailsImages);
+            ViewBag.ImagesPD = images;
             return PartialView("_Update", getProductDetails);
         }
+
         [HttpPost]
         public async Task<IActionResult> Update(ProductDetail getProductDetails, string? editor)
         {
@@ -340,8 +378,8 @@ namespace AdminApp.Controllers
                         {
                             Id = Guid.NewGuid(),
                             Code = worksheet.Cells[row, 1].Text,
-                            ImportPrice = float.Parse(worksheet.Cells[row, 2].Text),
-                            Price = float.Parse(worksheet.Cells[row, 3].Text),
+                            Price = float.Parse(worksheet.Cells[row, 2].Text),
+                            ImportPrice = float.Parse(worksheet.Cells[row, 3].Text),
                             Upgrade = worksheet.Cells[row, 4].Text,
                             Description = worksheet.Cells[row, 5].Text,
                             Status = int.Parse(worksheet.Cells[row, 6].Text),
@@ -354,7 +392,7 @@ namespace AdminApp.Controllers
                             CardVGAId = null,
                         };
                         products.Add(product);
-                        var result = await client.PostAsJsonAsync($"/api/ProductDetail/Create", product);
+
                         //if (result.IsSuccessStatusCode)
                         //{
                         //    return RedirectToAction("Index", "ProductDetail");
@@ -362,6 +400,7 @@ namespace AdminApp.Controllers
 
                         //return BadRequest(result);
                     }
+                    var result = await client.PostAsJsonAsync($"/api/ProductDetail/CreateMany", products);
                     return RedirectToAction("Index", "ProductDetail");
 
 

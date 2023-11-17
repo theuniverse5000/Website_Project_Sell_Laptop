@@ -12,6 +12,7 @@ namespace Shop_Models.Entities
         public double SoDiemDaDung { get; set; }
         public double SoDiemDaCong { get; set; }
         public int TrangThai { get; set; }
+        public virtual User? User { get; set; }
         public virtual ICollection<LichSuTieuDiem>? LichSuTieuDiems { get; set; }
     }
 }
