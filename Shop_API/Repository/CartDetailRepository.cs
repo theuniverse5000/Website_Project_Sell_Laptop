@@ -55,6 +55,11 @@ namespace Shop_API.Repository
             return await _context.CartDetails.ToListAsync();
         }
 
+        public async Task<CartDetail> GetById(Guid id)
+        {
+            return await _context.CartDetails.FindAsync(id);
+        }
+
         public async Task<bool> Update(CartDetail obj)
         {
             var cartDT = await _context.CartDetails.FindAsync(obj.Id);

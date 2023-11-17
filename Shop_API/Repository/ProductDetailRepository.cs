@@ -28,6 +28,7 @@ namespace Shop_API.Repository
             }
             try
             {
+
                 await _context.ProductDetails.AddAsync(obj);
                 await _context.SaveChangesAsync();
                 return true;
@@ -87,11 +88,11 @@ namespace Shop_API.Repository
            .Count();
             return getCount;
         }
-        public async Task<IEnumerable<ProductDetailDto>> PGetProductDetail(int? getNumber, string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int page = 10)
+        public async Task<IEnumerable<ProductDetailDto>> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int page = 10)
         {
             var query = _context.ProductDetails
           .AsNoTracking()
-          .Where(a => a.Status > 0 && (codeProductDetail != null ? a.Code == codeProductDetail : true))
+          .Where(a => (status == null || a.Status == status) && (codeProductDetail != null ? a.Code == codeProductDetail : true))
           .Select(a => new ProductDetailDto
           {
               Id = a.Id,

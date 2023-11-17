@@ -55,7 +55,7 @@ namespace Shop_API.Controllers
             return Ok(_reponse);
         }
         [HttpGet("PGetProductDetail")]
-        public async Task<IActionResult> PGetProductDetail(int? getNumber, string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int page)
+        public async Task<IActionResult> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int page)
         {
             string apiKey = _config.GetSection("ApiKey").Value;
             if (apiKey == null)
@@ -68,7 +68,7 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            var listProductDetail = await _repository.PGetProductDetail(getNumber, codeProductDetail, search, from, to, sortBy, page);
+            var listProductDetail = await _repository.PGetProductDetail(getNumber, codeProductDetail, status, search, from, to, sortBy, page);
             _reponse.Result = listProductDetail;
             _reponse.Count = listProductDetail.ToList().Count;
             return Ok(_reponse);

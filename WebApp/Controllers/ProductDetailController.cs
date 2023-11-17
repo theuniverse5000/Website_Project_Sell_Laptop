@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shop_Models.Dto;
-using Shop_Models.Entities;
 using System.Net.Http.Headers;
 
 namespace WebApp.Controllers
@@ -19,11 +18,49 @@ namespace WebApp.Controllers
             _httpClientFactory = httpClientFactory;
             urlApi = _config.GetSection("UrlApiAdmin").Value;
         }
-        public IActionResult Index()
+        [HttpGet("sản-phẩm")]
+        public async Task<IActionResult> Index()
         {
-
+            var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+            var apiUrl = "/api/ProductDetail/PGetProductDetail?status=1";
+            var apiRespone = await httpClient.GetStringAsync(apiUrl);
+            var Respone = apiRespone.ToString();
+            var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
+            var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
+            ViewBag.ListProduct = content;
             return View();
         }
+        [HttpGet("sản-phẩm/{code}")]
+        public async Task<IActionResult> Detail(string code)
+        {
+            //var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+            //var apiUrl = $"/api/ProductDetail/PGetProductDetail?codeProductDetail={code}&status=1";
+            //var apiRespone = await httpClient.GetStringAsync(apiUrl);
+            //var Respone = apiRespone.ToString();
+            //var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
+            //var content = JsonConvert.DeserializeObject<ProductDetailDto>(responeModel.Result.ToString());
+            //ViewBag.Product = content;
+            //return View();
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
+            {
+                HttpResponseMessage response = await client.GetAsync($"/api/ProductDetail/PGetProductDetail?codeProductDetail={code}&status=1");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultString = await response.Content.ReadAsStringAsync();
+                    var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
+                    var product = JsonConvert.DeserializeObject<List<ProductDetailDto>>(resultResponse.Result.ToString());
+                    ViewBag.product = product;
+                }
+                else
+                {
+                    ViewBag.product = null;
+                }
+
+                return View();
+            }
+        }
+
         public async Task<IActionResult> GetProductDetail()
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
@@ -38,7 +75,7 @@ namespace WebApp.Controllers
             var accessToken = JsonConvert.DeserializeObject<TokenDto>(Request.Cookies["access_token"]);
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
             var apiUrl_ProductDetail = $@"/api/Cart/AddCart?codeProductDetail={productDetailCode}";
-            var responeApi =await httpClient.PostAsync(apiUrl_ProductDetail, null);
+            var responeApi = await httpClient.PostAsync(apiUrl_ProductDetail, null);
         }
         [HttpPost]
         public async void IncreaseQuantity(string idProductDetail)

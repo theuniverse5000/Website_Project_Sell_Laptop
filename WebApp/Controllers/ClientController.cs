@@ -17,15 +17,44 @@ namespace WebApp.Controllers
         {
             return View();
         }
-        public IActionResult ShowCart()
+        public async Task<IActionResult> AddProductToCart(string code)
         {
-            var UsernameToCart = HttpContext.Session.GetString("CheckLogin");
-            if (UsernameToCart == null)
+            string getUsername = "@Thaothienthan1";
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
-                // var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
-                return RedirectToAction("IndexForSession");
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Cart/AddCart?userName={getUsername}&codeProductDetail={code}", string.Empty);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("ShowCart");
+                }
+                return View();
             }
-            return View();
+        }
+        [Route("giỏ-hàng")]
+        public async Task<IActionResult> ShowCart()
+        {
+            //var UsernameToCart = HttpContext.Session.GetString("CheckLogin");
+            //if (UsernameToCart == null)
+            //{
+            //    // var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
+            //    return RedirectToAction("IndexForSession");
+            //}
+            string userName = "@Thaothienthan1";
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
+            {
+                HttpResponseMessage response = await client.GetAsync($"/api/Cart/GetCartJoinForUser?userName={userName}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultString = await response.Content.ReadAsStringAsync();
+                    var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
+                    ViewBag.cartItem = JsonConvert.DeserializeObject<IEnumerable<CartItemDto>>(resultResponse.Result.ToString());
+                    return View();
+                }
+                ViewBag.cartItem = null;
+                return View();
+            }
+
         }
         public async Task<IActionResult> ShowBill()
         {
@@ -35,31 +64,25 @@ namespace WebApp.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var resultString = await response.Content.ReadAsStringAsync(); // Đảm bảo đọc nội dung của response
-
-                    // Deserialize JSON response to ResponseDto
+                    var resultString = await response.Content.ReadAsStringAsync();
                     var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
                     var billS = JsonConvert.DeserializeObject<BillDto>(resultResponse.Result.ToString());
                     if (billS != null)
                     {
                         ViewBag.Bill = billS;
-                        ViewBag.ListBillItem = billS.BillDetail; // Sử dụng trực tiếp thuộc tính BillDetail từ result1
+                        ViewBag.ListBillItem = billS.BillDetail;
                     }
                     else
                     {
                         ViewBag.ListBillItem = null;
                     }
-
-                    // Bây giờ bạn đã có dữ liệu và có thể sử dụng chúng ở trong ViewBag hoặc trả về View theo cách thích hợp
                 }
                 else
                 {
-                    ViewBag.ListBillItem = null; // Xử lý khi response không thành công
+                    ViewBag.ListBillItem = null;
                 }
-
                 return View();
             }
-
         }
     }
 }

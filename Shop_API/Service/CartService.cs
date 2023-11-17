@@ -28,229 +28,297 @@ namespace Shop_API.Service
             _userRepository = userRepository;
             _reponse = new ResponseDto();
         }
-        public async Task<ResponseDto> AddCart(Guid userId, string userName, string codeProductDetail)
+        //public async Task<ResponseDto> AddCart(string userName, string codeProductDetail)
+        //{
+        //    try
+        //    {
+        //        var productDetailToCart = _productDetailRepository.PGetProductDetail(1, codeProductDetail, null, null, null, null, null, 1).Result.FirstOrDefault();
+        //        var userToCart = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.UserName == userName);
+        //        getUserId = userToCart.Id;
+        //        if (userToCart == null)
+        //        {
+        //            _reponse.Result = null;
+        //            _reponse.IsSuccess = false;
+        //            _reponse.Code = 404;
+        //            _reponse.Message = "Không tìm thấy tài khoản";
+        //            return _reponse;
+        //        }
+        //        if (productDetailToCart == null)
+        //        {
+        //            _reponse.Result = null;
+        //            _reponse.IsSuccess = false;
+        //            _reponse.Code = 404;
+        //            _reponse.Message = "Không tìm thấy sản phẩm";
+        //            return _reponse;
+        //        }
+        //        // Bước 1: Khi truyền vào username lấy ra được id của user
+
+        //        var userCart = _cartRepository.GetAll().Result.FirstOrDefault(x => x.UserId == userToCart.Id);
+        //        int soLuongProductDetail = 1;// productDetailToCart.AvailableQuantity;
+        //        if (soLuongProductDetail <= 0)
+        //        {
+        //            _reponse.Result = null;
+        //            _reponse.IsSuccess = false;
+        //            _reponse.Code = 404;
+        //            _reponse.Message = "Số lượng sản phẩm không đủ";
+        //            return _reponse;
+        //        }
+        //        if (userCart != null)
+        //        {
+        //            var checkProductDetailInCart = _cartDetailRepository.GetAll().Result.FirstOrDefault(a => a.CartId == getUserId && a.ProductDetailId == productDetailToCart.Id);
+        //            if (checkProductDetailInCart != null)
+        //            {
+        //                CartDetail a = new CartDetail();
+        //                a.Id = checkProductDetailInCart.Id;
+        //                a.Quantity = checkProductDetailInCart.Quantity += 1;
+        //                if (await _cartDetailRepository.Update(a))
+        //                {
+        //                    _reponse.Result = a;
+        //                    _reponse.IsSuccess = true;
+        //                    _reponse.Code = 200;
+        //                    return _reponse;
+        //                }
+        //                _reponse.Result = null;
+        //                _reponse.IsSuccess = false;
+        //                _reponse.Code = 404;
+        //                _reponse.Message = "Không thể cập nhật số lượng sản phẩm trong giỏ hàng";
+        //                return _reponse;
+        //            }
+        //            else
+        //            {
+        //                CartDetail x = new CartDetail();
+        //                x.Id = Guid.NewGuid();
+        //                x.ProductDetailId = productDetailToCart.Id;
+        //                x.CartId = userToCart.Id;
+        //                x.Quantity = 1;
+        //                if (await _cartDetailRepository.Create(x))
+        //                {
+        //                    _reponse.Result = x;
+        //                    _reponse.IsSuccess = true;
+        //                    _reponse.Code = 201;
+        //                    _reponse.Message = "Thêm sản phẩm vào giỏ hàng thành công";
+        //                    return _reponse;
+        //                }
+        //                _reponse.Result = null;
+        //                _reponse.IsSuccess = false;
+        //                _reponse.Code = 404;
+        //                _reponse.Message = "Không thể thêm sản phẩm vào trong giỏ hàng";
+        //                return _reponse;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Cart cart = new Cart();
+        //            cart.UserId = getUserId;
+        //            cart.Description = $"Giỏ hàng của {userName}";
+        //            if (await _cartRepository.Create(cart))
+        //            {
+        //                CartDetail b = new CartDetail();
+        //                b.Id = new Guid();
+        //                b.ProductDetailId = productDetailToCart.Id;
+        //                b.CartId = getUserId;
+        //                b.Quantity = 1;
+        //                b.Status = 1;
+        //                if (await _cartDetailRepository.Create(b))
+        //                {
+        //                    _reponse.Result = b;
+        //                    _reponse.IsSuccess = true;
+        //                    _reponse.Code = 201;
+        //                    _reponse.Message = "Thêm sản phẩm vào giỏ hàng thành công";
+        //                    return _reponse;
+        //                }
+        //            }
+        //            _reponse.Result = null;
+        //            _reponse.IsSuccess = false;
+        //            _reponse.Code = 404;
+        //            _reponse.Message = "Không thể thêm sản phẩm vào trong giỏ hàng";
+        //            return _reponse;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _reponse.Result = null;
+        //        _reponse.IsSuccess = false;
+        //        _reponse.Code = 404;
+        //        _reponse.Message = e.Message;
+        //        return _reponse;
+        //    }
+        //}
+        public async Task<ResponseDto> AddCart(string userName, string codeProductDetail)
         {
             try
             {
+                var productDetailToCart = _productDetailRepository.PGetProductDetail(1, codeProductDetail, null, null, null, null, null, 1).Result.FirstOrDefault();
+                var userToCart = await _userRepository.GetAllUsers();
+                var user = userToCart.FirstOrDefault(x => x.UserName == userName);
 
-                var productDetailToCart = _productDetailRepository.PGetProductDetail(1, codeProductDetail, null, null, null, null, 1).Result.FirstOrDefault();
-                var userToCart = _userRepository.GetAllUsers().Result;//.FirstOrDefault(x => x.UserName == username);
-                if (userToCart == null)
+                if (user == null)
                 {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Không tìm thấy tài khoản";
-                    return _reponse;
+                    return ErrorResponse("Không tìm thấy tài khoản", 404);
                 }
+
                 if (productDetailToCart == null)
                 {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Không tìm thấy sản phẩm";
-                    return _reponse;
+                    return ErrorResponse("Không tìm thấy sản phẩm", 404);
                 }
-                // Bước 1: Khi truyền vào username lấy ra được id của user
 
-                var userCart = _cartRepository.GetAll().Result.FirstOrDefault(x => x.UserId == userId);
-                int soLuongProductDetail = 1;// productDetailToCart.AvailableQuantity;
+                getUserId = user.Id;
+
+                var userCart = await _cartRepository.GetAll();
+                var soLuongProductDetail = 1; // productDetailToCart.AvailableQuantity;
+
                 if (soLuongProductDetail <= 0)
                 {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Số lượng sản phẩm không đủ";
-                    return _reponse;
+                    return ErrorResponse("Số lượng sản phẩm không đủ", 404);
                 }
+
                 if (userCart != null)
                 {
-                    var checkProductDetailInCart = _cartDetailRepository.GetAll().Result.FirstOrDefault(a => a.CartId == getUserId && a.ProductDetailId == productDetailToCart.Id);
-                    if (checkProductDetailInCart != null)
+                    var checkProductDetailInCart = await _cartDetailRepository.GetAll();
+                    var cartDetail = checkProductDetailInCart.FirstOrDefault(a => a.CartId == getUserId && a.ProductDetailId == productDetailToCart.Id);
+
+                    if (cartDetail != null)
                     {
-                        CartDetail a = new CartDetail();
-                        a.Id = checkProductDetailInCart.Id;
-                        a.Quantity = checkProductDetailInCart.Quantity += 1;
-                        if (await _cartDetailRepository.Update(a))
+                        cartDetail.Quantity += 1;
+
+                        if (await _cartDetailRepository.Update(cartDetail))
                         {
-                            _reponse.Result = a;
-                            _reponse.IsSuccess = true;
-                            _reponse.Code = 200;
-                            return _reponse;
+                            return SuccessResponse(cartDetail, 200);
                         }
-                        _reponse.Result = null;
-                        _reponse.IsSuccess = false;
-                        _reponse.Code = 404;
-                        _reponse.Message = "Không thể cập nhật số lượng sản phẩm trong giỏ hàng";
-                        return _reponse;
+
+                        return ErrorResponse("Không thể cập nhật số lượng sản phẩm trong giỏ hàng", 404);
                     }
                     else
                     {
-                        CartDetail x = new CartDetail();
-                        x.Id = Guid.NewGuid();
-                        x.ProductDetailId = productDetailToCart.Id;
-                        x.CartId = userId;
-                        x.Quantity = 1;
-                        if (await _cartDetailRepository.Create(x))
+                        var newCartDetail = new CartDetail
                         {
-                            _reponse.Result = x;
-                            _reponse.IsSuccess = true;
-                            _reponse.Code = 201;
-                            _reponse.Message = "Thêm sản phẩm vào giỏ hàng thành công";
-                            return _reponse;
+                            Id = Guid.NewGuid(),
+                            ProductDetailId = productDetailToCart.Id,
+                            CartId = getUserId,
+                            Quantity = 1
+                        };
+
+                        if (await _cartDetailRepository.Create(newCartDetail))
+                        {
+                            return SuccessResponse(newCartDetail, 201, "Thêm sản phẩm vào giỏ hàng thành công");
                         }
-                        _reponse.Result = null;
-                        _reponse.IsSuccess = false;
-                        _reponse.Code = 404;
-                        _reponse.Message = "Không thể thêm sản phẩm vào trong giỏ hàng";
-                        return _reponse;
+
+                        return ErrorResponse("Không thể thêm sản phẩm vào trong giỏ hàng", 404);
                     }
                 }
                 else
                 {
-                    Cart cart = new Cart();
-                    cart.UserId = getUserId;
-                    cart.Description = $"Giỏ hàng của {userName}";
-                    if (await _cartRepository.Create(cart))
+                    var newCart = new Cart
                     {
-                        CartDetail b = new CartDetail();
-                        b.Id = new Guid();
-                        b.ProductDetailId = productDetailToCart.Id;
-                        b.CartId = getUserId;
-                        b.Quantity = 1;
-                        b.Status = 1;
-                        if (await _cartDetailRepository.Create(b))
+                        UserId = getUserId,
+                        Description = $"Giỏ hàng của {userName}"
+                    };
 
+                    if (await _cartRepository.Create(newCart))
+                    {
+                        var newCartDetail = new CartDetail
                         {
-                            _reponse.Result = b;
-                            _reponse.IsSuccess = true;
-                            _reponse.Code = 201;
-                            _reponse.Message = "Thêm sản phẩm vào giỏ hàng thành công";
-                            return _reponse;
+                            Id = Guid.NewGuid(),
+                            ProductDetailId = productDetailToCart.Id,
+                            CartId = getUserId,
+                            Quantity = 1,
+                            Status = 1
+                        };
+
+                        if (await _cartDetailRepository.Create(newCartDetail))
+                        {
+                            return SuccessResponse(newCartDetail, 201, "Thêm sản phẩm vào giỏ hàng thành công");
                         }
                     }
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Không thể thêm sản phẩm vào trong giỏ hàng";
-                    return _reponse;
+
+                    return ErrorResponse("Không thể thêm sản phẩm vào trong giỏ hàng", 404);
                 }
             }
             catch (Exception e)
             {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = e.Message;
-                return _reponse;
+                return ErrorResponse(e.Message, 404);
             }
         }
-        public async Task<ResponseDto> CongQuantityCartDetail(Guid idCartDetail,Guid idProductDetail)
+
+        private ResponseDto ErrorResponse(string message, int code)
+        {
+            return new ResponseDto
+            {
+                Result = null,
+                IsSuccess = false,
+                Code = code,
+                Message = message
+            };
+        }
+
+        private ResponseDto SuccessResponse(object result, int code, string message = null)
+        {
+            return new ResponseDto
+            {
+                Result = result,
+                IsSuccess = true,
+                Code = code,
+                Message = message
+            };
+        }
+        public async Task<ResponseDto> CongOrTruQuantityCartDetail(Guid idCartDetail, int changeAmount)
         {
             try
             {
-                var cartDetailX = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail && x.ProductDetailId==idProductDetail);
+                var cartDetailX = await _cartDetailRepository.GetById(idCartDetail);
+
                 if (cartDetailX == null)
                 {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Không tìm thấy giỏ hàng chi tiết";
-                    return _reponse;
+                    return ErrorResponse("Không tìm thấy giỏ hàng chi tiết", 404);
                 }
+
                 var checkProductDetailInCart = cartDetailX.Quantity;
-                CartDetail cartDetail = new CartDetail();
-                cartDetail.Id = idCartDetail;
-                cartDetail.Quantity = (checkProductDetailInCart += 1);
+                CartDetail cartDetail = new CartDetail
+                {
+                    Id = idCartDetail,
+                    Quantity = checkProductDetailInCart + changeAmount
+                };
+
+                if (cartDetail.Quantity < 0)
+                {
+                    return await HandleNegativeQuantity(cartDetail);
+                }
+
                 if (await _cartDetailRepository.Update(cartDetail))
                 {
-                    _reponse.Result = cartDetail;
-                    _reponse.IsSuccess = true;
-                    _reponse.Code = 200;
-                    _reponse.Message = "Tăng số lượng sản phẩm thành công";
-                    return _reponse;
+                    return SuccessResponse(cartDetail, 200, $"{(changeAmount > 0 ? "Tăng" : "Giảm")} số lượng sản phẩm thành công");
                 }
                 else
                 {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Thất bại";
-                    return _reponse;
+                    return ErrorResponse("Thất bại", 404);
                 }
             }
             catch (Exception e)
             {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = e.Message;
-                return _reponse;
+                return ErrorResponse(e.Message, 404);
             }
         }
-        public async Task<ResponseDto> TruQuantityCartDetail(Guid idCartDetail, Guid iDProductDetail)
-        {
-            try
-            {
-                var cartDetailX = _cartDetailRepository.GetAll().Result.FirstOrDefault(x => x.Id == idCartDetail&& x.ProductDetailId==iDProductDetail);
-                if (cartDetailX == null)
-                {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Không tìm thấy giỏ hàng chi tiết";
-                    return _reponse;
-                }
-                var checkProductDetailInCart = cartDetailX.Quantity;
-                if (checkProductDetailInCart > 0)
-                {
-                    CartDetail cartDetail = new CartDetail();
-                    cartDetail.Id = idCartDetail;
-                    cartDetail.Quantity = (checkProductDetailInCart -= 1);
-                    if (await _cartDetailRepository.Update(cartDetail))
-                    {
-                        _reponse.Result = cartDetail;
-                        _reponse.IsSuccess = true;
-                        _reponse.Code = 200;
-                        _reponse.Message = "Giảm số lượng sản phẩm thành công";
-                        return _reponse;
-                    }
-                    else
-                    {
-                        _reponse.Result = null;
-                        _reponse.IsSuccess = false;
-                        _reponse.Code = 404;
-                        _reponse.Message = "Thất bại";
-                        return _reponse;
-                    }
-                }
-                else
-                {
-                    if (await _cartDetailRepository.Delete(idCartDetail))
-                    {
-                        _reponse.Result = null;
-                        _reponse.IsSuccess = true;
-                        _reponse.Code = 204;
-                        _reponse.Message = "Bạn vừa xóa sản phẩm khỏi giỏ hàng";
-                        return _reponse;
-                    }
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Thất bại, có lỗi gì đó";
-                    return _reponse;
-                }
 
-            }
-            catch (Exception e)
+        private async Task<ResponseDto> HandleNegativeQuantity(CartDetail cartDetail)
+        {
+            if (await _cartDetailRepository.Delete(cartDetail.Id))
             {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = e.Message;
-                return _reponse;
+                return SuccessResponse(null, 204, "Bạn vừa xóa sản phẩm khỏi giỏ hàng");
             }
+
+            return ErrorResponse("Thất bại, có lỗi gì đó", 404);
         }
+
+        public async Task<ResponseDto> CongQuantityCartDetail(Guid idCartDetail)
+        {
+            return await CongOrTruQuantityCartDetail(idCartDetail, 1);
+        }
+
+        public async Task<ResponseDto> TruQuantityCartDetail(Guid idCartDetail)
+        {
+            return await CongOrTruQuantityCartDetail(idCartDetail, -1);
+        }
+
         public async Task<ResponseDto> GetAllCarts()
         {
             var cartItem = await _cartRepository.GetAll();

@@ -154,7 +154,7 @@
         <div class="List-products row">
 
             @{
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     <div class="hot-product  col-md-3" data-code="@productDetails[i].Code.ToString()">
 
@@ -210,7 +210,7 @@
                             return widthPercentage.ToString() + "%";
                         }
 
-                        for (int i = 0; i < 5; i++)
+                        for (int i = 0; i < 2; i++)
                         {
                             double giamgia = ((@productDetails[i].ImportPrice - @productDetails[i].Price) / @productDetails[i].ImportPrice) * 100;
                             <div class="item">
