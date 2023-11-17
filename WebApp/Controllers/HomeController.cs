@@ -22,6 +22,16 @@ namespace WebApp.Controllers
             var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
             var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
             ViewBag.ProductDetails = content;
+            var apiImagesUrl = "/api/Images";
+            var apiResponeImage = await httpClient.GetStringAsync(apiImagesUrl);
+
+            // Deserialize trực tiếp thành danh sách ImageDto
+            var contentIMage = JsonConvert.DeserializeObject<List<ImageDto>>(apiResponeImage);
+
+            // Gán danh sách ImageDto trực tiếp cho ViewBag.Image
+            ViewBag.Image = contentIMage;
+
+
             return View();
         }
         public IActionResult GoLogin()
