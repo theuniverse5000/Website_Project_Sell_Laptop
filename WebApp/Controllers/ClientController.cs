@@ -19,7 +19,7 @@ namespace WebApp.Controllers
         }
         public async Task<IActionResult> AddProductToCart(string code)
         {
-            string getUsername = "@Thaothienthan1";
+            string getUsername = "@Thaothienthan0";
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
                 HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Cart/AddCart?userName={getUsername}&codeProductDetail={code}", string.Empty);
@@ -39,7 +39,7 @@ namespace WebApp.Controllers
             //    // var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
             //    return RedirectToAction("IndexForSession");
             //}
-            string userName = "@Thaothienthan1";
+            string userName = "@Thaothienthan0";
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
                 HttpResponseMessage response = await client.GetAsync($"/api/Cart/GetCartJoinForUser?userName={userName}");
@@ -55,6 +55,20 @@ namespace WebApp.Controllers
                 return View();
             }
 
+        }
+        [HttpPost]
+        public async void IncreaseQuantity(string idProductDetail)
+        {
+            var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+            var apiurl = $"/api/Cart/CongQuantity?idCartDetail={Guid.Parse(idProductDetail)}";
+            var responeApi = await httpClient.PutAsync(apiurl, null);
+        }
+        [HttpPost]
+        public async void DecreaseQuantity(string idProductDetail)
+        {
+            var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+            var apiUrl = $"/api/Cart/TruQuantityCartDetail?idCartDetail={idProductDetail}";
+            var responeApi = httpClient.PutAsync(apiUrl, null);
         }
         public async Task<IActionResult> ShowBill()
         {

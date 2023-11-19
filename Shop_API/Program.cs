@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -122,6 +121,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
+
+//app.UseDirectoryBrowser(new DirectoryBrowserOptions
+//{
+//    FileProvider = new PhysicalFileProvider(
+//        Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "user_images")),
+//    RequestPath = "/user_images"
+//});
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseAuthentication();

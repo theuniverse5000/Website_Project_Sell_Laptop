@@ -1,6 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 
-namespace Shop_API.Utilitity
+namespace Shop_API.Utilitities
 {
     public static class TokenUtility
     {

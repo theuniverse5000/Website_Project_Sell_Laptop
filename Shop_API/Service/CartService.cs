@@ -164,7 +164,7 @@ namespace Shop_API.Service
 
                 getUserId = user.Id;
 
-                var userCart = await _cartRepository.GetAll();
+                var userCart = await _cartRepository.GetCartById(getUserId);
                 var soLuongProductDetail = 1; // productDetailToCart.AvailableQuantity;
 
                 if (soLuongProductDetail <= 0)
@@ -338,9 +338,9 @@ namespace Shop_API.Service
             }
 
         }
-        public async Task<ResponseDto> GetCartByUsername(string username)
+        public async Task<ResponseDto> GetCartById(Guid id)
         {
-            var cartItem = await _cartRepository.GetCartByUsername(username);
+            var cartItem = await _cartRepository.GetCartById(id);
             if (cartItem == null)
             {
                 _reponse.Result = null;

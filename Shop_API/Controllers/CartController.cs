@@ -32,11 +32,11 @@ namespace Shop_API.Controllers
             }
         }
         [AllowAnonymous]// For admin
-        [HttpGet("GetCartByUsername")]
-        public async Task<IActionResult> GetCartByUsername()
+        [HttpGet("GetCartById")]
+        public async Task<IActionResult> GetCartById(Guid id)
         {
             var username = User.Identity.Name;
-            var reponse = await _cartService.GetCartByUsername(username);
+            var reponse = await _cartService.GetCartById(id);
             if (reponse.IsSuccess)
             {
                 return Ok(reponse);

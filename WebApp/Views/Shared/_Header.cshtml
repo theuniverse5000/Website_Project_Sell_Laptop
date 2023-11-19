@@ -3,6 +3,97 @@
     string accessToken = httpContext.Request.Cookies["access_token"];
 }
 <header>
-  
-    
+    <div class="Nav-header justify-content-center d-flex" style="background-color: #73BBFE;">
+        <div class="navbar navbar-expand-md d-flex flex-column container" style="background-color:transparent;">
+            <div class="d-flex w-100">
+                <div class="row d-flex align-items-center flex-grow-1">
+                    <div class="col-md-1"></div>
+                    <div class="head-session col-md-5 justify-content-start d-flex ">
+                        <form class="d-flex w-100" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    <div class="collapse col-md-6 navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-around">
+                            <li class="nav-item  d-flex justify-content-center align-items-xxl-center">
+                                <a class="Hot-Line col-2" href="/giỏ-hàng">
+                                    <i class="fa-solid fa-bag-shopping"></i>
+                                    <span>Giỏ Hàng</span>
+                                </a>
+                            </li>
+                            <li class="nav-item  d-flex justify-content-center align-items-xxl-center">
+                                <div id="HotLineButton" class="Hot-Line col-2">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <span>SĐT: 1800.1516</span>
+                                </div>
+                            </li>
+                            @{
+
+                                if (accessToken != null)
+                                {
+                                    <li class="nav-item  d-flex justify-content-center align-items-xxl-center">
+                                        <div class="Hot-Line col-2">
+                                            <a class="d-flex" style="text-decoration: none;">
+                                                <i class="fa-solid fa-user"></i>
+                                                <span>Tài Khoản</span>
+                                            </a>
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item d-flex justify-content-center align-items-xxl-center">
+                                        <a href="@Url.Action("Login", "Home")" class="Hot-Line col-2" style="text-decoration: none;">
+                                            <div class="d-flex">
+                                                <i class="fa-solid fa-user"></i>
+                                                <span>Đăng Nhập</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</header>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="javascript:void(0)"><img src="" /></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mynavbar">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" style="margin-left: 90px;">Trang Chủ</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/sản-phẩm" style="margin-left: 90px;">Laptop Mới</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" style="margin-left: 90px;">Giới Thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" style="margin-left: 90px;">Trả Góp</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" style="margin-left: 90px;">Khuyến mãi</a>
+                    </li>
+                    
+                </ul>
+               
+            </div>
+        </div>
+    </nav>
 </header>

@@ -9,7 +9,7 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(Cart obj);
         Task<bool> Delete(Guid id);
         Task<IEnumerable<Cart>> GetAll();
-        Task<Cart> GetCartByUsername(string username);
+        Task<Cart> GetCartById(Guid id);
         Task<IEnumerable<CartItemDto>> GetCartItem(string username);
         //  Task<IEnumerable<CartItemDto>> GetAllCarts();
     }

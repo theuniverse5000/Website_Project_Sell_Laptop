@@ -55,12 +55,12 @@ namespace Shop_API.Repository
             return await _context.Carts.ToListAsync();
         }
 
-        public async Task<Cart> GetCartByUsername(string username)
+        public async Task<Cart> GetCartById(Guid id)
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x=>x.UserName== username);
-                var cart = await _context.Carts.FirstOrDefaultAsync(x=>x.UserId==user.Id);
+
+                var cart = await _context.Carts.FirstOrDefaultAsync(x => x.UserId == id);
                 return cart;
             }
             catch (Exception)
@@ -75,7 +75,7 @@ namespace Shop_API.Repository
             // Truyền vào tên tào khoản của người dùng
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x=>x.UserName==username);// lấy danh sách người dùng trong database
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == username);// lấy danh sách người dùng trong database
                 // Chú ý lấy trước rồi mới tìm để phân biệt được chữ hoa, chữ thường
                 // Nếu tìm trực tiếp sẽ không phân biệt được chữ hoa, chữ thường
                 // Lấy ra ìd người dùng//x => x.UserName == username
