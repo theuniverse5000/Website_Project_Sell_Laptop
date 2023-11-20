@@ -30,6 +30,13 @@ namespace AdminApp.Controllers
             }
         }
 
+        public async Task<IActionResult> Login()
+        {
+           
+                return View();
+            
+        }
+
         public async Task<IActionResult> Main()
         {
             return View("Index");

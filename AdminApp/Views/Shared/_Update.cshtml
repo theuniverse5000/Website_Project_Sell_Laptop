@@ -1,5 +1,5 @@
 ﻿@model Shop_Models.Entities.ProductDetail
-
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     ViewData["Title"] = "Update Product Detail";
     @* @using Shop_Models;
@@ -80,8 +80,9 @@
                                 <label for="exampleFormControlInput1" class="form-label">Hình Ảnh</label>
                                 <div id="imageInputsContainer">
                                     @foreach (var image in ViewBag.ImagesPD)
-                                    {
-                                        <img src="@Url.Content(image.LinkImage)" alt="Product Image" class="img-thumbnail" />
+                                    {                     
+                                        <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(image.LinkImage)" alt="Product Image" class="img-thumbnail" />
+                                       
                                     }
                                 </div>
                             </div>

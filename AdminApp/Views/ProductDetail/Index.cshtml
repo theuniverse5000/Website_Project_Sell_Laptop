@@ -22,6 +22,7 @@
     <div id="modalContent" style="display: block;">
     </div>
 </div>
+
 <style>
 
     #grid {
@@ -84,7 +85,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label"> Màu Sắc</label>
-                                <select class="form-select"  asp-for="IdColor" id="selectColor">
+                                <select class="form-select" asp-for="IdColor" id="selectColor">
                                     <option value="">Chọn Màu Sắc</option>
                                     @foreach (var t in ViewBag.GetColor)
                                     {
@@ -108,52 +109,52 @@
 
                         <div class="row">
                             <div class="col-md-3">
-                                <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>                              
-                                    <select class="form-select" asp-for="IdCpu" id="selectCPU">
-                                        <option value="">Chọn Vi Xử Lí</option>
-                                        @foreach (var t in (List<Cpu>)ViewBag.GetCPU)
-                                        {
-                                            <option value="@t.Id">@t.Ma</option>
-                                        }
+                                <label for="exampleFormControlInput1" class="form-label">Vi Xử Lí</label>
+                                <select class="form-select" asp-for="IdCpu" id="selectCPU">
+                                    <option value="">Chọn Vi Xử Lí</option>
+                                    @foreach (var t in (List<Cpu>)ViewBag.GetCPU)
+                                    {
+                                        <option value="@t.Id">@t.Ma</option>
+                                    }
 
-                                    </select>
-                                    @* <span asp-validation-for="IdCpu" id="cpuError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
+                                </select>
+                                @* <span asp-validation-for="IdCpu" id="cpuError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
                             </div>
 
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">Màn Hình</label>
-                                    <select class="form-select" asp-for="IdScreen" id="selectScreen">
-                                        <option value="">Chọn Màn Hình</option>
-                                        @foreach (var t in (List<Screen>)ViewBag.GetScreen)
-                                        {
-                                            <option value="@t.Id">@t.Ma</option>
-                                        }
+                                <select class="form-select" asp-for="IdScreen" id="selectScreen">
+                                    <option value="">Chọn Màn Hình</option>
+                                    @foreach (var t in (List<Screen>)ViewBag.GetScreen)
+                                    {
+                                        <option value="@t.Id">@t.Ma</option>
+                                    }
 
-                                    </select> @*<span asp-validation-for="IdScreen" id="screenError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
-                                </div>
+                                </select> @*<span asp-validation-for="IdScreen" id="screenError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
+                            </div>
 
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">HardDrive</label>
-                                    <select class="form-select" asp-for="IdHardDrive" id="selectHardDrive">
-                                        <option value="">Chọn HardDrive</option>
-                                        @foreach (var t in (List<HardDrive>)ViewBag.GetHardDrive)
-                                        {
-                                            <option value="@t.Id">@t.Ma</option>
-                                        }
+                                <select class="form-select" asp-for="IdHardDrive" id="selectHardDrive">
+                                    <option value="">Chọn HardDrive</option>
+                                    @foreach (var t in (List<HardDrive>)ViewBag.GetHardDrive)
+                                    {
+                                        <option value="@t.Id">@t.Ma</option>
+                                    }
 
-                                    </select> @*<span asp-validation-for="IdHardDrive" id="hardDriveError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
+                                </select> @*<span asp-validation-for="IdHardDrive" id="hardDriveError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
                             </div>
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">CardVGA</label>
-                                    <select class="form-select" asp-for="IdCardVGA" id="selectCardVGA">
-                                        <option value="">Chọn CardVGA</option>
-                                        @foreach (var t in (List<CardVGA>)ViewBag.GetlistCardVGA)
-                                        {
-                                            <option value="@t.Id">@t.Ma</option>
-                                        }
+                                <select class="form-select" asp-for="IdCardVGA" id="selectCardVGA">
+                                    <option value="">Chọn CardVGA</option>
+                                    @foreach (var t in (List<CardVGA>)ViewBag.GetlistCardVGA)
+                                    {
+                                        <option value="@t.Id">@t.Ma</option>
+                                    }
 
-                                    </select>
-                                    @* <span asp-validation-for="IdCardVGA" id="cardVgaError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
+                                </select>
+                                @* <span asp-validation-for="IdCardVGA" id="cardVgaError" class="text-danger"></span> <!-- Thông báo lỗi --> *@
                             </div>
                         </div>
 
@@ -171,7 +172,7 @@
                                 <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder=" Nhập Giá Nhập" required>
                             </div>
                             <div id="error-toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; top: 0; right: 0; z-index: 1050;"></div>
-                      
+
 
                         </div>
 
@@ -186,7 +187,7 @@
                         </div>
 
 
-                        <div class="demo-section wide">                         
+                        <div class="demo-section wide">
                             <label for="exampleFormControlInput1" class="form-label">Bài đăng, chi tiết về sản phẩm</label>
 
                             <div class="k-editor">
@@ -290,41 +291,17 @@
 
     $(document).ready(function () {
 
-
-
-
         // gọi form khi nhấn edit
 
         var editButtons = document.querySelectorAll('.k-button k-button-icontext k-grid-capnhat');
 
-    @* Gán sự kiện click cho từng nút "Sửa"*@
-            editButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
-    @* Gọi hàm hay thực hiện các đoạn mã tương ứng khi nút "Sửa" được nhấn*@
-                        $('#exampleModal').modal('show');
-                    console.log("Nút 'Sửa' đã được nhấn");
-    @* Thực hiện các tác vụ khác tại đây*@
-                                    });
-            });
-
-
+  
         $("#grid").kendoGrid({
             dataSource: {
                 transport: {
                     read: {
                         url: "/ProductDetail/GetProductDetail",
                         type: "GET",
-                        dataType: "json"
-                    },
-                    capnhat: {
-                        url: "/ProductDetail/Update({guid})",
-                        type: "GET",
-                        dataType: "object",
-
-                    },
-                    update: {
-                        url: "/",
-                        type: "PUT",
                         dataType: "json"
                     },
                     destroy: {
@@ -337,14 +314,6 @@
                 schema: {
                     data: "result",
                     total: "count", // Chỉ định tên trường tổng số dòng,
-                    model: {
-                        id: "id",
-                        fields: {
-                            code: { type: "string", validation: { required: true } },
-                            price: { type: "int", validate: { required: true } },
-                            status: { type: "int", validate: { required: true } }
-                        }
-                    }
                 },
 
                 pageSize: 20,
@@ -378,15 +347,6 @@
             },
 
             toolbar: [
-                // {
-                //     name: "other",
-                //     text: "C rết", /* Thay đổi văn bản của nút "Thêm" */
-                //     click: function (e) {
-
-                //     }
-
-                // },
-
                 {
                     name: "pdf",
                     text: "Xuất file PDF" // Change the text of the "PDF" button to "Xuất file PDF"
@@ -410,7 +370,7 @@
             columns: [
                 {
                     field: "code",
-                    title: "Mã"
+                    title: "Mã"// Đặt tên cho cột tùy chỉnh
                 },
                 {
                     field: "nameProduct",
@@ -431,20 +391,20 @@
 
                 },
                 {
-                    field: "tenCpu", // Đặt tên cho cột tùy chỉnh
+                    field: "tenCpu",
                     title: "Vi xử lý",
-                    hidden: true // Ẩn cột này
+                    hidden: true
 
                 },
                 {
                     field: "thongSoRam",
                     title: "Ram",
-                    // Ẩn cột này
+
                 },
                 {
                     field: "thongSoHardDrive",
                     title: "SSD",
-                    hidden: true // Ẩn cột này
+                    hidden: true
                 },
                 {
                     field: "price",
@@ -478,9 +438,8 @@
                 {
                     command: [
                         {
-
-                            // return '<button type="button" class="k-button k-button-icontext k-grid-capnhat">capnhat</button>'
                             name: "capnhat",
+                            template: '<a class="k-button k-button-icontext k-grid-capnhat" href="\\#"><span class="k-icon k-i-edit"></span>Sửa</a>',
                             text: "sửa",
                             click: function (e) {
                                 e.preventDefault();
@@ -507,11 +466,8 @@
 
         // Find elements with the specified class and prepend the textarea before them
         $(".k-edit-buttons.k-state-default").prepend(newTextarea);
-
-
-
         // tạo 1 nút thêm(Create New) trước class k-grid-pdf
-        var newButton = $('<a type="button" class="k-button k-button-icontext k-grid-create" data-bs-toggle="modal" data-bs-target="#exampleModal">Thêm</a> ');
+        var newButton = $('<a type="button" class="k-button k-button-icontext k-grid-create" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="k-icon k-i-add"></span>Thêm</a> ');
         // Find elements with the specified class and prepend the textarea before them
         $(".k-grid-pdf").before(newButton);
 

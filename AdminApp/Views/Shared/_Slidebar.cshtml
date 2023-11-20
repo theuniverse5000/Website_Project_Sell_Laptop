@@ -1,61 +1,133 @@
-﻿    <div class="profile">
-        <img src="~/Image/avt1.webp" alt="profile_picture">
-        <h3>Quản trị</h3>
-    </div>
-    <ul>
-        <li>
-            <a href="#" class="active">
-                <span class="icon"><i class="fas fa-home"></i></span>
-                <span class="item">Home</span>
+﻿<div class="profile text-center my-4">
+    <img src="~/Image/avt1.webp" alt="profile_picture" class="rounded-circle" style="width: 80px; height: 80px;">
+    <h3 class="mt-2">Quản trị</h3>
+</div>
+<div class="nav-container">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                @* <span class="icon"><i class="fas fa-home"></i></span> *@
+                <span class="item text-left">Home</span>
             </a>
         </li>
-        <li>
+        <li class="nav-item">
             <div id="Bill">
-                <a>
-                    <span class="icon"><i class="fas fa-desktop"></i></span>
-                    <span class="item">Hóa đơn</span>
+                <a href="/Bill" class="nav-link">
+                    @* <span class="icon"><i class="fas fa-desktop"></i></span> *@
+                    <span class="item text-left">Hóa đơn</span>
                 </a>
             </div>
         </li>
-        <li>
-            <a id="ProductDetail" href="#">
-                <span class="icon"><i class="fas fa-user-friends"></i></span>
-                <span class="item">Sản phẩm</span>
+        <li class="nav-item">
+            <a id="ProductDetail" href="/PointWallet" class="nav-link">
+                @* <span class="icon"><i class="fas fa-user-friends"></i></span> *@
+                <span class="item text-left">Quản Lí Ví Điểm</span>
             </a>
         </li>
-        <li>
-            <a href="#">
-                <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
-                <span class="item">Perfomance</span>
+        <li class="nav-item">
+            <a id="ProductDetail" href="/ProductDetail" class="nav-link">
+                @* <span class="icon"><i class="fas fa-user-friends"></i></span> *@
+                <span class="item text-left">Sản phẩm chi tiết</span>
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li class="nav-item">
+            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link">
+                @* <span class="icon"><i class="fas fa-chart-line"></i></span> *@
+                <span class="item text-left">Quản Lí Các chi tiết</span>
+            </a>
+            <ul class="collapse nav flex-column ms-4" id="submenu2" data-bs-parent="#menu">
+                <li class="w-100">
+                    <a href="/CardVGA" class="nav-link"> <span class="item text-left">CardVGA</span></a>
+                </li>
+                <li>
+                    <a href="/Color" class="nav-link"> <span class="item text-left">Màu sắc</span></a>
+                </li>
+                <li>
+                    <a href="/Cpu" class="nav-link"> <span class="item text-left">Cpu</span></a>
+                </li>
+                <li>
+                    <a href="/HardDrive" class="nav-link"> <span class="item text-left">HardDrive</span></a>
+                </li>
+                <li>
+                    <a href="/Manufacturer" class="nav-link"> <span class="item text-left">Hãng Sản Xuất</span></a>
+                </li>
+                <li>
+                    <a href="/Ram" class="nav-link"> <span class="item text-left">Ram</span></a>
+                </li>
+                <li>
+                    <a href="/Screen" class="nav-link"> <span class="item text-left">Màn Hình</span></a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="/Serial" class="nav-link">
+                @* <span class="icon"><i class="fas fa-tachometer-alt"></i></span> *@
+                <span class="item text-left">Serial</span>
+            </a>
+        </li>
+        @* <li class="nav-item">
+            <a href="#" class="nav-link">
                 <span class="icon"><i class="fas fa-database"></i></span>
-                <span class="item">Development</span>
+                <span class="item text-left">Development</span>
+            </a>
+        </li> *@
+     
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                @* <span class="icon"><i class="fas fa-chart-line"></i></span> *@
+                <span class="item text-left">Reports</span>
             </a>
         </li>
-        <li>
-            <a href="#">
-                <span class="icon"><i class="fas fa-chart-line"></i></span>
-                <span class="item">Reports</span>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                @* <span class="icon"><i class="fas fa-user-shield"></i></span> *@
+                <span class="item text-left">Admin</span>
             </a>
         </li>
-        <li>
-            <a href="#">
-                <span class="icon"><i class="fas fa-user-shield"></i></span>
-                <span class="item">Admin</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
+        @* <li class="nav-item">
+            <a href="#" class="nav-link">
                 <span class="icon"><i class="fas fa-cog"></i></span>
-                <span class="item">Settings</span>
+                <span class="item text-left">Settings</span>
             </a>
-        </li>
+        </li> *@
     </ul>
+</div>
 
-    <script>
+<style>
+
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-container {
+        height: 100%;
+        max-height: 100%;
+        overflow-y: auto;
+    }
+
+    .nav-link .item {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 12px;
+    }
+</style>
+
+<script>
+    function handleClick(element) {
+        // Loại bỏ 'active' từ tất cả các mục
+        $('.nav-link').removeClass('active');
+
+        // Thêm 'active' vào mục được chọn
+        $(element).addClass('active');
+    }
+</script>
+
+
+@*  <script>
     var loginButton = document.getElementById('Bill');
     loginButton.addEventListener('click', function (event) {
         event.preventDefault();
@@ -72,5 +144,5 @@
 
     })
     </script>
-
+ *@
 

@@ -1,4 +1,6 @@
-﻿@*
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -30,7 +32,8 @@
             @foreach (var t in ViewBag.ListProduct)
             {
                 <div class="card" style="width: 18rem; margin-right: 20px;">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/4.webp" class="card-img-top" alt="...">
+                   @*  <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/4.webp" class="card-img-top" alt="..."> *@
+                    <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" class="img-thumbnail" />
                     <div class="card-body">
                         <p class="card-text ">
                             <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code">[Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )  </a>

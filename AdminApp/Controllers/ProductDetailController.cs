@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using Shop_Models.Dto;
@@ -244,6 +245,10 @@ namespace AdminApp.Controllers
         ////[HttpPost]
         public async Task<IActionResult> Index(/*Guid guid*/)
         {
+            if (Request.Cookies["account"] == null) {
+                return RedirectToAction("Index","Home");
+            }
+
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
             var getProduct = await client.GetStringAsync($"/api/Product");
             ViewBag.GetProduct = JsonConvert.DeserializeObject<List<Product>>(getProduct);
