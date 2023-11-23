@@ -1,6 +1,5 @@
-﻿using Azure;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -9,6 +8,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class RamController : ControllerBase
     {
         private readonly IRamRepository _repository;
@@ -124,7 +124,7 @@ namespace Shop_API.Controllers
                 return Unauthorized();
             }
             _reponse.Result = _iPagingRepository.GetAllRam(search, from, to, sortBy, page);
-            var count  = _reponse.Count = _iPagingRepository.GetAllRam(search, from, to, sortBy, page).Count;
+            var count = _reponse.Count = _iPagingRepository.GetAllRam(search, from, to, sortBy, page).Count;
             return Ok(_reponse);
         }
 

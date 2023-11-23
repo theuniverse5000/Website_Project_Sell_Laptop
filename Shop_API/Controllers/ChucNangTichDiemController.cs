@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop_API.Service.IService;
 
 namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin,User")]
     public class ChucNangTichDiemController : ControllerBase
     {
         private readonly ITichDiemServices _tichDiemServices;
@@ -34,7 +36,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> TieuDiemChoLanMuaSauAsync(string phoneNumber, double TongTienThanhToan,double SoDiemMuonDung)
+        public async Task<IActionResult> TieuDiemChoLanMuaSauAsync(string phoneNumber, double TongTienThanhToan, double SoDiemMuonDung)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
             //if (apiKey == null)
@@ -47,7 +49,7 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            return Ok( await _tichDiemServices.TichDiemChoNhungLanMuaSauAsync(phoneNumber, TongTienThanhToan, SoDiemMuonDung));
+            return Ok(await _tichDiemServices.TichDiemChoNhungLanMuaSauAsync(phoneNumber, TongTienThanhToan, SoDiemMuonDung));
         }
 
     }

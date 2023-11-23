@@ -1,17 +1,14 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
-using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
-using System.Data;
 
 namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     //[Authorize]
     public class ProductController : ControllerBase
     {
@@ -27,7 +24,7 @@ namespace Shop_API.Controllers
             _response = new ResponseDto();
             _iPagingRepository = pagingRepository;
         }
-        
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllPro()
@@ -70,7 +67,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPut]
-        
+
         public async Task<IActionResult> Update(Product x)
         {
 
@@ -149,7 +146,7 @@ namespace Shop_API.Controllers
             //_response.Result = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page);
             //_response.Count = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page).Count;
 
-            _response.Result =await _productRepository.GetProductDtos(search, from, to, sortBy, page);
+            _response.Result = await _productRepository.GetProductDtos(search, from, to, sortBy, page);
             _response.Count = _productRepository.GetProductDtos(search, from, to, sortBy, page).Result.Count();
             return Ok(_response);
         }
