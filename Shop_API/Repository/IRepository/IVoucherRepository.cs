@@ -8,5 +8,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(Voucher obj);
         Task<bool> Delete(Guid id);
         Task<IEnumerable<Voucher>> GetAllVouchers();
+        Task<Voucher> GetByCode(string code);
     }
 }

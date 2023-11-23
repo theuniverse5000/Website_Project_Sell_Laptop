@@ -57,6 +57,12 @@ namespace Shop_API.Repository
             return list;
         }
 
+        public async Task<Voucher> GetByCode(string code)
+        {
+            return await _context.Vouchers.AsQueryable().FirstOrDefaultAsync(x => x.MaVoucher == code);
+
+        }
+
         public async Task<bool> Update(Voucher obj)
         {
             var vou = await _context.Vouchers.FindAsync(obj.Id);
