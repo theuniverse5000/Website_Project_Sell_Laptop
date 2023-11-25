@@ -1,4 +1,7 @@
-﻿<section class="h-100 h-custom">
+﻿@{
+    int stt = 0;
+}
+<section class="h-100 h-custom">
     <div class="container h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col">
@@ -7,7 +10,8 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col" class="h5">Tên sản phẩm</th>
+                                <th scope="col">Số thứ tự</th>
+                                <th scope="col" >Tên sản phẩm</th>
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Giá</th>
                             </tr>
@@ -15,10 +19,11 @@
                         <tbody>
                             @foreach (var t in ViewBag.cartItem)
                             {
-                                
+                                stt++;
                             
                             <tr>
-                                <th scope="row">
+                                <th>@stt</th>
+                                <th>
                                     <div class="d-flex align-items-center">
                                         <img src="https://i.imgur.com/2DsA49b.webp" class="img-fluid rounded-3"
                                              style="width: 120px;" alt="Book">
@@ -88,13 +93,24 @@
                                         </div>
                                         <div class="rounded border w-100 p-3">
                                             <p class="d-flex align-items-center mb-0">
-                                                <i class="fab fa-cc-paypal fa-2x fa-lg text-dark pe-2"></i>PayPal
+                                                <i class="fab fa-cc-paypal fa-2x fa-lg text-dark pe-2"></i>VN PAY
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div class="d-flex align-items-center pe-2">
+                                            <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel3v"
+                                                   value="" aria-label="..." />
+                                        </div>
+                                        <div class="rounded border w-100 p-3">
+                                            <p class="d-flex align-items-center mb-0">
+                                                <i class="fab fa-cc-paypal fa-2x fa-lg text-dark pe-2"></i>Thanh toán bằng tiền mặt
                                             </p>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-md-6 col-lg-4 col-xl-6">
+                            @* <div class="col-md-6 col-lg-4 col-xl-6">
                                 <div class="row">
                                     <div class="col-12 col-xl-6">
                                         <div class="form-outline mb-4 mb-xl-5">
@@ -123,31 +139,49 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
                             <div class="col-lg-4 col-xl-3">
                                 <div class="d-flex justify-content-between" style="font-weight: 500;">
-                                    <p class="mb-2">Subtotal</p>
-                                    <p class="mb-2">$23.49</p>
+                                    <p class="mb-2">Thành tiền</p>
+                                    <p class="mb-2">15.0000.000</p>
                                 </div>
 
                                 <div class="d-flex justify-content-between" style="font-weight: 500;">
-                                    <p class="mb-0">Shipping</p>
-                                    <p class="mb-0">$2.99</p>
+                                    <p class="mb-0">Phí ship</p>
+                                    <p class="mb-0">50.000</p>
                                 </div>
+                                <form asp-controller="Client" asp-action="CreateBill">
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="voucherSelect">Chọn mã giảm giá</label>
+                                        <select id="voucherSelect" name="codeVoucher" class="form-select form-select-lg">
+                                        <option value="null">Không có</option>
+                                        @foreach (var i in ViewBag.listVoucher)
+                                        {
+                                                <option value="@i.MaVoucher">@i.MaVoucher</option>
+                                            }
+                                    </select>
 
+                                </div>
                                 <hr class="my-4">
 
                                 <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
-                                    <p class="mb-2">Total (tax included)</p>
-                                    <p class="mb-2">$26.48</p>
+                                    <p class="mb-2">Thành tiền</p>
+                                    <p class="mb-2" id="totalAmount">15.000.000</p>
                                 </div>
 
-                                <button type="button" class="btn btn-primary btn-block btn-lg">
+                                    <a asp-controller="Vnpay" asp-action="Index" class="btn btn-primary btn-block btn-lg">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Thanh toán</span>
+                                            <span>15.000.000</span>
+                                        </div>
+                                    </a>
+                                <button  class="btn btn-primary btn-block btn-lg" type="submit">
                                     <div class="d-flex justify-content-between">
-                                        <span>Checkout</span>
-                                        <span>$26.48</span>
+                                        <span>Đặt hàng</span>
+                                        <span>15.000.000</span>
                                     </div>
-                                </button>
+                                    </button>
+                                </form>
 
                             </div>
                         </div>
@@ -159,3 +193,41 @@
         </div>
     </div>
 </section>
+<script>
+    function applySelectedVoucher() {
+        // Lấy giá trị mã voucher từ option được chọn
+        var selectedVoucher = document.getElementById('voucherSelect').value;
+
+        // Gửi yêu cầu đến API để lấy giá trị giảm giá cho mã voucher được chọn
+        $.ajax({
+            url: 'https://your-api-url/voucher',
+            type: 'GET',
+            data: { voucherCode: selectedVoucher },
+            success: function (response) {
+                // Xử lý phản hồi từ API
+                if (response.success) {
+                    // Giảm giá thành công
+                    var discount = response.discount;
+                    updateTotalWithDiscount(discount);
+                } else {
+                    // Hiển thị thông báo lỗi nếu cần
+                    alert('Invalid voucher code');
+                }
+            },
+            error: function () {
+                // Xử lý lỗi nếu có
+                alert('Error applying voucher');
+            }
+        });
+    }
+
+    function updateTotalWithDiscount(discount) {
+        // Tính toán giá mới sau khi áp dụng voucher
+        var originalTotal = 26.48; // Giả sử giá trước khi giảm giá là 26.48
+        var discountedTotal = originalTotal - (originalTotal * discount);
+
+        // Cập nhật giá trên giao diện người dùng
+        document.getElementById('totalAmount').innerText = '$' + discountedTotal.toFixed(2);
+    }
+</script>
+

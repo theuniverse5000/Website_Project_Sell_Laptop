@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -10,10 +8,10 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   
+    [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
-        private readonly IRoleService _roleService; 
+        private readonly IRoleService _roleService;
         private readonly IConfiguration _config;
         public RoleController(IRoleService roleService, IConfiguration config)
         {
@@ -53,19 +51,19 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            var roleCreate = new RoleCreateDto() 
+            var roleCreate = new RoleCreateDto()
             {
                 Name = obj.Name,
-                concurrencyStamp= Guid.NewGuid().ToString(),
-                normalizedName= obj.NormalizedName,
+                concurrencyStamp = Guid.NewGuid().ToString(),
+                normalizedName = obj.NormalizedName,
             };
-            
+
             try
             {
                 var result = await _roleService.CreatRole(roleCreate);
                 return Ok(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -87,9 +85,10 @@ namespace Shop_API.Controllers
             }
             try
             {
-               var result = await _roleService.EditRole(id, roleUpdateDto);
+                var result = await _roleService.EditRole(id, roleUpdateDto);
                 return Ok(result);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -111,9 +110,10 @@ namespace Shop_API.Controllers
             }
             try
             {
-                var reuslt =await _roleService.DelRole(id);
+                var reuslt = await _roleService.DelRole(id);
                 return Ok(reuslt);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

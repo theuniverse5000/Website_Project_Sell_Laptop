@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
 using Shop_API.Services.IServices;
@@ -10,6 +10,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ImagesController : ControllerBase
     {
         private readonly IImageRepository _repository;
@@ -646,7 +647,7 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> UploadImages([FromForm] List<IFormFile> files, [FromForm] Guid ProductId)
         {
             var objectFolder = "product_images";
-             //var ProductId = Guid.Empty;
+            //var ProductId = Guid.Empty;
             try
             {
                 var uploadedFiles = new List<string>();
@@ -664,8 +665,8 @@ namespace Shop_API.Controllers
                             string fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
                             //string filePath = Path.Combine(basePath, fileName);
 
-                            
-                         
+
+
                             string filePath = Path.Combine(basePath, objectFolder, fileName);
 
 
@@ -676,7 +677,7 @@ namespace Shop_API.Controllers
 
                             uploadedFiles.Add(fileName);
 
-                           
+
 
                             var image = new Image
                             {
@@ -859,7 +860,7 @@ namespace Shop_API.Controllers
                         Status = image.Status,
                         ProductDetailId = image.ProductDetailId,
                         ProductDetail = null  // Setting this to null to break the circular reference
-                    }).Where(x=>x.Status==1).ToList();
+                    }).Where(x => x.Status == 1).ToList();
 
                     return Ok(imageDetails);
                 }

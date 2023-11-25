@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -8,6 +8,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ManufacturerController : ControllerBase
     {
         private readonly IManufacturerRepository _manufacturer;
@@ -108,8 +109,8 @@ namespace Shop_API.Controllers
             return BadRequest("Xóa thất bại");
 
         }
-        
-        [HttpGet("GetManuFSP")] 
+
+        [HttpGet("GetManuFSP")]
         public async Task<IActionResult> GetManuFSP(string? search, double? from, double? to, string? sortBy, int page)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;

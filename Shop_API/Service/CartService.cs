@@ -195,7 +195,8 @@ namespace Shop_API.Service
                             Id = Guid.NewGuid(),
                             ProductDetailId = productDetailToCart.Id,
                             CartId = getUserId,
-                            Quantity = 1
+                            Quantity = 1,
+                            Status = 1
                         };
 
                         if (await _cartDetailRepository.Create(newCartDetail))

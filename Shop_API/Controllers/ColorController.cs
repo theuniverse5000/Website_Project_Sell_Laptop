@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -9,13 +8,14 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ColorController : ControllerBase
     {
         private readonly IColorRepository _colorRepository;
-		private readonly IPagingRepository _iPagingRepository;
-		private readonly IConfiguration _config;
-		private readonly ResponseDto _reponse;
-		public ColorController(IColorRepository colorRepository, IConfiguration config, IProductDetailRepository repository, IPagingRepository pagingRepository)
+        private readonly IPagingRepository _iPagingRepository;
+        private readonly IConfiguration _config;
+        private readonly ResponseDto _reponse;
+        public ColorController(IColorRepository colorRepository, IConfiguration config, IProductDetailRepository repository, IPagingRepository pagingRepository)
         {
             _colorRepository = colorRepository;
             _config = config;
@@ -109,24 +109,24 @@ namespace Shop_API.Controllers
         }
 
 
-		[HttpGet("GetColorFSP")]
-		public async Task<IActionResult> GetColorFSP(string? search, double? from, double? to, string? sortBy, int page)
-		{
-			//string apiKey = _config.GetSection("ApiKey").Value;
-			//if (apiKey == null)
-			//{
-			//    return Unauthorized();
-			//}
+        [HttpGet("GetColorFSP")]
+        public async Task<IActionResult> GetColorFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-			//var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-			//if (keyDomain != apiKey.ToLower())
-			//{
-			//    return Unauthorized();
-			//}
-			_reponse.Result =  _iPagingRepository.GetAllColor(search, from, to, sortBy, page);
-			_reponse.Count = 10;
-			return Ok(_reponse);
-		}
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+            _reponse.Result = _iPagingRepository.GetAllColor(search, from, to, sortBy, page);
+            _reponse.Count = 10;
+            return Ok(_reponse);
+        }
 
         [HttpGet("GetColorById")]
         public async Task<IActionResult> GetColorById(Guid guid)
@@ -144,7 +144,7 @@ namespace Shop_API.Controllers
             //        return Unauthorized();
             //    }
             //_reponse.Result = _colorRepository.GetById(guid);
-            return Ok( await _colorRepository.GetById(guid));
+            return Ok(await _colorRepository.GetById(guid));
         }
 
     }

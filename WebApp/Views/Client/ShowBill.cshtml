@@ -43,6 +43,8 @@
             text-align: right;
         }
     </style>
+@if (ViewBag.Bill != null)
+{
     <div class="invoice">
         <div class="header">
             <h1>HÓA ĐƠN BÁN LAPTOP</h1>
@@ -91,5 +93,11 @@
             <p>Thành tiền: @total</p>
         </div>
     </div>
+}
+else
+{
+    <h1>Khong co data</h1>
+}
+
 
 
