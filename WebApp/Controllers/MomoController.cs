@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApp.Models.Order;
+using Shop_Models;
 using WebApp.Services;
 
 namespace WebApp.Controllers
