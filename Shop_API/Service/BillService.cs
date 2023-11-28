@@ -36,7 +36,7 @@ namespace Shop_API.Service
         {
             try
             {
-                var user = _userRepository.GetAllUsers().Result.Where(x => x.UserName == username);
+                var user = _userRepository.GetAllUsers().Result.Where(x => x.UserName == username).FirstOrDefault();
                 if (user == null)
                 {
                     return NotFoundResponse("Không tìm thấy tài khoản người dùng");
@@ -67,6 +67,9 @@ namespace Shop_API.Service
                     InvoiceCode = "Bill" + RamdomString.GenerateRandomString(10),
                     CreateDate = DateTime.Now,
                     Status = 2, // Trạng thái 2: Chờ xác nhận
+                    FullName = user.FullName,
+                    PhoneNumber = user.PhoneNumber,
+                    Address = user.Address,
                     VoucherId = idVou
                 };
 

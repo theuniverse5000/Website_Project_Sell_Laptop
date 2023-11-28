@@ -19,6 +19,7 @@ namespace Shop_API.Controllers
             _repository = repository;
             _config = config;
         }
+        [AllowAnonymous]
         [HttpGet("GetAllVouchers")]
         public async Task<IActionResult> GetAllVouchers()
         {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using Shop_Models.Entities;
-using System.Net.Http;
 
 namespace AdminApp.Controllers
 {
@@ -167,6 +167,39 @@ namespace AdminApp.Controllers
                     return Json(null);
                 }
 
+            }
+        }
+        public async Task<IActionResult> ImportFromExcel(IFormFile excelFile)
+        {
+            try
+            {
+                using (var package = new ExcelPackage(excelFile.OpenReadStream()))
+                {
+                    var worksheet = package.Workbook.Worksheets[0];
+                    var rowCount = worksheet.Dimension.Rows;
+                    var serials = new List<Serial>();
+                    var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+                    for (int row = 2; row <= rowCount; row++)
+                    {
+                        var serial = new Serial
+                        {
+                            Id = Guid.NewGuid(),
+                            SerialNumber = worksheet.Cells[row, 1].Text,
+                            Status = Convert.ToInt32(worksheet.Cells[row, 2].Text),
+                            ProductDetailId = Guid.Parse("6600DB54-6954-451E-88AB-2A1EA4902D02"),
+
+                        };
+                        serials.Add(serial);
+                    }
+                    var result = await client.PostAsJsonAsync($"/api/Serial/CreateMany", serials);
+                    return RedirectToAction("Index", "Serial");
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message);
             }
         }
 

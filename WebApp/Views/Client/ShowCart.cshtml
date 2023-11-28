@@ -11,7 +11,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Số thứ tự</th>
-                                <th scope="col" >Tên sản phẩm</th>
+                                <th scope="col" >Ma sản phẩm</th>
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Giá</th>
                             </tr>
@@ -25,10 +25,8 @@
                                 <th>@stt</th>
                                 <th>
                                     <div class="d-flex align-items-center">
-                                        <img src="https://i.imgur.com/2DsA49b.webp" class="img-fluid rounded-3"
-                                             style="width: 120px;" alt="Book">
                                         <div class="flex-column ms-4">
-                                                <p class="mb-2">@t.NameProduct</p>
+                                                <p class="mb-2">@t.MaProductDetail</p>
                                         </div>
                                     </div>
                                 </th>
@@ -140,6 +138,22 @@
                                     </div>
                                 </div>
                             </div> *@
+                            <div class="container">
+                                <h1>Chọn danh sách tỉnh</h1>
+                                <form action="">
+                                    <select name="" id="province">
+                                    </select>
+                                    <select name="" id="district">
+                                        <option value="">chọn quận</option>
+                                    </select>
+                                    <select name="" id="ward">
+                                        <option value="">chọn phường</option>
+                                    </select>
+                                </form>
+
+
+                                <h2 id="result"></h2>
+                            </div>
                             <div class="col-lg-4 col-xl-3">
                                 <div class="d-flex justify-content-between" style="font-weight: 500;">
                                     <p class="mb-2">Thành tiền</p>

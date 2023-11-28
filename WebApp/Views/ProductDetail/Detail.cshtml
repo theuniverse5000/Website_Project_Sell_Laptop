@@ -9,28 +9,10 @@
             <div class="row gx-5">
                 <aside class="col-lg-6">
                     <div class="border rounded-4 mb-3 d-flex justify-content-center">
-                        <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/detail1/big.webp">
+                        <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
                             <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" />
                         </a>
                     </div>
-                 @*    <div class="d-flex justify-content-center mb-3">
-                        <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="https://laptopaz.vn/media/product/120_2919_slim_5_2023.jpg" class="item-thumb">
-                            <img width="60" height="60" class="rounded-2" src="https://laptopaz.vn/media/product/120_2919_slim_5_2023.jpg" />
-                        </a>
-                        <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/detail1/big2.webp" class="item-thumb">
-                            <img width="60" height="60" class="rounded-2" src="https://laptopaz.vn/media/product/120_2919_slim_5_2023.jpg" />
-                        </a>
-                        <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/detail1/big3.webp" class="item-thumb">
-                            <img width="60" height="60" class="rounded-2" src="https://laptopaz.vn/media/product/120_2919_slim_5_2023.jpg" />
-                        </a>
-                        <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/detail1/big4.webp" class="item-thumb">
-                            <img width="60" height="60" class="rounded-2" src="https://laptopaz.vn/media/product/120_2919_slim_5_2023.jpg" />
-                        </a>
-                        <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/detail1/big.webp" class="item-thumb">
-                            <img width="60" height="60" class="rounded-2" src="https://laptopaz.vn/media/product/120_2919_slim_5_2023.jpg" />
-                        </a>
-                        
-                    </div> *@
 
                     <div class="d-flex justify-content-center mb-3">
                         @if (t.OtherImages != null )
@@ -151,48 +133,8 @@
                         <!-- Pills content -->
                         <div class="tab-content" id="ex1-content">
                             <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
-                                <p>
-                                    With supporting text below as a natural lead-in to additional content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                    enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur.
-                                </p>
-                                <div class="row mb-2">
-                                    <div class="col-12 col-md-6">
-                                        <ul class="list-unstyled mb-0">
-                                            <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Lorem ipsum dolor sit amet, consectetur</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Duis aute irure dolor in reprehenderit</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Optical heart sensor</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-12 col-md-6 mb-0">
-                                        <ul class="list-unstyled">
-                                            <li><i class="fas fa-check text-success me-2"></i>Easy fast and ver good</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
-                                            <li><i class="fas fa-check text-success me-2"></i>Modern style and design</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                              
-                            </div>
-                            <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                                Tab content or sample information now <br />
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                                officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            </div>
-                            <div class="tab-pane fade mb-2" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-                                Another tab content or sample information now <br />
-                                Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                                mollit anim id est laborum.
-                            </div>
-                            <div class="tab-pane fade mb-2" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
-                                Some other tab content or sample information now <br />
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                                officia deserunt mollit anim id est laborum.
+                                <h1>Thông tin thêm về sản phẩm</h1><br />
+                                <p class="product-description">@Html.Raw(t.Description)</p>
                             </div>
                         </div>
                         <!-- Pills content -->
@@ -202,7 +144,7 @@
                     <div class="px-0 border rounded-2 shadow-0">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Similar items</h5>
+                                <h5 class="card-title">Sản phẩm tương tự</h5>
                                 <div class="d-flex mb-3">
                                     <a href="#" class="me-3">
                                         <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
@@ -216,38 +158,7 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex mb-3">
-                                    <a href="#" class="me-3">
-                                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                                    </a>
-                                    <div class="info">
-                                        <a href="#" class="nav-link mb-1">
-                                            Summer New Men's Denim <br />
-                                            Jeans Shorts
-                                        </a>
-                                        <strong class="text-dark"> $29.50</strong>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex mb-3">
-                                    <a href="#" class="me-3">
-                                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                                    </a>
-                                    <div class="info">
-                                        <a href="#" class="nav-link mb-1"> T-shirts with multiple colors, for men and lady </a>
-                                        <strong class="text-dark"> $120.00</strong>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex">
-                                    <a href="#" class="me-3">
-                                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                                    </a>
-                                    <div class="info">
-                                        <a href="#" class="nav-link mb-1"> Blazer Suit Dress Jacket for Men, Blue color </a>
-                                        <strong class="text-dark"> $339.90</strong>
-                                    </div>
-                                </div>
+                              
                             </div>
                         </div>
                     </div>
