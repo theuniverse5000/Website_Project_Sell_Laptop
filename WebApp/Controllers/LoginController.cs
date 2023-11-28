@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Facebook;
-using Microsoft.AspNetCore.Authentication.Google;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Shop_Models.Dto;
-using Shop_Models.Entities;
+using System.Net.Http.Headers;
 using System.Security.Claims;
+using Shop_Models.Dto;
+using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Azure.Core;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.DotNet.MSIdentity.Shared;
+using System.Net.Http;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Shop_Models.Entities;
 
 namespace WebApp.Controllers;
 [AllowAnonymous]
@@ -25,38 +30,29 @@ public class LoginController : Controller
     public IActionResult Login(string ReturnUrl = "/")
     {
         string accessToken = HttpContext.Request.Cookies["access_token"];
-        if (accessToken != null)
+        if (accessToken!=null)
         {
             return RedirectToAction("Index", "Home");
         }
         return RedirectToAction("Login", "Home");
     }
-
-    public async Task<IActionResult> LoginWithJWT(string username, string password)
+    [HttpPost]
+    public async Task<IActionResult> LoginWithJWT([FromBody] LoginRequestDto loginRequestDto)
     {
-        LoginRequestDto login = new LoginRequestDto();
-        login.UserName = username;
-        login.Password = password;
-        login.ReturnUrl = "";
-        login.RememberMe = true;
         var apiUrl = "/api/Account/Login";
         var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-        var requestdata = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
+        var requestdata = new StringContent(JsonConvert.SerializeObject(loginRequestDto), Encoding.UTF8, "application/json");
         var respone = await httpclient.PostAsync(apiUrl, requestdata);
         //var LoginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(respone.Content);
         var jsonRespone = await respone.Content.ReadAsStringAsync();
-        var loginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
+        var LoginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
         // Lưu trữ access token trong một cookie
-        HttpContext.Response.Cookies.Append("access_token", loginRespones.Data.ToString(), new CookieOptions
+        HttpContext.Response.Cookies.Append("access_token", LoginRespones.Data.ToString(), new CookieOptions
         {
             Expires = DateTime.Now.AddHours(3), // Thời gian sống của cookie (ở đây là 30 ngày)
         });
-        if (loginRespones.Successful)
-        {
-            return RedirectToAction("Index", "Home");
-        }
-        return View();
 
+        return RedirectToAction("Index", "Home");
     }
     public async Task<IActionResult> LogOut()
     {
@@ -114,16 +110,16 @@ public class LoginController : Controller
         var apiUrl = "/api/Account/SignUp";
         var requestData = new StringContent(JsonConvert.SerializeObject(signUpdata), Encoding.UTF8, "application/json");
         var respone = await httpClient.PostAsync(apiUrl, requestData);
-        var content = JsonConvert.DeserializeObject<ResponseDto>(await respone.Content.ReadAsStringAsync());
+        var content = JsonConvert.DeserializeObject<ResponseDto>( await respone.Content.ReadAsStringAsync());
         var signUpRespone = JsonConvert.DeserializeObject<SignUpRespone>(content.Result.ToString());
-        if (signUpRespone.Mess == "true")
+        if (signUpRespone.Mess=="true")
         {
             var userInformation = JsonConvert.DeserializeObject<User>(signUpRespone.Data.ToString());
             LoginRequestDto userLogin = new LoginRequestDto()
             {
-                UserName = userInformation.UserName,
-                Password = userInformation.Password,
-                RememberMe = true,
+                UserName=userInformation.UserName,
+                Password=userInformation.Password,
+                RememberMe=true,
             };
             RedirectToAction("LoginWithJWT", userLogin);
         }

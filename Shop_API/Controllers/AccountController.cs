@@ -19,15 +19,15 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
-
+        public async Task<IActionResult> Login([FromBody]LoginRequestDto loginRequest)
+        
         {
             var result = await _userServiece.Validate(loginRequest);
-            if (result.Successful)
+            if (result == null)
             {
-                return Ok(result);
+                return BadRequest("khong co access");
             }
-            return BadRequest(result);
+            return Ok(result);
         }
         [HttpPost("RenewToken")]
         public async Task<IActionResult> RenewToken(TokenDto tokenDTO)
@@ -39,7 +39,7 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> SignUpAsync([FromBody] SignUpDto signUp)
         {
             var result = await _userServiece.SignUp(signUp);
-            _reponse.Result = result.Data;
+            _reponse.Result=result.Data;
             return Ok(_reponse);
         }
 
