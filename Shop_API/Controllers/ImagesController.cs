@@ -34,6 +34,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Image>>> GetImages()
         {
 

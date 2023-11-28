@@ -1,4 +1,4 @@
-﻿namespace WebApp.Models
+﻿namespace Shop_Models
 {
     public class PaymentResponseModel
     {

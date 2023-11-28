@@ -1,4 +1,4 @@
-﻿namespace WebApp.Models.Order
+﻿namespace Shop_Models.Order
 {
     public class OrderInfoModel
     {

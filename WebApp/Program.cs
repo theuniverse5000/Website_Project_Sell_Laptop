@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_Models.Entities;
-using WebApp.Models.Momo;
+using Shop_Models.Momo;
 using WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
