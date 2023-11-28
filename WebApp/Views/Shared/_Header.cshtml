@@ -2,6 +2,13 @@
     var httpContext = ViewContext.HttpContext;
     string accessToken = httpContext.Request.Cookies["access_token"];
 }
+<style>
+    .container {
+        padding: 20px; /* Khoảng cách giữa nội dung và mép của form */
+        border-radius: 10px; /* Bo góc của form */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng cho form */
+    }
+</style>
 <header>
     <div class="Nav-header justify-content-center d-flex" style="background-color: #73BBFE;">
         <div class="navbar navbar-expand-md d-flex flex-column container" style="background-color:transparent;">
@@ -48,13 +55,14 @@
                                 else
                                 {
                                     <li class="nav-item d-flex justify-content-center align-items-xxl-center">
-                                        <a href="@Url.Action("Login", "Home")" class="Hot-Line col-2" style="text-decoration: none;">
+                                        <a id="loginLink" class="Hot-Line col-2" style="text-decoration: none;">
                                             <div class="d-flex">
                                                 <i class="fa-solid fa-user"></i>
                                                 <span>Đăng Nhập</span>
                                             </div>
                                         </a>
                                     </li>
+
                                 }
                             }
                         </ul>
@@ -97,3 +105,43 @@
         </div>
     </nav>
 </header>
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-controller="Login" asp-action="LoginWithJWT" class="container">
+    <div class="form-outline mb-4">
+        <input type="text" name="username"class="form-control" />
+        <label class="form-label" >Tài khoản</label>
+    </div>
+                <div class="form-outline mb-4">
+                    <input type="password" class="form-control" /> 
+                    <label class="form-label">Mật khẩu</label>
+       
+    </div>
+    <button type="submit" class="btn btn-primary btn-block mb-4">Đăng nhập</button>
+    <div class="text-center">
+        <p>Chưa có tài khoản? <a href="#!">Đăng ký</a></p>
+        <p>Đăng nhập bằng:</p>
+        <button type="button" class="btn btn-secondary btn-floating mx-1" onclick="location.href='@Url.Action("LoginWithFacebook", "Login")'">
+            <i class="fab fa-facebook-f"></i>
+        </button>
+
+        <button type="button" class="btn btn-secondary btn-floating mx-1" onclick="location.href='@Url.Action("LoginWithGoogle", "Login")'">
+            <i class="fab fa-google"></i>
+        </button>
+
+
+
+    </div>
+</form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#loginLink").click(function (e) {
+            e.preventDefault();
+            $("#loginModal").modal("show");
+        });
+    });
+</script>

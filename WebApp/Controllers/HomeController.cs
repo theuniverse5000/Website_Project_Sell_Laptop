@@ -10,7 +10,7 @@ namespace WebApp.Controllers
 
         public HomeController(IHttpClientFactory httpClientFactory)
         {
-            _httpClientFactory=httpClientFactory;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<IActionResult> Index()
@@ -22,14 +22,14 @@ namespace WebApp.Controllers
             var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
             var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
             ViewBag.ProductDetails = content;
-            var apiImagesUrl = "/api/Images";
-            var apiResponeImage = await httpClient.GetStringAsync(apiImagesUrl);
+            // var apiImagesUrl = "/api/Images";
+            //  var apiResponeImage = await httpClient.GetStringAsync(apiImagesUrl);
 
             // Deserialize trực tiếp thành danh sách ImageDto
-            var contentIMage = JsonConvert.DeserializeObject<List<ImageDto>>(apiResponeImage);
+            //var contentIMage = JsonConvert.DeserializeObject<List<ImageDto>>(apiResponeImage);
 
             // Gán danh sách ImageDto trực tiếp cho ViewBag.Image
-            ViewBag.Image = contentIMage;
+            ViewBag.Image = null;
 
 
             return View();
@@ -40,7 +40,7 @@ namespace WebApp.Controllers
         }
         public async Task<IActionResult> ProductDetail(string code)
         {
-            var  x = HttpContext.Request;
+            var x = HttpContext.Request;
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
             var apiUrl = $@"/api/ProductDetail/PGetProductDetail?codeProductDetail={code}";
             var apiRespone = await httpClient.GetStringAsync(apiUrl);
