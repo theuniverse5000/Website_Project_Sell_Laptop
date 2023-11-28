@@ -1,4 +1,4 @@
-﻿namespace WebApp.Models.Momo
+﻿namespace Shop_Models
 {
     public class MomoOptionModel
     {
