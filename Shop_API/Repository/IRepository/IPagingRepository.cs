@@ -17,5 +17,6 @@ namespace Shop_API.Repository.IRepository
         List<PagingDto> GetAllManufacturer(string? search, double? from, double? to, string? sortBy, int page);
         List<PagingDto> GetAllCpu(string? search, double? from, double? to, string? sortBy, int page);
         List<SerialDto> GetAllSerial(string? search, double? from, double? to, string? sortBy, int page);
+        List<Voucher> GetAllVoucherPG(string? search, double? from, double? to, string? sortBy, int? page);
     }
 }

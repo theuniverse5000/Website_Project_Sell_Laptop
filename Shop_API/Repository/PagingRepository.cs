@@ -486,5 +486,49 @@ namespace Shop_API.Repository
                 BillDetailCode = hh.BillDetail.Code,
             }).ToList();
         }
+
+
+        public List<Voucher> GetAllVoucherPG(string? search, double? from, double? to, string? sortBy, int? page)
+        {
+            var allSerial = _context.Vouchers.AsQueryable();
+
+
+            #region Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                allSerial = allSerial.Where(pt => pt.MaVoucher.Contains(search));
+            }
+
+            #endregion
+
+            #region Sorting
+            //Default sort by Name 
+            allSerial = allSerial.OrderBy(hh => hh.TenVoucher);
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+
+                allSerial = allSerial.OrderByDescending(hh => hh.GiaTri); /*break;*/
+
+            }
+            #endregion
+
+            int totalCount = allSerial.Count();
+
+
+            return allSerial.Select(hh => new Voucher
+            {
+                Id = hh.Id,
+                MaVoucher = hh.MaVoucher,
+                TenVoucher = hh.TenVoucher,
+                StarDay = hh.StarDay,
+                EndDay = hh.EndDay,
+                GiaTri = hh.GiaTri,
+                SoLuong = hh.SoLuong,
+                Status = hh.Status,
+
+            }).ToList();
+        }
+
+
     }
 }

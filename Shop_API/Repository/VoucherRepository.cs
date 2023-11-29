@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Repository
@@ -12,22 +13,72 @@ namespace Shop_API.Repository
         {
             _context = context;
         }
-        public async Task<bool> Create(Voucher obj)
+        //public async Task<bool> Create(Voucher obj)
+        //{
+        //    var checkMa = await _context.Vouchers.AnyAsync(x => x.MaVoucher == obj.MaVoucher);// tìm mã, trả về true nếu đã có, false nếu chưa có
+        //    if (obj == null || checkMa == true)
+        //    {
+        //        return false;
+        //    }
+        //    try
+        //    {
+        //        await _context.Vouchers.AddAsync(obj);
+        //        await _context.SaveChangesAsync();
+        //        return true;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return false;
+        //    }
+        //}
+        public async Task<ResponseDto> Create(Voucher obj)
         {
-            var checkMa = await _context.Vouchers.AnyAsync(x => x.MaVoucher == obj.MaVoucher);// tìm mã, trả về true nếu đã có, false nếu chưa có
-            if (obj == null || checkMa == true)
+            var checkMa = await _context.Vouchers.AnyAsync(x => x.MaVoucher == obj.MaVoucher);
+
+            if (obj == null || checkMa)
             {
-                return false;
+                return new ResponseDto
+                {
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Thêm thất bại - Mã voucher đã tồn tại hoặc thông tin không hợp lệ.",
+                    Result = null
+                };
             }
+
+            if (obj.EndDay <= obj.StarDay)
+            {
+                return new ResponseDto
+                {
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Thêm thất bại - Ngày hết hạn phải lớn hơn ngày bắt đầu.",
+                    Result = null
+                };
+            }
+
+            // Other validations...
+
             try
             {
                 await _context.Vouchers.AddAsync(obj);
                 await _context.SaveChangesAsync();
-                return true;
+
+                return new ResponseDto
+                {
+                    Result = obj,
+                    Message = "Thêm thành công"
+                };
             }
             catch (Exception)
             {
-                return false;
+                return new ResponseDto
+                {
+                    IsSuccess = false,
+                    Code = 500,
+                    Message = "Thêm thất bại - Lỗi hệ thống.",
+                    Result = null
+                };
             }
         }
 
@@ -57,12 +108,28 @@ namespace Shop_API.Repository
             return list;
         }
 
-        public async Task<bool> Update(Voucher obj)
+        public async Task<ResponseDto> Update(Voucher obj)
         {
             var vou = await _context.Vouchers.FindAsync(obj.Id);
             if (vou == null)
             {
-                return false;
+                return new ResponseDto
+                {
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Sửa thất bại - Không Tìm Thấy Voucher ",
+                    Result = null
+                };
+            }
+            if (obj.EndDay <= obj.StarDay)
+            {
+                return new ResponseDto
+                {
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Sửa thất bại - Ngày hết hạn phải lớn hơn ngày bắt đầu.",
+                    Result = null
+                };
             }
             try
             {
@@ -79,13 +146,72 @@ namespace Shop_API.Repository
 
                 _context.Vouchers.Update(vou);
                 await _context.SaveChangesAsync();
-                return true;
+                return new ResponseDto
+                {
+                    Result = obj,
+                    Message = "Sửa thành công"
+                };
             }
             catch (Exception)
             {
-                return false;
+                return new ResponseDto
+                {
+                    Result = obj,
+                    Message = "Lỗi hệ thống "
+                };
             }
         }
+
+        public async Task<bool> Duyet(Guid Id)
+        {
+            var vou = await _context.Vouchers.FindAsync(Id);
+
+            if (vou == null)
+            {
+                return false;
+            }
+            else
+            {
+                try
+                {
+                    vou.Status = 1;
+                    _context.Vouchers.Update(vou);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+
+            }
+        }
+
+        public async Task<bool> HuyDuyet(Guid Id)
+        {
+            var vou = await _context.Vouchers.FindAsync(Id);
+            if (vou == null)
+            {
+                return false;
+            }
+            else
+            {
+                try
+                {
+                    vou.Status = 0;
+                    _context.Vouchers.Update(vou);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+
+            }
+        }
+
+
     }
 }
 

@@ -32,9 +32,16 @@ namespace AdminApp.Controllers
 
         public async Task<IActionResult> Login()
         {
-           
+
+            if (HttpContext.Request.Cookies.ContainsKey("account"))
+            {
+                return View("Index");
+            }
+            else
+            {
                 return View();
-            
+            }
+
         }
 
         public async Task<IActionResult> Main()
@@ -47,7 +54,7 @@ namespace AdminApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoginWithJWT([FromBody] LoginRequestDto loginRequestDto)
+        public async Task<IActionResult> LoginWithJWT([FromForm] LoginRequestDto loginRequestDto)
         {
 
             //  var apiUrl = "https://localhost:7286/";
@@ -78,7 +85,8 @@ namespace AdminApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index");
+            Response.Cookies.Delete("account");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

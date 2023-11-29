@@ -1,0 +1,372 @@
+﻿@{
+    ViewBag.Title = "Voucher";
+}
+
+<span id="notification" style="display:none;">222</span>
+<div style="width: 1300px; margin: 0 auto;">
+    <div id="gridVoucher"></div>
+</div>
+<br />
+
+<div id="detailsGrid"></div>
+
+@section scripts {
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        kendo.pdf.defineFont({
+            "DejaVu Sans": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans.ttf",
+            "DejaVu Sans|Bold": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Bold.ttf",
+            "DejaVu Sans|Bold|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "DejaVu Sans|Italic": "https://kendo.cdn.telerik.com/2016.2.607/styles/fonts/DejaVu/DejaVuSans-Oblique.ttf",
+            "WebComponentsIcons": "https://kendo.cdn.telerik.com/2017.1.223/styles/fonts/glyphs/WebComponentsIcons.ttf"
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var grid;
+            var dataSource = new kendo.data.DataSource({
+                data: [], // null
+            });
+
+            console.log(grid);
+
+          grid=  $("#gridVoucher").kendoGrid({
+
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "/Voucher/GetListVoucher",
+                            type: "GET",
+                            dataType: "json"
+                        },
+                        create: {
+                            url: "/Voucher/Createone",
+                            type: "POST",
+                            dataType: "json",
+                            data: function (data) {
+                                // Chuyển giá trị "status" về kiểu số nguyên trước khi gửi đi
+                                data.status = parseInt(data.status, 10);
+                                return data;
+                            },
+                            success: function (response) {
+                                // Xử lý thành công
+                                toastr.success(response.message);
+
+                                // Refresh grid sau khi thêm mới thành công
+                                $("#gridVoucher").data("kendoGrid").dataSource.read();
+                            },
+                            error: function (error) {
+                                // Xử lý lỗi
+                                toastr.error("Có lỗi xảy ra khi thêm mới voucher.");
+                                console.error(error);
+                            }
+                        },
+                        update: {
+                            url: "/Voucher/EditVoucher",
+                            type: "PUT",
+                            dataType: "json"
+                        },
+                        destroy: {
+                            url: "/",
+                            type: "DELETE",
+                            dataType: "json"
+                        },
+                    },
+                    parameterMap: function (data, type) {
+                        console.log("Hello, world!");
+                        if (type === "create" || type === "update") {
+                            // Convert ngày tháng về định dạng chính xác trước khi gửi lên server
+                            console.log("Sending starDay to server:", data.starDay);
+
+                            // Kiểm tra xem có phải kiểu Date không
+
+                            data.starDay = kendo.toString(data.starDay, "yyyy-MM-ddTHH:mm:ss.fffffff");
+
+
+                            // Kiểm tra và định dạng endDay nếu cần
+                            if (data.endDay instanceof Date) {
+                                data.endDay = kendo.toString(data.endDay, "yyyy-MM-ddTHH:mm:ss.fffffff");
+                            }
+
+                            return kendo.stringify(data);
+                        }
+                        return data;
+                    },
+
+
+                    schema: {
+                        data: "result",
+                        total: "count",
+                        model: {
+                            id: "id",
+                            fields: {
+                                maVoucher: { type: "string", validation: { required: true }, },
+                                tenVoucher: { type: "string", validation: { required: true }, },
+                                giaTri: { type: "number", validation: { required: true, min: 0, }, },
+
+                                soLuong: { type: "number", validation: { required: true, min: 0 } },
+                                starDay: {
+                                    type: "date",
+
+                                    defaultValue: new Date(), // Giá trị mặc định là ngày tháng hiện tại
+                                    parse: function (value) {
+                                        if (value === null) {  // Nếu không có giá trị được chọn, sử dụng ngày tháng hiện tại
+                                            var today = new Date();
+                                            console.log("Using current date:", today);
+                                            var formattedValue = kendo.toString(today, "yyyy-MM-ddTHH:mm:ss.fffffff");
+                                            return formattedValue;
+                                        } else {
+                                            var formattedValue = kendo.toString(value, "yyyy-MM-ddTHH:mm:ss.fffffff");
+                                            return formattedValue;
+                                        }
+                                    },
+
+
+                                },
+
+
+                                endDay: {
+                                    type: "date",
+
+                                    parse: function (value) {
+                                        if (value === "") {  // Nếu không có giá trị được chọn, sử dụng ngày tháng hiện tại
+                                            var today = new Date();
+                                            console.log("Using current date:", today);
+                                            var formattedValue = kendo.toString(today, "yyyy-MM-ddTHH:mm:ss.fffffff");
+                                            return formattedValue;
+                                        } else {
+                                            var formattedValue = kendo.toString(value, "yyyy-MM-ddTHH:mm:ss.fffffff");
+                                            return formattedValue;
+                                        }
+
+                                    },
+                                },
+                                status: { type: "int" },
+                                // statusText: { type: "string" } // Thêm trường mới cho văn bản trạng thái
+                            }
+                        }
+                    },
+                    pageSize: 20,
+                },
+                height: 550,
+                groupable: false,
+                sortable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: [5, 10, 20, "All"],
+                    buttonCount: 3,
+                    messages: {
+                        itemsPerPage: "Số dòng trên mỗi trang",
+                        display: "{0}-{1} trong {2} dòng"
+                    }
+                },
+                toolbar: [
+                    {
+                        name: "create",
+                        text: "Thêm",
+                    },
+                    "pdf"
+                ],
+                pdf: {
+                    allPages: true,
+                    avoidLinks: true,
+                    paperSize: "A4",
+                    margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
+                    landscape: true,
+                    repeatHeaders: true,
+                    template: $("#page-template").html(),
+                    scale: 0.8,
+                },
+                editable: {
+                    mode: "popup",
+                    window: { width: 550, height: 500 }, // Chỉnh chiều rộng ở đây
+                },
+
+                save: function (e) {
+                    if (e.model.isNew()) {
+                        // Thực hiện tạo mới
+                        e.model.dirty = true; // Đánh dấu là có thay đổi để tránh việc thông báo không cần thiết
+
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+
+                            if (ev.type === "create" && ev.response.code === 200) {
+                                // Thành công
+                                showNotification(ev.response.message, "success");
+                                // console.log(ev.response.Message);
+                                console.log(ev.response);
+                                console.log(ev.response.message);
+                                console.log(ev.response.result);
+                            } else {
+                                // Lỗi
+                                showNotification(ev.response.message, "error");
+                            }
+                            // Reload grid after the create operation
+                            $("#gridVoucher").data("kendoGrid").dataSource.read();
+                        });
+                    } else if (e.model.dirty) {
+                        // Trường hợp cập nhật
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            if (ev.type === "update" && ev.response.code === 200) {
+                                // Thành công
+                                showNotification(ev.response.message, "success");
+                                console.log(ev);
+                            } else {
+                                // Lỗi
+                                console.log(ev.response.message);
+                                showNotification("Có lỗi xảy ra khi cập nhật", "error");
+                                showNotification(ev.response.message, "error");
+                            }
+                        });
+                    } else if (e.model.isNew() && e.model.isDestroyed()) {
+                        // Trường hợp xóa
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            if (ev.type === "destroy" && ev.response) {
+                                // Thành công
+                                showNotification(ev.response, "success");
+                            } else {
+                                // Lỗi
+                                showNotification("Có lỗi xảy ra khi xóa", "error");
+                            }
+                        });
+                    }
+                },
+
+
+
+
+                columns: [
+                    {
+                        field: "maVoucher",
+                        title: "Mã Voucher",
+                    },
+                    {
+                        field: "tenVoucher",
+                        title: "Tên Voucher"
+                    },
+                    {
+                        field: "starDay",
+                        title: "Ngày bắt đầu",
+
+                        template: function (dataItem) {
+
+                            return kendo.toString(new Date(dataItem.starDay), "yyyy-MM-dd HH:mm:ss");
+                        }, editor: function (container, options) {
+                            var input = $("<input name='" + options.field + "' />");
+                            input.appendTo(container);
+                            console.log("dang chon ");
+                            input.kendoDateTimePicker({
+                                format: "yyyy-MM-ddTHH:mm:ss",
+                            });
+                        }
+                    },
+                    {
+                        field: "endDay",
+                        title: "Ngày Kết Thúc",
+                        template: function (dataItem) {
+                            return kendo.toString(new Date(dataItem.endDay), "yyyy-MM-dd HH:mm:ss");
+                        }, editor: function (container, options) {
+                            var input = $("<input name='" + options.field + "' />");
+                            input.appendTo(container);
+                            console.log("dang chon ");
+                            input.kendoDateTimePicker({
+                                format: "yyyy-MM-ddTHH:mm:ss",
+                            });
+                        }
+                    },
+                    {
+                        field: "giaTri",
+                        title: "Giá Trị",
+                    },
+                    {
+                        field: "soLuong",
+                        title: "Số lượng",
+                    },
+                    {
+                        field: "status",
+                        title: "Trạng thái",
+                        editor: function (container, options) {
+                            // Tạo dropdownlist
+                            var input = $("<input name='" + options.field + "' />");
+                            input.appendTo(container);
+                            console.log(options.field);
+                            // Cấu hình dropdownlist
+                            input.kendoDropDownList({
+                                dataSource: [
+                                    { text: "Đã kết thúc", value: 0 },
+                                    { text: "Đang diễn ra", value: 1 },
+                                    { text: "Tạm dừng", value: 2 },
+                                    { text: "Sắp diễn ra", value: 3 },
+                                    { text: "Giới hạn người dùng", value: 4 }
+                                ],
+                                dataTextField: "text",
+                                dataValueField: "value",
+                                value: options.model.status || 1, // Sử dụng giá trị mặc định nếu không có giá trị
+                                change: function (e) {
+                                    console.log("Selected value:", options.model.status.value);
+                                    console.log("this value:", this.value());
+                                    options.model.status = this.value();
+                                }
+                            });
+                        },
+
+                        template: function (dataItem) {
+                            // Hiển thị văn bản tương ứng với giá trị status
+                            return getStatusText(dataItem.status);
+                        }
+                    },
+                    {
+                        command: [
+                            {
+                                name: "edit",
+                                text: "Sửa",
+                            },
+                            {
+                                name: "destroy",
+                                text: "Xóa",
+                            },
+                        ],
+                        title: "Hành động",
+                        width: "250px",
+                        exportable: false
+                    }
+                ],
+            }).data("kendoGrid");        
+        });
+
+
+          function getStatusText(status) {
+            switch (status) {
+                case 0: return "Đã kết thúc";
+                case 1: return "Đang diễn ra";
+                case 2: return "Tạm dừng";
+                case 3: return "Sắp diễn ra";
+                case 4: return "Giới hạn người dùng";
+                default: return "Không xác định trạng thái";
+            }
+        }
+
+        // Function hiển thị thông báo
+        function showNotification(message, type) {
+            toastr.options = {
+                positionClass: "toast-top-right", // Điều chỉnh vị trí của thông báo
+                closeButton: true // Hiển thị nút đóng thông báo
+            };
+
+            // Hiển thị thông báo theo loại
+            if (type === "success") {
+                toastr.success(message);
+            } else {
+                toastr.error(message);
+            }
+        }
+
+
+    </script>
+}
