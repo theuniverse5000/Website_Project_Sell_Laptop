@@ -90,7 +90,18 @@
                 <span class="item text-left">Settings</span>
             </a>
         </li> *@
-    </ul>
+
+        <li class="nav-item">
+            <form asp-controller="Home" asp-action="Logout" method="post" id="logoutForm">
+                <button type="submit" class="nav-link">
+                    <!-- You can include an icon if desired -->
+                    <!-- <span class="icon"><i class="fas fa-sign-out-alt"></i></span> -->
+                    <span class="item text-left">Log Out</span>
+                </button>
+            </form>
+        </li>
+
+    </ul>   
 </div>
 
 <style>

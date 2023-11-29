@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Quartz.Impl;
+using Quartz.Spi;
+using Quartz;
 using Serilog;
 using Shop_API.AppDbContext;
 using Shop_API.Repository;
@@ -14,11 +17,12 @@ using Shop_API.Services.IServices;
 using Shop_Models.Entities;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using Shop_API;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
-    builder.Configuration.GetConnectionString("DefaultConnection")
+    builder.Configuration.GetConnectionString("DefaultConnection") 
     ));
 // Add services to the container.
 
@@ -67,7 +71,20 @@ builder.Services.AddTransient<IManagePostRepository, ManagePostRepository>();
 #endregion
 builder.Services.RegisterServiceComponents();
 
-
+#region Đăng ký VoucherStatusUpdateJob, IScheduler và SchedulerConfig
+// Đăng ký VoucherStatusUpdateJob, IScheduler và SchedulerConfig
+builder.Services.AddScoped<VoucherStatusUpdateJob>();
+builder.Services.AddSingleton<IJobFactory, JobFactory>();
+builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+builder.Services.AddSingleton(provider =>
+{
+    var schedulerFactory = new StdSchedulerFactory();
+    var scheduler = schedulerFactory.GetScheduler().Result;
+    scheduler.JobFactory = provider.GetRequiredService<IJobFactory>();
+    return scheduler;
+});
+builder.Services.AddHostedService<QuartzHostedService>();
+#endregion
 #region Đăng ký JWT
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -121,6 +138,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+var scheduler = app.Services.GetService<IScheduler>();
+await SchedulerConfig.ConfigureJobs(scheduler);
+
 
 app.UseStaticFiles();
 
