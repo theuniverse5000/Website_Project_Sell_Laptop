@@ -1,19 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using Shop_Models.Dto;
 using Newtonsoft.Json;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using Azure.Core;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.DotNet.MSIdentity.Shared;
-using System.Net.Http;
-using Microsoft.AspNetCore.Authentication.Facebook;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
+using System.Security.Claims;
+using System.Text;
 
 namespace WebApp.Controllers;
 [AllowAnonymous]
@@ -30,18 +25,23 @@ public class LoginController : Controller
     public IActionResult Login(string ReturnUrl = "/")
     {
         string accessToken = HttpContext.Request.Cookies["access_token"];
-        if (accessToken!=null)
+        if (accessToken != null)
         {
             return RedirectToAction("Index", "Home");
         }
         return RedirectToAction("Login", "Home");
     }
     [HttpPost]
-    public async Task<IActionResult> LoginWithJWT([FromBody] LoginRequestDto loginRequestDto)
+    public async Task<IActionResult> LoginWithJWT(string username, string password)
     {
+        LoginRequestDto login = new LoginRequestDto();
+        login.UserName = username;
+        login.Password = password;
+        login.RememberMe = true;
+        login.ReturnUrl = String.Empty;
         var apiUrl = "/api/Account/Login";
         var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-        var requestdata = new StringContent(JsonConvert.SerializeObject(loginRequestDto), Encoding.UTF8, "application/json");
+        var requestdata = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
         var respone = await httpclient.PostAsync(apiUrl, requestdata);
         //var LoginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(respone.Content);
         var jsonRespone = await respone.Content.ReadAsStringAsync();
@@ -110,16 +110,16 @@ public class LoginController : Controller
         var apiUrl = "/api/Account/SignUp";
         var requestData = new StringContent(JsonConvert.SerializeObject(signUpdata), Encoding.UTF8, "application/json");
         var respone = await httpClient.PostAsync(apiUrl, requestData);
-        var content = JsonConvert.DeserializeObject<ResponseDto>( await respone.Content.ReadAsStringAsync());
+        var content = JsonConvert.DeserializeObject<ResponseDto>(await respone.Content.ReadAsStringAsync());
         var signUpRespone = JsonConvert.DeserializeObject<SignUpRespone>(content.Result.ToString());
-        if (signUpRespone.Mess=="true")
+        if (signUpRespone.Mess == "true")
         {
             var userInformation = JsonConvert.DeserializeObject<User>(signUpRespone.Data.ToString());
             LoginRequestDto userLogin = new LoginRequestDto()
             {
-                UserName=userInformation.UserName,
-                Password=userInformation.Password,
-                RememberMe=true,
+                UserName = userInformation.UserName,
+                Password = userInformation.Password,
+                RememberMe = true,
             };
             RedirectToAction("LoginWithJWT", userLogin);
         }

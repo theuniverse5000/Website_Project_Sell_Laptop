@@ -64,9 +64,14 @@ namespace Shop_API.Controllers
         }
         [AllowAnonymous]
         [HttpPost("CreateBill")]
-        public async Task<IActionResult> CreateBill(string username, string maVoucher)
+        public async Task<IActionResult> CreateBill(string? username, string? maVoucher)
         {
-            return Ok(await _billService.CreateBill(username, maVoucher));
+            var reponse = await _billService.CreateBill(username, maVoucher);
+            if (reponse.IsSuccess)
+            {
+                return Ok("Thanh cong");
+            }
+            return BadRequest("");
         }
         [AllowAnonymous]
         [HttpPut("UpdateBill")]

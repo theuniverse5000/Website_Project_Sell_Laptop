@@ -1,5 +1,5 @@
-﻿using WebApp.Libraries;
-using WebApp.Models;
+﻿using Shop_Models;
+using WebApp.Libraries;
 
 namespace WebApp.Services
 {

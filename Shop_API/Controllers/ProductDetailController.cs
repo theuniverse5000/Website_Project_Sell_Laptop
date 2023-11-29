@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -6,7 +7,8 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductDetailController : LaptopShopController
+    [Authorize(Roles = "Admin")]
+    public class ProductDetailController : ControllerBase
     {
         private readonly IProductDetailRepository _repository;
         private readonly ResponseDto _reponse;
@@ -54,6 +56,7 @@ namespace Shop_API.Controllers
             _reponse.Result = await _repository.GetAll();
             return Ok(_reponse);
         }
+        [AllowAnonymous]
         [HttpGet("PGetProductDetail")]
         public async Task<IActionResult> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int page)
         {

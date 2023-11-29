@@ -3,6 +3,13 @@
 
 }
 <span id="notification" style="display:none;">222</span>
+<form asp-controller="Serial" asp-action="ImportFromExcel" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="excelFile">Chọn file excel</label>
+        <input type="file" name="excelFile" class="form-control-file" accept=".xlsx" required />
+    </div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Lưu lại</button>
+</form>
 <div id="example" style="width: 1300px; margin: 0 auto;">
     <div id="grid"></div>
 </div>

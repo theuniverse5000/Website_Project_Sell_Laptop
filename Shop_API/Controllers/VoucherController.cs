@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
@@ -10,6 +11,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class VoucherController : ControllerBase
     {
         private readonly IVoucherRepository _repository;

@@ -24,15 +24,15 @@ namespace Shop_API.Service
         private readonly IConfiguration _configuration;
         private readonly IRoleService _roleService;
         private static readonly string key = "theuniverse500";
-        public AccountService(RoleManager<Role> roleManager, ICartRepository  cartRepository, UserManager<User> userManager, SignInManager<User> signInManager, IRoleService roleService, IConfiguration configuration, ApplicationDbContext applicationDbContext)
+        public AccountService(RoleManager<Role> roleManager, ICartRepository cartRepository, UserManager<User> userManager, SignInManager<User> signInManager, IRoleService roleService, IConfiguration configuration, ApplicationDbContext applicationDbContext)
         {
             _context = applicationDbContext;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
-            _roleService= roleService;
-            _roleManager=roleManager;
-            _cartRepository= cartRepository;
+            _roleService = roleService;
+            _roleManager = roleManager;
+            _cartRepository = cartRepository;
         }
 
         public async Task<LoginResponesDto> Validate(LoginRequestDto loginRequest)
@@ -40,17 +40,17 @@ namespace Shop_API.Service
             //cấp token
             var token = await GenerateToken(loginRequest);
             var respone = new LoginResponesDto();
-            if (token.AccessToken==null)
+            if (token.AccessToken == null)
             {
-                respone.Mess="Login Fail";
-                respone.Successful=false;
-                respone.Data=token;
+                respone.Mess = "Login Fail";
+                respone.Successful = false;
+                respone.Data = String.Empty;
             }
             else
             {
-                respone.Mess="Login Successfull";
-                respone.Successful=true;
-                respone.Data=token;
+                respone.Mess = "Login Successfull";
+                respone.Successful = true;
+                respone.Data = token;
             }
 
             return respone;
@@ -258,7 +258,7 @@ namespace Shop_API.Service
 
         public async Task<SignUpRespone> SignUp(SignUpDto p)
         {
-            var defaultClienRole = _roleService.GetAllRole().Result.FirstOrDefault(x=>x.NormalizedName=="CLIENT");
+            var defaultClienRole = _roleService.GetAllRole().Result.FirstOrDefault(x => x.NormalizedName == "CLIENT");
             try
             {
                 var user = new User()
@@ -269,7 +269,7 @@ namespace Shop_API.Service
                     Status = 1,   // quy uoc 1 có nghĩa là đang hđ
                     Address = p.DiaChi,
                     Password = p.Password,
-                    RoleId=p.IdRole??defaultClienRole.Id
+                    RoleId = p.IdRole ?? defaultClienRole.Id
                 };
                 var result = await _userManager.CreateAsync(user, p.Password);
                 SignUpRespone res = new SignUpRespone();
@@ -278,15 +278,15 @@ namespace Shop_API.Service
                     //Tao user
                     var role = await _roleService.GetRoleById(user.RoleId);
                     //await _rolema.AddToRoleAsync(user, role.Name);
-                    await _userManager.AddToRoleAsync(user,role.Name);
-                    res.Mess=result.Succeeded.ToString();
-                    res.Data=user;
+                    await _userManager.AddToRoleAsync(user, role.Name);
+                    res.Mess = result.Succeeded.ToString();
+                    res.Data = user;
                     //Tao Cart cho User
 
                     var userCart = new Cart()
                     {
-                        UserId=user.Id,
-                        Description=$"Cart Of {user.UserName}"
+                        UserId = user.Id,
+                        Description = $"Cart Of {user.UserName}"
                     };
                     await _cartRepository.Create(userCart);
 
@@ -294,23 +294,23 @@ namespace Shop_API.Service
                 }
                 else
                 {
-                    res.Mess=result.Succeeded.ToString();
-                    var listError= new List<IdentityError>();
-                  foreach(var er in result.Errors)
+                    res.Mess = result.Succeeded.ToString();
+                    var listError = new List<IdentityError>();
+                    foreach (var er in result.Errors)
                     {
-                        if (er==null) continue;
-                        listError.Add(er); 
+                        if (er == null) continue;
+                        listError.Add(er);
                     }
-                  res.Data=listError;
+                    res.Data = listError;
                 }
-                
+
                 return res;
             }
-          
+
             catch (Exception ex)
             {
-                
-                throw ex; 
+
+                throw ex;
             }
         }
 

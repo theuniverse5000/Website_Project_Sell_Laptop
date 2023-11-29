@@ -32,108 +32,112 @@ namespace Shop_API.Service
             _voucherRepository = voucherRepository;
         }
 
-        public async Task<ResponseDto> CreateBill(string username, string? maVoucher)
+        public async Task<ResponseDto> CreateBill(string? username, string? maVoucher)
         {
             try
             {
-                var user = _userRepository.GetAllUsers().Result;//.FirstOrDefault(x => x.UserName == username);
+                var user = _userRepository.GetAllUsers().Result.Where(x => x.UserName == username).FirstOrDefault();
                 if (user == null)
                 {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Không tìm thấy tài khoản người dùng";
-                    return _reponse;// Nếu chưa có sản phẩm trong giỏ hàng thì không thể tạo hóa đơn
+                    return NotFoundResponse("Không tìm thấy tài khoản người dùng");
                 }
-                //   getUserId = user.Id;
-                cartItem = await _cartRepository.GetCartItem(username);// Tìm  ra giỏ hàng của user
-                if (cartItem == null)// Kiểm tra giỏ hàng của người dùng 
+
+                var cartItem = await _cartRepository.GetCartItem(username);
+                if (cartItem == null)
                 {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Không có sản phẩm trong giỏ hàng";
-                    return _reponse;// Nếu chưa có sản phẩm trong giỏ hàng thì không thể tạo hóa đơn
+                    return NotFoundResponse("Không có sản phẩm trong giỏ hàng");
                 }
-                var listVoucher = await _voucherRepository.GetAllVouchers();// Lấy danh sách voucher
-                var voucherX = listVoucher.FirstOrDefault(x => x.MaVoucher == maVoucher);// Kiểm tra xem có voucher ko
-                if (voucherX == null)// Không có thì trả về kết quả
+
+                var listVoucher = await _voucherRepository.GetAllVouchers();
+                var voucherX = listVoucher.FirstOrDefault(x => x.MaVoucher == maVoucher);
+                var idVou = Guid.Empty;
+
+                if (voucherX == null || voucherX.SoLuong <= 0 || voucherX.StarDay > DateTime.Now || DateTime.Now > voucherX.EndDay)
                 {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Voucher sai hoặc không tồn tại";
-                    return _reponse;
-                }
-                int checkSlVoucher = voucherX.SoLuong;
-                DateTime startTimeVoucher = voucherX.StarDay;
-                DateTime endTimeVoucher = voucherX.EndDay;
-                if (checkSlVoucher <= 0)
-                {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Voucher đã hết lượt sử dụng";
-                    return _reponse;
-                }
-                if (startTimeVoucher > DateTime.Now || DateTime.Now > endTimeVoucher)
-                {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 404;
-                    _reponse.Message = "Voucher đã hết hạn sử dụng hoặc chưa đến ngày sử dụng";
-                    return _reponse;
-                }
-                Bill bill = new Bill()// Tạo hóa đơn
-                {
-                    Id = Guid.NewGuid(),
-                    InvoiceCode = "Bill" + RamdomString.GenerateRandomString(7),
-                    CreateDate = Convert.ToDateTime(DateTime.Now.ToString()),
-                    //FullName = user.FullName,
-                    //PhoneNumber = user.PhoneNumber,
-                    //Address = user.Address,
-                    Status = 2,// Trạng thái 2: Chờ xác nhận
-                               //  UserId = getUserId,
-                    VoucherId = voucherX != null ? voucherX.Id : null
-                };
-                if (await _billRepository.Create(bill))
-                {
-                    var cartItemToBill = cartItem.Where(x => x.Status == 3).ToList();
-                    foreach (var x in cartItemToBill)
-                    {
-                        BillDetail billDetail = new BillDetail();
-                        billDetail.Id = Guid.NewGuid();
-                        billDetail.Code = bill.InvoiceCode + RamdomString.GenerateRandomString(6);
-                        // billDetail.CodeProductDetail = productDetailX.Code;
-                        billDetail.Price = x.Price;
-                        billDetail.Quantity = x.Quantity;
-                        billDetail.BillId = bill.Id;
-                        await _billDetailRepository.CreateBillDetail(billDetail);
-                    }
-                    _reponse.Result = bill;
-                    _reponse.IsSuccess = true;
-                    _reponse.Code = 200;
-                    _reponse.Message = "Đặt hàng thành công";
-                    return _reponse;
+                    idVou = Guid.Empty;
                 }
                 else
                 {
-                    _reponse.Result = null;
-                    _reponse.IsSuccess = false;
-                    _reponse.Code = 400;
-                    _reponse.Message = "Đặt hàng thất bại";
-                    return _reponse;
+                    idVou = voucherX.Id;
+                }
+
+                var bill = new Bill
+                {
+                    Id = Guid.NewGuid(),
+                    InvoiceCode = "Bill" + RamdomString.GenerateRandomString(10),
+                    CreateDate = DateTime.Now,
+                    Status = 2, // Trạng thái 2: Chờ xác nhận
+                    FullName = user.FullName,
+                    PhoneNumber = user.PhoneNumber,
+                    Address = user.Address,
+                    VoucherId = idVou
+                };
+
+                if (await _billRepository.Create(bill))
+                {
+                    var cartItemToBill = cartItem.Where(x => x.Status == 1).ToList();
+
+                    foreach (var cartItemDetail in cartItemToBill)
+                    {
+                        var billDetail = new BillDetail
+                        {
+                            Id = Guid.NewGuid(),
+                            Code = bill.InvoiceCode + RamdomString.GenerateRandomString(6),
+                            CodeProductDetail = cartItemDetail.MaProductDetail,
+                            Price = cartItemDetail.Price,
+                            Quantity = cartItemDetail.Quantity,
+                            BillId = bill.Id
+                        };
+
+                        await _billDetailRepository.CreateBillDetail(billDetail);
+                    }
+
+                    return SuccessResponse(bill, "Đặt hàng thành công");
+                }
+                else
+                {
+                    return ErrorResponse("Đặt hàng thất bại");
                 }
             }
             catch (Exception e)
             {
-                _reponse.Result = null;
-                _reponse.IsSuccess = false;
-                _reponse.Code = 404;
-                _reponse.Message = "Có lỗi gì đó: " + e.Message;
-                return _reponse;
+                return ErrorResponse("Có lỗi gì đó: " + e.Message);
             }
         }
+
+        private ResponseDto NotFoundResponse(string message)
+        {
+            return new ResponseDto
+            {
+                Result = null,
+                IsSuccess = false,
+                Code = 404,
+                Message = message
+            };
+        }
+
+        private ResponseDto SuccessResponse(Bill bill, string message)
+        {
+            return new ResponseDto
+            {
+                Result = bill,
+                IsSuccess = true,
+                Code = 200,
+                Message = message
+            };
+        }
+
+        private ResponseDto ErrorResponse(string message)
+        {
+            return new ResponseDto
+            {
+                Result = null,
+                IsSuccess = false,
+                Code = 400,
+                Message = message
+            };
+        }
+
         public async Task<ResponseDto> PGetBillByInvoiceCode(string invoiceCode)
         {
             Bill billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);

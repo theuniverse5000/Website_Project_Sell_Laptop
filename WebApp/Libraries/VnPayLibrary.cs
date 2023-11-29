@@ -1,9 +1,9 @@
-﻿using System.Globalization;
-using System.Net.Sockets;
+﻿using Shop_Models;
+using System.Globalization;
 using System.Net;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
-using WebApp.Models;
 
 namespace WebApp.Libraries
 {

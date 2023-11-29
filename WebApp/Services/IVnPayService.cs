@@ -1,4 +1,4 @@
-﻿using WebApp.Models;
+﻿using Shop_Models;
 
 namespace WebApp.Services
 {
