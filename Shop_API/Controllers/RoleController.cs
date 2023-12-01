@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -8,7 +7,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;
@@ -23,17 +22,17 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> GetAllRoles()
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             return Ok(await _roleService.GetAllRole());
         }
         [HttpPost]
@@ -41,16 +40,16 @@ namespace Shop_API.Controllers
         {
 
             string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             var roleCreate = new RoleCreateDto()
             {
                 Name = obj.Name,

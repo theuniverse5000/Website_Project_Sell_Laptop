@@ -4,6 +4,7 @@
     {
         public string Mess { get; set; } = "Login Falied";
         public bool Successful { get; set; } = false;
-        public object Data { get; set; }
+        public string Token { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

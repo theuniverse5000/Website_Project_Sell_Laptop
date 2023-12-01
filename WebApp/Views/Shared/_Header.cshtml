@@ -1,15 +1,14 @@
 ﻿@{
+    @using Microsoft.AspNetCore.Http;
     var httpContext = ViewContext.HttpContext;
     string accessToken = httpContext.Request.Cookies["access_token"];
+    string username = ViewContext.HttpContext.Session.GetString("username");
 }
 <style>
-    .container {
-        padding: 20px; /* Khoảng cách giữa nội dung và mép của form */
-        border-radius: 10px; /* Bo góc của form */
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng cho form */
-    }
 </style>
+@* <div class="container">
 <header>
+  
     <div class="Nav-header justify-content-center d-flex" style="background-color: #73BBFE;">
         <div class="navbar navbar-expand-md d-flex flex-column container" style="background-color:transparent;">
             <div class="d-flex w-100">
@@ -41,27 +40,27 @@
                             </li>
                             @{
 
-                                if (accessToken != null)
+                                if (username != null)
                                 {
-                                    <li class="nav-item  d-flex justify-content-center align-items-xxl-center">
-                                        <div class="Hot-Line col-2">
-                                            <a class="d-flex" style="text-decoration: none;">
-                                                <i class="fa-solid fa-user"></i>
-                                                <span>Tài Khoản</span>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa-solid fa-user" style="color:aqua;font-size:30px"></i>@username
                                             </a>
-                                        </div>
-                                    </li>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
+                                                <li><a class="dropdown-item" href="#">Xem đơn hàng</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+                                            </ul>
+                                        </li>
                                 }
                                 else
                                 {
-                                    <li class="nav-item d-flex justify-content-center align-items-xxl-center">
-                                        <a id="loginModel" class="Hot-Line col-2" style="text-decoration: none;">
-                                            <div class="d-flex">
-                                                <i class="fa-solid fa-user"></i>
-                                                <span>Đăng Nhập</span>
-                                            </div>
-                                        </a>
-                                    </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="loginLink" href="#">
+                                                <i class="fa-solid fa-user" style="color:aqua;font-size:30px"></i> Đăng nhập
+                                            </a>
+                                        </li>
                                 }
                             }
                         </ul>
@@ -136,11 +135,348 @@
         </div>
     </div>
 </div>
+
+</div> *@
+<style>
+    .textNavbar {
+        color: var(--color-01, #333) !important;
+        font-family: Inter !important;
+        font-size: 16px !important;
+        font-style: normal !important;
+        font-weight: 500 !important;
+        line-height: normal !important;
+        margin-left: 20px !important;
+    }
+
+    .btnDangKy {
+        width: 115px;
+        height: 38px;
+        flex-shrink: 0;
+        border-radius: 22px;
+        background: var(--main-color-1, linear-gradient(90deg, #3BB54A 0%, #7EC341 100%));
+        margin-left: 20px;
+    }
+
+    .textDangKy {
+        color: #FFF !important;
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* 187.5% */
+    }
+
+    .textDangNhap {
+        color: #3BB54A !important;
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* 187.5% */
+    }
+
+    .btnDangNhap {
+        width: 115px;
+        height: 38px;
+        flex-shrink: 0;
+        border-radius: 33px;
+        border: 1.5px solid #3BB54A;
+        margin-left: 20px;
+    }
+
+    .text-center {
+        text-align: center !important;
+    }
+
+    .logoNav {
+        width: 149px;
+        height: 59px;
+        flex-shrink: 0;
+        margin-left: 150px;
+    }
+
+</style>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand logoNav" href="#">
+        <img alt="Logo" src="./Image/logo1.png" />
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+            <li>
+                <a class="nav-link textNavbar" href="/">Trang chủ</a>
+            </li>
+            <li>
+                <a class="nav-link textNavbar" href="/sản-phẩm">Laptop mới</a>
+            </li>
+            <li>
+                <a class="nav-link textNavbar" href="#">Giới thiệu</a>
+            </li>
+            <li>
+                <a class="nav-link textNavbar" href="#">
+                    Bảo hành
+                </a>
+            </li>
+            <li>
+                <a class="nav-link textNavbar" href="#">
+                    Phản hồi
+                </a>
+            </li>
+            @{
+
+                if (username != null)
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user" style="color:aqua;font-size:30px"></i>@username
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
+                            <li><a class="dropdown-item" href="#">Xem đơn hàng</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" asp-controller="Login" asp-action="LogOut">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    <form class="d-flex">
+                <a class="nav-link btnDangKy" id="resgisterLink">
+                    <span class="textDangKy">Đăng ký</span>
+                </a>
+                        <a class="nav-link btnDangNhap" id="loginLink">
+                    <span class="textDangNhap">Đăng nhập</span>
+                </a>
+               
+
+            </form>
+                }
+            }
+           <li>
+            <a class="nav-link" href="/giỏ-hàng" style="display: flex; align-items: center;">
+                <i class="fa-solid fa-cart-shopping" style="font-size:25px"></i> <span>Giỏ hàng</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div >
+        <div class="modal-content">
+
+            @*  <form asp-controller="Login" asp-action="LoginWithJWT" class="container">
+             <div class="form-outline mb-4">
+                    <input type="text" name="username" class="form-control" />
+                    <label class="form-label">Tài khoản</label>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="password" name="password" class="form-control" />
+                    <label class="form-label">Mật khẩu</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mb-4">Đăng nhập</button>
+                <div class="text-center">
+                    <p>Chưa có tài khoản? <a href="#!">Đăng ký</a></p>
+                    <p>Đăng nhập bằng:</p>
+                    <button type="button" class="btn btn-secondary btn-floating mx-1" onclick="location.href='@Url.Action("LoginWithFacebook", "Login")'">
+                        <i class="fab fa-facebook-f"></i>
+                    </button>
+
+                    <button type="button" class="btn btn-secondary btn-floating mx-1" onclick="location.href='@Url.Action("LoginWithGoogle", "Login")'">
+                        <i class="fab fa-google"></i>
+                    </button>
+
+
+
+                </div>
+
+            </form> *@
+            <div id="first">
+                <div class="myform form ">
+                    <div class="logo mb-3">
+                        <div class="col-md-12 text-center">
+                            <h1>Login</h1>
+                        </div>
+                    </div>
+                        <form asp-controller="Login" asp-action="LoginWithJWT" method="post" name="login" class="container">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Tài khoản</label>
+                                <input type="text" name="username" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Mật khẩu</label>
+                            <input type="password" name="password" id="password" class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+                        </div>
+                        <div class="form-group">
+                            <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
+                        </div>
+                        <div class="col-md-12 text-center ">
+                            <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Đăng nhập</button>
+                        </div>
+                        <div class="col-md-12 ">
+                            <div class="login-or">
+                                <hr class="hr-or">
+                                <span class="span-or">or</span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <p class="text-center">
+                                <a href="javascript:void();" class="google btn mybtn">
+                                    <i class="fa fa-google-plus">
+                                    </i> Signup using Google
+                                </a>
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <p class="text-center">Don't have account? <a href="#" id="signup">Sign up here</a></p>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div>
+            <div class="modal-content">
+                	  <div id="second">
+			      <div class="myform form ">
+                        <div class="logo mb-3">
+                           <div class="col-md-12 text-center">
+                              <h1 >Signup</h1>
+                           </div>
+                        </div>
+                        <form action="#" name="registration">
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">First Name</label>
+                              <input type="text"  name="firstname" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter Firstname">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Last Name</label>
+                              <input type="text"  name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="Enter Lastname">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Email address</label>
+                              <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Password</label>
+                              <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+                           </div>
+                           <div class="col-md-12 text-center mb-3">
+                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Get Started For Free</button>
+                           </div>
+                           <div class="col-md-12 ">
+                              <div class="form-group">
+                                 <p class="text-center"><a href="#" id="signin">Already have an account?</a></p>
+                              </div>
+                           </div>
+                          
+                    </form>
+                     </div>
+			</div>
+            </div>
+        </div>
+        </div>
+    </div>
 <script>
     $(document).ready(function () {
         $("#loginLink").click(function (e) {
             e.preventDefault();
             $("#loginModal").modal("show");
         });
+        $("#resgisterLink").click(function (e) {
+            e.preventDefault();
+            $("#registerModal").modal("show");
+        });
     });
+    $("#signup").click(function () {
+        $("#first").fadeOut("fast", function () {
+            $("#second").fadeIn("fast");
+        });
+    });
+
+    $("#signin").click(function () {
+        $("#second").fadeOut("fast", function () {
+            $("#first").fadeIn("fast");
+        });
+    });
+
+
+
+    $(function () {
+        $("form[name='login']").validate({
+            rules: {
+
+                username: {
+                    required: true,
+                },
+                password: {
+                    required: true,
+
+                }
+            },
+            messages: {
+                email: "Please enter a valid email address",
+
+                password: {
+                    required: "Please enter password",
+
+                }
+
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    });
+
+
+
+    $(function () {
+
+        $("form[name='registration']").validate({
+            rules: {
+                firstname: "required",
+                lastname: "required",
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 5
+                }
+            },
+
+            messages: {
+                firstname: "Please enter your firstname",
+                lastname: "Please enter your lastname",
+                password: {
+                    required: "Please provide a password",
+                    minlength: "Your password must be at least 5 characters long"
+                },
+                email: "Please enter a valid email address"
+            },
+
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    });
+
 </script>

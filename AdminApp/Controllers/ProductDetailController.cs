@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using OfficeOpenXml;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
+using System.Net.Http.Headers;
 namespace AdminApp.Controllers
 {
     public class ProductDetailController : Controller
@@ -27,19 +28,27 @@ namespace AdminApp.Controllers
         }
         public async Task<IActionResult> GetList()
         {
+            string jwtToken = HttpContext.Session.GetString("AccessToken");
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             string result = await client.GetStringAsync($"/api/ProductDetail/GetAllPDD");
             return Content(result, "application/json");
         }
         public async Task<IActionResult> GetProductDetail()
         {
+            string jwtToken = HttpContext.Session.GetString("AccessToken");
+
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             string result = await client.GetStringAsync($"/api/ProductDetail/PGetProductDetail");
             return Content(result, "application/json");
         }
         public async Task<IActionResult> Create(Guid id)
         {
+            string jwtToken = HttpContext.Session.GetString("AccessToken");
+
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             string getProduct = await client.GetStringAsync($"/api/Product");
             ViewBag.GetProduct = JsonConvert.DeserializeObject<List<Product>>(getProduct);
             listProduct = JsonConvert.DeserializeObject<List<Product>>(getProduct);

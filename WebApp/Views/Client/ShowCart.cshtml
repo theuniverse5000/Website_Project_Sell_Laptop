@@ -11,7 +11,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Số thứ tự</th>
-                                <th scope="col" >Ma sản phẩm</th>
+                                <th scope="col">Mã sản phẩm</th>
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Giá</th>
                             </tr>
@@ -30,22 +30,17 @@
                                         </div>
                                     </div>
                                 </th>
-                                <td class="align-middle">
-                                    <div class="d-flex flex-row">
-                                        <button class="btn btn-link px-2"
-                                                onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-
-                                            <input id="form1" min="0" name="quantity" value="@t.Quantity" type="number"
-                                               class="form-control form-control-sm" style="width: 50px;" />
-
-                                        <button class="btn btn-link px-2"
-                                                onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </td>
+                                    <td class="align-middle">
+                                        <div class="d-flex flex-row">
+                                            <button class="btn btn-link px-2 decrease-quantity" data-id="@t.Id">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <label id="quantity-cartdetail" class="form-control form-control-sm quantity-input" style="width: 50px;" data-id="@t.Id">@t.Quantity</label>
+                                            <button class="btn btn-link px-2 increase-quantity" data-id="@t.Id">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </td>
                                 <td class="align-middle">
                                         <p class="mb-0" style="font-weight: 500;">@t.Price</p>
                                 </td>
@@ -108,36 +103,7 @@
                                     </div>
                                 </form>
                             </div>
-                            @* <div class="col-md-6 col-lg-4 col-xl-6">
-                                <div class="row">
-                                    <div class="col-12 col-xl-6">
-                                        <div class="form-outline mb-4 mb-xl-5">
-                                            <input type="text" id="typeName" class="form-control form-control-lg" siez="17"
-                                                   placeholder="John Smith" />
-                                            <label class="form-label" for="typeName">Name on card</label>
-                                        </div>
-
-                                        <div class="form-outline mb-4 mb-xl-5">
-                                            <input type="text" id="typeExp" class="form-control form-control-lg" placeholder="MM/YY"
-                                                   size="7" id="exp" minlength="7" maxlength="7" />
-                                            <label class="form-label" for="typeExp">Expiration</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-xl-6">
-                                        <div class="form-outline mb-4 mb-xl-5">
-                                            <input type="text" id="typeText" class="form-control form-control-lg" siez="17"
-                                                   placeholder="1111 2222 3333 4444" minlength="19" maxlength="19" />
-                                            <label class="form-label" for="typeText">Card Number</label>
-                                        </div>
-
-                                        <div class="form-outline mb-4 mb-xl-5">
-                                            <input type="password" id="typeText" class="form-control form-control-lg"
-                                                   placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3" />
-                                            <label class="form-label" for="typeText">Cvv</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> *@
+                           
                             <div class="container">
                                 <h1>Chọn danh sách tỉnh</h1>
                                 <form action="">
@@ -208,40 +174,82 @@
     </div>
 </section>
 <script>
-    function applySelectedVoucher() {
-        // Lấy giá trị mã voucher từ option được chọn
-        var selectedVoucher = document.getElementById('voucherSelect').value;
+    // function applySelectedVoucher() {
+    //     // Lấy giá trị mã voucher từ option được chọn
+    //     var selectedVoucher = document.getElementById('voucherSelect').value;
 
-        // Gửi yêu cầu đến API để lấy giá trị giảm giá cho mã voucher được chọn
-        $.ajax({
-            url: 'https://your-api-url/voucher',
-            type: 'GET',
-            data: { voucherCode: selectedVoucher },
-            success: function (response) {
-                // Xử lý phản hồi từ API
-                if (response.success) {
-                    // Giảm giá thành công
-                    var discount = response.discount;
-                    updateTotalWithDiscount(discount);
-                } else {
-                    // Hiển thị thông báo lỗi nếu cần
-                    alert('Invalid voucher code');
+    //     // Gửi yêu cầu đến API để lấy giá trị giảm giá cho mã voucher được chọn
+    //     $.ajax({
+    //         url: 'https://your-api-url/voucher',
+    //         type: 'GET',
+    //         data: { voucherCode: selectedVoucher },
+    //         success: function (response) {
+    //             // Xử lý phản hồi từ API
+    //             if (response.success) {
+    //                 // Giảm giá thành công
+    //                 var discount = response.discount;
+    //                 updateTotalWithDiscount(discount);
+    //             } else {
+    //                 // Hiển thị thông báo lỗi nếu cần
+    //                 alert('Invalid voucher code');
+    //             }
+    //         },
+    //         error: function () {
+    //             // Xử lý lỗi nếu có
+    //             alert('Error applying voucher');
+    //         }
+    //     });
+    // }
+
+    // function updateTotalWithDiscount(discount) {
+    //     // Tính toán giá mới sau khi áp dụng voucher
+    //     var originalTotal = 26.48; // Giả sử giá trước khi giảm giá là 26.48
+    //     var discountedTotal = originalTotal - (originalTotal * discount);
+
+    //     // Cập nhật giá trên giao diện người dùng
+    //     document.getElementById('totalAmount').innerText = '$' + discountedTotal.toFixed(2);
+    // }
+    $(document).ready(function () {
+        $(".decrease-quantity").click(function () {
+            var itemId = $(this).data("id");
+            var row = $(this).closest('tr');
+            var quantityLabel = row.find(".quantity-input");
+          
+            $.ajax({
+                url: '/Client/DecreaseQuantity',
+                type: 'POST',
+                data: { idCartDetail: itemId },
+                success: function (response) {
+                    var currentQuantity = parseInt(quantityLabel.text());
+                    var newQuantity = currentQuantity - 1;
+                    quantityLabel.text(newQuantity);
+                },
+                error: function (error) {
+                    console.error('Error:', error);
                 }
-            },
-            error: function () {
-                // Xử lý lỗi nếu có
-                alert('Error applying voucher');
-            }
+            });
         });
-    }
+        $(".increase-quantity").click(function () {
+            var itemId = $(this).data("id");
+            var row = $(this).closest('tr');
+            var quantityLabel = row.find(".quantity-input");
 
-    function updateTotalWithDiscount(discount) {
-        // Tính toán giá mới sau khi áp dụng voucher
-        var originalTotal = 26.48; // Giả sử giá trước khi giảm giá là 26.48
-        var discountedTotal = originalTotal - (originalTotal * discount);
+            $.ajax({
+                url: '/Client/IncreaseQuantity',
+                type: 'POST',
+                data: { idCartDetail: itemId },
+                success: function (response) {
+                    var currentQuantity = parseInt(quantityLabel.text());
+                    var newQuantity = currentQuantity + 1;
+                    quantityLabel.text(newQuantity);
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
 
-        // Cập nhật giá trên giao diện người dùng
-        document.getElementById('totalAmount').innerText = '$' + discountedTotal.toFixed(2);
-    }
-</script>
+    </script>
+       
 

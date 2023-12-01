@@ -10,13 +10,11 @@ namespace WebApp.Controllers
     {
         private readonly IConfiguration _config;
         private readonly IHttpClientFactory _httpClientFactory;
-        private static string getUsername { get; set; } = null;
+        private static string getUsername { get; set; } = string.Empty;
         public ClientController(IConfiguration config, IHttpClientFactory httpClientFactory)
         {
             _config = config;
             _httpClientFactory = httpClientFactory;
-            //getUsername = SessionExtensions.GetString(HttpContext.Session, "userName");
-
         }
         public IActionResult Index()
         {
@@ -24,7 +22,7 @@ namespace WebApp.Controllers
         }
         public async Task<IActionResult> AddProductToCart(string code)
         {
-            // string getUsername = "@Thaothienthan0";
+            getUsername = HttpContext.Session.GetString("username");
             if (getUsername == null)
             {
                 using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
@@ -65,8 +63,6 @@ namespace WebApp.Controllers
                         }
                     }
                 }
-
-
             }
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
@@ -81,62 +77,49 @@ namespace WebApp.Controllers
         [Route("giỏ-hàng")]
         public async Task<IActionResult> ShowCart()
         {
-            //var UsernameToCart = HttpContext.Session.GetString("CheckLogin");
-            //if (UsernameToCart == null)
-            //{
-            //    // var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
-            //    return RedirectToAction("IndexForSession");
-            //}
-
+            getUsername = HttpContext.Session.GetString("username");
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
-                HttpResponseMessage response = await client.GetAsync($"/api/Voucher/GetAllVouchers");
-
+                HttpResponseMessage response = await client.GetAsync($"/api/Voucher/GetAllVoucher");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var resultString = await response.Content.ReadAsStringAsync();
                     // var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
                     ViewBag.listVoucher = JsonConvert.DeserializeObject<IEnumerable<Voucher>>(resultString);
-
                 }
-
-
             }
-            var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
-
-            ViewBag.cartItem = Cart;
-            return View();
-            string userName = "@Thaothienthan0";
-            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
+            if (getUsername != null)
             {
-                HttpResponseMessage response = await client.GetAsync($"/api/Cart/GetCartJoinForUser?userName={userName}");
-
-                if (response.IsSuccessStatusCode)
+                using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
                 {
-                    var resultString = await response.Content.ReadAsStringAsync();
-                    var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
-                    ViewBag.cartItem = JsonConvert.DeserializeObject<IEnumerable<CartItemDto>>(resultResponse.Result.ToString());
+                    HttpResponseMessage response = await client.GetAsync($"/api/Cart/GetCartJoinForUser?userName={getUsername}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var resultString = await response.Content.ReadAsStringAsync();
+                        var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
+                        ViewBag.cartItem = JsonConvert.DeserializeObject<IEnumerable<CartItemDto>>(resultResponse.Result.ToString());
+                        return View();
+                    }
+                    ViewBag.cartItem = null;
                     return View();
                 }
-                ViewBag.cartItem = null;
+            }
+            else
+            {
+                var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
+
+                ViewBag.cartItem = Cart;
                 return View();
             }
-
         }
         [HttpGet()]
         public async Task<IActionResult> GetListVoucher()
         {
-            //var UsernameToCart = HttpContext.Session.GetString("CheckLogin");
-            //if (UsernameToCart == null)
-            //{
-            //    // var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
-            //    return RedirectToAction("IndexForSession");
-            //}
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
                 HttpResponseMessage response = await client.GetAsync($"/api/Voucher/GetAllVouchers");
-
                 if (response.IsSuccessStatusCode)
                 {
                     var resultString = await response.Content.ReadAsStringAsync();
@@ -147,28 +130,27 @@ namespace WebApp.Controllers
                 ViewBag.listVoucher = null;
                 return View();
             }
-
         }
         [HttpPost]
-        public async void IncreaseQuantity(string idProductDetail)
+        public async void IncreaseQuantity(Guid idCartDetail)
         {
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-            var apiurl = $"/api/Cart/CongQuantity?idCartDetail={Guid.Parse(idProductDetail)}";
-            var responeApi = await httpClient.PutAsync(apiurl, null);
+            var apiurl = $"/api/Cart/CongQuantity?idCartDetail={idCartDetail}";
+            var responeApi = await httpClient.PutAsJsonAsync(apiurl, string.Empty);
         }
         [HttpPost]
-        public async void DecreaseQuantity(string idProductDetail)
+        public async void DecreaseQuantity(Guid idCartDetail)
         {
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-            var apiUrl = $"/api/Cart/TruQuantityCartDetail?idCartDetail={idProductDetail}";
-            var responeApi = httpClient.PutAsync(apiUrl, null);
+            var apiUrl = $"/api/Cart/TruQuantityCartDetail?idCartDetail={idCartDetail}";
+            var responeApi = await httpClient.PutAsJsonAsync(apiUrl, string.Empty);
         }
         public async Task<IActionResult> CreateBill(string? codeVoucher)
         {
-            string userName = "@Thaothienthan0";
+            getUsername = HttpContext.Session.GetString("username");
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
-                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Bill/CreateBill?username={userName}&maVoucher={codeVoucher}", String.Empty);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Bill/CreateBill?username={getUsername}&maVoucher={codeVoucher}", String.Empty);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("ShowBill");

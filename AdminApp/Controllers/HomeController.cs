@@ -56,8 +56,6 @@ namespace AdminApp.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginWithJWT([FromForm] LoginRequestDto loginRequestDto)
         {
-
-            //  var apiUrl = "https://localhost:7286/";
             var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
             var requestdata = new StringContent(JsonConvert.SerializeObject(loginRequestDto), Encoding.UTF8, "application/json");
             var respone = await httpclient.PostAsync("api/Account/Login", requestdata);
@@ -74,10 +72,10 @@ namespace AdminApp.Controllers
             var pricipal = new ClaimsPrincipal(identity);
             var props = new AuthenticationProperties();
             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, pricipal, props).Wait();
-            HttpContext.Response.Cookies.Append("account", LoginRespones.Data.ToString(), new CookieOptions
-            {
-                Expires = DateTime.Now.AddHours(3),
-            });
+            //HttpContext.Response.Cookies.Append("account", LoginRespones.Data.ToString(), new CookieOptions
+            //{
+            //    Expires = DateTime.Now.AddHours(3),
+            //});
 
             return Content(jsonRespone, "application/json");
         }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -25,6 +24,7 @@ namespace Shop_API.Controllers
             _pagingRepository = pagingRepository;
             _response = new ResponseDto();
         }
+        [AllowAnonymous]
         [HttpGet("GetAllVoucher")]
         public async Task<IActionResult> GetAllVoucher()
         {
@@ -142,7 +142,7 @@ namespace Shop_API.Controllers
                 return Ok("DuyetVoucher thành công");
             }
             return BadRequest("DuyetVoucher thất bại");
-         
+
         }
         [HttpPut("HuyDuyetVoucher")]
         public async Task<IActionResult> HuyDuyetVoucher(Guid id)

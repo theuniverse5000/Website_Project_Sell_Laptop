@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Shop_Models.Entities;
+using System.Net.Http.Headers;
 
 namespace AdminApp.Controllers
 {
@@ -74,6 +75,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                string jwtToken = HttpContext.Session.GetString("AccessToken");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
                 HttpResponseMessage response = await client.GetAsync($"/api/Serial/GetSerialPG");
 
                 if (response.IsSuccessStatusCode)
@@ -125,6 +128,8 @@ namespace AdminApp.Controllers
 
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
+                    string jwtToken = HttpContext.Session.GetString("AccessToken");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
                     // Gửi yêu cầu PUT dưới dạng JSON
                     HttpResponseMessage response = await client.PutAsJsonAsync($"/api/Serial", p);
 
@@ -154,7 +159,8 @@ namespace AdminApp.Controllers
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
-                //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
+                string jwtToken = HttpContext.Session.GetString("AccessToken");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
                 HttpResponseMessage response = await client.DeleteAsync($"/api/Serial/id?id={id}");
                 if (response.IsSuccessStatusCode)
                 {
@@ -178,7 +184,9 @@ namespace AdminApp.Controllers
                     var worksheet = package.Workbook.Worksheets[0];
                     var rowCount = worksheet.Dimension.Rows;
                     var serials = new List<Serial>();
+                    string jwtToken = HttpContext.Session.GetString("AccessToken");
                     var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
                     for (int row = 2; row <= rowCount; row++)
                     {
                         var serial = new Serial

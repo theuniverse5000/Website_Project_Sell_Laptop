@@ -44,13 +44,15 @@ namespace Shop_API.Service
             {
                 respone.Mess = "Login Fail";
                 respone.Successful = false;
-                respone.Data = String.Empty;
+                respone.Token = null;
+                respone.RefreshToken = null;
             }
             else
             {
                 respone.Mess = "Login Successfull";
                 respone.Successful = true;
-                respone.Data = token;
+                respone.Token = token.AccessToken;
+                respone.RefreshToken = token.RefreshToken;
             }
 
             return respone;
@@ -240,7 +242,7 @@ namespace Shop_API.Service
                                 await _context.SaveChangesAsync();
                                 var tokenValidate = await GenerateToken(loginRequestVM);
 
-                                return new LoginResponesDto { Successful = true, Mess = "Successful", Data = tokenValidate };
+                                return new LoginResponesDto { Successful = true, Mess = "Successful", Token = tokenValidate.AccessToken, RefreshToken = tokenValidate.RefreshToken };
                             }
                         }
 
