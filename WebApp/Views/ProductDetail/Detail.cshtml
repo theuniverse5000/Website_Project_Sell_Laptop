@@ -140,6 +140,8 @@
                         <!-- Pills content -->
                     </div>
                 </div>
+                @foreach (var k in ViewBag.listProductSame)
+                {
                 <div class="col-lg-4">
                     <div class="px-0 border rounded-2 shadow-0">
                         <div class="card">
@@ -151,10 +153,9 @@
                                     </a>
                                     <div class="info">
                                         <a href="#" class="nav-link mb-1">
-                                            Rucksack Backpack Large <br />
-                                            Line Mounts
+                                                @k.NameProduct @k.Code (@k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive )
                                         </a>
-                                        <strong class="text-dark"> $38.90</strong>
+                                            <strong class="text-dark"> @k.Price.ToString("N0")</strong>
                                     </div>
                                 </div>
 
@@ -163,6 +164,7 @@
                         </div>
                     </div>
                 </div>
+                }
             </div>
         </div>
     </section>

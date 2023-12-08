@@ -153,16 +153,18 @@ namespace WebApp.Controllers
                 HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Bill/CreateBill?username={getUsername}&maVoucher={codeVoucher}", String.Empty);
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("ShowBill");
+                    var codeBill = await response.Content.ReadAsStringAsync();
+                    return RedirectToAction("ShowBill", new { invoiceCode = $"{codeBill}" });
                 }
                 return View();
             }
         }
-        public async Task<IActionResult> ShowBill()
+        [Route("Hóa đơn")]
+        public async Task<IActionResult> ShowBill(string? invoiceCode)
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
-                HttpResponseMessage response = await client.GetAsync("/api/Bill/PGetBillByInvoiceCode?invoiceCode=BilluIpqvWonFp");
+                HttpResponseMessage response = await client.GetAsync($"/api/Bill/PGetBillByInvoiceCode?invoiceCode={invoiceCode}");
 
                 if (response.IsSuccessStatusCode)
                 {

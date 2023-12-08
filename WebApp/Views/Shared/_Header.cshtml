@@ -5,207 +5,26 @@
     string username = ViewContext.HttpContext.Session.GetString("username");
 }
 <style>
-</style>
-@* <div class="container">
-<header>
-  
-    <div class="Nav-header justify-content-center d-flex" style="background-color: #73BBFE;">
-        <div class="navbar navbar-expand-md d-flex flex-column container" style="background-color:transparent;">
-            <div class="d-flex w-100">
-                <div class="row d-flex align-items-center flex-grow-1">
-                    <div class="col-md-1"></div>
-                    <div class="head-session col-md-5 justify-content-start d-flex ">
-                        <form class="d-flex w-100" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                    </div>
-                    <div class="collapse col-md-6 navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-around">
-                            <li class="nav-item  d-flex justify-content-center align-items-xxl-center">
-                                <a class="Hot-Line col-2" href="/giỏ-hàng">
-                                    <i class="fa-solid fa-bag-shopping"></i>
-                                    <span>Giỏ Hàng</span>
-                                </a>
-                            </li>
-                            <li class="nav-item  d-flex justify-content-center align-items-xxl-center">
-                                <div id="HotLineButton" class="Hot-Line col-2">
-                                    <i class="fa-solid fa-phone"></i>
-                                    <span>SĐT: 1800.1516</span>
-                                </div>
-                            </li>
-                            @{
-
-                                if (username != null)
-                                {
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="fa-solid fa-user" style="color:aqua;font-size:30px"></i>@username
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
-                                                <li><a class="dropdown-item" href="#">Xem đơn hàng</a></li>
-                                                <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
-                                            </ul>
-                                        </li>
-                                }
-                                else
-                                {
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="loginLink" href="#">
-                                                <i class="fa-solid fa-user" style="color:aqua;font-size:30px"></i> Đăng nhập
-                                            </a>
-                                        </li>
-                                }
-                            }
-                        </ul>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</header>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="javascript:void(0)"><img src="" /></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mynavbar">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/" style="margin-left: 90px;">Trang Chủ</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="/sản-phẩm" style="margin-left: 90px;">Laptop Mới</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:void(0)" style="margin-left: 90px;">Giới Thiệu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:void(0)" style="margin-left: 90px;">Trả Góp</a>
-                    </li>
-                     <li class="nav-item">
-                        <a class="nav-link" href="javascript:void(0)" style="margin-left: 90px;">Khuyến mãi</a>
-                    </li>
-                    
-                </ul>
-               
-            </div>
-        </div>
-    </nav>
-</header>
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            
-            <form asp-controller="Login" asp-action="LoginWithJWT" class="container">
-                <div class="form-outline mb-4">
-                    <input type="text"  name="username" class="form-control" />
-                    <label class="form-label">Tài khoản</label>
-                </div>
-                <div class="form-outline mb-4">
-                    <input type="password" name="password" class="form-control" />
-                    <label class="form-label">Mật khẩu</label>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block mb-4">Đăng nhập</button>
-                <div class="text-center">
-                    <p>Chưa có tài khoản? <a href="#!">Đăng ký</a></p>
-                    <p>Đăng nhập bằng:</p>
-                    <button type="button" class="btn btn-secondary btn-floating mx-1" onclick="location.href='@Url.Action("LoginWithFacebook", "Login")'">
-                        <i class="fab fa-facebook-f"></i>
-                    </button>
-
-                    <button type="button" class="btn btn-secondary btn-floating mx-1" onclick="location.href='@Url.Action("LoginWithGoogle", "Login")'">
-                        <i class="fab fa-google"></i>
-                    </button>
-
-
-
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-</div> *@
-<style>
-    .textNavbar {
-        color: var(--color-01, #333) !important;
-        font-family: Inter !important;
-        font-size: 16px !important;
-        font-style: normal !important;
-        font-weight: 500 !important;
-        line-height: normal !important;
-        margin-left: 20px !important;
-    }
-
-    .btnDangKy {
-        width: 115px;
-        height: 38px;
-        flex-shrink: 0;
-        border-radius: 22px;
-        background: var(--main-color-1, linear-gradient(90deg, #3BB54A 0%, #7EC341 100%));
-        margin-left: 20px;
-    }
-
-    .textDangKy {
-        color: #FFF !important;
-        font-family: Inter;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 600;
-        display: flex;
+    .navbar-nav a {
         align-items: center;
-        justify-content: center;
-        /* 187.5% */
+        }
+
+    .navbar-nav i {
+        font-size:25px;
     }
 
-    .textDangNhap {
-        color: #3BB54A !important;
-        font-family: Inter;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        /* 187.5% */
+    .myform{
+        margin-left:30px;
+        margin-right:30px
     }
-
-    .btnDangNhap {
-        width: 115px;
-        height: 38px;
-        flex-shrink: 0;
-        border-radius: 33px;
-        border: 1.5px solid #3BB54A;
-        margin-left: 20px;
+    .btn-login {
+        margin-top:30px;
     }
-
-    .text-center {
-        text-align: center !important;
-    }
-
-    .logoNav {
-        width: 149px;
-        height: 59px;
-        flex-shrink: 0;
-        margin-left: 150px;
-    }
-
 </style>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg">
     <a class="navbar-brand logoNav" href="#">
-        <img alt="Logo" src="./Image/logo1.png" />
+        <img alt="Logo" src="./Images/logo_laptopaz.jpg" />
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -215,24 +34,31 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
             <li>
-                <a class="nav-link textNavbar" href="/">Trang chủ</a>
-            </li>
-            <li>
-                <a class="nav-link textNavbar" href="/sản-phẩm">Laptop mới</a>
-            </li>
-            <li>
-                <a class="nav-link textNavbar" href="#">Giới thiệu</a>
-            </li>
-            <li>
-                <a class="nav-link textNavbar" href="#">
-                    Bảo hành
+                <a class="nav-link textNavbar" href="/">
+                    <i class="fa-solid fa-house" ></i>Trang chủ
                 </a>
             </li>
             <li>
-                <a class="nav-link textNavbar" href="#">
-                    Phản hồi
+                <a class="nav-link textNavbar" href="/sản-phẩm">
+                    <i class="fa-solid fa-laptop"></i>Laptop mới
                 </a>
             </li>
+            <li>
+                <a class="nav-link textNavbar" href="/sản-phẩm">
+                    <i class="fas fa-truck"></i>Tra cứu đơn hàng
+                </a>
+            </li>           
+            <li>
+                <a class="nav-link textNavbar" href="/giỏ-hàng">
+                    <i class="fas fa-cart-plus"></i>Giỏ hàng
+                </a>
+            </li>
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Bạn muốn tìm gì?" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
             @{
 
                 if (username != null)
@@ -263,84 +89,43 @@
             </form>
                 }
             }
-           <li>
-            <a class="nav-link" href="/giỏ-hàng" style="display: flex; align-items: center;">
-                <i class="fa-solid fa-cart-shopping" style="font-size:25px"></i> <span>Giỏ hàng</span>
-                </a>
-            </li>
+          
         </ul>
     </div>
 </nav>
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div >
-        <div class="modal-content">
-
-            @*  <form asp-controller="Login" asp-action="LoginWithJWT" class="container">
-             <div class="form-outline mb-4">
-                    <input type="text" name="username" class="form-control" />
-                    <label class="form-label">Tài khoản</label>
-                </div>
-                <div class="form-outline mb-4">
-                    <input type="password" name="password" class="form-control" />
-                    <label class="form-label">Mật khẩu</label>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block mb-4">Đăng nhập</button>
-                <div class="text-center">
-                    <p>Chưa có tài khoản? <a href="#!">Đăng ký</a></p>
-                    <p>Đăng nhập bằng:</p>
-                    <button type="button" class="btn btn-secondary btn-floating mx-1" onclick="location.href='@Url.Action("LoginWithFacebook", "Login")'">
-                        <i class="fab fa-facebook-f"></i>
-                    </button>
-
-                    <button type="button" class="btn btn-secondary btn-floating mx-1" onclick="location.href='@Url.Action("LoginWithGoogle", "Login")'">
-                        <i class="fab fa-google"></i>
-                    </button>
-
-
-
-                </div>
-
-            </form> *@
+        <div class="modal-content">     
             <div id="first">
                 <div class="myform form ">
-                    <div class="logo mb-3">
-                        <div class="col-md-12 text-center">
-                            <h1>Login</h1>
-                        </div>
-                    </div>
                         <form asp-controller="Login" asp-action="LoginWithJWT" method="post" name="login" class="container">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tài khoản</label>
-                                <input type="text" name="username" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                                <input type="text" name="username" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Tài khoản">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Mật khẩu</label>
-                            <input type="password" name="password" id="password" class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
-                        </div>
-                        <div class="form-group">
-                            <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
+                            <input type="password" name="password" id="password" class="form-control" aria-describedby="emailHelp" placeholder="Mật khẩu">
                         </div>
                         <div class="col-md-12 text-center ">
-                            <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Đăng nhập</button>
+                            <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm btn-login">Đăng nhập</button>
                         </div>
                         <div class="col-md-12 ">
                             <div class="login-or">
                                 <hr class="hr-or">
-                                <span class="span-or">or</span>
+                                <span class="span-or">hoặc</span>
                             </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <p class="text-center">
                                 <a href="javascript:void();" class="google btn mybtn">
                                     <i class="fa fa-google-plus">
-                                    </i> Signup using Google
+                                    </i> Đăng nhập với google
                                 </a>
                             </p>
                         </div>
-                        <div class="form-group">
-                            <p class="text-center">Don't have account? <a href="#" id="signup">Sign up here</a></p>
-                        </div>
+                       
                     </form>
 
                 </div>
@@ -352,37 +137,41 @@
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div>
-            <div class="modal-content">
+        <div class="modal-content">
                 	  <div id="second">
 			      <div class="myform form ">
-                        <div class="logo mb-3">
-                           <div class="col-md-12 text-center">
-                              <h1 >Signup</h1>
-                           </div>
-                        </div>
+                      
                         <form action="#" name="registration">
                            <div class="form-group">
-                              <label for="exampleInputEmail1">First Name</label>
-                              <input type="text"  name="firstname" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter Firstname">
+                              <label for="exampleInputEmail1">Họ và tên</label>
+                              <input type="text"  name="firstname" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="">
                            </div>
                            <div class="form-group">
-                              <label for="exampleInputEmail1">Last Name</label>
-                              <input type="text"  name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="Enter Lastname">
+                              <label for="exampleInputEmail1">Địa chỉ</label>
+                              <input type="text"  name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="">
                            </div>
                            <div class="form-group">
-                              <label for="exampleInputEmail1">Email address</label>
-                              <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                              <label for="exampleInputEmail1">Số điện thoạt</label>
+                              <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="">
                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Tài khoản</label>
+                                <input type="text" name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="">
+                            </div>
                            <div class="form-group">
-                              <label for="exampleInputEmail1">Password</label>
-                              <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
+                              <label for="exampleInputEmail1">Mật khẩu</label>
+                              <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="">
                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Nhập lại mật khẩu</label>
+                                <input type="password" name="password" id="password" class="form-control" aria-describedby="emailHelp" placeholder="">
+                            </div>
                            <div class="col-md-12 text-center mb-3">
-                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Get Started For Free</button>
+                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Đăng ký</button>
                            </div>
                            <div class="col-md-12 ">
                               <div class="form-group">
-                                 <p class="text-center"><a href="#" id="signin">Already have an account?</a></p>
+                                 <p class="text-center"><a href="#" id="signin">Bạn đã có tài khoản? Đăng nhập ngay</a></p>
                               </div>
                            </div>
                           
@@ -418,65 +207,65 @@
 
 
 
-    $(function () {
-        $("form[name='login']").validate({
-            rules: {
+    // $(function () {
+    //     $("form[name='login']").validate({
+    //         rules: {
 
-                username: {
-                    required: true,
-                },
-                password: {
-                    required: true,
+    //             username: {
+    //                 required: true,
+    //             },
+    //             password: {
+    //                 required: true,
 
-                }
-            },
-            messages: {
-                email: "Please enter a valid email address",
+    //             }
+    //         },
+    //         messages: {
+    //             email: "Please enter a valid email address",
 
-                password: {
-                    required: "Please enter password",
+    //             password: {
+    //                 required: "Please enter password",
 
-                }
+    //             }
 
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
-        });
-    });
+    //         },
+    //         submitHandler: function (form) {
+    //             form.submit();
+    //         }
+    //     });
+    // });
 
 
 
-    $(function () {
+    // $(function () {
 
-        $("form[name='registration']").validate({
-            rules: {
-                firstname: "required",
-                lastname: "required",
-                email: {
-                    required: true,
-                    email: true
-                },
-                password: {
-                    required: true,
-                    minlength: 5
-                }
-            },
+    //     $("form[name='registration']").validate({
+    //         rules: {
+    //             firstname: "required",
+    //             lastname: "required",
+    //             email: {
+    //                 required: true,
+    //                 email: true
+    //             },
+    //             password: {
+    //                 required: true,
+    //                 minlength: 5
+    //             }
+    //         },
 
-            messages: {
-                firstname: "Please enter your firstname",
-                lastname: "Please enter your lastname",
-                password: {
-                    required: "Please provide a password",
-                    minlength: "Your password must be at least 5 characters long"
-                },
-                email: "Please enter a valid email address"
-            },
+    //         messages: {
+    //             firstname: "Please enter your firstname",
+    //             lastname: "Please enter your lastname",
+    //             password: {
+    //                 required: "Please provide a password",
+    //                 minlength: "Your password must be at least 5 characters long"
+    //             },
+    //             email: "Please enter a valid email address"
+    //         },
 
-            submitHandler: function (form) {
-                form.submit();
-            }
-        });
-    });
+    //         submitHandler: function (form) {
+    //             form.submit();
+    //         }
+    //     });
+    // });
 
 </script>

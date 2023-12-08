@@ -4,21 +4,71 @@
         List<ImageDto> images = ViewBag.Image;
 
 }
+<div class=" row">
+    <div class="carousel col-sm-12 col-md-6">
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="2000">
+                    <img src="./img/icon/carousel-img/air m1 (1).webp" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="./img/icon/carousel-img/asus rog.webp" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="./img/icon/carousel-img/b2s-cate-dday-p1.webp" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="carousel col-sm-12 col-md-6">
+        <div id="carouselExampleAutoplaying2" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="2000">
+                    <img src="./img/icon/carousel-img/dell inspirion (1).webp" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="./img/icon/carousel-img/hp pavilion.webp" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="./img/icon/carousel-img/intel-evo.webp" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying2" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying2" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+</div>
 <main class="container" style=" margin: auto;">
 
-    <div class=" ">
+    @*  <div class=" ">
         <div class=" row">
             <div class="carousel col-sm-12 col-md-6">
                 <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
                     
                     
                         <div class="carousel-inner">
-                       @*  @foreach (var item in images)
+                       @foreach (var item in images)
                         {
                             <div class="carousel-item active" data-bs-interval="2000">
                                 <img src="@item.LinkImage" class="d-block w-100" alt="">
                             </div>
-                        }     *@                    
+                        }                        
                         </div>
                     
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
@@ -36,13 +86,13 @@
                 <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
 
 
-                    <div class="carousel-inner">
-                      @*   @foreach (var item in images)
+    <div class="carousel-inner">*@
+    @*   @foreach (var item in images)
                         {
                             <div class="carousel-item active" data-bs-interval="2000">
                                 <img src="@item.LinkImage" class="d-block w-100" alt="...">
                             </div>
-                        } *@
+                        }
                     </div>
 
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
@@ -55,9 +105,10 @@
                     </button>
                 </div>
             </div>
-
+  
         </div>
-    </div>
+    </div>  *@
+
     <!-- danh lục hãng sản xuất -->
     <div class="Company-list  d-flex justify-content-evenly">
 
@@ -108,6 +159,454 @@
         </div>
 
     </div>
+   @*  <div class="tabpal1" id="tab-destop">
+        <nav>
+            <div class="nav nav-tabs btn-center " id="nav-tab" role="tablist">
+                <button class="btn_tabPanel active custom-active-tab" data-bs-toggle="tab" data-bs-target="#nav-tab-1"
+                        type="button" role="tab" aria-controls="nav-tab-1" aria-selected="false">
+                    <div class="can-giua-div-1">
+                        <i class="fa-solid fa-scissors f-s-35"></i>
+                        <div class="text-tab-dt">Quản lý chuối salon</div>
+                        <h3 class="gach-chan-bt"></h3>
+                    </div>
+                </button>
+                <button class="btn_Btn_TabPanel btn_tabPanel" data-bs-toggle="tab" data-bs-target="#nav-tab-2"
+                        type="button" role="tab" aria-controls="nav-tab-2" aria-selected="false">
+                    <div class="can-giua-div-1">
+                        <i class="fa fa-solid fa-chart-simple f-s-35">
+
+                        </i>
+                        <div class="text-tab-dt">Quản lý lịch hẹn</div>
+                        <div class="gach-chan-bt"></div>
+                    </div>
+                </button>
+                <button class="btn_Btn_TabPanel btn_tabPanel" data-bs-toggle="tab" data-bs-target="#nav-tab-3"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                    <div class="can-giua-div-1">
+                        <i class="fa-regular fa-users f-s-35">
+                        </i>
+                        <div class="text-tab-dt">Quản lý thành viên</div>
+                        <div class="gach-chan-bt"></div>
+                    </div>
+                </button>
+                <button class="btn_Btn_TabPanel btn_tabPanel" data-bs-toggle="tab" data-bs-target="#nav-tab-4"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                    <div class="can-giua-div-1">
+                        <i class="fa-solid fa-cart-shopping f-s-35">
+                        </i>
+                        <div class="text-tab-dt">Bán hàng</div>
+                        <div class="gach-chan-bt"></div>
+                    </div>
+                </button>
+                <button class="btn_Btn_TabPanel btn_tabPanel" data-bs-toggle="tab" data-bs-target="#nav-tab-5"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                    <div class="can-giua-div-1">
+                        <i class="fa-solid fa-chart-simple f-s-35">
+                        </i>
+                        <div class="text-tab-dt">Quản lý kho</div>
+                        <div class="gach-chan-bt"></div>
+                    </div>
+                </button>
+                <button class="btn_Btn_TabPanel btn_tabPanel" data-bs-toggle="tab" data-bs-target="#nav-tab-6"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                    <div class="can-giua-div-1">
+                        <i class="fa-solid fa-chart-simple f-s-35">
+                        </i>
+                        <div class="text-tab-dt">Quản lý nhân viên</div>
+                        <div class="gach-chan-bt"></div>
+                    </div>
+                </button>
+                <button class="btn_Btn_TabPanel btn_tabPanel" data-bs-toggle="tab" data-bs-target="#nav-tab-7"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                    <div class="can-giua-div-1 bao-cao-xoa">
+                        <i class="fa-solid fa-chart-simple f-s-35"></i>
+                        <div class="text-tab-dt">Báo cáo thống kê</div>
+                        <div class="gach-chan-bt"></div>
+                    </div>
+                </button>
+            </div>
+        </nav>
+        <div class="tab-content container" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-tab-1" role="tabpanel" aria-labelledby="nav-tab-1">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 d-flex align-items-center">
+                            <img src="./img/Company-icon/item-cato/Screenshot 2023-06-22 185155 1.png" class="rounded float-start pd-top-30 img-tab-3" alt="...">
+                        </div>
+                        <div class="col-md-6 col-sm-6 d-flex align-items-center">
+                            <div>
+                                <h2 class="tabPanelTextTitle">Tổng hợp dữ liệu nhanh chóng, chính xác</h2>
+                                <p class="tabPanelText">
+                                    Báo cáo thông tin lịch hẹn, doanh thu… chi tiết đến từng salon trong chuỗi. Báo
+                                    cáo tổng hợp cho số liệu tổng quan tình hình kinh doanh của toàn bộ salon. Dễ dàng
+                                    so sánh, đánh
+                                    giá
+                                    hiệu
+                                    quản
+                                    hoạt động của từng của hàng.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="nav-tab-2" role="tabpanel" aria-labelledby="nav-tab-2">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <img src="./Image/imagetab6.png" class="rounded float-start pd-top-30  img-tab-3" alt="...">
+                    </div>
+                    <div class="col-md-6 col-sm-6 d-flex align-items-center">
+                        <div>
+                            <h2 class="tabPanelTextTitle">Quản lý lịch hẹn</h2>
+                            <p class="tabPanelText">
+                                Quản lý lịch hẹn giúp cho salon sắp xếp công việc hiệu quả. Tăng năng suất làm
+                                việc
+                                của nhân viên, tăng trải nghiệm khách hàng.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-tab-3" role="tabpanel" aria-labelledby="nav-tab-3">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <img src="./Image/imagetab3.png" class="rounded float-start pd-top-30  img-tab-3" alt="...">
+                    </div>
+                    <div class="col-md-6 col-sm-6 d-flex align-items-center">
+                        <div>
+                            <h2 class="tabPanelTextTitle">Duy trì giữ chân khách hàng</h2>
+                            <p class="tabPanelText">
+                                Với thẻ thành viên, salon sẽ nhận diện được khách hàng thân thiết, từ đó phục vụ
+                                khách hàng tốt hơn để giữ chân khách hàng
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-tab-4" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <img src="./Image/imagetab4.png" class="rounded float-start pd-top-30  img-tab-3" alt="...">
+                    </div>
+                    <div class="col-md-6 col-sm-6 pd-top-595">
+                        <h2 class="tabPanelTextTitle">Tạo khuyến mại nhanh chóng</h2>
+                        <p class="tabPanelText">
+                            Chỉ mất vài phút, bạn đã có thể TẠO VÀ ÁP DỤNG KHUYẾN MẠI cho từng mặt hàng hay
+                            nhóm
+                            hàng, giá trị khuyến mại linh hoạt theo đơn vị tính (chiếc, bộ; gói…); số tiền
+                            cụ
+                            thể (vnđ) hoặc % (giá trị đơn hàng, giá trị hàng tặng, điểm tích lũy…). Tất cả
+                            các
+                            thông tin về hàng khuyến mại và giá trị khuyến mại đều được thể hiện rõ ràng
+                            trên
+                            hóa đơn (trừ điểm tích lũy), giúp người bán hàng và cả khách hàng có thể dễ ràng
+                            tra
+                            soát. Không chỉ vậy, khi phát sinh giao dịch Trả hàng thì giá trị khuyến mại đã
+                            được
+                            áp dụng cho khách cũng sẽ được thể hiện trên hóa đơn Trả hàng, giúp bạn hay nhân
+                            viên không bị nhầm lẫn khi hoàn tiền cho khách.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-tab-5" role="tabpanel" aria-labelledby="nav-contact-tab">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <img src="./Image/imagetab5.png" class="rounded float-start pd-top-30 img-tab-3" alt="...">
+                    </div>
+                    <div class="col-md-6 col-sm-6 d-flex align-items-center ">
+                        <div>
+                            <h2 class="tabPanelTextTitle">Nắm bắt hàng tồn kho, bổ sung hàng hóa kịp thời</h2>
+                            <p class="tabPanelText">
+                                vSalon giúp bạn quản lý tồn kho chính xác tới từng mặt hàng cụ thể và chi tiết
+                                trong
+                                từng chi nhánh, gạt đi nỗi lo muôn thuở về những sản phẩm chồng chất mà không
+                                soát
+                                nổi con số như tình trạng các cửa hàng hay gặp phải. Theo đó, bạn sẽ chủ động
+                                nắm
+                                được mặt hàng nào đang bán chạy, số lượng hàng còn tồn trong kho để đưa ra quyết
+                                định nhập hàng lần kế tiếp.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-tab-6" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <img src="./Image/imagetab6.png" class="rounded float-start pd-top-30  img-tab-3" alt="...">
+                    </div>
+                    <div class="ccol-md-6 col-sm-6 d-flex align-items-center">
+                        <div>
+                            <h2 class="tabPanelTextTitle">Lập lịch làm việc khoa học</h2>
+                            <ul class="tabPanel">
+                                <li>Quản lý ca làm việc</li>
+                                <li>Ngày nghỉ, ngày lễ</li>
+                                <li>Thời gian mở cửa </li>
+                                <li>Thời gian đóng cửa</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-tab-7" role="tabpanel" aria-labelledby="nav-contact-tab">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <img src="./Image/imagetab7.png" class="rounded float-start pd-top-30  img-tab-3" alt="...">
+                    </div>
+                    <div class="col-md-6 col-sm-6 d-flex align-items-center">
+                        <div>
+                            <h2 class="tabPanelTextTitle">Chúng tôi cung cấp những con số bạn cần</h2>
+                            <p class="tabPanelText">
+                                Bạn muốn nắm được doanh thu bán hàng cụ thể đến từng ngày, lịch sử giao dịch mua
+                                hàng, doanh số bán hàng của từng nhân viên hay công nợ của từng chi nhánh? Chúng
+                                tôi
+                                thấu hiểu những mối bận tâm của một người quản lý như bạn. Vì vậy, e-spa cung
+                                cấp
+                                cho bạn HỆ THỐNG BÁO CÁO chính xác, sinh động và dễ hiểu. Những biểu đồ trực
+                                quan
+                                giúp bạn có cái nhìn toàn diện về cửa hàng, so sánh hoạt động giữa các chi nhánh
+                                để
+                                đưa ra những đánh giá đúng đắn trong hoạt động kinh doanh.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> *@
+    <!-- Mobile -->
+   @*  <div id="accordion">
+        <button class="btnMobile" data-bs-toggle="collapse" href="#collapse1">
+            <i class="fa-solid fa-scissors icon-mobile"></i>
+            <span class="textBtnMob"> Quản lý chuối salon</span>
+            <svg style="margin-left: auto;margin-right: 18px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none">
+                <path d="M6 9L12 15L18 9" stroke="#333333" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+            </svg>
+        </button>
+        <div id="collapse1" class="collapse show" data-bs-parent="#accordion">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="./Image/imagetab1.png" class="rounded float-start img-coll-mobile" alt="...">
+                </div>
+                <div class="col-md-4">
+                    <h2 class="tabPanelTextTitle">Tổng hợp dữ liệu nhanh chóng, chính xác</h2>
+                    <p class="tabPanelText">
+                        Báo cáo thông tin lịch hẹn, doanh thu… chi tiết đến từng salon trong chuỗi. Báo
+                        cáo
+                        tổng
+                        hợp cho
+                        số liệu tổng quan tình hình kinh doanh của toàn bộ salon. Dễ dàng so sánh, đánh
+                        giá
+                        hiệu
+                        quản
+                        hoạt động của từng của hàng.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <button class="btnMobile" data-bs-toggle="collapse" href="#collapse2">
+            <i class="fa fa-solid fa-chart-simple icon-mobile  ">
+
+            </i>
+            <span class="textBtnMob"> Quản lý lịch hẹn</span>
+            <svg style="margin-left: auto;margin-right: 18px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none">
+                <path d="M6 9L12 15L18 9" stroke="#333333" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <div id="collapse2" class="collapse" data-bs-parent="#accordion">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="./Image/imagetab2.png" class="rounded float-start img-coll-mobile " alt="...">
+                </div>
+                <div class="col-md-4">
+                    <h2 class="tabPanelTextTitle">Quản lý lịch hẹn</h2>
+                    <p class="tabPanelText">
+                        Quản lý lịch hẹn giúp cho salon sắp xếp công việc hiệu quả. Tăng năng suất làm
+                        việc
+                        của nhân viên, tăng trải nghiệm khách hàng.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <button class="btnMobile" data-bs-toggle="collapse" href="#collapse3">
+            <i class="fa-regular fa-users icon-mobile  ">
+
+            </i>
+            <span class="textBtnMob"> Quản lý thành viên</span>
+            <svg style="margin-left: auto;margin-right: 18px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none">
+                <path d="M6 9L12 15L18 9" stroke="#333333" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <div id="collapse3" class="collapse" data-bs-parent="#accordion">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="./Image/imagetab3.png" class="rounded float-start img-coll-mobile" alt="...">
+                </div>
+                <div class="col-md-4">
+                    <h2 class="tabPanelTextTitle">Duy trì giữ chân khách hàng</h2>
+                    <p class="tabPanelText">
+                        Với thẻ thành viên, salon sẽ nhận diện được khách hàng thân thiết, từ đó phục vụ
+                        khách hàng tốt hơn để giữ chân khách hàng
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <button class="btnMobile" data-bs-toggle="collapse" href="#collapse4">
+            <i class="fa-solid fa-cart-shopping icon-mobile  ">
+
+            </i>
+            <span class="textBtnMob"> Bán hàng</span>
+            <svg style="margin-left: auto;margin-right: 18px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none">
+                <path d="M6 9L12 15L18 9" stroke="#333333" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <div id="collapse4" class="collapse" data-bs-parent="#accordion">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="./Image/imagetab4.png" class="rounded float-start img-coll-mobile" alt="...">
+                </div>
+                <div class="col-md-4">
+                    <h2 class="tabPanelTextTitle">Tạo khuyến mại nhanh chóng</h2>
+                    <p class="tabPanelText">
+                        Chỉ mất vài phút, bạn đã có thể TẠO VÀ ÁP DỤNG KHUYẾN MẠI cho từng mặt hàng hay
+                        nhóm
+                        hàng, giá trị khuyến mại linh hoạt theo đơn vị tính (chiếc, bộ; gói…); số tiền
+                        cụ
+                        thể (vnđ) hoặc % (giá trị đơn hàng, giá trị hàng tặng, điểm tích lũy…). Tất cả
+                        các
+                        thông tin về hàng khuyến mại và giá trị khuyến mại đều được thể hiện rõ ràng
+                        trên
+                        hóa đơn (trừ điểm tích lũy), giúp người bán hàng và cả khách hàng có thể dễ ràng
+                        tra
+                        soát. Không chỉ vậy, khi phát sinh giao dịch Trả hàng thì giá trị khuyến mại đã
+                        được
+                        áp dụng cho khách cũng sẽ được thể hiện trên hóa đơn Trả hàng, giúp bạn hay nhân
+                        viên không bị nhầm lẫn khi hoàn tiền cho khách.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <button class="btnMobile" data-bs-toggle="collapse" href="#collapse5">
+            <i class="fa-solid fa-chart-simple icon-mobile  ">
+
+            </i>
+            <span class="textBtnMob"> Quản lý kho</span>
+            <svg style="margin-left: auto;margin-right: 18px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none">
+                <path d="M6 9L12 15L18 9" stroke="#333333" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <div id="collapse5" class="collapse" data-bs-parent="#accordion">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="./Image/imagetab5.png" class="rounded float-start img-coll-mobile" style="width: 366px;
+                            height: 244px;" alt="...">
+                </div>
+                <div class="col-md-4">
+                    <h2 class="tabPanelTextTitle">Nắm bắt hàng tồn kho, bổ sung hàng hóa kịp thời</h2>
+                    <p class="tabPanelText">
+                        vSalon giúp bạn quản lý tồn kho chính xác tới từng mặt hàng cụ thể và chi tiết
+                        trong
+                        từng chi nhánh, gạt đi nỗi lo muôn thuở về những sản phẩm chồng chất mà không
+                        soát
+                        nổi con số như tình trạng các cửa hàng hay gặp phải. Theo đó, bạn sẽ chủ động
+                        nắm
+                        được mặt hàng nào đang bán chạy, số lượng hàng còn tồn trong kho để đưa ra quyết
+                        định nhập hàng lần kế tiếp.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <button class="btnMobile" data-bs-toggle="collapse" href="#collapse6">
+            <i class="fa fa-solid fa-chart-simple icon-mobile  ">
+
+            </i>
+            <span class="textBtnMob"> Quản lý nhân viên</span>
+            <svg style="margin-left: auto;margin-right: 18px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none">
+                <path d="M6 9L12 15L18 9" stroke="#333333" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <div id="collapse6" class="collapse" data-bs-parent="#accordion">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="./Image/imagetab6.png" class="rounded float-start img-coll-mobile " alt="...">
+                </div>
+                <div class="col-md-4">
+                    <h2 class="tabPanelTextTitle">Lập lịch làm việc khoa học</h2>
+                    <ul class="tabPanel">
+                        <li>Quản lý ca làm việc</li>
+                        <li>Ngày nghỉ, ngày lễ</li>
+                        <li>Thời gian mở cửa </li>
+                        <li>Thời gian đóng cửa</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <button class="btnMobile" data-bs-toggle="collapse" href="#collapse7">
+            <i class="fa fa-solid fa-chart-simple icon-mobile  ">
+
+            </i>
+            <span class="textBtnMob"> Báo cáo thống kê</span>
+            <svg style="margin-left: auto;margin-right: 18px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none">
+                <path d="M6 9L12 15L18 9" stroke="#333333" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <div id="collapse7" class="collapse" data-bs-parent="#accordion">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="./Image/imagetab7.png" class="rounded float-start img-coll-mobile" alt="...">
+                </div>
+                <div class="col-md-4">
+                    <h2 class="tabPanelTextTitle">Chúng tôi cung cấp những con số bạn cần</h2>
+                    <p class="tabPanelText">
+                        Bạn muốn nắm được doanh thu bán hàng cụ thể đến từng ngày, lịch sử giao dịch mua
+                        hàng, doanh số bán hàng của từng nhân viên hay công nợ của từng chi nhánh? Chúng
+                        tôi
+                        thấu hiểu những mối bận tâm của một người quản lý như bạn. Vì vậy, e-spa cung
+                        cấp
+                        cho bạn HỆ THỐNG BÁO CÁO chính xác, sinh động và dễ hiểu. Những biểu đồ trực
+                        quan
+                        giúp bạn có cái nhìn toàn diện về cửa hàng, so sánh hoạt động giữa các chi nhánh
+                        để
+                        đưa ra những đánh giá đúng đắn trong hoạt động kinh doanh.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div> *@
     <span style="font-weight: 500;font-size: larger; color: rgb(52, 52, 52);">Chọn  theo nhu cầu</span>
     <!-- danh mục loại sản phẩm -->
     <div class="categories-content-wrapper is-flex">
@@ -416,201 +915,6 @@
             </div>
 
         </div>
-        <div class="categories-boxs-name">
-            <div class="box-names-title">
-                <b>LAP TOP GAMING</b>
-            </div>
-        </div>
-        <div class="List-products-2">
-            <div class="product-box  col-sm-3" ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-            <div class="product-box  col-sm-3" ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-            <div class="product-box  col-sm-3" ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-            <div class="product-box  col-sm-3 " ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-
-        </div>
-        <div class="categories-boxs-name">
-            <div class="box-names-title">
-                <b>LAP TOP ĐỒ HỌA</b>
-            </div>
-        </div>
-        <div class="List-products-2">
-
-            <div class="product-box  col-sm-3" ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-            <div class="product-box  col-sm-3" ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-
-            <div class="product-box  col-sm-3" ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-            <div class="product-box  col-sm-3 " ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-
-        </div>
-
     </div>
     <!-- xem them san pham -->
     <div class="More-product">
@@ -648,45 +952,42 @@
         </div>
 
     </div>
-    <!-- Swiper -->
-    <div class="borderSwipper loi-ich ">
-        <div class="swiper mySwiper ">
-            <div class="swiper-wrapper pd-top-40">
-                <div class="swiper-slide swiper1 text-center">
-                    <img src="~/img/slides/imageSwipper1.png" class="iconSwipper1" />
-
-                    <h2>Gắn kết khách hàng</h2>
-                    <p>
-                        Đem đến sự chuyên nghiệp và trải nghiệm dịch vụ tốt
-                        nhất cho khách.
-                    </p>
-
+    <div class="container">
+        <!-- Swiper -->
+        <div class="loi-ich ">
+            <div class="swiper mySwiper ">
+                <div class="swiper-wrapper pd-top-40">
+                    <div class="swiper-slide swiper1 text-center">
+                        <img src="./Images/imageSwipper1.png" class="iconSwipper1" />
+                        <h2>Gắn kết khách hàng</h2>
+                        <p> Đem đến sự chuyên nghiệp và trải nghiệm dịch vụ tốt nhất cho khách. </p>
+                    </div>
+                    <div class="swiper-slide swiper2 text-center">
+                        <img src="./Images/imageSwipper2.png" class="iconSwipper2" />
+                        <h2>Điều phối lịch hẹn</h2>
+                        <p>
+                            Không còn lo lắng khi quên lịch hẹn với khách hàng.
+                        </p>
+                    </div>
+                    <div class="swiper-slide swiper1 text-center">
+                        <img src="./Images/imageSwipper3.png" class="iconSwipper3">
+                        <h2 class="pd-top-30">Quản lý hiệu quả</h2>
+                        <p>
+                            Giúp nhân viên tăng năng xuất làm việc. Quản lý
+                            hiệu
+                            quả từ xa
+                        </p>
+                    </div>
                 </div>
-                <div class="swiper-slide swiper2 text-center">
-                    <img src="~/img/slides/imageSwipper1.png" class="iconSwipper2" />
-                    <h2>Điều phối lịch hẹn</h2>
-                    <p>
-                        Không còn lo lắng khi quên lịch hẹn với khách hàng.
-                    </p>
-                </div>
-                <div class="swiper-slide swiper1 text-center">
-                    <img src="~/img/slides/imageSwipper1.png" class="iconSwipper3">
-                    <h2 style="margin-top: 15%;">Quản lý hiệu quả</h2>
-                    <p>
-                        Giúp nhân viên tăng năng xuất làm việc. Quản lý
-                        hiệu
-                        quả từ xa
-                    </p>
-                </div>
+                <p></p>
+                <svg class="swiper-button-next" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                    <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z" />
+                </svg>
+                <svg class="swiper-button-prev" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                
+                    <path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM271 135c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-87 87 87 87c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L167 273c-9.4-9.4-9.4-24.6 0-33.9L271 135z" />
+                </svg>
             </div>
-            <svg class="swiper-button-next" xmlns="http://www.w3.org/2000/svg" height="1em"
-                 viewBox="0 0 512 512">
-                <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z" />
-            </svg>
-            <svg class="swiper-button-prev" xmlns="http://www.w3.org/2000/svg" height="1em"
-                 viewBox="0 0 512 512">
-                <path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM271 135c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-87 87 87 87c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L167 273c-9.4-9.4-9.4-24.6 0-33.9L271 135z" />
-            </svg>
         </div>
     </div>
 

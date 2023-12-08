@@ -30,7 +30,7 @@ namespace WebApp.Controllers
             return View();
         }
         [HttpGet("sản-phẩm/{code}")]
-        public async Task<IActionResult> Detail(string code)
+        public async Task<IActionResult> Detail(string code, string name)
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
@@ -42,6 +42,8 @@ namespace WebApp.Controllers
                     var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
                     var product = JsonConvert.DeserializeObject<List<ProductDetailDto>>(resultResponse.Result.ToString());
                     ViewBag.product = product;
+                    var resultSame = client.GetFromJsonAsync<ResponseDto>($"/api/ProductDetail/PGetProductDetail?search={name}").Result;
+                    ViewBag.listProductSame = JsonConvert.DeserializeObject<List<ProductDetailDto>>(resultSame.Result.ToString());
                 }
                 else
                 {

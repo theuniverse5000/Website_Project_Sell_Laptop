@@ -92,7 +92,7 @@ namespace Shop_API.Service
                         await _billDetailRepository.CreateBillDetail(billDetail);
                     }
 
-                    return SuccessResponse(bill, "Đặt hàng thành công");
+                    return SuccessResponse(bill, $"{bill.InvoiceCode}");
                 }
                 else
                 {
