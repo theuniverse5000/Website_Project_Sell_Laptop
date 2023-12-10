@@ -63,7 +63,6 @@ builder.Services.AddTransient<ICartService, CartService>();
 builder.Services.AddTransient<IPagingRepository, PagingRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
-builder.Services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
 builder.Services.AddTransient<ITichDiemServices, TichDiemServices>();
 builder.Services.AddTransient<IImagesServies, ImagesServies>();
 builder.Services.AddTransient<IManagePostRepository, ManagePostRepository>();
