@@ -29,9 +29,13 @@ namespace AdminApp.Controllers
         }
         public async Task<IActionResult> GetList()
         {
-            string jwtToken = HttpContext.Session.GetString("AccessToken");
+
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+            var accessToken = Request.Cookies["account"];
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            //string jwtToken = HttpContext.Session.GetString("AccessToken");
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             string result = await client.GetStringAsync($"/api/ProductDetail/GetAllPDD");
             return Content(result, "application/json");
         }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shop_Models.Dto;
@@ -37,22 +38,23 @@ public class LoginController : Controller
         LoginRequestDto login = new LoginRequestDto();
         login.UserName = username;
         login.Password = password;
-        login.RememberMe = true;
-        login.ReturnUrl = String.Empty;
-        var apiUrl = "/api/Account/Login";
+        //login.RememberMe = true;
+        //login.ReturnUrl = String.Empty;
+        var apiUrl = "/api/Authentication/Login";
         var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
         var requestdata = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
         var respone = await httpclient.PostAsync(apiUrl, requestdata);
         //var LoginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(respone.Content);
         var jsonRespone = await respone.Content.ReadAsStringAsync();
-        var loginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
+        //var loginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
         // Lưu trữ access token trong một cookie
         //HttpContext.Response.Cookies.Append("access_token", loginRespones.Data.ToString(), new CookieOptions
         //{
         //    Expires = DateTime.Now.AddHours(3), // Thời gian sống của cookie (ở đây là 30 ngày)
         //});
-        if (loginRespones.Successful)
+        if (respone.IsSuccessStatusCode)
         {
+            var loginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
             HttpContext.Session.SetString("username", username);
             HttpContext.Session.SetString("AccessToken", loginRespones.Token);
             string jwtToken = HttpContext.Session.GetString("AccessToken");
@@ -114,12 +116,12 @@ public class LoginController : Controller
         [FromBody] SignUpDto signUpdata)
     {
         var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-        var apiUrl = "/api/Account/SignUp";
+        var apiUrl = "/api/User/Register";
         var requestData = new StringContent(JsonConvert.SerializeObject(signUpdata), Encoding.UTF8, "application/json");
         var respone = await httpClient.PostAsync(apiUrl, requestData);
         var content = JsonConvert.DeserializeObject<ResponseDto>(await respone.Content.ReadAsStringAsync());
         var signUpRespone = JsonConvert.DeserializeObject<SignUpRespone>(content.Result.ToString());
-        if (signUpRespone.Mess == "true")
+        if (respone.IsSuccessStatusCode)
         {
             var userInformation = JsonConvert.DeserializeObject<User>(signUpRespone.Data.ToString());
             LoginRequestDto userLogin = new LoginRequestDto()

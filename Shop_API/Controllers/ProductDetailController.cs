@@ -56,7 +56,7 @@ namespace Shop_API.Controllers
             _reponse.Result = await _repository.GetAll();
             return Ok(_reponse);
         }
-       
+        [AllowAnonymous]
         [HttpGet("PGetProductDetail")]
         public async Task<IActionResult> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int page)
         {
