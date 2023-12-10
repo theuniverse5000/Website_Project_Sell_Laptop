@@ -3,7 +3,7 @@
 
 }
 <span id="notification" style="display:none;">222</span>
-<div id="example" style="width: 1300px; margin: 0 auto;">
+<div id="example">
     <div id="grid"></div>
 </div>
 <br />
@@ -117,7 +117,9 @@
                         name: "pdf",
                         text: "Xuất file PDF", /* Thay đổi văn bản của nút "Thêm" */
 
-                    },],
+                    },
+                    { name: "search" }
+                ],
                 pdf: {
                     allPages: true,
                     avoidLinks: true,
@@ -170,7 +172,8 @@
                     {
 
                         field: "ma",
-                        title: "Mã"
+                        title: "Mã",
+                        operator: "contains", filterable: { multi: true, search: true }
                     },
                     {
                         field: "name",

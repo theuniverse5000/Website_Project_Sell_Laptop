@@ -3,7 +3,7 @@
 
 }
 <span id="notification" style="display:none;">222</span>
-<div id="example" style="width: 1300px; margin: 0 auto;">
+<div id="example">
     <div id="grid"></div>
 </div>
 <br />
@@ -83,7 +83,7 @@
                         model: {
                             id: "id",
                             fields: {
-                                linkImage: { type: "string", validation: { required: true } },
+                                linkImage: { type: "file", validation: { required: true } },
                                 name: { type: "string", validation: { required: true } },
                                 //  status: { type: "int" }
                             }
@@ -163,14 +163,14 @@
                 },
 
                 columns: [
-                    {
+                    // {
 
-                        field: "linkImage",
-                        title: "linkImage"
-                    },
+                    //     field: "linkImage",
+                    //     title: "linkImage"
+                    // },
                     {
                         field: "name",
-                        title: "Tên"
+                        title: "Tên Nhà Sản Xuất"
                     },
                     {
                         command: [

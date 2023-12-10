@@ -56,7 +56,7 @@ namespace Shop_API.Controllers
             _reponse.Result = await _repository.GetAll();
             return Ok(_reponse);
         }
-        [AllowAnonymous]
+       
         [HttpGet("PGetProductDetail")]
         public async Task<IActionResult> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int page)
         {
@@ -101,6 +101,34 @@ namespace Shop_API.Controllers
             _reponse.Message = "Thất bại";
             return BadRequest(_reponse);
         }
+
+        [HttpPost("CreateReturnDTO")]
+        public async Task<IActionResult> CreateReturnDTO(ProductDetail obj)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+            //obj.Id = Guid.NewGuid();
+            var response = await _repository.CreateReturnDto(obj);
+            if (response.IsSuccess)
+            {
+                //_reponse.Result = obj;
+                return Ok(response);
+            }
+            //_reponse.Result = null;
+            //_reponse.IsSuccess = false;
+            //_reponse.Message = "Thất bại";
+            return BadRequest(response);
+        }
+
         [HttpPost("CreateMany")]
         public async Task<IActionResult> CreateMany(List<ProductDetail> list)
         {

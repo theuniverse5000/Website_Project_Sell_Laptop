@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OfficeOpenXml;
@@ -36,10 +37,13 @@ namespace AdminApp.Controllers
         }
         public async Task<IActionResult> GetProductDetail()
         {
-            string jwtToken = HttpContext.Session.GetString("AccessToken");
+            //string jwtToken = HttpContext.Session.GetString("AccessToken");
 
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+
+            var accessToken = Request.Cookies["account"];
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             string result = await client.GetStringAsync($"/api/ProductDetail/PGetProductDetail");
             return Content(result, "application/json");
         }
@@ -178,7 +182,7 @@ namespace AdminApp.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> Index(ProductDetailDto productRequest, string editor, [FromForm] List<IFormFile> formFiles)
+        public async Task<IActionResult> Createaa(ProductDetailDto productRequest, string editor, [FromForm] List<IFormFile> formFiles)
         {
             ProductDetail productDetail = new ProductDetail()
             {
@@ -199,9 +203,11 @@ namespace AdminApp.Controllers
             };
 
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
-            var result = await client.PostAsJsonAsync($"/api/ProductDetail/Create", productDetail);
+            var accessToken = Request.Cookies["account"];
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var response = await client.PostAsJsonAsync($"/api/ProductDetail/CreateReturnDTO", productDetail);
 
-
+            //string message = await response.Content.ReadAsStringAsync(); // Lấy thông báo từ nội dung
             using (var formData = new MultipartFormDataContent())
             {
                 foreach (var file in formFiles)
@@ -221,15 +227,21 @@ namespace AdminApp.Controllers
 
                 // Send the request
                 var resultImage = await client.PostAsync("https://localhost:44333/api/Images/uploadManyProductDetailImages", formData);
-                
             }
 
 
-            if (result.IsSuccessStatusCode /*&& resultImage.IsSuccessStatusCode*/)
+            if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index", "ProductDetail");
+                var result = await response.Content.ReadAsStringAsync();
+
+                return Content(result, "application/json");
             }
-            return RedirectToAction("Index", "ProductDetail", BadRequest("loi"));
+            else
+            {
+                var result = await response.Content.ReadAsStringAsync();
+
+                return Content(result, "application/json");
+            }
         }
 
 
@@ -254,51 +266,49 @@ namespace AdminApp.Controllers
         ////[HttpPost]
         public async Task<IActionResult> Index(/*Guid guid*/)
         {
-            if (Request.Cookies["account"] == null) {
-                return RedirectToAction("Index","Home");
+            if (Request.Cookies["account"] == null)
+            {
+                return RedirectToAction("Index", "Home");
             }
 
-            var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
-            var getProduct = await client.GetStringAsync($"/api/Product");
-            ViewBag.GetProduct = JsonConvert.DeserializeObject<List<Product>>(getProduct);
-            string getManufacturer = await client.GetStringAsync($"/api/Manufacturer");
-            ViewBag.GetManufacturer = JsonConvert.DeserializeObject<List<Manufacturer>>(getManufacturer);
-            string getColor = await client.GetStringAsync($"/api/Color");
-            ViewBag.GetColor = JsonConvert.DeserializeObject<List<Color>>(getColor);
-            listColor = JsonConvert.DeserializeObject<List<Color>>(getColor);
-            string getProductType = await client.GetStringAsync($"/api/ProductType");
-            ViewBag.GetProductType = JsonConvert.DeserializeObject<List<ProductType>>(getProductType);
-            string getCPU = await client.GetStringAsync($"/api/Cpu");
-            ViewBag.GetCPU = JsonConvert.DeserializeObject<List<Cpu>>(getCPU);
-            listCpu = JsonConvert.DeserializeObject<List<Cpu>>(getCPU);
-            string getRam = await client.GetStringAsync($"/api/Ram");
-            ViewBag.GetRam = JsonConvert.DeserializeObject<List<Ram>>(getRam);
-            listRam = JsonConvert.DeserializeObject<List<Ram>>(getRam);
-            string getHardDrive = await client.GetStringAsync($"/api/HardDrive");
-            ViewBag.GetHardDrive = JsonConvert.DeserializeObject<List<HardDrive>>(getHardDrive);
-            listHardDrive = JsonConvert.DeserializeObject<List<HardDrive>>(getHardDrive);
-            string getScreen = await client.GetStringAsync($"/api/Screen");
-            ViewBag.GetScreen = JsonConvert.DeserializeObject<List<Screen>>(getScreen);
-            listScreen = JsonConvert.DeserializeObject<List<Screen>>(getScreen);
-            string getlistCardVGA = await client.GetStringAsync($"/api/CardVGA");
-            ViewBag.GetlistCardVGA = JsonConvert.DeserializeObject<List<CardVGA>>(getlistCardVGA);
-            listCardVGA = JsonConvert.DeserializeObject<List<CardVGA>>(getlistCardVGA);
-            //if (guid == Guid.Empty)
-            //{
-            return View();
-            //}
-            //else
-            //{
-            //    var getProductDetails = await client.GetFromJsonAsync<ProductDetailDto>($"/api/ProductDetail/ProductDetailByIdReturnProDetailDTO?guid={guid}");
-            //    if (getProductDetails != null)
-            //    {
-            //        return View(getProductDetails);
-            //    }
-            //    else
-            //    {
-            //        return View();
-            //    }
-            //}
+
+
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin")) {
+
+                //var cookies = Request.Cookies.FirstOrDefault(x => x.Key == "account");
+
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                var getProduct = await client.GetStringAsync($"/api/Product");
+                ViewBag.GetProduct = JsonConvert.DeserializeObject<List<Product>>(getProduct);
+                string getManufacturer = await client.GetStringAsync($"/api/Manufacturer");
+                ViewBag.GetManufacturer = JsonConvert.DeserializeObject<List<Manufacturer>>(getManufacturer);
+                string getColor = await client.GetStringAsync($"/api/Color");
+                ViewBag.GetColor = JsonConvert.DeserializeObject<List<Color>>(getColor);
+                listColor = JsonConvert.DeserializeObject<List<Color>>(getColor);
+                string getProductType = await client.GetStringAsync($"/api/ProductType");
+                ViewBag.GetProductType = JsonConvert.DeserializeObject<List<ProductType>>(getProductType);
+                string getCPU = await client.GetStringAsync($"/api/Cpu");
+                ViewBag.GetCPU = JsonConvert.DeserializeObject<List<Cpu>>(getCPU);
+                listCpu = JsonConvert.DeserializeObject<List<Cpu>>(getCPU);
+                string getRam = await client.GetStringAsync($"/api/Ram");
+                ViewBag.GetRam = JsonConvert.DeserializeObject<List<Ram>>(getRam);
+                listRam = JsonConvert.DeserializeObject<List<Ram>>(getRam);
+                string getHardDrive = await client.GetStringAsync($"/api/HardDrive");
+                ViewBag.GetHardDrive = JsonConvert.DeserializeObject<List<HardDrive>>(getHardDrive);
+                listHardDrive = JsonConvert.DeserializeObject<List<HardDrive>>(getHardDrive);
+                string getScreen = await client.GetStringAsync($"/api/Screen");
+                ViewBag.GetScreen = JsonConvert.DeserializeObject<List<Screen>>(getScreen);
+                listScreen = JsonConvert.DeserializeObject<List<Screen>>(getScreen);
+                string getlistCardVGA = await client.GetStringAsync($"/api/CardVGA");
+                ViewBag.GetlistCardVGA = JsonConvert.DeserializeObject<List<CardVGA>>(getlistCardVGA);
+                listCardVGA = JsonConvert.DeserializeObject<List<CardVGA>>(getlistCardVGA);
+
+                return View();
+            }
+           
+           
         }
 
 
@@ -306,6 +316,8 @@ namespace AdminApp.Controllers
         public async Task<IActionResult> Update(Guid id)
         {
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
+            var accessToken = Request.Cookies["account"];
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var getProductDetails = await client.GetFromJsonAsync<ProductDetail>($"/api/ProductDetail/ProductDetailById?guid={id}");
             var getProductDetailsImages = await client.GetStringAsync($"https://localhost:44333/api/Images/getProductDetailImages2?ProductId={id}");
             var images = JsonConvert.DeserializeObject<List<Image>>(getProductDetailsImages);
@@ -314,15 +326,17 @@ namespace AdminApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(ProductDetail getProductDetails, string? editor)
+        public async Task<IActionResult> Update(ProductDetail getProductDetails/*, string editor*/)
         {
             var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
-            ProductDetail productDetail = new ProductDetail();
-            productDetail.ImportPrice = (float)getProductDetails.ImportPrice;
-            productDetail.Price = (float)getProductDetails.Price;
-            productDetail.Upgrade = getProductDetails.Upgrade;
-            productDetail.Description = editor;
-            var result = client.PutAsJsonAsync($"/api/ProductDetail/UpdateProductDetail", getProductDetails).Result;
+            var accessToken = Request.Cookies["account"];
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            //ProductDetail productDetail = new ProductDetail();
+            //productDetail.ImportPrice = (float)getProductDetails.ImportPrice;
+            //productDetail.Price = (float)getProductDetails.Price;
+            //productDetail.Upgrade = getProductDetails.Upgrade;
+            //productDetail.Description = getProductDetails.Description;
+            var result = await client.PutAsJsonAsync($"/api/ProductDetail/UpdateProductDetail", getProductDetails);
 
             if (result.IsSuccessStatusCode)
             {

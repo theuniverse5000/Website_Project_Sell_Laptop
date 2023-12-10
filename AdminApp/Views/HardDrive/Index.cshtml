@@ -3,8 +3,9 @@
 
 }
 <span id="notification" style="display:none;">222</span>
-<div id="example" style="width: 1300px; margin: 0 auto;">
-    <div id="grid"></div>
+<div id="example" >
+    <div id="grid" data-role="grid" class="k-grid k-widget k-grid-display-block k-editable" style="height: 550px; width: 100%;">
+    </div>
 </div>
 <br />
 
@@ -113,7 +114,9 @@
 
                     },
 
-                    "pdf"],
+                    "pdf",
+                    "search"
+                ],
                 pdf: {
                     allPages: true,
                     avoidLinks: true,
@@ -170,7 +173,7 @@
                     },
                     {
                         field: "thongSo",
-                        title: "Tên"
+                        title: "Thông số"
                     },
                     {
                         command: [

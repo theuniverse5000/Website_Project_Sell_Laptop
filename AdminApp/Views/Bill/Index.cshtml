@@ -3,7 +3,7 @@
 
 }
 <span id="notification" style="display:none;">222</span>
-<div style="width: 1300px; margin: 0 auto;">
+<div>
     <div id="gridBill"></div>
 </div>
 <br />
@@ -14,10 +14,10 @@
             </div>
     </div>
 </div> *@
-@* <div id="myModal" class="modal fade" role="dialog" data-backdrop="static"> 
+@* <div id="myModal" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-body">*@
-            <div id="detailsGrid"></div>
+<div id="detailsGrid"></div>
 @*        </div>
     </div>
  </div> *@
@@ -64,7 +64,7 @@
                         title: "Giá",
                         editable: true
                     },
-                    
+
                     {
                         field: "quantity",
                         title: "Số lượng",
@@ -123,10 +123,10 @@
                         model: {
                             id: "id",
                             fields: {
-                                invoiceCode: { type: "string", validation: { required: true },editable: false  },
-                                createDate: { type: "datetime", editable: false },
+                                invoiceCode: { type: "string", validation: { required: true }, editable: false },
+                                createDate: { type: "date", editable: false },
                                 thongSo: { type: "string", validation: { required: true } },
-                                status: { type: "int",validation: { required: true } }
+                                status: { type: "int", validation: { required: true } }
                             }
                         }
                     },
@@ -288,17 +288,51 @@
                     },
                     {
                         field: "createDate",
-                        title: "Ngày mua"
+                        title: "Ngày mua",
+                        template: function (dataItem) {
+                            // Chuyển đổi ngày thành đối tượng Date
+                            const createDateUtc = new Date(dataItem.createDate);
+                            // Đặt offset của múi giờ của Việt Nam (UTC+7)
+                            const vnTimeOffset = 7;
+                            // Thêm offset vào ngày tạo
+                            const createDateVn = new Date(createDateUtc.getTime() + vnTimeOffset * 60 * 60 * 1000);
+                            // Định dạng ngày theo định dạng mong muốn (ví dụ: "yyyy-MM-dd HH:mm:ss")
+                            return kendo.toString(createDateVn, "dd-MM-yyyy HH:mm:ss");
+                        },
                     },
                     {
                         field: "status",
                         title: "Trạng thái",
-                        template: function (data) {
-                            if (data.status === 1) {
-                                return "Chờ xác nhận";
-                            } else {
-                                return "OK";
-                            }
+                        editor: function (container, options) {
+                            var input = $("<input name='" + options.field + "' />");
+                            input.appendTo(container);
+                            console.log(options.field);
+                            input.kendoDropDownList({
+                                dataSource: [
+                                    { text: "Đã xóa", value: 0 },
+                                    { text: "Chờ xác nhận", value: 1 },
+                                    { text: "Chưa thanh toán - Chưa giao hàng", value: 2 },
+                                    { text: "Chưa thanh toán - Đang giao hàng", value: 3 },
+                                    { text: "Đã thanh toán - Chưa giao hàng", value: 4 },
+                                    { text: "Chưa thanh toán - Giao thất bại", value: 5},
+                                    { text: "Đã thanh toán - Giao thất bại", value: 6},
+                                    { text: "Đã hoàn thành", value: 7},
+                                    { text: "Chờ đổi trả", value: 8},
+                                ],
+                                dataTextField: "text",
+                                dataValueField: "value",
+                                value: options.model.status || 1, 
+                                change: function (e) {
+                                    console.log("Selected value:", options.model.status.value);
+                                    console.log("this value:", this.value());
+                                    options.model.status = this.value();
+                                }
+                            });
+                        },
+
+                        template: function (dataItem) {
+                            // Hiển thị văn bản tương ứng với giá trị status
+                            return getStatusText(dataItem.status);
                         }
                     },
                     {
@@ -324,6 +358,23 @@
 
             });
         });
+
+
+        function getStatusText(status) {
+            switch (status) {
+                case 0: return "Đã xóa";
+                case 1: return "Chờ xác nhận";
+                case 2: return "Chưa thanh toán - Chưa giao hàng";
+                case 3: return "Chưa thanh toán - Đang giao hàng";
+                case 4: return "Đã thanh toán - Chưa giao hàng";
+                case 5: return "Chưa thanh toán - Giao thất bại";
+                case 6: return "Đã thanh toán - Giao thất bại";
+                case 7: return "Đã hoàn thành";
+                case 8: return "Chờ đổi trả";
+                default: return "Không xác định trạng thái";
+            }
+        }
+
     </script>
 }
 

@@ -95,7 +95,8 @@
             RememberMe: true,
             ReturnUrl: "/" // Fixed the syntax error here (changed semicolon to colon)
         }
- 
+        debugger
+        alert("!");
         $.ajax({
             url: apiUrl,
             type: "POST",
@@ -107,7 +108,7 @@
                 if (response.mess === "Login Successfull") {
                     debugger
                     alert("Đăng Nhập Thành Công !");
-                    Cookies.set('account', JSON.stringify(response))
+                    Cookies.set('account', response.token)
                     window.location.href = "/Home/Index";
                 } else{
                     alert("Đăng Nhập Thất Bại !");

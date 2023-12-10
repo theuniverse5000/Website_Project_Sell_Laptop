@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace Shop_API.Repository
 {
@@ -10,9 +12,11 @@ namespace Shop_API.Repository
     {
         private readonly ApplicationDbContext _context;
         public static int Page_Size { get; set; } = 10;
+        private readonly ResponseDto responseDto;
         public ProductDetailRepository(ApplicationDbContext context)
         {
             _context = context;
+            responseDto = new ResponseDto();
         }
         public async Task<List<ProductDetail>> GetAll()
         {
@@ -38,6 +42,73 @@ namespace Shop_API.Repository
                 return false;
             }
         }
+
+        public async Task<ResponseDto> CreateReturnDto(ProductDetail obj)
+        {
+            var checkMa = await _context.ProductDetails.AnyAsync(x => x.Code == obj.Code);
+            if (obj == null || checkMa == true)
+            {
+
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Trùng Mã",
+
+                };
+            }
+            if (obj.ProductId==Guid.Empty)
+            {
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Bắt buộc phải chọn tên sản phẩm",
+
+                };
+            }
+            if (obj.ImportPrice == 0 || obj.Price == 0)
+            {
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Giá phải lớn hơn 0",
+
+                };
+            }
+
+            try
+            {
+
+                await _context.ProductDetails.AddAsync(obj);
+                await _context.SaveChangesAsync();
+                return new ResponseDto
+                {
+                    Result = obj,
+                    IsSuccess = true,
+                    Code = 200,
+                    Message = "Thành Công",
+
+                };
+            }
+            catch (Exception)
+            {
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 500,
+                    Message = "Lỗi hệ thống",
+
+                };
+            }
+        }
+
+
         public async Task<bool> CreateMany(List<ProductDetail> list)
         {
             foreach (var i in list)

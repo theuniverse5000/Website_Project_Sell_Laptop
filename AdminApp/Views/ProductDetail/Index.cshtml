@@ -10,6 +10,12 @@
 <script src="https://kendo.cdn.telerik.com/2021.3.1207/js/jquery.min.js"></script>
 <script src="https://kendo.cdn.telerik.com/2021.3.1207/js/kendo.all.min.js"></script> *@
 
+
+<!-- Include thư viện Toastr -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
 <form asp-controller="ProductDetail" asp-action="ImportProductsFromExcel" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="excelFile">Chọn file excel</label>
@@ -67,7 +73,7 @@
             <div class="modal-body">
 
                 <div id="example">
-                    <form asp-controller="ProductDetail" asp-action="Index" method="post" enctype="multipart/form-data">
+                    <form id="formedit" asp-controller="ProductDetail"  method="post" enctype="multipart/form-data">
 
                         <div class="row">
                             <div class=" col-md-3">
@@ -169,11 +175,11 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">Giá Bán</label>
-                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Price" placeholder="Nhập Giá Bán" required>
+                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="Price" placeholder="Nhập Giá Bán" required min="0">
                             </div>
                             <div class="col-md-3">
                                 <label for="exampleFormControlInput1" class="form-label">Giá Nhập</label>
-                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder=" Nhập Giá Nhập" required>
+                                <input type="number" class="form-control" id="exampleFormControlInput1" asp-for="ImportPrice" placeholder=" Nhập Giá Nhập" required min="0">
                             </div>
                             <div id="error-toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; top: 0; right: 0; z-index: 1050;"></div>
 
@@ -204,7 +210,9 @@
                         </div>
 
 
-                        <button type="submit" class="btn btn-primary">Lưu</button>
+                        @* <button type="submit" class="btn btn-primary">Lưu</button> *@
+
+                        <button type="button" class="btn btn-primary" onclick="saveForm()">Lưu</button>
                     </form>
                 </div>
             </div>
@@ -299,7 +307,7 @@
 
         var editButtons = document.querySelectorAll('.k-button k-button-icontext k-grid-capnhat');
 
-  
+
         $("#grid").kendoGrid({
             dataSource: {
                 transport: {
@@ -354,8 +362,11 @@
                 {
                     name: "pdf",
                     text: "Xuất file PDF" // Change the text of the "PDF" button to "Xuất file PDF"
-                }
+                },
+                { name: "search" }
             ],
+            search: true, // Bật tính năng tìm kiếm
+
             pdf: {
                 allPages: true,
                 avoidLinks: true,
@@ -373,18 +384,17 @@
             },
             columns: [
                 {
-                    field: "code",
-                    title: "Mã"// Đặt tên cho cột tùy chỉnh
+                    field: "code", title: "Mã", operator: "contains", filterable: { multi: true, search: true }
                 },
                 {
                     field: "nameProduct",
-                    title: "Tên sản phẩm"
+                    title: "Tên sản phẩm",
+                    operator: "contains", filterable: { multi: true, search: true }
                 },
                 {
                     field: "nameManufacturer",
                     title: "Hãng sản xuất",
-
-
+                    operator: "contains", filterable: { multi: true, search: true }
                 },
                 {
                     field: "nameProductType",
@@ -417,6 +427,13 @@
                 {
                     field: "availableQuantity",
                     title: "Số lượng"
+                },
+                {
+                    field: "status",
+                    title: "Trạng thái",
+                    template: function (dataItem) {
+                        return getStatusMessage(dataItem);
+                    }
                 },
                 // {
                 //     field: "yourFieldName", // Replace with your actual field name
@@ -521,6 +538,88 @@
         });
     }
 
+    function getStatusMessage(dataItem) {
+        if (dataItem.status === 1) {
+            return "Đang kinh doanh";
+        } else {
+            return "Ngưng kinh doanh";
+        }
+    }
+
+    function saveForm() {
+        var formData = new FormData(document.getElementById('formedit'));
+
+        // Thực hiện request và hiển thị thông báo
+        performRequest(formData);
+    }
+
+    function performRequest(formData) {
+        $.ajax({
+            url: '/ProductDetail/Createaa',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (results) { 
+            debugger
+                console.log(results);
+                // Hiển thị thông báo dựa trên kết quả từ server
+                if (results.code===200) {
+                    debugger
+                    console.log(results.message);
+                    showNotification(results.message, "success");
+                    $('#exampleModal').modal('hide');
+                    // Tải lại dữ liệu của grid
+                    var grid = $("#grid").data("kendoGrid");
+                    if (grid) {
+                        grid.dataSource.read();
+                        grid.refresh();
+                    }
+
+                   
+                }else{
+                    debugger
+                    console.log(results.message);
+                    showNotification(results.message, "error");
+                    
+                }
+            },
+            error: function () {
+                showNotification("Lỗi hệ thống", "error");
+            }
+        });
+    }
+
+
+
+
+    // Function hiển thị thông báo
+    function showNotification(message, type) {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        // Hiển thị thông báo theo loại
+        if (type === "success") {
+            toastr.success(message);
+        } else {
+            toastr.error(message);
+        }
+    }
 
 
 

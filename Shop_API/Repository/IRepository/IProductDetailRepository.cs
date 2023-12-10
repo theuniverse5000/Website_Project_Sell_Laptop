@@ -12,5 +12,6 @@ namespace Shop_API.Repository.IRepository
         Task<IEnumerable<ProductDetailDto>> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int page = 1);
         Task<bool> UpdateSoLuong(Guid id, int soLuong);
         Task<ProductDetail> GetById(Guid guid);
+        Task<ResponseDto> CreateReturnDto(ProductDetail obj);
     }
 }

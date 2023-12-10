@@ -71,19 +71,14 @@
                 <span class="item text-left">Development</span>
             </a>
         </li> *@
-     
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                @* <span class="icon"><i class="fas fa-chart-line"></i></span> *@
-                <span class="item text-left">Reports</span>
-            </a>
-        </li>
+
         <li class="nav-item">
             <a href="#" class="nav-link">
                 @* <span class="icon"><i class="fas fa-user-shield"></i></span> *@
                 <span class="item text-left">Admin</span>
             </a>
         </li>
+
         @* <li class="nav-item">
             <a href="#" class="nav-link">
                 <span class="icon"><i class="fas fa-cog"></i></span>
@@ -93,13 +88,13 @@
 
         <li class="nav-item">
             <form asp-controller="Home" asp-action="Logout" method="post" id="logoutForm">
-                <button type="submit" class="nav-link">
-                    <!-- You can include an icon if desired -->
+                <a type="submit" class="nav-link" id="logoutButton">
                     <!-- <span class="icon"><i class="fas fa-sign-out-alt"></i></span> -->
-                    <span class="item text-left">Log Out</span>
-                </button>
+                    <span class="item text-left">Đăng Xuất</span>
+                </a>
             </form>
         </li>
+
 
     </ul>   
 </div>
@@ -125,6 +120,22 @@
         text-overflow: ellipsis;
         font-size: 12px;
     }
+
+    #logoutButton {
+        background-color: #007bff; /* Màu nền khi bình thường */
+        color: #fff; /* Màu chữ khi bình thường */
+        border: none;
+        padding: 8px 16px; /* Kích thước padding cho nút */
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi màu sắc trong 0.3 giây */
+    }
+
+        #logoutButton:hover {
+            background-color: #0056b3; /* Màu nền khi di chuột vào */
+            color: #fff; /* Màu chữ khi di chuột vào */
+        }
+
+
 </style>
 
 <script>

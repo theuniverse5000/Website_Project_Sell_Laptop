@@ -3,7 +3,7 @@
 
 }
 <span id="notification" style="display:none;">222</span>
-<div id="example" style="width: 1300px; margin: 0 auto;">
+<div id="example">
     <div id="grid"></div>
 </div>
 <br />
@@ -114,7 +114,9 @@
 
                     },
 
-                    "pdf"],
+                    "pdf",
+                    "search"
+                ],
                 pdf: {
                     allPages: true,
                     avoidLinks: true,
@@ -167,7 +169,8 @@
                     {
 
                         field: "ma",
-                        title: "Mã"
+                        title: "Mã",
+                        operator: "contains", filterable: { multi: true, search: true }
                     }, 
                     {
 
