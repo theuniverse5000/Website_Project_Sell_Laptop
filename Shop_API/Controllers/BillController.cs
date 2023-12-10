@@ -69,7 +69,7 @@ namespace Shop_API.Controllers
             var reponse = await _billService.CreateBill(username, maVoucher);
             if (reponse.IsSuccess)
             {
-                return Ok("Thanh cong");
+                return Ok(reponse.Message);
             }
             return BadRequest("");
         }

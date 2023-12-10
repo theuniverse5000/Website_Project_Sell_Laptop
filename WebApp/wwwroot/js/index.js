@@ -58,3 +58,26 @@ $(window).on("resize", function () {
     }
     initializeSwiper();
 });
+$(document).ready(function () {
+    function checkWindowSize() {
+        if ($(window).width() < 768) {
+            $('#accordion').removeClass('d-none');
+            $('#tab-destop').addClass('d-none');
+            $("#luu-y").hide();
+            $("#text-mobile").show();
+        } else {
+            $('#accordion').addClass('d-none');
+            $('#tab-destop').removeClass('d-none');
+            $("#luu-y").show();
+            $("#text-mobile").hide();
+        }
+    }
+
+    // Kiểm tra kích thước màn hình khi tải trang
+    checkWindowSize();
+
+    // Kiểm tra kích thước màn hình khi thay đổi kích thước cửa sổ
+    $(window).resize(function () {
+        checkWindowSize();
+    });
+});

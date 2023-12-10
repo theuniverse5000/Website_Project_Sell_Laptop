@@ -1,164 +1,69 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Shop_API.Constants;
+using Shop_API.Helpers;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("[controller]/[action]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
-        private readonly ResponseDto _reponseDto;
-        private readonly IConfiguration _config;
-        public UserController(IUserRepository userRepository, IConfiguration config)
-        {
-            _userRepository = userRepository;
-            _reponseDto = new ResponseDto();
-            _config = config;
-        }
-        [HttpGet]
-        public async Task<ResponseDto> GetAllUser()
-        {
+        private readonly RoleManager<Role> _roleManager;
+        private readonly UserManager<User> _userManager;
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Bạn không có quyền";
-                _reponseDto.Code = 401;
-                return _reponseDto;
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Bạn không có quyền";
-                _reponseDto.Code = 401;
-                return _reponseDto;
-            }
-            var list = await _userRepository.GetAllUsers();
-            if (list != null)
-            {
-                _reponseDto.Result = list;
-                _reponseDto.Code = 200;
-                return _reponseDto;
-            }
-            else
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Lỗi";
-                _reponseDto.Code = 404;
-                return _reponseDto;
-            }
+        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager)
+        {
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         [HttpPost]
-        public async Task<ResponseDto> CreateUser(User obj)
+        public async Task<IActionResult> InitRole()
         {
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
+            foreach (var role in SecurityRoles.Roles)
             {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Bạn không có quyền";
-                _reponseDto.Code = 401;
-                return _reponseDto;
+                if (!await _roleManager.RoleExistsAsync(role))
+                {
+                    await _roleManager.CreateAsync(new Role
+                    {
+                        Name = role,
+                        NormalizedName = role.ToUpper(),
+                        ConcurrencyStamp = Guid.NewGuid().ToString(),
+                    });
+                }
             }
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Bạn không có quyền";
-                _reponseDto.Code = 401;
-                return _reponseDto;
-            }
-            obj.Id = Guid.NewGuid();
-            if (await _userRepository.Create(obj))
-            {
-                _reponseDto.Result = obj;
-                _reponseDto.Code = 200;
-                return _reponseDto;
-            }
-            else
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Lỗi";
-                _reponseDto.Code = 405;
-                return _reponseDto;
-            }
-        }
-        [HttpPut]
-        public async Task<ResponseDto> UpdateUser(User obj)
-        {
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Bạn không có quyền";
-                _reponseDto.Code = 401;
-                return _reponseDto;
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Bạn không có quyền";
-                _reponseDto.Code = 401;
-                return _reponseDto;
-            }
-            if (await _userRepository.Update(obj))
-            {
-                _reponseDto.Result = obj;
-                _reponseDto.Code = 200;
-                return _reponseDto;
-            }
-            else
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Lỗi";
-                _reponseDto.Code = 405;
-                return _reponseDto;
-            }
-
+            return Ok("Done");
         }
 
-        [HttpDelete]
-        public async Task<ResponseDto> DeleteUser(Guid id)
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] UserRegisterDto dto)
         {
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Bạn không có quyền";
-                _reponseDto.Code = 401;
-                return _reponseDto;
-            }
+            var existUsername = await _userManager.FindByNameAsync(dto.UserName);
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Bạn không có quyền";
-                _reponseDto.Code = 401;
-                return _reponseDto;
-            }
-            if (await _userRepository.Delete(id))
-            {
+            if (existUsername != null) return new BadRequestObjectResult($"Username {dto.UserName} has already been taken");
 
-                _reponseDto.Code = 200;
-                return _reponseDto;
-            }
-            else
-            {
-                _reponseDto.IsSuccess = false;
-                _reponseDto.Message = "Lỗi";
-                _reponseDto.Code = 405;
-                return _reponseDto;
-            }
+            var appUser = UserHelper.ToApplicationUser(dto);
+
+            var result1 = await _userManager.CreateAsync(appUser, dto.Password);
+
+            if (!result1.Succeeded) return new BadRequestObjectResult(result1.Errors);
+
+            List<string> roles = new();
+
+            if (dto.IsAdmin) roles.AddRange(SecurityRoles.Roles.ToList());
+            else roles.Add("User");
+
+            var result2 = await _userManager.AddToRolesAsync(appUser, roles);
+
+            if (!result2.Succeeded) return new BadRequestObjectResult(result2.Errors);
+
+            var response = await _userManager.FindByNameAsync(dto.UserName);
+
+            return Ok(response);
         }
     }
 }
