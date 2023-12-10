@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shop_Models.Entities;
+using System.Net.Http.Headers;
 
 namespace AdminApp.Controllers
 {
@@ -30,6 +31,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var reponse = await client.GetAsync($"/api/ManagePost/GetAllReturnReposon");
                 if (reponse.IsSuccessStatusCode)
                 {
@@ -45,6 +48,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var reponse = await client.PostAsJsonAsync($"/api/ManagePost/CreateMP", obj);
                 if (reponse.IsSuccessStatusCode)
                 {
@@ -67,6 +72,8 @@ namespace AdminApp.Controllers
 
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var reponse = await client.PostAsJsonAsync($"/api/ManagePost/CreateMP", obj);
                 if (reponse.IsSuccessStatusCode)
                 {
@@ -83,6 +90,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var reponse = await client.GetAsync($"/api/ManagePost/GetByIdManagePost?Id={id}");
                 if (reponse.IsSuccessStatusCode)
                 {
@@ -104,6 +113,8 @@ namespace AdminApp.Controllers
             //updateObj.Status = obj.Status;
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var reponse = await client.PutAsJsonAsync($"/api/ManagePost", obj);
                 if (reponse.IsSuccessStatusCode)
                 {

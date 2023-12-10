@@ -75,8 +75,10 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
-                string jwtToken = HttpContext.Session.GetString("AccessToken");
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                //string jwtToken = HttpContext.Session.GetString("AccessToken");
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpResponseMessage response = await client.GetAsync($"/api/Serial/GetSerialPG");
 
                 if (response.IsSuccessStatusCode)
@@ -101,6 +103,8 @@ namespace AdminApp.Controllers
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
                 HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Serial/CreateSerial", p);
                 if (response.IsSuccessStatusCode)
@@ -128,6 +132,8 @@ namespace AdminApp.Controllers
 
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
+                    var accessToken = Request.Cookies["account"];
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     string jwtToken = HttpContext.Session.GetString("AccessToken");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
                     // Gửi yêu cầu PUT dưới dạng JSON
@@ -159,8 +165,10 @@ namespace AdminApp.Controllers
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
-                string jwtToken = HttpContext.Session.GetString("AccessToken");
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                //string jwtToken = HttpContext.Session.GetString("AccessToken");
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
                 HttpResponseMessage response = await client.DeleteAsync($"/api/Serial/id?id={id}");
                 if (response.IsSuccessStatusCode)
                 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_Models.Entities;
+using System.Net.Http.Headers;
 
 namespace AdminApp.Controllers
 {
@@ -28,8 +29,10 @@ namespace AdminApp.Controllers
 
 
 			using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
-			{
-				HttpResponseMessage response = await client.GetAsync($"/api/Color/GetColorFSP");
+            {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                HttpResponseMessage response = await client.GetAsync($"/api/Color/GetColorFSP");
 
 				if (response.IsSuccessStatusCode)
 				{
@@ -52,9 +55,11 @@ namespace AdminApp.Controllers
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
-			{
-				//    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-				HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Color/CreateColor", p);
+            {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Color/CreateColor", p);
 				if (response.IsSuccessStatusCode)
 				{
 					var result = response.Content.ReadAsStringAsync().Result;
@@ -79,9 +84,11 @@ namespace AdminApp.Controllers
 				string? urlApi = _config.GetSection("UrlApiAdmin").Value;
 
 				using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
-				{
-					// Gửi yêu cầu PUT dưới dạng JSON
-					HttpResponseMessage response = await client.PutAsJsonAsync($"https://localhost:44333/api/Color", p);
+                {
+                    var accessToken = Request.Cookies["account"];
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                    // Gửi yêu cầu PUT dưới dạng JSON
+                    HttpResponseMessage response = await client.PutAsJsonAsync($"https://localhost:44333/api/Color", p);
 
 					if (response.IsSuccessStatusCode)
 					{
@@ -108,9 +115,11 @@ namespace AdminApp.Controllers
 			string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
 			string? urlApi = _config.GetSection("UrlApiAdmin").Value;
 			using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
-			{
-				//    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-				HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/Color/id?id={id}");
+            {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
+                HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/Color/id?id={id}");
 				if (response.IsSuccessStatusCode)
 				{
 					var result = response.Content.ReadAsStringAsync().Result;
@@ -134,10 +143,12 @@ namespace AdminApp.Controllers
 				string urlApi = _config.GetSection("UrlApiAdmin").Value;
 
 				using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
-				{
-					// Gửi yêu cầu DELETE với id trong URL
-					//HttpResponseMessage response = await client.DeleteAsync($"{urlApi}/api/Color/{id}");
-					HttpResponseMessage response = await client.DeleteAsync($"/api/Color/id?id={id}");
+                {
+                    var accessToken = Request.Cookies["account"];
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                    // Gửi yêu cầu DELETE với id trong URL
+                    //HttpResponseMessage response = await client.DeleteAsync($"{urlApi}/api/Color/{id}");
+                    HttpResponseMessage response = await client.DeleteAsync($"/api/Color/id?id={id}");
 
 					if (response.IsSuccessStatusCode)
 					{

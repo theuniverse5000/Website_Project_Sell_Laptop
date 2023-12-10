@@ -8,7 +8,8 @@ using Shop_Models.Entities;
 namespace Shop_API.Controllers
 {
 
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]")]
+    [ApiController]
     public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -20,7 +21,7 @@ namespace Shop_API.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.UserName);

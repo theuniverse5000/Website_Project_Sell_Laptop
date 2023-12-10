@@ -20,13 +20,13 @@
                     </span>
                     <!-- Email input -->
                     <div class="form-outline mb-4">
-                        <input type="email" id="UserName" class="form-control form-control-lg"
+                        <input type="email" id="userName" class="form-control form-control-lg"
                                placeholder="Nhập địa chỉ email hoặc tên tài khoản" />
                     </div>
 
                     <!-- Password input -->
                     <div class="form-outline mb-3">
-                        <input type="password" id="PassWord" class="form-control form-control-lg"
+                        <input type="password" id="password" class="form-control form-control-lg"
                                placeholder="Nhập mật khẩu" />
                     </div>
 
@@ -85,34 +85,42 @@
 
         event.preventDefault();
 
-        var UserNameInput = document.getElementById('UserName').value;
-        var passwordInput = document.getElementById('PassWord').value;
-        var apiUrl = "https://localhost:44333/api/Account/Login";
+        var UserNameInput = document.getElementById('userName').value;
+        var passwordInput = document.getElementById('password').value;
+        var apiUrl = "https://localhost:44333/api/Authentication/Login";
         // Create an object containing the data to send to the server
         var dataToSend = {
-            UserName: UserNameInput,
-            Password: passwordInput,
+            userName: UserNameInput,
+            password: passwordInput,
             RememberMe: true,
             ReturnUrl: "/" // Fixed the syntax error here (changed semicolon to colon)
         }
-        debugger
-        alert("!");
         $.ajax({
             url: apiUrl,
             type: "POST",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(dataToSend), // Thay đổi ở đây
-            success: function (response) {
-                debugger
-                if (response.mess === "Login Successfull") {
-                    debugger
-                    alert("Đăng Nhập Thành Công !");
-                    Cookies.set('account', response.token)
+
+            success: function (response, textStatus, xhr) {
+                // console.log(response);
+                console.log(xhr.status);
+                if (response===400) {
+                    // Xử lý lỗi Bad Request ở đây
+                  
+                } else {
+                    Cookies.set('account', response.token);
                     window.location.href = "/Home/Index";
-                } else{
-                    alert("Đăng Nhập Thất Bại !");
+                    alert("Đăng Nhập Thành Công !");
                 }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log(xhr.status);
+                console.log(textStatus);
+                console.log(errorThrown);
+
+                // Xử lý các loại lỗi khác ở đây
+                alert("Đăng Nhập Thất Bại !");
             }
            
         });

@@ -65,6 +65,12 @@
                 <span class="item text-left">Serial</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="/Voucher" class="nav-link">
+                @* <span class="icon"><i class="fas fa-user-shield"></i></span> *@
+                <span class="item text-left">Voucher</span>
+            </a>
+        </li>
         @* <li class="nav-item">
             <a href="#" class="nav-link">
                 <span class="icon"><i class="fas fa-database"></i></span>
@@ -88,10 +94,10 @@
 
         <li class="nav-item">
             <form asp-controller="Home" asp-action="Logout" method="post" id="logoutForm">
-                <a type="submit" class="nav-link" id="logoutButton">
+                <button type="submit" class="nav-link" id="logoutButton">
                     <!-- <span class="icon"><i class="fas fa-sign-out-alt"></i></span> -->
                     <span class="item text-left">Đăng Xuất</span>
-                </a>
+                </button>
             </form>
         </li>
 

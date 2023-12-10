@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_Models.Entities;
+using System.Net.Http.Headers;
 
 namespace AdminApp.Controllers
 {
@@ -23,6 +24,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpResponseMessage response = await client.GetAsync("https://localhost:44333/api/Voucher/GetAllVoucherPGs");
                 if (response.IsSuccessStatusCode)
                 {
@@ -41,6 +44,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 var response = await client.PostAsJsonAsync($"https://localhost:44333/api/Voucher/CreateVoucher2", voucher);
                 if (response.IsSuccessStatusCode)
                 {
@@ -66,6 +71,8 @@ namespace AdminApp.Controllers
 
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
+                    var accessToken = Request.Cookies["account"];
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     // Gửi yêu cầu PUT dưới dạng JSON
                     HttpResponseMessage response = await client.PutAsJsonAsync($"https://localhost:44333/api/Voucher/UpdateVoucher", p);
 
@@ -95,6 +102,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpResponseMessage response = await client.PutAsync($"https://localhost:44333/api/Voucher/DuyetVoucher?id={id}", null);
                 if (response.IsSuccessStatusCode)
                 {
@@ -113,6 +122,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpResponseMessage response = await client.PutAsync($"https://localhost:44333/api/Voucher/HuyDuyetVoucher?id={id}", null);
                 if (response.IsSuccessStatusCode)
                 {

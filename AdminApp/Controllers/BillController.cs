@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_Models.Entities;
+using System.Net.Http.Headers;
 
 namespace AdminApp.Controllers
 {
@@ -21,6 +22,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpResponseMessage response = await client.GetAsync($"/api/Bill/GetListBill");
 
                 if (response.IsSuccessStatusCode)
@@ -42,6 +45,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpResponseMessage response = await client.GetAsync($"/api/Bill/GetBillDetailByInvoiceCode?invoiceCode={invoiceCode}");
 
                 if (response.IsSuccessStatusCode)
@@ -63,6 +68,8 @@ namespace AdminApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpResponseMessage response = await client.PutAsJsonAsync<Bill>($"/api/Bill/UpdateBill", bill);
 
                 if (response.IsSuccessStatusCode)

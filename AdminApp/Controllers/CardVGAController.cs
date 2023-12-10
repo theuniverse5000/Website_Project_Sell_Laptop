@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop_Models.Entities;
+using System.Net.Http.Headers;
 
 namespace AdminApp.Controllers
 {
@@ -28,6 +29,8 @@ namespace AdminApp.Controllers
 
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpResponseMessage response = await client.GetAsync($"/api/CardVGA/GetCardVGAFSP");
 
                 if (response.IsSuccessStatusCode)
@@ -52,6 +55,8 @@ namespace AdminApp.Controllers
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
                 HttpResponseMessage response = await client.PostAsJsonAsync($"/api/CardVGA/CreateCardVGA", p);
                 if (response.IsSuccessStatusCode)
@@ -79,6 +84,8 @@ namespace AdminApp.Controllers
 
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
+                    var accessToken = Request.Cookies["account"];
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     // Gửi yêu cầu PUT dưới dạng JSON
                     HttpResponseMessage response = await client.PutAsJsonAsync($"/api/CardVGA", p);
 
@@ -108,6 +115,8 @@ namespace AdminApp.Controllers
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
                 HttpResponseMessage response = await client.DeleteAsync($"/api/CardVGA/id?id={id}");
                 if (response.IsSuccessStatusCode)
@@ -134,6 +143,8 @@ namespace AdminApp.Controllers
 
                 using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
                 {
+                    var accessToken = Request.Cookies["account"];
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     // Gửi yêu cầu DELETE với id trong URL
                     //HttpResponseMessage response = await client.DeleteAsync($"{urlApi}/api/CardVGA/{id}");
                     HttpResponseMessage response = await client.DeleteAsync($"/api/CardVGA/id?id={id}");

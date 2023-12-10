@@ -22,6 +22,7 @@ namespace AdminApp.Controllers
         {
             if (HttpContext.Request.Cookies.ContainsKey("account"))
             {
+
                 return View();
             }
             else
