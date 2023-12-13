@@ -20,11 +20,14 @@
     .btn-login {
         margin-top:30px;
     }
+    .pd-l-130{
+        padding-left: 130px;
+    }
 </style>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg">
     <a class="navbar-brand logoNav" href="#">
-        <img alt="Logo" src="./Images/logo_laptopaz.jpg" />
+        <img alt="Logo" src="/Images/logopt.jpg" style="max-width:65%; margin-left:70px" />
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -44,25 +47,23 @@
                 </a>
             </li>
             <li>
-                <a class="nav-link textNavbar" href="/sản-phẩm">
+                <a class="nav-link textNavbar" href="/hóa-đơn">
                     <i class="fas fa-truck"></i>Tra cứu đơn hàng
                 </a>
-            </li>           
-            <li>
-                <a class="nav-link textNavbar" href="/giỏ-hàng">
-                    <i class="fas fa-cart-plus"></i>Giỏ hàng
-                </a>
             </li>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Bạn muốn tìm gì?" aria-label="Search">
+            <form class="d-flex" style="margin:auto">
+                <input class="form-control me-2" style="width:280px" type="search" placeholder="Bạn muốn tìm gì?" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
             </form>
+          
+          
             @{
-
+                
                 if (username != null)
                 {
+                    <div class="pd-l-130">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-user" style="color:aqua;font-size:30px"></i>@username
@@ -74,10 +75,19 @@
                             <li><a class="dropdown-item" asp-controller="Login" asp-action="LogOut">Đăng xuất</a></li>
                         </ul>
                     </li>
+                    </div>
+                  
                 }
                 else
                 {
-                    <form class="d-flex">
+                    <form class="d-flex pd-l-130">
+                    <li>
+
+                        <a class="nav-link textNavbar" href="/giỏ-hàng">
+                            <i class="fas fa-cart-plus"></i>Giỏ hàng
+                        </a>
+
+                    </li>
                 <a class="nav-link btnDangKy" id="resgisterLink">
                     <span class="textDangKy">Đăng ký</span>
                 </a>

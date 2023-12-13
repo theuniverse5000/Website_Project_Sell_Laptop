@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shop_Models.Dto;
@@ -60,7 +59,7 @@ public class LoginController : Controller
             string jwtToken = HttpContext.Session.GetString("AccessToken");
             return RedirectToAction("Index", "Home");
         }
-        else return RedirectToAction("I", "Home");
+        else return BadRequest("Error");
 
     }
     public async Task<IActionResult> LogOut()

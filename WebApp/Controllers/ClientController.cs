@@ -159,7 +159,7 @@ namespace WebApp.Controllers
                 return View();
             }
         }
-        [Route("Hóa đơn")]
+        [Route("hóa-đơn")]
         public async Task<IActionResult> ShowBill(string? invoiceCode)
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
@@ -187,6 +187,33 @@ namespace WebApp.Controllers
                 }
                 return View();
             }
+
         }
+        public async Task<IActionResult> ShowBill2(string? invoiceCode)
+        {
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
+            {
+                HttpResponseMessage response = await client.GetAsync($"/api/Bill/PGetBillByInvoiceCode?invoiceCode={invoiceCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultString = await response.Content.ReadAsStringAsync();
+                    var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
+                    var billS = JsonConvert.DeserializeObject<BillDto>(resultResponse.Result.ToString());
+
+                    if (billS != null)
+                    {
+                        ViewBag.Bill = billS;
+                        ViewBag.ListBillItem = billS.BillDetail;
+                        // Trả về JSON chứa thông tin hóa đơn
+                        return Json(new { success = true, bill = billS });
+                    }
+                }
+
+                // Trả về JSON thông báo lỗi
+                return Json(new { success = false, message = "Không tìm thấy hóa đơn" });
+            }
+        }
+
     }
 }
