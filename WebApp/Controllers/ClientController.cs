@@ -145,7 +145,7 @@ namespace WebApp.Controllers
             var apiUrl = $"/api/Cart/TruQuantityCartDetail?idCartDetail={idCartDetail}";
             var responeApi = await httpClient.PutAsJsonAsync(apiUrl, string.Empty);
         }
-        public async Task<IActionResult> CreateBill(string? codeVoucher)
+        public async Task<IActionResult> CreateBill(string? codeVoucher,double? PointYouWanToUse)
         {
             getUsername = HttpContext.Session.GetString("username");
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
@@ -153,7 +153,16 @@ namespace WebApp.Controllers
                 HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Bill/CreateBill?username={getUsername}&maVoucher={codeVoucher}", String.Empty);
                 if (response.IsSuccessStatusCode)
                 {
+                    
                     var codeBill = await response.Content.ReadAsStringAsync();
+                    //HttpResponseMessage tichdiem = await client.PostAsJsonAsync($"https://localhost:44333/api/ChucNangTichDiem/first-buy?invoiceCode={codeBill}&TongTienThanhToan={PointYouWanToUse}&SoDiemMuonDung={PointYouWanToUse}", String.Empty);
+                    HttpResponseMessage response2 = await client.GetAsync($"/api/Bill/PGetBillByInvoiceCode?invoiceCode={codeBill}");
+                    var resultString2 = await response2.Content.ReadAsStringAsync();
+                    var resultResponse2 = JsonConvert.DeserializeObject<ResponseDto>(resultString2);
+                    var billS = JsonConvert.DeserializeObject<BillDto>(resultResponse2.Result.ToString());
+                    ViewBag.Bill = billS;
+                    ViewBag.ListBillItem = billS.BillDetail;
+
                     return RedirectToAction("ShowBill", new { invoiceCode = $"{codeBill}" });
                 }
                 return View();

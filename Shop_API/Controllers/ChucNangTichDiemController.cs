@@ -43,10 +43,10 @@ namespace Shop_API.Controllers
             //    return Unauthorized();
             //}
             return Ok(await _tichDiemServices.TichDiemChoLanDauMuaHangAsync(invoiceCode, TongTienThanhToan, SoDiemMuonDung));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> TieuDiemChoLanMuaSauAsync(string phoneNumber, double TongTienThanhToan, double SoDiemMuonDung)
+        } 
+        
+        [HttpPost("TichDiemMuaHangAsync")]
+        public async Task<IActionResult> TichDiemMuaHangAsync(string invoiceCode, double TongTienThanhToan)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
             //if (apiKey == null)
@@ -59,7 +59,24 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            return Ok(await _tichDiemServices.TichDiemChoNhungLanMuaSauAsync(phoneNumber, TongTienThanhToan, SoDiemMuonDung));
+            return Ok(await _tichDiemServices.TichDiemMuaHangAsync(invoiceCode, TongTienThanhToan));
+        }
+
+        [HttpPost("TieuDiemMuaHangAsync")]
+        public async Task<IActionResult> TieuDiemMuaHangAsync(string invoiceCode, double TongTienThanhToan, double SoDiemMuonDung)
+        {
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
+
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
+            return Ok(await _tichDiemServices.TieuDiemMuaHangAsync(invoiceCode, TongTienThanhToan, SoDiemMuonDung));
         }
 
         [HttpGet("GetStatusOfPointWallet")]
@@ -72,7 +89,7 @@ namespace Shop_API.Controllers
             if (viDiem != null)
             {
                 return Ok(viDiem.TrangThai);
-            } return BadRequest("Chua tao vi diem");
+            } return BadRequest(0);
         }
 
         [HttpGet("GetThePointOfWallet")]
@@ -101,5 +118,18 @@ namespace Shop_API.Controllers
         //}
 
 
+        [HttpPost("CalculateTotalAmount")]
+        public IActionResult CalculateTotalAmount(double tongTienHoaDon, double? soDiemMuonDoi)
+        {
+            const double tiLeDiemTichLuy = 0.000000625;
+            const double diemToVND = 10000;
+
+            double diemTichLuy = tongTienHoaDon > 0 ? tongTienHoaDon * tiLeDiemTichLuy : 0;
+            double soTienSauKhiDoi = soDiemMuonDoi > 0 ? (double)(soDiemMuonDoi * diemToVND) : 0;
+
+            double totalAmount = tongTienHoaDon - soTienSauKhiDoi;
+
+            return Ok(totalAmount) ;
+        }
     }
 }

@@ -2,7 +2,6 @@
     int stt = 0;
     string statuswallet = ViewContext.HttpContext.Session.GetString("StatusPointWallet");
     string username = ViewContext.HttpContext.Session.GetString("username");
-
 }
 <section class="h-100 h-custom">
     <div class="container h-100 py-5">
@@ -152,7 +151,7 @@
                                                 <label>Ví điểm của @username </label>
                                                 <div id=" id=" sodiemhiencolb"" style="color: blue;">Số điểm hiện có:  <label class="form-label" id="sodiemhiencolb"></label></div>
                                                 <label class="form-label" for="sudungdiem">Sử dụng điểm: </label>
-                                                <input type="number" id="diemInput" />
+                                                <input type="number" id="diemInput" name="PointYouWanToUse"/>
                                                 <div id="error-message" style="color: red;"></div>
 
                                                
@@ -272,7 +271,81 @@
 
 
 
+
+
+
 <script>
+
+    // function calculateTotalAmount() {
+    //     var totalAmount = 0;
+
+    //     // Iterate through each row in the table
+    //     $("#yourTableId tbody tr").each(function () {
+    //         var quantity = parseInt($(this).find(".quantity-input").text());
+    //         var price = parseFloat($(this).find("td:eq(2) p").text().replace(',', '')); // Adjust the index based on your actual structure
+
+    //         totalAmount += quantity * price;
+    //     });
+    //     console.log(totalAmount);
+    //     alert(totalAmount);
+    //     return totalAmount;
+    // }
+
+
+
+    // function updateTotalAmount() {
+    //     var totalAmount = 0;
+
+    //     // Loop through each row in the table
+    //     $("tbody tr").each(function () {
+    //         var quantity = parseInt($(this).find(".quantity-input").text());
+    //         var price = parseFloat($(this).find(".price").text().replace(',', '')); // Assuming the price is displayed as a string with commas
+
+    //         totalAmount += quantity * price;
+    //     });
+
+    //     // Update the total amount on the UI
+    //     $("#totalAmount").text(formatCurrency(totalAmount)); // Format the total amount as needed
+    // }
+
+    // // Function to format currency
+    // function formatCurrency(amount) {
+    //     // Customize this function based on your currency formatting requirements
+    //     var formatter = new Intl.NumberFormat('en-US', {
+    //         style: 'currency',
+    //         currency: 'USD', // Change this to your currency code
+    //         minimumFractionDigits: 2
+    //     });
+
+    //     return formatter.format(amount);
+    // }
+
+    // $("#diemInput").on("input", function () {
+    //     var soDiemMuonDoi = parseFloat($(this).val());
+    //     var tongTienHoaDon = calculateTotalAmount(); // Calculate the total amount based on product prices and quantities
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "https://localhost:44333/api/ChucNangTichDiem/CalculateTotalAmount",
+    //         data: {
+    //             tongTienHoaDon: tongTienHoaDon,
+    //             soDiemMuonDoi: soDiemMuonDoi
+    //         },
+    //         success: function (response) {
+    //             $(
+
+    //                 "#totalAmount").text(formatCurrency(response.totalAmount));
+    //         },
+    //         error: function (error) {
+    //             console.error('Error:', error);
+    //         }
+    //     });
+    // });
+
+
+
+
+
     // Biến để chứa số điểm hiện có từ ví điểm
     var soDiemHienCo;
 
