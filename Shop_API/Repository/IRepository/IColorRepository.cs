@@ -1,4 +1,5 @@
-﻿using Shop_Models.Entities;
+﻿using Shop_Models.Dto;
+using Shop_Models.Entities;
 
 namespace Shop_API.Repository.IRepository
 {
@@ -9,5 +10,7 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Delete(Guid id);
         Task<List<Color>> GetAllColors();
         Task<Color> GetById(Guid id);
+        Task<ResponseDto> CreateReturnDto(Color obj);
+        Task<ResponseDto> UpdateReturnDto(Color obj);
     }
 }

@@ -47,7 +47,7 @@ namespace Shop_API.Controllers
             if (existUsername != null) return new BadRequestObjectResult($"Username {dto.UserName} has already been taken");
 
             var appUser = UserHelper.ToApplicationUser(dto);
-
+            appUser.Status = 1;
             var result1 = await _userManager.CreateAsync(appUser, dto.Password);
 
             if (!result1.Succeeded) return new BadRequestObjectResult(result1.Errors);

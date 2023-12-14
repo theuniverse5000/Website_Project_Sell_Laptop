@@ -1,4 +1,5 @@
-﻿using Shop_Models.Entities;
+﻿using Shop_Models.Dto;
+using Shop_Models.Entities;
 
 namespace Shop_API.Repository.IRepository
 {
@@ -9,5 +10,6 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Delete(Guid id);
         Task<List<Cpu>> GetAllCpus();
         Task<Cpu> GetById(Guid id);
+        Task<ResponseDto> CreateReturnDto(Cpu obj);
     }
 }

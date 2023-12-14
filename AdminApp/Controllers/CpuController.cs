@@ -43,7 +43,7 @@ namespace AdminApp.Controllers
                 }
             }
         }
-        public async Task<JsonResult> CreateCpu(Cpu p)
+        public async Task<IActionResult> CreateCpu(Cpu p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
@@ -52,18 +52,20 @@ namespace AdminApp.Controllers
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
                 var accessToken = Request.Cookies["account"];
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Cpu/CreateCpu", p);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Cpu/CreateReturnDto", p);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
                     Check = 1;
-                    return Json(new { status = "success" });
+                    return Content(result,"application/json");
                 }
                 else
                 {
-                    Check = 0;
-                    return Json(new { status = "error" });
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    ViewBag.CartItem = result;
+                   Check = 1;
+                    return Content(result, "application/json");
                 }
             }
         }
@@ -78,7 +80,7 @@ namespace AdminApp.Controllers
                     var accessToken = Request.Cookies["account"];
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     // Gửi yêu cầu PUT dưới dạng JSON
-                    HttpResponseMessage response = await client.PutAsJsonAsync($"https://localhost:44333/api/Cpu", p);
+                    HttpResponseMessage response = await client.PutAsJsonAsync($"/api/Cpu", p);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -88,7 +90,9 @@ namespace AdminApp.Controllers
                     }
                     else
                     {
-                        return Json(null);
+                        var result = await response.Content.ReadAsStringAsync();
+                        ViewBag.CartItem = result;
+                        return Json(result);
                     }
                 }
             }

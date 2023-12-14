@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -40,6 +41,33 @@ namespace Shop_API.Controllers
             }
             return Ok(await _colorRepository.GetAllColors());
         }
+
+        [HttpPost("CreateReturnDto")]
+        public async Task<IActionResult> CreateReturnDto(Color obj)
+        {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            obj.Id = Guid.NewGuid();
+            obj.TrangThai = 1;
+            var response = await _colorRepository.CreateReturnDto(obj);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        
         [HttpPost("CreateColor")]
         public async Task<IActionResult> CreateColor(Color obj)
         {
@@ -85,6 +113,29 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Sửa thất bại");
         }
+        [HttpPut("UpdateReturnDto")]
+        public async Task<IActionResult> UpdateReturnDto(Color obj)
+        {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            var response = await _colorRepository.UpdateReturnDto(obj);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteColor(Guid id)
         {

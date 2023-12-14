@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -63,6 +64,31 @@ namespace Shop_API.Controllers
                 return Ok("Thêm thành công");
             }
             return BadRequest("Thêm thất bại");
+        }
+
+        [HttpPost("CreateReturnDto")]
+        public async Task<IActionResult> CreateReturnDto(HardDrive obj)
+        {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            obj.Id = Guid.NewGuid();
+            obj.TrangThai = 1;
+            var response = await _repository.CreateReturnDto(obj);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
         [HttpPut]

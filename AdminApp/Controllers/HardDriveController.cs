@@ -49,7 +49,7 @@ namespace AdminApp.Controllers
             }
         }
 
-        public async Task<JsonResult> CreateHardDrive(HardDrive p)
+        public async Task<IActionResult> CreateHardDrive(HardDrive p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
@@ -58,20 +58,21 @@ namespace AdminApp.Controllers
                 var accessToken = Request.Cookies["account"];
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/HardDrive/CreateHardDrive", p);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/HardDrive/CreateReturnDto", p);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
                     Check = 1;
-                    return Json(new { status = "success" });
+                    return Content(result, "application/json");
                 }
                 else
                 {
-                    Check = 0;
-                    return Json(new { status = "error" });
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    ViewBag.CartItem = result;
+                    Check = 1;
+                    return Content(result, "application/json");
                 }
-
             }
         }
 

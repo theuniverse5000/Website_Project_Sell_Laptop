@@ -1,0 +1,148 @@
+﻿@{
+    ViewBag.Title = "Thống kê Doanh thu";
+}
+
+<div>
+    <label for="yearPicker">Chọn năm:</label>
+    <input id="yearPicker1" />
+    <div><button onclick="getYearlyRevenue()">Thống kê Năm</button></div>
+</div>
+
+<div id="chartYear"></div>
+
+<script>
+    $(document).ready(function () {
+        $("#yearPicker1").kendoDatePicker({
+            start: "decade",
+            depth: "decade",
+            format: "yyyy",
+            change: function (e) {
+                getYearlyRevenue();
+            }
+        });
+
+        getYearlyRevenue();
+    });
+
+    function getYearlyRevenue() {
+        var selectedYear = $("#yearPicker1").data("kendoDatePicker").value();
+
+        // Kiểm tra nếu không có giá trị được chọn, sử dụng năm hiện tại
+        if (!selectedYear) {
+            var currentDate = new Date();
+            selectedYear = currentDate.getFullYear();
+        } else {
+            selectedYear = kendo.toString(selectedYear, "yyyy");
+        }
+
+        $.ajax({
+            url: "https://localhost:44333/api/Bill/GetRevenueStatistics",
+            data: { year: selectedYear },
+            dataType: "json",
+            success: function (data) {
+                renderChartYear(data);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    function renderChartYear(data) {
+        $("#chartYear").kendoChart({
+            dataSource: {
+                data: data
+            },
+            series: [{
+                type: "line",
+                field: "amount",
+                name: "Doanh thu"
+            }],
+            categoryAxis: {
+                field: "date",
+                labels: {
+                    format: "MMMM yyyy"
+                }
+            },
+            title: {
+                text: "Thống kê Doanh thu theo năm"
+            }
+        });
+    }
+</script>
+
+</br>
+
+<div>
+    <label for="datePicker">Chọn tháng:</label>
+    <input id="datePicker" />
+    <div> <button onclick="getMonthlyRevenue()">Thống kê Tháng</button></div>
+</div>
+
+<div id="chartMonth"></div>
+
+<script>
+    $(document).ready(function () {
+        $("#datePicker").kendoDatePicker({
+            start: "year",
+            depth: "year",
+            format: "MM/yyyy",
+            change: function (e) {
+                getDailyRevenue();
+            }
+        });
+
+        getDailyRevenue();
+    });
+
+    function getDailyRevenue() {
+        var selectedDate = $("#datePicker").data("kendoDatePicker").value();
+        var formattedDate;
+
+        if (selectedDate) {
+            formattedDate = kendo.toString(selectedDate, "yyyy-MM");
+        } else {
+            // Nếu không có giá trị được chọn, sử dụng tháng và năm hiện tại
+            var currentDate = new Date();
+            formattedDate = kendo.toString(currentDate, "yyyy-MM");
+        }
+
+        $.ajax({
+            url: "https://localhost:44333/api/Bill/GetRevenueStatisticss",
+            data: { selectedDate: formattedDate },
+            dataType: "json",
+            success: function (data) {
+                renderChartMonth(data);
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function renderChartMonth(data) {
+        console.log(data);  // In dữ liệu vào Console để kiểm tra
+        $("#chartMonth").kendoChart({
+            dataSource: {
+                data: data
+            },
+            series: [{
+                type: "line",
+                field: "amount",
+                name: "Doanh thu",
+                color: "red"
+            }],
+            categoryAxis: {
+                field: "day",  // Thay đổi field thành "day"
+                labels: {
+                    format: "d"
+                }
+            },
+            title: {
+                text: "Thống kê Doanh thu theo ngày trong tháng"
+            }
+        });
+    }
+
+</script>

@@ -65,7 +65,7 @@ namespace AdminApp.Controllers
                 }
             }
         }
-        public async Task<JsonResult> CreateProductType(ProductType p)
+        public async Task<IActionResult> CreateProductType(ProductType p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
@@ -74,18 +74,20 @@ namespace AdminApp.Controllers
                 var accessToken = Request.Cookies["account"];
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/ProductType/CreateProductType", p);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/ProductType/CreateReturnDto", p);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
                     Check = 1;
-                    return Json(new { status = "success" });
+                    return Content(result, "application/json");
                 }
                 else
                 {
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    ViewBag.CartItem = result;
                     Check = 0;
-                    return Json(new { status = "error" });
+                    return Content(result, "application/json");
                 }
             }
         }

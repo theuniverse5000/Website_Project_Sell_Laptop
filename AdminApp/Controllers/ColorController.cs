@@ -50,7 +50,7 @@ namespace AdminApp.Controllers
 			}
 		}
 
-		public async Task<JsonResult> CreateColor(Color p)
+		public async Task<IActionResult> CreateColor(Color p)
 		{
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
@@ -59,24 +59,25 @@ namespace AdminApp.Controllers
                 var accessToken = Request.Cookies["account"];
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
-                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Color/CreateColor", p);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Color/CreateReturnDto", p);
 				if (response.IsSuccessStatusCode)
 				{
 					var result = response.Content.ReadAsStringAsync().Result;
 					ViewBag.CartItem = result;
 					Check = 1;
-					return Json(new { status = "success" });
+					return Content(result,"application/json");
 				}
 				else
 				{
-					Check = 0;
-					return Json(new { status = "error" });
-				}
+                    var resultError = response.Content.ReadAsStringAsync().Result;
+                    ViewBag.CartItem = resultError;
+                    return Content(resultError, "application/json");
+                }
 
 			}
 		}
 
-		public async Task<JsonResult> UpdateColor(Color p)
+		public async Task<IActionResult> UpdateColor(Color p)
 		{
 			try
 			{
@@ -88,18 +89,20 @@ namespace AdminApp.Controllers
                     var accessToken = Request.Cookies["account"];
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     // Gửi yêu cầu PUT dưới dạng JSON
-                    HttpResponseMessage response = await client.PutAsJsonAsync($"https://localhost:44333/api/Color", p);
+                    HttpResponseMessage response = await client.PutAsJsonAsync($"/api/Color/UpdateReturnDto", p);
 
 					if (response.IsSuccessStatusCode)
 					{
 						var result = await response.Content.ReadAsStringAsync();
 						ViewBag.CartItem = result;
-						return Json(result);
-					}
+                        return Content(result, "application/json");
+                    }
 					else
 					{
-						return Json(null);
-					}
+                        var resultError = await response.Content.ReadAsStringAsync();
+                        ViewBag.CartItem = resultError;
+                        return Content(resultError, "application/json");
+                    }
 				}
 			}
 			catch (Exception ex)

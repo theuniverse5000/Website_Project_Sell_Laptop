@@ -92,6 +92,32 @@ namespace Shop_API.Controllers
             return BadRequest("Thêm thất bại");
         }
 
+
+        [HttpPost("CreateReturnDto")]
+        public async Task<IActionResult> CreateReturnDto(ProductType obj)
+        {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            obj.Id = Guid.NewGuid();
+            obj.Status = 1;
+            var response = await _repository.CreateReturnDto(obj);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdateProductType(ProductType obj)
         {
@@ -109,9 +135,9 @@ namespace Shop_API.Controllers
             }
             if (await _repository.Update(obj))
             {
-                return Ok("Chỉnh sửa thành công");
+                return Ok("Sửa thành công");
             }
-            return BadRequest("Chỉnh sửa thất bại");
+            return BadRequest("Sửa thành công");
         }
 
         [HttpDelete("id")]

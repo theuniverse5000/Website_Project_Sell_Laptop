@@ -150,24 +150,33 @@
 
                 save: function (e) {
                     if (e.model.isNew()) {
-                        // Thay đổi status thành biến thực tế của bạn
-                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+                        e.model.dirty = true;
+                        console.log(" tra ve: " + e.response);
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            console.log(ev.response);
+                            if (ev.type === "create" && ev.response.code === 200) {
 
-                        if (status === 'success') {
-                            Response
-                            showNotification("Lưu thành công", "success");
-                        } else {
-                            showNotification("Lưu thất bại", "error");
-                        }
+                                showNotification(ev.response.message, "success");
+                            } else {
+                                showNotification("Thêm Thất Bại", "error");
+                                showNotification(ev.response.message, "error");
+                            }
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        });
                     } else if (e.model.dirty) {
-                        // Trường hợp cập nhật
-                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            console.log(ev);
+                            console.log(ev.response);
+                            if (ev.type === "update" && ev.response === "Sửa thành công") {
 
-                        if (status === 'success') {
-                            showNotification("Cập nhật thành công", "success");
-                        } else {
-                            showNotification("Cập nhật thất bại", "error");
-                        }
+                                showNotification(ev.response, "success");
+                            } else {
+                                showNotification("Cập nhật thất bại", "error");
+                                showNotification(ev.response.message, "error");
+                            }
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        });
+
                     } else if (e.model.isNew() && e.model.isDestroyed()) {
                         // Trường hợp xóa
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
@@ -184,7 +193,10 @@
                     {
 
                         field: "ma",
-                        title: "Mã"
+                        title: "Mã",
+                        editable: function (dataItem) {
+                            return dataItem.isNew();
+                        }
                     },
                     {
                         field: "thongSo",

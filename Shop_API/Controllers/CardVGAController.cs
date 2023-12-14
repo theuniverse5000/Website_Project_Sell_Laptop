@@ -62,6 +62,55 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Thêm thất bại");
         }
+
+        [HttpPost("CreateReturnDto")]
+        public async Task<IActionResult> CreateReturnDto(CardVGA obj)
+        {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            obj.Id = Guid.NewGuid();
+            obj.TrangThai = 1;
+            var response = await _repository.CreateReturnDto(obj);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPut("UpdateReturnDto")]
+        public async Task<IActionResult> UpdateReturnDto(CardVGA obj)
+        {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }                
+            var response = await _repository.UpdateReturnDto(obj);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdateCardVGA(CardVGA obj)
         {
@@ -83,7 +132,7 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Sửa thất bại");
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteCardVGA")]
         public async Task<IActionResult> DeleteCardVGA(Guid id)
         {
 

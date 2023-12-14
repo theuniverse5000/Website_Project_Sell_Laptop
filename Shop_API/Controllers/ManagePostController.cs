@@ -106,7 +106,7 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Xóa thất bại");
         }
-
+        [AllowAnonymous]
         [HttpGet("GetByIdManagePost")]
         public async Task<IActionResult> GetByIdManagePost(Guid Id)
         {
@@ -136,7 +136,7 @@ namespace Shop_API.Controllers
             _response.Count = _mpRepository.GetAllManagePosts().Result.Count();
             return Ok(_response);
         }
-
+        [AllowAnonymous]
         [HttpGet("GGetManagePostDtosFSP")]
         public async Task<IActionResult> GGetManagePostDtosFSP(string? search, DateTime? from, DateTime? to, string? sortBy, int page)
         {
