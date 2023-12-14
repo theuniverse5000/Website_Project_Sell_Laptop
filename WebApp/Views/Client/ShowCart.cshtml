@@ -1,5 +1,8 @@
 ﻿@{
     int stt = 0;
+    string statuswallet = ViewContext.HttpContext.Session.GetString("StatusPointWallet");
+    string username = ViewContext.HttpContext.Session.GetString("username");
+
 }
 <section class="h-100 h-custom">
     <div class="container h-100 py-5">
@@ -42,7 +45,7 @@
                                         </div>
                                     </td>
                                 <td class="align-middle">
-                                        <p class="mb-0" style="font-weight: 500;">@t.Price</p>
+                                        <p class="mb-0" style="font-weight: 500;">@t.Price*@t.Quantity</p>
                                 </td>
                             </tr>
                             }
@@ -141,6 +144,21 @@
                                             }
                                     </select>
 
+                                       
+                                        @{
+                                            if (statuswallet == "2")
+                                            {
+
+                                                <label>Ví điểm của @username </label>
+                                                <div id=" id=" sodiemhiencolb"" style="color: blue;">Số điểm hiện có:  <label class="form-label" id="sodiemhiencolb"></label></div>
+                                                <label class="form-label" for="sudungdiem">Sử dụng điểm: </label>
+                                                <input type="number" id="diemInput" />
+                                                <div id="error-message" style="color: red;"></div>
+
+                                               
+                                            }
+
+                                       }
                                 </div>
                                 <hr class="my-4">
 
@@ -251,5 +269,61 @@
     });
 
     </script>
-       
+
+
+
+<script>
+    // Biến để chứa số điểm hiện có từ ví điểm
+    var soDiemHienCo;
+
+    // Hàm để lấy số điểm hiện có từ backend
+    async function fetchSoDiemHienCo() {
+        try {
+            var name = "@(username)";
+
+            const response = await fetch('https://localhost:44333/api/ChucNangTichDiem/GetThePointOfWallet?usename=' + name);
+            const data = await response.json();
+
+            // Cập nhật giá trị của soDiemHienCo từ dữ liệu nhận được từ backend
+            soDiemHienCo = data.soDiemHienCo;
+            console.log(soDiemHienCo);
+            console.log(response);
+            // Gọi hàm validateInput để kiểm tra giá trị nhập vào
+            validateInput();
+            document.getElementById("sodiemhiencolb").innerText = soDiemHienCo.toString();
+
+        } catch (error) {
+            console.error('Error fetching soDiemHienCo:', error);
+        }
+    }
+
+    // Gọi hàm fetchSoDiemHienCo khi trang được tải để lấy số điểm hiện có từ backend
+    window.addEventListener('load', fetchSoDiemHienCo);
+
+    function validateInput() {
+        // Lấy giá trị từ input
+        var diemInputValue = document.getElementById("diemInput").value.trim();
+
+        // Nếu người dùng không nhập, không thực hiện kiểm tra
+        if (diemInputValue === "") {
+            document.getElementById("error-message").innerText = "";
+            return;
+        }
+
+        // Kiểm tra giá trị nhập vào
+        var diemInputNumber = parseInt(diemInputValue);
+        if (isNaN(diemInputNumber) || diemInputNumber < 0) {
+            document.getElementById("error-message").innerText = "Giá trị không hợp lệ. Vui lòng nhập một số không nhỏ hơn 0.";
+        } else if (diemInputNumber > soDiemHienCo) {
+            document.getElementById("error-message").innerText = "Không thể sử dụng số điểm vượt quá số điểm hiện có trong ví điểm.";
+        } else {
+            document.getElementById("error-message").innerText = "";
+        }
+    }
+
+    // Gọi hàm validateInput mỗi khi giá trị trong input thay đổi
+    document.getElementById("diemInput").addEventListener("input", validateInput);
+
+
+</script>
 

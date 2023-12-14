@@ -94,6 +94,11 @@ namespace Shop_API.Repository
         {
             var result = await _context.Users.FindAsync(id);
             return result;
+        } 
+        public async Task<User> GetUserByUserName(string userName)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+            return user;
         }
 
     }

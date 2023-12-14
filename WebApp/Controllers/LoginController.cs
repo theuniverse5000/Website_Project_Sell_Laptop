@@ -52,11 +52,19 @@ public class LoginController : Controller
         //{
         //    Expires = DateTime.Now.AddHours(3), // Thời gian sống của cookie (ở đây là 30 ngày)
         //});
+
+        var apiUrl2 = $"https://localhost:44333/api/ChucNangTichDiem/GetStatusOfPointWallet?usename={username}";
+        var httpclien2t = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+        var respone2 = await httpclient.GetAsync(apiUrl2);
+        var jsonRespone2 = await respone2.Content.ReadAsStringAsync();
         if (respone.IsSuccessStatusCode)
         {
             var loginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
+            var StatusPointWallet = JsonConvert.DeserializeObject<int>(jsonRespone2);
+            var trangthaividiem = StatusPointWallet.ToString();
             HttpContext.Session.SetString("username", username);
             HttpContext.Session.SetString("AccessToken", loginRespones.Token);
+            HttpContext.Session.SetString("StatusPointWallet", trangthaividiem);
             string jwtToken = HttpContext.Session.GetString("AccessToken");
             return RedirectToAction("Index", "Home");
         }

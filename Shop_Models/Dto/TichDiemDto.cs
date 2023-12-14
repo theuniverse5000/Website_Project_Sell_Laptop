@@ -16,6 +16,7 @@ namespace Shop_Models.Dto
         public double TongDiemTrongViDiem { get; set; }
         public double SoDiemDaCongTrongVi { get; set; }
         public double SoDiemDaDungTrongVi { get; set; }
+        public int TrangThaiViDiem { get; set; }
 
     }
 }
