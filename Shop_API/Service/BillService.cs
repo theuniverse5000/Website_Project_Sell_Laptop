@@ -50,17 +50,6 @@ namespace Shop_API.Service
 
                 var listVoucher = await _voucherRepository.GetAllVouchers();
                 var voucherX = listVoucher.FirstOrDefault(x => x.MaVoucher == maVoucher);
-                var idVou = Guid.Empty;
-
-                if (voucherX == null || voucherX.SoLuong <= 0 || voucherX.StarDay > DateTime.Now || DateTime.Now > voucherX.EndDay)
-                {
-                    idVou = Guid.Empty;
-                }
-                else
-                {
-                    idVou = voucherX.Id;
-                }
-
                 var bill = new Bill
                 {
                     Id = Guid.NewGuid(),
@@ -70,7 +59,8 @@ namespace Shop_API.Service
                     FullName = user.FullName,
                     PhoneNumber = user.PhoneNumber,
                     Address = user.Address,
-                    VoucherId = idVou
+                    UserId = user != null ? user.Id : null,
+                    VoucherId = voucherX != null ? voucherX.Id : (Guid?)null
                 };
 
                 if (await _billRepository.Create(bill))
@@ -149,6 +139,7 @@ namespace Shop_API.Service
                 _reponseBill.FullName = billT.FullName;
                 _reponseBill.Address = billT.Address;
                 _reponseBill.Status = billT.Status;
+                _reponseBill.CreateDate = billT.CreateDate;
                 _reponseBill.BillDetail = listBillDetail;
                 _reponseBill.Count = listBillDetail.Count();
                 _reponse.Message = $"Lấy hóa đơn của khách hàng {invoiceCode} thành công.";

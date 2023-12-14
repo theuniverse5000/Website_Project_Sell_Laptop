@@ -2,12 +2,109 @@
 @{
     string tinhTrangSoLuong = String.Empty;
 }
+<style>
+    .wrapper {
+        display: inline-flex;
+        background: #fff;
+        height: 100px;
+        width: 400px;
+        align-items: center;
+        justify-content: space-evenly;
+        border-radius: 5px;
+        padding: 20px 15px;
+        box-shadow: 5px 5px 30px rgba(0,0,0,0.2);
+    }
+
+        .wrapper .option {
+            background: #fff;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 0 10px;
+            border: 2px solid lightgrey;
+            transition: all 0.3s ease;
+        }
+
+            .wrapper .option .dot {
+                height: 20px;
+                width: 20px;
+                background: #d9d9d9;
+                border-radius: 50%;
+                position: relative;
+            }
+
+                .wrapper .option .dot::before {
+                    position: absolute;
+                    content: "";
+                    top: 4px;
+                    left: 4px;
+                    width: 12px;
+                    height: 12px;
+                    background: #0069d9;
+                    border-radius: 50%;
+                    opacity: 0;
+                    transform: scale(1.5);
+                    transition: all 0.3s ease;
+                }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    #option-1:checked:checked ~ .option-1,
+    #option-2:checked:checked ~ .option-2 {
+        border-color: #0069d9;
+        background: #0069d9;
+    }
+
+        #option-1:checked:checked ~ .option-1 .dot,
+        #option-2:checked:checked ~ .option-2 .dot {
+            background: #fff;
+        }
+
+            #option-1:checked:checked ~ .option-1 .dot::before,
+            #option-2:checked:checked ~ .option-2 .dot::before {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+    .wrapper .option span {
+        font-size: 20px;
+        color: #808080;
+    }
+
+    #option-1:checked:checked ~ .option-1 span,
+    #option-2:checked:checked ~ .option-2 span {
+        color: #fff;
+    }
+</style>
 @foreach (var t in ViewBag.product)
 {
     <section class="py-5">
         <div class="container">
+            <h4 class="title text-dark">
+                [Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )
+                
+                    
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span class="ms-1">
+                            4.5
+                        </span>
+                    <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
+                    <span class="text-success ms-2">In stock</span>
+              
+            </h4>
             <div class="row gx-5">
-                <aside class="col-lg-6">
+                <div class="col-md-4 col-md-4">
                     <div class="border rounded-4 mb-3 d-flex justify-content-center">
                         <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="">
                             <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" />
@@ -25,8 +122,6 @@
                             }
                         }                                                                       
                     </div>
-
-
                     <h1>Thông số kỹ thuật</h1>
                     <table class="table border mt-3 mb-2">
                         <tr>
@@ -50,65 +145,84 @@
                             <td class="py-2">@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh</td>
                         </tr>
                     </table>
-                    <!-- thumbs-wrap.// -->
-                    <!-- gallery-wrap .end// -->
-                </aside>
-                <main class="col-lg-6">
-                    <div class="ps-lg-3">
-                        <h4 class="title text-dark">
-                            [Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )
-                        </h4>
-                        <div class="d-flex flex-row my-3">
-                            <div class="text-warning mb-1 me-2">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span class="ms-1">
-                                    4.5
-                                </span>
+              
+                </div>
+                <div class="col-md-4 col-sm-4">             
+                            <div class="mb-3">
+                                <span class="h5">Giá bán: @t.Price.ToString("N0")</span>
+                                <span class="text-muted">@t.ImportPrice.ToString("N0")</span><br>
+                                <span class="h5">Bảo hành: 12 Tháng</span><br>
+                                @if (t.AvailableQuantity > 0)
+                                {
+                                    tinhTrangSoLuong = "Còn hàng";
+                                }
+                                else
+                                {
+                                    tinhTrangSoLuong = "Hết hàng";
+                                }
+                                <span class="h5">Tình trạng: @tinhTrangSoLuong</span>
                             </div>
-                            <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
-                            <span class="text-success ms-2">In stock</span>
-                        </div>
-
-                        <div class="mb-3">
-                            <span class="h5">Giá bán: @t.Price.ToString("N0")</span>
-                            <span class="text-muted">@t.ImportPrice.ToString("N0")</span><br>
-                            <span class="h5">Bảo hành: 12 Tháng</span><br>
-                            @if (t.AvailableQuantity > 0)
-                            {
-                                tinhTrangSoLuong = "Còn hàng";
-                            }
-                            else
-                            {
-                                tinhTrangSoLuong = "Hết hàng";
-                            }
-                            <span class="h5">Tình trạng: @tinhTrangSoLuong</span>
-                        </div>
-                        <div class="row">
-                            <dt class="col-3">Loại sản phẩm:</dt>
-                            <dd class="col-9">@t.NameProductType</dd>
-
-                            <dt class="col-3">Nhà sản xuất:</dt>
-                            <dd class="col-9">@t.NameManufacturer</dd>
-
-                            <dt class="col-3">Màu sắc:</dt>
-                            <dd class="col-9">@t.NameColor</dd>
-                        </div>
-
-                        <hr />
-                        <a asp-controller="Client" asp-action="AddProductToCart" asp-route-code="@t.Code" class="btn btn-warning shadow-0"> Mua ngay </a>
-@*                         <a href="#" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
-                        <a href="#" class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i class="me-1 fa fa-heart fa-lg"></i> Save </a> *@
-                    </div>
-                </main>
+                        <p> Loại sản phẩm: @t.NameProductType </p>
+                        <p>Nhà sản xuất: @t.NameManufacturer </p>
+                        <p> Màu sắc: @t.NameColor </p>
+                            <hr />
+                <h2>CẤU HÌNH:</h2>
+                    @foreach (var k in ViewBag.listProductSame)
+                    {
+                        if(t.Code == k.Code)
+                        {
+                          
+                                <input type="radio" name="select"checked>
+                                <label >
+                                    <div class="dot"></div>
+                                    <span>
+                                        <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
+                                            @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
+                                        </a>
+                                    </span>
+                                </label>
+                           
+                        }
+                        else
+                        {
+                            <div class="wrapper">
+                                <input type="radio" name="select">
+                                <label >
+                                    <div class="dot"></div>
+                                    <span>
+                                        <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
+                                            @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
+                                        </a>
+                                    </span>
+                                </label>
+                            </div>
+                            @*     <div class="px-0 border rounded-2 shadow-0">
+                                        <div class="d-flex">
+                                            <div class="info">
+                                                <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
+                                                   @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive 
+                                                </a>
+                                                <strong class="text-dark"> @k.Price.ToString("N0")</strong>
+                                            </div>
+                                        </div>
+                            </div> *@
+                        }
+                    
+                       
+                    }
+                    <a asp-controller="Client" asp-action="AddProductToCart" asp-route-code="@t.Code" class="btn btn-warning shadow-0"> Mua ngay </a>
+                </div>
+               <div class="col-md-4 col-sm-4">
+                   <div class="">
+                       <ul>
+                            <li> <i class="fa-solid fa-star" style="color: #e2ff05;"></i>Chất lượng sản phẩm là hàng đầu</li>
+                       </ul>
+                   </div>
+               </div>
             </div>
-        </div>
+            </div>
     </section>
     <!-- content -->
-
     <section class="bg-light border-top py-4">
         <div class="container">
             <div class="row gx-4">
@@ -140,31 +254,6 @@
                         <!-- Pills content -->
                     </div>
                 </div>
-                @foreach (var k in ViewBag.listProductSame)
-                {
-                <div class="col-lg-4">
-                    <div class="px-0 border rounded-2 shadow-0">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Sản phẩm tương tự</h5>
-                                <div class="d-flex mb-3">
-                                    <a href="#" class="me-3">
-                                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp" style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                                    </a>
-                                    <div class="info">
-                                        <a href="#" class="nav-link mb-1">
-                                                @k.NameProduct @k.Code (@k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive )
-                                        </a>
-                                            <strong class="text-dark"> @k.Price.ToString("N0")</strong>
-                                    </div>
-                                </div>
-
-                              
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                }
             </div>
         </div>
     </section>

@@ -42,7 +42,27 @@
             margin-top: 20px;
             text-align: right;
         }
-    </style>
+
+    .find-bill{
+        max-width:500px;
+       
+        margin-left: 100px;
+    }
+
+    .pd-bt-40{
+        margin-bottom: 40px;
+    }
+</style>
+<div class="container">
+<h1>Mời bạn nhập mã hóa đơn để tra cứu đơn hàng</h1>
+    <div class="pd-bt-40">
+<form asp-controller="Client" asp-action="ShowBill" class="d-flex">
+    <input class="form-control find-bill" name="invoiceCode" type="search" placeholder="Bạn muốn tìm gì?" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">
+        <i class="fas fa-search"></i>
+    </button>
+</form>
+    </div>
 @if (ViewBag.Bill != null)
 {
     <div class="invoice">
@@ -52,7 +72,43 @@
         </div>
         <div class="invoice-details">
             <div>
-                <p>Mã Hóa Đơn: @ViewBag.Bill.InvoiceCode</p>
+                <p>Mã hóa đơn: @ViewBag.Bill.InvoiceCode</p>
+                    @if (ViewBag.Bill.Status == 0)
+                    {
+                        <p>Trạng thái: Đơn hàng đã bị hủy.</p>
+                    }
+                    else if (ViewBag.Bill.Status == 1)
+                    {
+                        <p>Trạng thái: Đang chờ xác nhận.</p>
+                    }
+                    else if (ViewBag.Bill.Status == 2)
+                    {
+                        <p>Trạng thái: Chưa thanh toán - Chưa giao hàng.</p>
+                    }
+                    else if (ViewBag.Bill.Status == 3)
+                    {
+                        <p>Trạng thái: Chưa thanh toán - Đang giao hàng.</p>
+                    }
+                    else if (ViewBag.Bill.Status == 4)
+                    {
+                        <p>Trạng thái: Đã thanh toán - Chưa giao hàng.</p>
+                    }
+                    else if (ViewBag.Bill.Status == 5)
+                    {
+                        <p>Trạng thái: Chưa thanh toán - Giao hàng thất bại.</p>
+                    }
+                    else if (ViewBag.Bill.Status == 6)
+                    {
+                        <p>Trạng thái: Đã thanh toán - Giao hàng thất bại.</p>
+                    }
+                    else if (ViewBag.Bill.Status == 7)
+                    {
+                        <p>Trạng thái: Đơn hàng đã hoàn thành.</p>
+                    }
+                    else if (ViewBag.Bill.Status == 8)
+                    {
+                        <p>Trạng thái: Đang chờ đổi trả.</p>
+                    }
             <p>Người bán: </p>
             </div>
             <div>
@@ -96,8 +152,32 @@
 }
 else
 {
-    <h1>Khong co data</h1>
+   <h2>Không có dữ liệu</h2>
 }
 
+</div>
+@* <script>
+    $(document).ready(function () {
+        // Gán sự kiện click cho nút tìm kiếm
+        $("#searchButton").on("click", function () {
+            // Lấy giá trị từ trường nhập liệu
+            var invoiceCode = $("[name='invoiceCode']").val();
 
+            // Thực hiện AJAX
+            $.ajax({
+                url: '/Client/ShowBill2', // Đường dẫn tới action trong controller
+                type: 'GET', // Hoặc 'POST' tùy thuộc vào cách bạn đã thiết lập action của mình
+                data: { invoiceCode: invoiceCode }, // Dữ liệu gửi đi
+                success: function (data) {
+                    // Cập nhật nội dung của #invoiceContainer
+                    $("#invoiceContainer").html(data);
+                },
+                error: function (error) {
+                    // Xử lý lỗi nếu có
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script> *@
 
