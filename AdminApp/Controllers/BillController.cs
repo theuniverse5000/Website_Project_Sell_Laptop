@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 using System.Net.Http.Headers;
 
@@ -83,6 +84,42 @@ namespace AdminApp.Controllers
                 }
             }
         }
+
+
+
+        [HttpPost("TichDiemMuaHangAsync1")]
+        public async Task<IActionResult> TichDiemMuaHangAsync1(string invoiceCode, double? TongTienThanhToan)
+        {
+            try
+            {
+                using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
+                {
+                    var accessToken = Request.Cookies["account"];
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                    // Pass the necessary data in the request body
+                    var requestData = new { InvoiceCode = invoiceCode, TongTienThanhToan = TongTienThanhToan };
+                    HttpResponseMessage response = await client.PostAsJsonAsync("https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync", requestData);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadAsStringAsync();
+                        return Json(result);
+                    }
+                    else
+                    {
+                        return Json(null);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception
+                return Json(new { success = false });
+            }
+        }
+
+
 
     }
 }

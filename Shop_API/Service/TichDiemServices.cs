@@ -32,22 +32,24 @@ namespace Shop_API.Service
         // Hàm tính số điểm tích lũy dựa vào tổng tiền hóa đơn
         public double TinhDiemTichLuy(double tongTienHoaDon)
         {
-            const double tiLeDiemTichLuy = 0.000000625; // tiLeDiemTichLuy = 1 VND /1.600.000 VND = 0.000000625
-
+            const double tiLeDiemTichLuy = 0.000000625; // tiLeDiemTichLuy = 1 VND / 1.600.000 VND = 0.000000625
 
             if (tongTienHoaDon > 0)
             {
                 double diemTichLuy = tongTienHoaDon * tiLeDiemTichLuy;
 
+                // Làm tròn số thập phân thành số nguyên
+                diemTichLuy = Math.Round(diemTichLuy);
+
                 return diemTichLuy;
             }
             else
             {
-                double diemTichLuy = 0;
-
-                return diemTichLuy;
+                // Trả về 0 nếu tổng tiền hóa đơn không hợp lệ
+                return 0;
             }
         }
+
 
         // hàm tính đổi điểm sang tiền khi sử dụng điểm 
         public double DoiDiemSangTien(double? soDiemMuonDoi)
@@ -230,9 +232,6 @@ namespace Shop_API.Service
                 return _reponseDto;
             }
         }
-
-
-
 
         //if (billT == null && TongTienThanhToan <= 0)
         //{
@@ -613,7 +612,7 @@ namespace Shop_API.Service
         public async Task<ResponseDto> TichDiemMuaHangAsync(string invoiceCode, double TongTienThanhToan)
         {
             var billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);
-            //var user = await _userRepository.GetUserById(billT.UserId);
+            var user2 = await _userRepository.GetUserByUserName(billT.FullName);
 
             if (billT == null && TongTienThanhToan <= 0)
             {
@@ -627,13 +626,14 @@ namespace Shop_API.Service
                 _reponseDto.Message = "chưa thanh toán";
                 _reponseDto.IsSuccess = false;
                 return _reponseDto;// Không thực hiện tích điểm nếu hóa đơn có trạng thái khác 1.(chưa thanh toán xong) 
-            } else if (billT.Status == 4 || billT.Status == 6 || billT.Status == 7)
-            {
-                _reponseDto.Code = 400;
-                _reponseDto.Message = "da thanh toan va tich diem doi voi hoa don nay roi";
-                _reponseDto.IsSuccess = false;
-                return _reponseDto;// Không thực hiện tích điểm nếu hóa đơn có trạng thái khác 1.(chưa thanh toán xong) 
-            }            
+            }
+            //else if (billT.Status == 4 || billT.Status == 6 || billT.Status == 7)
+            //{
+            //    _reponseDto.Code = 400;
+            //    _reponseDto.Message = "da thanh toan va tich diem doi voi hoa don nay roi";
+            //    _reponseDto.IsSuccess = false;
+            //    return _reponseDto;// Không thực hiện tích điểm nếu hóa đơn có trạng thái khác 1.(chưa thanh toán xong) 
+            //}
             else
             {
                 var user = await _userRepository.GetUserById(billT.UserId);
@@ -769,7 +769,7 @@ namespace Shop_API.Service
         }
 
 
-        public async Task<ResponseDto> TieuDiemMuaHangAsync(string invoiceCode, double TongTienThanhToan, double? SoDiemMuonDung)
+        public async Task<ResponseDto> TieuDiemMuaHangAsync(string invoiceCode, double TongTienThanhToan/*, double? SoDiemMuonDung*/)
         {
             // Existing code for retrieving data
             var billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);
@@ -798,14 +798,14 @@ namespace Shop_API.Service
             //{
             //    // Existing code for handling errors
             //}
-            else if (SoDiemMuonDung> viDiem.TongDiem)
-            {
-                _reponseDto.Code = 405;
-                _reponseDto.Message = "Số điểm muốn dùng không thể lớn hơn tổng điểm hiện có";
-                _reponseDto.IsSuccess = false;
+            //else if (SoDiemMuonDung> viDiem.TongDiem)
+            //{
+            //    _reponseDto.Code = 405;
+            //    _reponseDto.Message = "Số điểm muốn dùng không thể lớn hơn tổng điểm hiện có";
+            //    _reponseDto.IsSuccess = false;
 
-                return _reponseDto;
-            }
+            //    return _reponseDto;
+            //}
             else
             {
                 var user = await _userRepository.GetUserById(billT.UserId);
@@ -815,7 +815,7 @@ namespace Shop_API.Service
                 if (stViDiem != null && stViDiem.TrangThai == 2)
                 {
                     var SoDiemDuocCong = TinhDiemTichLuy(TongTienThanhToan);
-                    var tienTieuDiem = DoiDiemSangTien(SoDiemMuonDung);
+                    var tienTieuDiem = DoiDiemSangTien(viDiem.TongDiem);
                     var tienTichDiem = DoiDiemSangTien(SoDiemDuocCong);
 
 
@@ -830,7 +830,7 @@ namespace Shop_API.Service
                     // thêm lịch sử tiêu điểm 
                     LichSuTieuDiem objLSTieuDiem = new LichSuTieuDiem();
                     objLSTieuDiem.Id = Guid.NewGuid();
-                    objLSTieuDiem.SoDiemDaDung = (double)SoDiemMuonDung;
+                    objLSTieuDiem.SoDiemDaDung = (double)viDiem.TongDiem;
                     objLSTieuDiem.SoDiemCong = 0;
                     objLSTieuDiem.NgaySD = DateTime.Now;
                     objLSTieuDiem.TrangThai = 1;
@@ -839,10 +839,11 @@ namespace Shop_API.Service
                     _lichSuTieuDiemRepository.Create(objLSTieuDiem);
 
                     // vi diem
-                    double tongDiem = (double)(viDiem.TongDiem - SoDiemMuonDung + SoDiemDuocCong);
+                    double tongDiem = (double)(viDiem.TongDiem - viDiem.TongDiem);
+                    viDiem.SoDiemDaDung += (double)viDiem.TongDiem;
                     viDiem.TongDiem = tongDiem; // tổng điểm hiện có sau khi trừ số điểm muốn dùng và cộng số điểm được cộng 
                     viDiem.SoDiemDaCong += 0;
-                    viDiem.SoDiemDaDung += (double)SoDiemMuonDung;
+                   
                     viDiem.TrangThai = 2; // trạng thái 2 sẽ là đánh dấu người người đã mua lần đầu
                     _viDiemRepository.Update(viDiem);
 
