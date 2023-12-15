@@ -63,12 +63,12 @@ public class LoginController : Controller
     [HttpPost]
     public async Task<IActionResult> AccountSignUp(string userName, string email, string password, string fullName)
     {
-        LoginRequestDto userLogin = new LoginRequestDto();
+        UserRegisterDto userLogin = new UserRegisterDto();
         userLogin.UserName = userName;
         userLogin.Email = email;
         userLogin.Password = password;
         userLogin.FullName = fullName;
-        userLogin.isAdmin = false;
+        userLogin.IsAdmin = false;
         var apiUrl = "https://localhost:44333/User/Register";
         var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
         var requestdata = new StringContent(JsonConvert.SerializeObject(userLogin), Encoding.UTF8, "application/json");
@@ -76,7 +76,7 @@ public class LoginController : Controller
         var jsonRespone = await respone.Content.ReadAsStringAsync();
         if (respone.IsSuccessStatusCode)
         {
-            var loginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
+            var loginRespones = JsonConvert.DeserializeObject<UserRegisterDto>(jsonRespone);
             HttpContext.Session.SetString("username", userName);
             return RedirectToAction("Index", "Home");
         }
