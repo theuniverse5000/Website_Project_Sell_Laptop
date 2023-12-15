@@ -257,7 +257,7 @@
                         // Trường hợp cập nhật
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
                         console.log(e.model.invoiceCode);
-
+                        totalAmount = 25000000;
                         $.ajax({
                             type: "POST",
                             url: "https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync?invoiceCode=" + e.model.invoiceCode + "&TongTienThanhToan=" + totalAmount,
@@ -401,26 +401,26 @@
             }
         }
 
-        // var totalAmount = 0;
-        // button.click(function (e) {
-        //     e.preventDefault();
+        var totalAmount = 0;
+        button.click(function (e) {
+            e.preventDefault();
 
-        //     // Fetch the details data for the clicked row
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "/Bill/GetListBillDetailByInvoiceCode",
-        //         data: { invoiceCode: dataItem.invoiceCode },
-        //         success: function (detailsData) {
-        //             // Calculate total amount
-        //             calculateTotalAmount(detailsData.result);
+            // Fetch the details data for the clicked row
+            $.ajax({
+                type: "GET",
+                url: "/Bill/GetListBillDetailByInvoiceCode",
+                data: { invoiceCode: dataItem.invoiceCode },
+                success: function (detailsData) {
+                    // Calculate total amount
+                    calculateTotalAmount(detailsData.result);
 
-        //             // Rest of your code...
-        //         },
-        //         error: function () {
-        //             alert("Lỗi khi gọi API.");
-        //         }
-        //     });
-        // });
+                    // Rest of your code...
+                },
+                error: function () {
+                    alert("Lỗi khi gọi API.");
+                }
+            });
+        });
 
 
 
