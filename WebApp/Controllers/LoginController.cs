@@ -37,21 +37,11 @@ public class LoginController : Controller
         LoginRequestDto login = new LoginRequestDto();
         login.UserName = username;
         login.Password = password;
-        //login.RememberMe = true;
-        //login.ReturnUrl = String.Empty;
         var apiUrl = "/api/Authentication/Login";
         var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
         var requestdata = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
         var respone = await httpclient.PostAsync(apiUrl, requestdata);
-        //var LoginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(respone.Content);
         var jsonRespone = await respone.Content.ReadAsStringAsync();
-        //var loginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
-        // Lưu trữ access token trong một cookie
-        //HttpContext.Response.Cookies.Append("access_token", loginRespones.Data.ToString(), new CookieOptions
-        //{
-        //    Expires = DateTime.Now.AddHours(3), // Thời gian sống của cookie (ở đây là 30 ngày)
-        //});
-
         var apiUrl2 = $"https://localhost:44333/api/ChucNangTichDiem/GetStatusOfPointWallet?usename={username}";
         var httpclien2t = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
         var respone2 = await httpclient.GetAsync(apiUrl2);
@@ -68,6 +58,32 @@ public class LoginController : Controller
             return RedirectToAction("Index", "Home");
         }
         else return BadRequest("Error");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AccountSignUp(string userName, string email, string password, string fullName)
+    {
+        LoginRequestDto userLogin = new LoginRequestDto();
+        userLogin.UserName = userName;
+        userLogin.Email = email;
+        userLogin.Password = password;
+        userLogin.FullName = fullName;
+        userLogin.isAdmin = false;
+        var apiUrl = "https://localhost:44333/User/Register";
+        var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+        var requestdata = new StringContent(JsonConvert.SerializeObject(userLogin), Encoding.UTF8, "application/json");
+        var respone = await httpclient.PostAsync(apiUrl, requestdata);
+        var jsonRespone = await respone.Content.ReadAsStringAsync();
+        if (respone.IsSuccessStatusCode)
+        {
+            var loginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
+            HttpContext.Session.SetString("username", userName);
+            return RedirectToAction("Index", "Home");
+        }
+        else {
+
+            return BadRequest("Error");
+        }
 
     }
     public async Task<IActionResult> LogOut()
@@ -112,34 +128,6 @@ public class LoginController : Controller
 
             return RedirectToAction("Login");
         }
-    }
-
-    public async Task<IActionResult> SignUp()
-    {
-        return PartialView("_SignUp");
-    }
-    [HttpPost]
-    public async void AccountSignUp(
-        [FromBody] SignUpDto signUpdata)
-    {
-        var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-        var apiUrl = "/api/User/Register";
-        var requestData = new StringContent(JsonConvert.SerializeObject(signUpdata), Encoding.UTF8, "application/json");
-        var respone = await httpClient.PostAsync(apiUrl, requestData);
-        var content = JsonConvert.DeserializeObject<ResponseDto>(await respone.Content.ReadAsStringAsync());
-        var signUpRespone = JsonConvert.DeserializeObject<SignUpRespone>(content.Result.ToString());
-        if (respone.IsSuccessStatusCode)
-        {
-            var userInformation = JsonConvert.DeserializeObject<User>(signUpRespone.Data.ToString());
-            LoginRequestDto userLogin = new LoginRequestDto()
-            {
-                UserName = userInformation.UserName,
-                Password = userInformation.Password,
-                RememberMe = true,
-            };
-            RedirectToAction("LoginWithJWT", userLogin);
-        }
-
     }
     public IActionResult LoginWithFacebook(string returnUrl = "/")
     {

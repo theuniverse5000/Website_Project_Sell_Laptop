@@ -152,41 +152,27 @@
                 	  <div id="second">
 			      <div class="myform form ">
                       
-                        <form action="#" name="registration">
-                           <div class="form-group">
-                              <label for="exampleInputEmail1">Họ và tên</label>
-                              <input type="text"  name="firstname" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="">
-                           </div>
-                           <div class="form-group">
-                              <label for="exampleInputEmail1">Địa chỉ</label>
-                              <input type="text"  name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="">
-                           </div>
-                           <div class="form-group">
-                              <label for="exampleInputEmail1">Số điện thoạt</label>
-                              <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="">
-                           </div>
+                        <form asp-controller="Login" asp-action="AccountSignUp" method="post" name="registration" onsubmit="submitForm(event)"> 
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Tài khoản</label>
-                                <input type="text" name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="">
+                                <input type="text" name="userName" class="form-control" id="userName" aria-describedby="emailHelp" placeholder="">
                             </div>
-                           <div class="form-group">
-                              <label for="exampleInputEmail1">Mật khẩu</label>
-                              <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="">
-                           </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Nhập lại mật khẩu</label>
+                                <label for="exampleInputEmail1">Email</label>
+                                <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Mật khẩu</label>
                                 <input type="password" name="password" id="password" class="form-control" aria-describedby="emailHelp" placeholder="">
                             </div>
-                           <div class="col-md-12 text-center mb-3">
-                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Đăng ký</button>
-                           </div>
-                           <div class="col-md-12 ">
-                              <div class="form-group">
-                                 <p class="text-center"><a href="#" id="signin">Bạn đã có tài khoản? Đăng nhập ngay</a></p>
-                              </div>
-                           </div>
-                          
-                    </form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Họ và tên</label>
+                                <input type="text" name="fullName" class="form-control" id="fullName" aria-describedby="emailHelp" placeholder="">
+                            </div>
+                            <div class="col-md-12 text-center mb-3">
+                                <button type="submit" class="btn btn-block mybtn btn-primary tx-tfm">Đăng ký</button>
+                            </div>
+                        </form>
                      </div>
 			</div>
             </div>
@@ -215,7 +201,6 @@
             $("#first").fadeIn("fast");
         });
     });
-
 
 
     // $(function () {
