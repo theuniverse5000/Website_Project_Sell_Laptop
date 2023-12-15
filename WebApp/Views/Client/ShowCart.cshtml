@@ -2,6 +2,8 @@
     int stt = 0;
     string statuswallet = ViewContext.HttpContext.Session.GetString("StatusPointWallet");
     string username = ViewContext.HttpContext.Session.GetString("username");
+    float thanhTien = 0;
+    float tongTien = 0;
 }
 <section class="h-100 h-custom">
     <div class="container h-100 py-5">
@@ -15,19 +17,19 @@
                                 <th scope="col">Số thứ tự</th>
                                 <th scope="col">Mã sản phẩm</th>
                                 <th scope="col">Số lượng</th>
-                                <th scope="col">Giá</th>
+                                <th scope="col">Thành tiền</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var t in ViewBag.cartItem)
                             {
                                 stt++;
-
-                                <tr>
-                                    <th>@stt</th>
-                                    <th>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-column ms-4">
+                            
+                            <tr>
+                                <th>@stt</th>
+                                <th>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-column ms-4">
                                                 <p class="mb-2">@t.MaProductDetail</p>
                                             </div>
                                         </div>
@@ -43,10 +45,10 @@
                                             </button>
                                         </div>
                                     </td>
-                                    <td class="align-middle">
+                                <td class="align-middle">
                                         <p class="mb-0" style="font-weight: 500;">@t.Price*@t.Quantity</p>
-                                    </td>
-                                </tr>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -105,7 +107,7 @@
                                     </div>
                                 </form>
                             </div>
-
+                           
                             <div class="container">
                                 <h1>Chọn danh sách tỉnh</h1>
                                 <form action="">
@@ -118,19 +120,22 @@
                                         <option value="">chọn phường</option>
                                     </select>
                                 </form>
+                            }
+                            <div class="container">
+                                
 
 
                                 <h2 id="result"></h2>
                             </div>
                             <div class="col-lg-4 col-xl-3">
                                 <div class="d-flex justify-content-between" style="font-weight: 500;">
-                                    <p class="mb-2">Thành tiền</p>
-                                    <p class="mb-2">15.0000.000</p>
+                                    <p class="mb-2">Tổng tiền</p>
+                                    <p class="mb-2">@tongTien</p>
                                 </div>
 
                                 <div class="d-flex justify-content-between" style="font-weight: 500;">
                                     <p class="mb-0">Phí ship</p>
-                                    <p class="mb-0">50.000</p>
+                                    <p class="mb-0">00.000</p>
                                 </div>
                                 <form asp-controller="Client" asp-action="CreateBill">
                                     <div class="form-outline mb-4">
@@ -256,6 +261,7 @@
                     var currentQuantity = parseInt(quantityLabel.text());
                     var newQuantity = currentQuantity - 1;
                     quantityLabel.text(newQuantity);
+                    location.reload();
                 },
                 error: function (error) {
                     console.error('Error:', error);
@@ -266,7 +272,6 @@
             var itemId = $(this).data("id");
             var row = $(this).closest('tr');
             var quantityLabel = row.find(".quantity-input");
-
             $.ajax({
                 url: '/Client/IncreaseQuantity',
                 type: 'POST',
@@ -275,6 +280,7 @@
                     var currentQuantity = parseInt(quantityLabel.text());
                     var newQuantity = currentQuantity + 1;
                     quantityLabel.text(newQuantity);
+                    location.reload();
                 },
                 error: function (error) {
                     console.error('Error:', error);

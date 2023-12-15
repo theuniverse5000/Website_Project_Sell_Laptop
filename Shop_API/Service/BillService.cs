@@ -130,7 +130,7 @@ namespace Shop_API.Service
 
         public async Task<ResponseDto> PGetBillByInvoiceCode(string invoiceCode)
         {
-            Bill billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);
+            var billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);
             if (billT != null)
             {
                 var listBillDetail = await _billRepository.GetBillDetailByInvoiceCode(invoiceCode);
@@ -140,6 +140,9 @@ namespace Shop_API.Service
                 _reponseBill.Address = billT.Address;
                 _reponseBill.Status = billT.Status;
                 _reponseBill.CreateDate = billT.CreateDate;
+                _reponseBill.CodeVoucher = billT.CodeVoucher;
+                _reponseBill.GiamGia = billT.GiamGia;
+                _reponseBill.UserId = billT.UserId;
                 _reponseBill.BillDetail = listBillDetail;
                 _reponseBill.Count = listBillDetail.Count();
                 _reponse.Message = $"Lấy hóa đơn của khách hàng {invoiceCode} thành công.";

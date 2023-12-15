@@ -152,41 +152,32 @@
                 	  <div id="second">
 			      <div class="myform form ">
                       
-                        <form action="#" name="registration">
-                           <div class="form-group">
-                              <label for="exampleInputEmail1">Họ và tên</label>
-                              <input type="text"  name="firstname" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="">
-                           </div>
-                           <div class="form-group">
-                              <label for="exampleInputEmail1">Địa chỉ</label>
-                              <input type="text"  name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="">
-                           </div>
-                           <div class="form-group">
-                              <label for="exampleInputEmail1">Số điện thoạt</label>
-                              <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="">
-                           </div>
+                        <form asp-controller="Login" asp-action="AccountSignUp" method="post" name="registration" onsubmit="submitForm(event)">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Họ và tên</label>
+                                <input type="text" name="fullName" class="form-control" id="fullName" aria-describedby="emailHelp" placeholder="">
+                            </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Tài khoản</label>
-                                <input type="text" name="lastname" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="">
+                                <input type="text" name="userName" class="form-control" id="userName" aria-describedby="emailHelp" placeholder="">
                             </div>
-                           <div class="form-group">
-                              <label for="exampleInputEmail1">Mật khẩu</label>
-                              <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="">
-                           </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Nhập lại mật khẩu</label>
+                                <label for="exampleInputEmail1">Email</label>
+                                <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Mật khẩu</label>
                                 <input type="password" name="password" id="password" class="form-control" aria-describedby="emailHelp" placeholder="">
                             </div>
-                           <div class="col-md-12 text-center mb-3">
-                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Đăng ký</button>
-                           </div>
-                           <div class="col-md-12 ">
-                              <div class="form-group">
-                                 <p class="text-center"><a href="#" id="signin">Bạn đã có tài khoản? Đăng nhập ngay</a></p>
-                              </div>
-                           </div>
-                          
-                    </form>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Nhập lại mật khẩu</label>
+                                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" aria-describedby="emailHelp" placeholder="">
+                            </div>
+                            
+                            <div class="col-md-12 text-center mb-3">
+                                <button type="submit" class="btn btn-block mybtn btn-primary tx-tfm">Đăng ký</button>
+                            </div>
+                        </form>
                      </div>
 			</div>
             </div>
@@ -194,6 +185,9 @@
         </div>
     </div>
 <script>
+
+  
+
     $(document).ready(function () {
         $("#loginLink").click(function (e) {
             e.preventDefault();
@@ -217,6 +211,40 @@
     });
 
 
+    document.addEventListener("DOMContentLoaded", function () {
+        var registrationForm = document.forms["registration"];
+
+        registrationForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            var fullName = registrationForm.elements["fullName"].value;
+            var userName = registrationForm.elements["userName"].value;
+            var email = registrationForm.elements["email"].value;
+            var password = registrationForm.elements["password"].value;
+            var confirmPassword = registrationForm.elements["confirmPassword"].value;
+
+            if (fullName.trim() === '' || userName.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '') {
+                alert('Vui lòng điền đầy đủ thông tin');
+            } else if (userName.length < 4 || userName.length > 100) {
+                alert('Tên đăng nhập phải có ít nhất 4 và nhiều nhất 100 kí tự.');
+            } else if (password.length < 7 || password.length > 100) {
+                alert('Mật khẩu phải có ít nhất 7 và nhiều nhất 100 kí tự.');
+            } else if (password !== confirmPassword) {
+                alert('Mật khẩu và xác nhận mật khẩu không khớp');
+            } else if (!/\d/.test(password)) {
+                alert('Mật khẩu phải chứa ít nhất một chữ số (0-9).');
+            } else if (!/[A-Z]/.test(password)) {
+                alert('Mật khẩu phải chứa ít nhất một chữ viết hoa (A-Z).');
+            } else if (!/[a-z]/.test(password)) {
+                alert('Mật khẩu phải chứa ít nhất một chữ viết thường (a-z).');
+            } else if (!/\W/.test(password)) {
+                alert('Mật khẩu phải chứa ít nhất một ký tự không phải chữ hoặc số.');
+            } else {
+                // If all conditions pass, manually submit the form
+                registrationForm.submit();
+            }
+        });
+    });
 
     // $(function () {
     //     $("form[name='login']").validate({
