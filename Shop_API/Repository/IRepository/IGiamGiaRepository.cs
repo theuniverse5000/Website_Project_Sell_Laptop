@@ -1,4 +1,5 @@
-﻿using Shop_Models.Entities;
+﻿using Shop_Models.Dto;
+using Shop_Models.Entities;
 
 namespace Shop_API.Repository.IRepository
 {
@@ -9,6 +10,8 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Delete(Guid id);
         Task<List<GiamGia>> GetAllGiamGias();
         Task<GiamGia> GetGiamGiaByPromotionType(string promotionType);
+        Task<ResponseDto> CreateReturnDto(GiamGia obj);
+
 
     }
 }

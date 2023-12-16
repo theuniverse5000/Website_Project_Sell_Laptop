@@ -545,6 +545,25 @@ namespace Shop_API.Repository
             }).ToList();
         }
 
+        public List<GiamGia> GetAllGiamGia(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            var allGiamGia = _context.GiamGias.Where(x => x.TrangThai > 0).AsQueryable();
+            int totalCount = allGiamGia.Count();
+            return allGiamGia.Select(hh => new GiamGia
+            {
+                Id = hh.Id,
+                Ma = hh.Ma,
+                Ten = hh.Ten,
+                NgayBatDau = hh.NgayBatDau,
+                NgayKetThuc = hh.NgayKetThuc,
+                MucGiamGiaPhanTram = hh.MucGiamGiaPhanTram,
+                MucGiamGiaTienMat = hh.MucGiamGiaTienMat,
+                LoaiGiamGia = hh.LoaiGiamGia,
+                TrangThai = hh.TrangThai
+
+            }).ToList();
+        }
+
 
     }
 }

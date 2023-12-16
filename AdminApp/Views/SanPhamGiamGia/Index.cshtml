@@ -1,8 +1,15 @@
 ﻿@{
-    ViewBag.Title = "Manufacturer";
+    ViewBag.Title = "Sản Phẩm Giảm Giá";
 
 }
 <span id="notification" style="display:none;">222</span>
+<form asp-controller="Serial" asp-action="ImportFromExcel" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="excelFile">Chọn file excel</label>
+        <input type="file" name="excelFile" class="form-control-file" accept=".xlsx" required />
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" type="submit">Lưu lại</button>
+</form>
 <div id="example">
     <div id="grid"></div>
 </div>
@@ -55,23 +62,23 @@
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/Manufacturer/GetManufacturer",
+                            url: "/SanPhamGiamGia/GetSPGG",
                             type: "GET",
                             dataType: "json"
                         },
                         create: {
-                            url: "/Manufacturer/CreateManufacturer",
+                            url: "/SanPhamGiamGia/CreateSPGGWithOne",
                             type: "POST",
                             dataType: "json",
 
                         },
                         update: {
-                            url: "/Manufacturer/UpdateManufacturer",
+                            url: "/SanPhamGiamGia/UpdateSPGG",
                             type: "PUT",
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/Manufacturer/DeleteManufacturer2",
+                            url: "/SanPhamGiamGia/DeleteSPGG",
                             type: "DELETE",
                             dataType: "json"
                         },
@@ -80,17 +87,21 @@
                     schema: {
                         data: "result",
                         total: "count", // Chỉ định tên trường tổng số dòng,
+                        serverPaging: true, // tai lai data sau khi update
                         model: {
                             id: "id",
                             fields: {
-                                linkImage: { type: "file" },
-                                name: { type: "string", validation: { required: true } },
-                                //  status: { type: "int" }
+                                // ma: { type: "string", validation: { required: true } },
+                                serialNumber: { type: "string", validation: { required: true } },
+                                status: { type: "int" },
+                                productDetailId: { type: "string", validation: { required: true } },
+                                giamGiaId: { type: "string", validation: { required: true } },
+                               
                             }
                         }
                     },
 
-                    pageSize: 20,
+                    pageSize: 10,
 
                 },
                 height: 550,
@@ -113,7 +124,13 @@
 
                     },
 
-                    "pdf"],
+                    {
+                        name: "pdf",
+                        text: "Xuất file PDF", /* Thay đổi văn bản của nút "Thêm" */
+
+                    },
+                    "search"
+                ],
                 pdf: {
                     allPages: true,
                     avoidLinks: true,
@@ -132,33 +149,23 @@
 
                 save: function (e) {
                     if (e.model.isNew()) {
-                        e.model.dirty = true;
-                        console.log(" tra ve: " + e.response);
-                        e.sender.dataSource.one("requestEnd", function (ev) {
-                            console.log(ev.response);
-                            if (ev.type === "create" && ev.response.code === 200) {
+                        // Thay đổi status thành biến thực tế của bạn
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
 
-                                showNotification(ev.response.message, "success");
-                            } else {
-                                showNotification("Thêm Thất Bại", "error");
-                                showNotification(ev.response.message, "error");
-                            }
-                            $("#grid").data("kendoGrid").dataSource.read();
-                        });
+                        if (status === 'success') {
+                            showNotification("Lưu thành công", "success");
+                        } else {
+                            showNotification("Lưu thất bại", "error");
+                        }
                     } else if (e.model.dirty) {
-                        e.sender.dataSource.one("requestEnd", function (ev) {
-                            console.log(ev);
-                            console.log(ev.response);
-                            if (ev.type === "update" && ev.response === "Sửa thành công") {
+                        // Trường hợp cập nhật
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
 
-                                showNotification(ev.response, "success");
-                            } else {
-                                showNotification("Cập nhật thất bại", "error");
-                                showNotification(ev.response, "error");
-                            }
-                            $("#grid").data("kendoGrid").dataSource.read();
-                        });
-
+                        if (status === 'success') {
+                            showNotification("Cập nhật thành công", "success");
+                        } else {
+                            showNotification("Cập nhật thất bại", "error");
+                        }
                     } else if (e.model.isNew() && e.model.isDestroyed()) {
                         // Trường hợp xóa
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
@@ -171,16 +178,71 @@
                     }
                 },
 
-                columns: [
-                    // {
 
-                    //     field: "linkImage",
-                    //     title: "linkImage"
-                    // },
+                columns: [
                     {
-                        field: "name",
-                        title: "Tên Nhà Sản Xuất"
+                        field: "dongia",
+                        title: "Đơn Giá",
+                        // Make "Mã" field editable when adding a new record
+                        editable: function (dataItem) {
+                            return dataItem.isNew();
+                        }
                     },
+                    {
+                        field: "sotienconlai",
+                        title: "Số tiền còn lại",
+                        // Make "Mã" field editable when adding a new record
+                        editable: function (dataItem) {
+                            return dataItem.isNew();
+                        }
+                    },
+                    {
+                        field: "giamGiaCode",
+                        title: "Mã Giảm Giá",
+                        editor: function (container, options) {
+                            // Tạo dropdownlist
+                            $("<input name='giamGiaId'/>")
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    dataSource: {
+                                        transport: {
+                                            read: {
+                                                url: "/GiamGia/GetGiamGia",
+                                                type: "GET"
+                                            }
+                                        }
+                                    },
+                                    dataValueField: "id",
+                                    dataTextField: "ma",
+                                    optionLabel: "Chọn mã giảm giá"
+                                });
+                        }
+                    },
+                    {
+                        field: "productDetailCode",
+                        title: "Mã Sản Phẩm Chi Tiết",
+                        editor: function (container, options) {
+                            // Tạo dropdownlist
+                            $("<input name='productDetailId' />")
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    // Cấu hình tải dữ liệu từ API hoặc nguồn dữ liệu của bạn
+                                    dataSource: {
+                                        transport: {
+                                            read: {
+                                                url: "/ProductDetail/GetList", // Thay thế đường dẫn bằng API của bạn
+                                                type: "GET"
+                                            }
+                                        }
+                                    },
+                                    dataValueField: "id", // Thay thế bằng trường ID thực tế
+                                    dataTextField: "code", // Thay thế bằng trường hiển thị thực tế
+                                    optionLabel: "Chọn mã sản phẩm" // Đây là giá trị mặc định (null)
+
+                                });
+                        }
+                    },
+                    
                     {
                         command: [
                             {
@@ -202,7 +264,6 @@
         });
     </script>
 }
-
 
 
 

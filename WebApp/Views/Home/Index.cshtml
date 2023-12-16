@@ -1,7 +1,12 @@
 ﻿@using Shop_Models.Dto
+@using Shop_Models.Entities;
 @{
     List<ProductDetailDto> productDetails = ViewBag.ProductDetails;
         List<ImageDto> images = ViewBag.Image;
+    List<SanPhamGiamGiaDto> sanPhamGiamGias = ViewBag.SanPhamGiamGia;
+    List<GiamGia> giamGias = ViewBag.GiamGia;
+
+
 
 }
 <div class=" row">
@@ -708,45 +713,23 @@
                             return widthPercentage.ToString() + "%";
                         }
 
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < 5; i++)
                         {
-                            double giamgia = ((@productDetails[i].ImportPrice - @productDetails[i].Price) / @productDetails[i].ImportPrice) * 100;
+                            decimal giamgia = giamGias[i].MucGiamGiaPhanTram;
                             <div class="item">
                                 <div class="p-container">
                                     <a href="" class="p-img">
                                         <img src="./img/Products/text_d_i_5__1 1.png">
                                         <span class="percent">-@giamgia.ToString("0.")%</span>
                                     </a>
-                                    <a href="" class="p-name">@productDetails[i].Code</a>
+                                    <a href="" class="p-name">@productDetails[i].NameProduct</a>
                                     <div class="p-price-all">
                                         <span class="p-price">
-                                            @productDetails[i].Price.ToString("N0")
+                                            @sanPhamGiamGias[i].SoTienConLai.ToString("N0")
                                         </span>
-                                        <span class="p-old-price">@productDetails[i].ImportPrice.ToString("N0") </span>
+                                        <span class="p-old-price">@sanPhamGiamGias[i].DonGia.ToString("N0") </span>
                                     </div>
-                                    <div class="deal-status">
-                                        <div>
-                                            <div class="p-order-status w-100">
-                                                @{
-                                                    double progressBarWidth = double.Parse(GetProgressBarWidth(productDetails[i].Status).Replace("%", ""));
-                                                }
-                                                @if (progressBarWidth > 50)
-                                                {
-                                                    <span class="text" style="right: initial; left: 60px; color: #000; transform: translateX(-100%)">
-                                                        Còn lại @productDetails[i].Status
-                                                    </span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text" style="right: 10px; left: initial; color: #000">
-                                                        Còn lại @productDetails[i].Status
-                                                    </span>
-                                                }
-                                                <span class="bg-count-left" style="width: @GetProgressBarWidth(productDetails[i].Status)"></span>
-                                                <span class="icon-order-status icon-order-status-deal" style="left: @GetProgressBarWidth(productDetails[i].Status)"></span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         }

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Manufacturer";
+    ViewBag.Title = "GiamGia";
 
 }
 <span id="notification" style="display:none;">222</span>
@@ -51,27 +51,44 @@
                 }
             }
 
+            // // Cấu hình Kendo UI Notification
+            // $("#notification").kendoNotification({
+            //     position: {
+            //         top: 50,
+            //         right: 20
+            //     }
+            // });
+            // Function hiển thị thông báo
+            // function showNotification(message, type) {
+            //     $("#notification").data("kendoNotification").show({
+            //         message: message,
+            //         hideAfter: 40000, // Thời gian hiển thị thông báo (3 giây)
+            //         width: 300,
+            //         type: type // Loại thông báo: "success" hoặc "error"
+            //     });
+            // }
+
             $("#grid").kendoGrid({
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/Manufacturer/GetManufacturer",
+                            url: "/GiamGia/GetGiamGia",
                             type: "GET",
                             dataType: "json"
                         },
                         create: {
-                            url: "/Manufacturer/CreateManufacturer",
+                            url: "/GiamGia/CreateGiamGia",
                             type: "POST",
                             dataType: "json",
 
                         },
                         update: {
-                            url: "/Manufacturer/UpdateManufacturer",
+                            url: "/GiamGia/UpdateGiamGia",
                             type: "PUT",
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/Manufacturer/DeleteManufacturer2",
+                            url: "/GiamGia/DeleteGiamGia",
                             type: "DELETE",
                             dataType: "json"
                         },
@@ -83,9 +100,9 @@
                         model: {
                             id: "id",
                             fields: {
-                                linkImage: { type: "file" },
-                                name: { type: "string", validation: { required: true } },
-                                //  status: { type: "int" }
+                                ma: { type: "string", validation: { required: true } },
+                                ten: { type: "string", validation: { required: true } },
+                                MucGiamGiaPhanTram: { type: "number", validation: { required: true, min: 0, }, },
                             }
                         }
                     },
@@ -113,7 +130,8 @@
 
                     },
 
-                    "pdf"],
+                    "pdf",
+                    "search"],
                 pdf: {
                     allPages: true,
                     avoidLinks: true,
@@ -154,7 +172,7 @@
                                 showNotification(ev.response, "success");
                             } else {
                                 showNotification("Cập nhật thất bại", "error");
-                                showNotification(ev.response, "error");
+                                showNotification(ev.response.message, "error");
                             }
                             $("#grid").data("kendoGrid").dataSource.read();
                         });
@@ -172,14 +190,20 @@
                 },
 
                 columns: [
-                    // {
-
-                    //     field: "linkImage",
-                    //     title: "linkImage"
-                    // },
                     {
-                        field: "name",
-                        title: "Tên Nhà Sản Xuất"
+                        field: "ma",
+                        title: "Mã",
+                        editable: function (dataItem) {
+                            return dataItem.isNew();
+                        }
+                    },
+                    {
+                        field: "ten",
+                        title: "Tên"
+                    },
+                    {
+                        field: "MucGiamGiaPhanTram",
+                        title: "Mức giảm giá %"
                     },
                     {
                         command: [
@@ -202,7 +226,6 @@
         });
     </script>
 }
-
 
 
 
