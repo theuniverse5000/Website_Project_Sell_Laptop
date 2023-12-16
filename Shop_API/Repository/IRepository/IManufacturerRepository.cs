@@ -1,10 +1,11 @@
-﻿using Shop_Models.Entities;
+﻿using Shop_Models.Dto;
+using Shop_Models.Entities;
 
 namespace Shop_API.Repository.IRepository
 {
     public interface IManufacturerRepository
     {
-        Task<bool> Create(Manufacturer obj);
+        Task<ResponseDto> Create(Manufacturer obj);
         Task<bool> Update(Manufacturer obj);
         Task<bool> Delete(Guid idobj);
 

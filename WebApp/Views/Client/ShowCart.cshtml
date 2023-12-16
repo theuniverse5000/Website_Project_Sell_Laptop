@@ -2,8 +2,8 @@
     int stt = 0;
     string statuswallet = ViewContext.HttpContext.Session.GetString("StatusPointWallet");
     string username = ViewContext.HttpContext.Session.GetString("username");
-    float thanhTien = 0;
-    float tongTien = 0;
+    double thanhTien = 0;
+    double tongTien = 0;
 }
 <section class="h-100 h-custom">
     <div class="container h-100 py-5">
@@ -24,7 +24,8 @@
                             @foreach (var t in ViewBag.cartItem)
                             {
                                 stt++;
-                            
+                                thanhTien = t.Price * t.Quantity;
+                                tongTien += thanhTien; // Accumulate the total for each item
                             <tr>
                                 <th>@stt</th>
                                 <th>
@@ -46,10 +47,14 @@
                                         </div>
                                     </td>
                                 <td class="align-middle">
-                                        <p class="mb-0" style="font-weight: 500;">@t.Price*@t.Quantity</p>
+                                        <p class="mb-0" style="font-weight: 500;">@(t.Price * t.Quantity)</p>
                                 </td>
                             </tr>
                             }
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Tổng tiền:</strong></td>
+                                <td><strong id="totalAmount" name="totalAmount">@tongTien</strong></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -137,7 +142,10 @@
                                     <p class="mb-0">Phí ship</p>
                                     <p class="mb-0">00.000</p>
                                 </div>
-                                <form asp-controller="Client" asp-action="CreateBill">
+                                <form asp-controller="Client" asp-action="CreateBill" >
+
+                                        <input type="hidden" name="totalAmount" id="hiddenTotalAmount" value="@tongTien" />
+
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="voucherSelect">Chọn mã giảm giá</label>
                                         <select id="voucherSelect" name="codeVoucher" class="form-select form-select-lg">
@@ -174,7 +182,7 @@
                                                     <input type="checkbox" id="useAllPoints" name="useAllPoints" class="form-check-input" value="true">
                                                     
                                                 </div>
-                                                <input type="number" id="diemInput" name="PointYouWanToUse"  />
+                                                <input type="number" id="diemInput" name="PointYouWanToUse" hidden />
                                                 <div id="error-message" style="color: red;"></div>
                                             }
                                         }
@@ -184,19 +192,21 @@
 
                                     <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
                                         <p class="mb-2">Thành tiền</p>
-                                        <p class="mb-2" id="totalAmount">15.000.000</p>
+                                            <p class="mb-2" id="thanhtien">@tongTien</p>
                                     </div>
 
                                     <a asp-controller="Vnpay" asp-action="Index" class="btn btn-primary btn-block btn-lg">
                                         <div class="d-flex justify-content-between">
                                             <span>Thanh toán</span>
-                                            <span>15.000.000</span>
+                                                <span id="thanhToan">@tongTien</span>
                                         </div>
                                     </a>
-                                    <button class="btn btn-primary btn-block btn-lg" type="submit">
+                                        <input type="number" name="giaTriGioHang" id="giaTriGioHang" />
+                                        <button class="btn btn-primary btn-block btn-lg" type="submit">
                                         <div class="d-flex justify-content-between">
                                             <span>Đặt hàng</span>
-                                            <span>15.000.000</span>
+                                                <span id="datHang" name="datHang">@tongTien</span>
+                                              
                                         </div>
                                     </button>
                                 </form>
@@ -426,6 +436,7 @@
 
     // ... (Your existing code)
 
+    var tongTien = @tongTien;
     // Function to update the input value based on the checkbox state
     function updatePointsInput() {
         var diemInput = document.getElementById("diemInput");
@@ -435,11 +446,29 @@
         if (useAllPointsCheckbox.checked) {
             diemInput.value = soDiemHienCo;
             diemInput.disabled = true; // Disable the input when using all points
+
+            var diemToTienExchangeRate = 10000;
+            var diemInputValue = parseInt(diemInput.value);
+
+            if (!isNaN(diemInputValue) && diemInputValue > 0) {
+              
+                var tienConverted = diemInputValue * diemToTienExchangeRate;
+                console.log(tienConverted);
+                tongTien -= tienConverted; console.log(tongTien);
+            }
+
         } else {
             diemInput.value = ""; // Clear the input value
             diemInput.disabled = false; // Enable the input when not using all points
+            tongTien = @tongTien;
         }
 
+        document.getElementById("totalAmount").innerText = tongTien;
+        document.getElementById("thanhToan").innerText = tongTien;
+        document.getElementById("datHang").innerText = tongTien;
+        document.getElementById("thanhtien").innerText = tongTien;
+        document.getElementById("giaTriGioHang").innerText = tongTien;
+        document.getElementById("hiddenTotalAmount").value = tongTien;
         validateInput(); // Validate the input based on the updated value
     }
 

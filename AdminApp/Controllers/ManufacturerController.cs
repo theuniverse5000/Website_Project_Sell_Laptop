@@ -68,25 +68,27 @@ namespace AdminApp.Controllers
             }
         }
 
-        public async Task<JsonResult> CreateManufacturer(Manufacturer p)
+        public async Task<IActionResult> CreateManufacturer(Manufacturer p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 //    client.DefaultRequestHeaders.Add("Key-Domain", apiKey);
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Manufacturer/CreateManu", p);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
-
-                    return Json(new { status = "success" });
+                    return Content(result, "application/json");
                 }
                 else
                 {
-
-                    return Json(new { status = "error" });
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    ViewBag.CartItem = result;
+                    return Content(result, "application/json");
                 }
             }
         }

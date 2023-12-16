@@ -156,7 +156,7 @@ namespace WebApp.Controllers
                     
                     var codeBill = await response.Content.ReadAsStringAsync();
                     if (useAllPoints == true) {
-                        totalAmount = 1000000;
+                        //datHang = 1000000;
                         HttpResponseMessage response2 = await client.PostAsJsonAsync($"https://localhost:44333/api/ChucNangTichDiem/TieuDiemMuaHangAsync?invoiceCode={codeBill}&TongTienThanhToan={totalAmount}", String.Empty);
 
                         var resultString2 = await response2.Content.ReadAsStringAsync();

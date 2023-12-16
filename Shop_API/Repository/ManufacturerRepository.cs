@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Repository
@@ -14,22 +15,40 @@ namespace Shop_API.Repository
             dbContext = applicationDb;
         }
 
-        public async Task<bool> Create(Manufacturer obj)
+        public async Task<ResponseDto> Create(Manufacturer obj)
         {
             var checktt = await dbContext.Manufacturers.AnyAsync(p => p.Name == obj.Name);
-            if (obj == null && checktt == true)
+            if (obj == null || checktt == true)
             {
-                return false;
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Trùng Mã",
+                };
             }
             try
             {
                 await dbContext.Manufacturers.AddAsync(obj);
                 await dbContext.SaveChangesAsync();
-                return true;
+                return new ResponseDto
+                {
+                    Result = obj,
+                    IsSuccess = true,
+                    Code = 200,
+                    Message = "Thêm thành công",
+                }; 
             }
             catch (Exception)
             {
-                return false;
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 500,
+                    Message = "Lỗi Hệ Thống",
+                };
 
             }
         }
