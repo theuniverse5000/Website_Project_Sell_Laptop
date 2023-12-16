@@ -15,8 +15,11 @@ namespace Shop_API.Service
         private readonly IBillRepository _billRepository;
         private readonly IUserRepository _userRepository;
         private readonly ResponseDto _reponseDto;
+        private readonly IBillDetailRepository _billDetailsRepository;
+        private readonly IVoucherRepository _voucherRepository;
+
         public TichDiemServices(ApplicationDbContext context, IQuyDoiDiemRepository quyDoiDiemRepository, ILichSuTieuDiemRepository lichSuTieuDiemRepository, IViDiemRepository viDiemRepository,
-            IBillRepository billRepository, IUserRepository userRepository)
+            IBillRepository billRepository, IUserRepository userRepository, IBillDetailRepository billDetailRepository, IVoucherRepository voucherRepository)
         {
             _context = context;
             _quyDoiDiemRepository = quyDoiDiemRepository;
@@ -25,8 +28,8 @@ namespace Shop_API.Service
             _billRepository = billRepository;
             _userRepository = userRepository;
             _reponseDto = new ResponseDto();
-
-
+            _billDetailsRepository = billDetailRepository;
+            _voucherRepository = voucherRepository;
         }
 
         // Hàm tính số điểm tích lũy dựa vào tổng tiền hóa đơn
@@ -609,160 +612,190 @@ namespace Shop_API.Service
 
 
 
-        public async Task<ResponseDto> TichDiemMuaHangAsync(string invoiceCode, double TongTienThanhToan)
+        public async Task<ResponseDto> TichDiemMuaHangAsync(string invoiceCode/*, double TongTienThanhToan*/)
         {
             var billT = await _billRepository.GetBillByInvoiceCode(invoiceCode);
+            var billZ = _billRepository.GetAll().Result.FirstOrDefault(x => x.InvoiceCode == invoiceCode);
             var user2 = await _userRepository.GetUserByUserName(billT.FullName);
+            var billDetail = _billDetailsRepository.GetAllBillDetails().Result.Where(x => x.BillId == billZ.Id);
 
-            if (billT == null && TongTienThanhToan <= 0)
+            double tongtien = 0;
+            foreach (var prodetailsintBillDetails in billDetail)
+            {
+                tongtien += prodetailsintBillDetails.Price * prodetailsintBillDetails.Quantity;
+            }
+
+
+            if (billT.GiamGia.HasValue)
+            {
+                tongtien -= billT.GiamGia.Value;
+            }
+
+            if (billT == null && tongtien <= 0)
             {
                 _reponseDto.Code = 405;
                 _reponseDto.Message = "không tìm thấy hóa đơn";
-                _reponseDto.IsSuccess = false;
+                _reponseDto.IsSuccess = true;
             }
             else if (billT.Status != 4 && billT.Status != 6 && billT.Status != 7)
             {
                 _reponseDto.Code = 400;
                 _reponseDto.Message = "chưa thanh toán";
-                _reponseDto.IsSuccess = false;
-                return _reponseDto;// Không thực hiện tích điểm nếu hóa đơn có trạng thái khác 1.(chưa thanh toán xong) 
+                _reponseDto.IsSuccess = true;
+                return _reponseDto;
             }
-            //else if (billT.Status == 4 || billT.Status == 6 || billT.Status == 7)
-            //{
-            //    _reponseDto.Code = 400;
-            //    _reponseDto.Message = "da thanh toan va tich diem doi voi hoa don nay roi";
-            //    _reponseDto.IsSuccess = false;
-            //    return _reponseDto;// Không thực hiện tích điểm nếu hóa đơn có trạng thái khác 1.(chưa thanh toán xong) 
-            //}
             else
             {
-                var user = await _userRepository.GetUserById(billT.UserId);
-                var stViDiem = await _viDiemRepository.GetViDiemById(billT.UserId);
-                // Existing code for handling case when stViDiem is null
-
-                if (stViDiem == null)
+                if (billT.Status == 4)
                 {
-                    stViDiem = new ViDiem()
-                    {
-                        UserId = user.Id,
-                        TongDiem = 0,
-                        SoDiemDaCong = 0,
-                        SoDiemDaDung = 0,
-                        TrangThai = 1,
-                    };
-
-                    await _viDiemRepository.Create(stViDiem);
-
-                    var soDiemDuocCong = TinhDiemTichLuy(TongTienThanhToan);
-                    var soTienTichDuoc = DoiDiemSangTien(soDiemDuocCong);
-
-                    // thêm lịch sử quyDoiDiem 
-                    QuyDoiDiem objQuyDoiDiem = new QuyDoiDiem();
-                    objQuyDoiDiem.Id = Guid.NewGuid();
-                    objQuyDoiDiem.TienTieuDiem = 0;// lần đầu mua không có tiền tiêu điểm
-                    objQuyDoiDiem.TienTichDiem = soTienTichDuoc; // số tiền được đổi từ điểm tích được trong lần mua hàng hiện tại
-                    objQuyDoiDiem.TrangThai = 1;
-                    _quyDoiDiemRepository.Create(objQuyDoiDiem);
-
-                    // thêm lịch sử tiêu điểm 
-                    LichSuTieuDiem objLSTieuDiem = new LichSuTieuDiem();
-                    objLSTieuDiem.Id = Guid.NewGuid();
-                    objLSTieuDiem.SoDiemDaDung = 0; // lần đầu mua hàng không sử dụng điểm
-                    objLSTieuDiem.SoDiemCong = soDiemDuocCong;
-                    objLSTieuDiem.NgaySD = DateTime.Now;
-                    objLSTieuDiem.TrangThai = 1;
-                    objLSTieuDiem.QuyDoiDiemId = objQuyDoiDiem.Id;
-                    objLSTieuDiem.ViDiemId = stViDiem.UserId;
-                    _lichSuTieuDiemRepository.Create(objLSTieuDiem);
-
-                    // vi diem
-                    stViDiem.TongDiem += soDiemDuocCong; // số điểm hiện có sẽ được cộng thêm số điểm được cộng
-                    stViDiem.SoDiemDaCong += soDiemDuocCong;// tổng toàn bộ đã được cộng từ trước đến thời điểm hiện tại
-                    stViDiem.SoDiemDaDung += 0; // lần đầu mua không dùng điểm
-                    stViDiem.TrangThai = 2; // trạng thái 2 sẽ là đánh dấu người người đã mua lần đầu
-                    _viDiemRepository.Update(stViDiem);
-
-
-
-                    TichDiemDto tichDiemDto = new TichDiemDto()
-                    {
-                        TienTieuDiem = objQuyDoiDiem.TienTieuDiem,
-                        TienTichDiem = objQuyDoiDiem.TienTichDiem,
-                        //SoDiemDaDungTrongHoaDon = objLSTieuDiem.SoDiemDaDung,
-                        SoDiemCongTrongHoaDon = objLSTieuDiem.SoDiemCong,
-                        NgaySD = objLSTieuDiem.NgaySD,
-                        TongDiemTrongViDiem = stViDiem.TongDiem,
-                        SoDiemDaCongTrongVi = stViDiem.SoDiemDaCong,
-                        SoDiemDaDungTrongVi = stViDiem.SoDiemDaDung,
-                    };
-                    _reponseDto.Result = tichDiemDto;
-                    _reponseDto.Code = 200;
-                    _reponseDto.Message = "Tích điểm thành công";
+                    _reponseDto.Code = 400;
+                    _reponseDto.Message = "Đơn hàng chưa hoàn thành chưa tích điểm";
                     _reponseDto.IsSuccess = true;
                     return _reponseDto;
                 }
-                else
+                else if (billT.Status == 6)
                 {
-                    // Existing code for handling case when stViDiem is not null and TrangThai is 2
-                    if (stViDiem.TrangThai == 2)
+                    _reponseDto.Code = 400;
+                    _reponseDto.Message = "Đơn hàng chưa hoàn thành chưa tích điểm";
+                    _reponseDto.IsSuccess = true;
+                    return _reponseDto;
+
+                }
+                else if (billT.Status == 7)
+                {
+
+
+                    var user = await _userRepository.GetUserById(billT.UserId);
+                    var stViDiem = await _viDiemRepository.GetViDiemById(billT.UserId);
+                    // Existing code for handling case when stViDiem is null
+
+                    if (stViDiem == null)
                     {
+                        stViDiem = new ViDiem()
+                        {
+                            UserId = user.Id,
+                            TongDiem = 0,
+                            SoDiemDaCong = 0,
+                            SoDiemDaDung = 0,
+                            TrangThai = 1,
+                        };
 
-                        var SoDiemDuocCong = TinhDiemTichLuy(TongTienThanhToan);
-                        var tienTichDiem = DoiDiemSangTien(SoDiemDuocCong);
+                        await _viDiemRepository.Create(stViDiem);
 
-                        //var viDiem = _context.ViDiems.FirstOrDefault(x => x.UserId == user.Id);
-                        var viDiem = await _viDiemRepository.GetViDiemById(user.Id);
+                        var soDiemDuocCong = TinhDiemTichLuy(tongtien);
+                        var soTienTichDuoc = DoiDiemSangTien(soDiemDuocCong);
 
                         // thêm lịch sử quyDoiDiem 
                         QuyDoiDiem objQuyDoiDiem = new QuyDoiDiem();
                         objQuyDoiDiem.Id = Guid.NewGuid();
-                        objQuyDoiDiem.TienTieuDiem = 0;
-                        objQuyDoiDiem.TienTichDiem = tienTichDiem; // số tiền tích điểm = số điểm tích được * 10000.
+                        objQuyDoiDiem.TienTieuDiem = 0;// lần đầu mua không có tiền tiêu điểm
+                        objQuyDoiDiem.TienTichDiem = soTienTichDuoc; // số tiền được đổi từ điểm tích được trong lần mua hàng hiện tại
                         objQuyDoiDiem.TrangThai = 1;
                         _quyDoiDiemRepository.Create(objQuyDoiDiem);
 
                         // thêm lịch sử tiêu điểm 
                         LichSuTieuDiem objLSTieuDiem = new LichSuTieuDiem();
                         objLSTieuDiem.Id = Guid.NewGuid();
-                        objLSTieuDiem.SoDiemDaDung = 0;
-                        objLSTieuDiem.SoDiemCong = SoDiemDuocCong;
+                        objLSTieuDiem.SoDiemDaDung = 0; // lần đầu mua hàng không sử dụng điểm
+                        objLSTieuDiem.SoDiemCong = soDiemDuocCong;
                         objLSTieuDiem.NgaySD = DateTime.Now;
                         objLSTieuDiem.TrangThai = 1;
                         objLSTieuDiem.QuyDoiDiemId = objQuyDoiDiem.Id;
-                        objLSTieuDiem.ViDiemId = viDiem.UserId;
+                        objLSTieuDiem.ViDiemId = stViDiem.UserId;
                         _lichSuTieuDiemRepository.Create(objLSTieuDiem);
 
                         // vi diem
-                        double tongDiem = (double)(viDiem.TongDiem + SoDiemDuocCong);
-                        viDiem.TongDiem = tongDiem; // tổng điểm hiện có sau khi trừ số điểm muốn dùng và cộng số điểm được cộng 
-                        viDiem.SoDiemDaCong += SoDiemDuocCong;// tổng toàn bộ điểm đã được cộng từ trước đến thời điểm hiện tại
-                        viDiem.SoDiemDaDung += 0;
-                        viDiem.TrangThai = 2; // trạng thái 2 sẽ là đánh dấu người người đã mua lần đầu
-                        _viDiemRepository.Update(viDiem);
+                        stViDiem.TongDiem += soDiemDuocCong; // số điểm hiện có sẽ được cộng thêm số điểm được cộng
+                        stViDiem.SoDiemDaCong += soDiemDuocCong;// tổng toàn bộ đã được cộng từ trước đến thời điểm hiện tại
+                        stViDiem.SoDiemDaDung += 0; // lần đầu mua không dùng điểm
+                        stViDiem.TrangThai = 2; // trạng thái 2 sẽ là đánh dấu người người đã mua lần đầu
+                        _viDiemRepository.Update(stViDiem);
+
 
 
                         TichDiemDto tichDiemDto = new TichDiemDto()
                         {
                             TienTieuDiem = objQuyDoiDiem.TienTieuDiem,
                             TienTichDiem = objQuyDoiDiem.TienTichDiem,
-                            SoDiemDaDungTrongHoaDon = objLSTieuDiem.SoDiemDaDung,
+                            //SoDiemDaDungTrongHoaDon = objLSTieuDiem.SoDiemDaDung,
                             SoDiemCongTrongHoaDon = objLSTieuDiem.SoDiemCong,
                             NgaySD = objLSTieuDiem.NgaySD,
-                            TongDiemTrongViDiem = viDiem.TongDiem,
-                            SoDiemDaCongTrongVi = viDiem.SoDiemDaCong,
-                            SoDiemDaDungTrongVi = viDiem.SoDiemDaDung,
-
+                            TongDiemTrongViDiem = stViDiem.TongDiem,
+                            SoDiemDaCongTrongVi = stViDiem.SoDiemDaCong,
+                            SoDiemDaDungTrongVi = stViDiem.SoDiemDaDung,
                         };
                         _reponseDto.Result = tichDiemDto;
                         _reponseDto.Code = 200;
-                        _reponseDto.Message = "tích điểm thành công";
+                        _reponseDto.Message = "Tích điểm thành công";
                         _reponseDto.IsSuccess = true;
-
-
                         return _reponseDto;
-
                     }
+                    else
+                    {
+                      
+                        if (stViDiem.TrangThai == 2)
+                        {
+
+                            var SoDiemDuocCong = TinhDiemTichLuy(tongtien);
+                            var tienTichDiem = DoiDiemSangTien(SoDiemDuocCong);
+
+                            //var viDiem = _context.ViDiems.FirstOrDefault(x => x.UserId == user.Id);
+                            var viDiem = await _viDiemRepository.GetViDiemById(user.Id);
+
+                            // thêm lịch sử quyDoiDiem 
+                            QuyDoiDiem objQuyDoiDiem = new QuyDoiDiem();
+                            objQuyDoiDiem.Id = Guid.NewGuid();
+                            objQuyDoiDiem.TienTieuDiem = 0;
+                            objQuyDoiDiem.TienTichDiem = tienTichDiem; // số tiền tích điểm = số điểm tích được * 10000.
+                            objQuyDoiDiem.TrangThai = 1;
+                            _quyDoiDiemRepository.Create(objQuyDoiDiem);
+
+                            // thêm lịch sử tiêu điểm 
+                            LichSuTieuDiem objLSTieuDiem = new LichSuTieuDiem();
+                            objLSTieuDiem.Id = Guid.NewGuid();
+                            objLSTieuDiem.SoDiemDaDung = 0;
+                            objLSTieuDiem.SoDiemCong = SoDiemDuocCong;
+                            objLSTieuDiem.NgaySD = DateTime.Now;
+                            objLSTieuDiem.TrangThai = 1;
+                            objLSTieuDiem.QuyDoiDiemId = objQuyDoiDiem.Id;
+                            objLSTieuDiem.ViDiemId = viDiem.UserId;
+                            _lichSuTieuDiemRepository.Create(objLSTieuDiem);
+
+                            // vi diem
+                            double tongDiem = (double)(viDiem.TongDiem + SoDiemDuocCong);
+                            viDiem.TongDiem = tongDiem; 
+                            viDiem.SoDiemDaCong += SoDiemDuocCong;
+                            viDiem.SoDiemDaDung += 0;
+                            viDiem.TrangThai = 2; // trạng thái 2 sẽ là đánh dấu người người đã mua lần đầu
+                            _viDiemRepository.Update(viDiem);
+
+
+                            TichDiemDto tichDiemDto = new TichDiemDto()
+                            {
+                                TienTieuDiem = objQuyDoiDiem.TienTieuDiem,
+                                TienTichDiem = objQuyDoiDiem.TienTichDiem,
+                                SoDiemDaDungTrongHoaDon = objLSTieuDiem.SoDiemDaDung,
+                                SoDiemCongTrongHoaDon = objLSTieuDiem.SoDiemCong,
+                                NgaySD = objLSTieuDiem.NgaySD,
+                                TongDiemTrongViDiem = viDiem.TongDiem,
+                                SoDiemDaCongTrongVi = viDiem.SoDiemDaCong,
+                                SoDiemDaDungTrongVi = viDiem.SoDiemDaDung,
+
+                            };
+                            _reponseDto.Result = tichDiemDto;
+                            _reponseDto.Code = 200;
+                            _reponseDto.Message = "tích điểm thành công";
+                            _reponseDto.IsSuccess = true;
+
+
+                            return _reponseDto;
+
+                        }
+                    }
+
                 }
+
+
             }
 
             return _reponseDto;
@@ -823,7 +856,7 @@ namespace Shop_API.Service
                     QuyDoiDiem objQuyDoiDiem = new QuyDoiDiem();
                     objQuyDoiDiem.Id = Guid.NewGuid();
                     objQuyDoiDiem.TienTieuDiem = tienTieuDiem;
-                    objQuyDoiDiem.TienTichDiem = 0; 
+                    objQuyDoiDiem.TienTichDiem = 0;
                     objQuyDoiDiem.TrangThai = 1;
                     _quyDoiDiemRepository.Create(objQuyDoiDiem);
 
@@ -843,7 +876,7 @@ namespace Shop_API.Service
                     viDiem.SoDiemDaDung += (double)viDiem.TongDiem;
                     viDiem.TongDiem = tongDiem; // tổng điểm hiện có sau khi trừ số điểm muốn dùng và cộng số điểm được cộng 
                     viDiem.SoDiemDaCong += 0;
-                   
+
                     viDiem.TrangThai = 2; // trạng thái 2 sẽ là đánh dấu người người đã mua lần đầu
                     _viDiemRepository.Update(viDiem);
 

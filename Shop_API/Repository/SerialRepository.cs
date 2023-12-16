@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Repository
@@ -12,22 +13,40 @@ namespace Shop_API.Repository
         {
             _context = context;
         }
-        public async Task<bool> Create(Serial obj)
+        public async Task<ResponseDto> Create(Serial obj)
         {
             var checkMa = await _context.Serials.AnyAsync(x => x.SerialNumber == obj.SerialNumber);
             if (obj == null || checkMa == true)
             {
-                return false;
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Trùng Serial",
+                };
             }
             try
             {
                 await _context.Serials.AddAsync(obj);
                 await _context.SaveChangesAsync();
-                return true;
+                return new ResponseDto
+                {
+                    Result = obj,
+                    IsSuccess = true,
+                    Code = 200,
+                    Message = "Thêm thành công",
+                };
             }
             catch (Exception)
             {
-                return false;
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 500,
+                    Message = "Lỗi Hệ Thống",
+                };
             }
         }
         public async Task<bool> CreateMany(List<Serial> listObj)
@@ -79,24 +98,44 @@ namespace Shop_API.Repository
             return listSerial;
         }
 
-        public async Task<bool> Update(Serial obj)
+        public async Task<ResponseDto> Update(Serial obj)
         {
             var Serial = await _context.Serials.FindAsync(obj.Id);
             if (Serial == null)
             {
-                return false;
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Không Tìm Thấy Serial",
+                };
             }
             try
             {
                 Serial.SerialNumber = obj.SerialNumber;
-                Serial.Status = obj.Status;
+                //Serial.Status = 1;
+                Serial.BillDetailId = obj.BillDetailId;
+                Serial.ProductDetailId = obj.ProductDetailId;
                 _context.Serials.Update(Serial);
                 await _context.SaveChangesAsync();
-                return true;
+                return new ResponseDto
+                {
+                    Result = obj,
+                    IsSuccess = true,
+                    Code = 200,
+                    Message = "Sửa thành công",
+                };
             }
             catch (Exception)
             {
-                return false;
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 500,
+                    Message = "Lỗi hệ thống",
+                };
             }
         }
     }

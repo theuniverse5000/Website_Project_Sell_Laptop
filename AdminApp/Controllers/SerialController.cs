@@ -71,6 +71,33 @@ namespace AdminApp.Controllers
         //}
 
 
+
+        public async Task<IActionResult> GetAllBillDetail()
+        {
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
+            {
+                //string jwtToken = HttpContext.Session.GetString("AccessToken");
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                HttpResponseMessage response = await client.GetAsync($"/api/BillDetail/GetAllBillDetail");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    var count = result.Count();
+                    ViewBag.Count = count;
+
+
+                    return Content(result, "application/json");
+                }
+                else
+                {
+                    return Json(null);
+                }
+            }
+        }
+
         public async Task<IActionResult> GetSerial()
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
@@ -97,7 +124,7 @@ namespace AdminApp.Controllers
             }
         }
 
-        public async Task<JsonResult> CreateSerialWithOne(Serial p)
+        public async Task<IActionResult> CreateSerialWithOne(Serial p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
             string? urlApi = _config.GetSection("UrlApiAdmin").Value;
@@ -112,18 +139,20 @@ namespace AdminApp.Controllers
                     var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
                     Check = 1;
-                    return Json(new { status = "success" });
+                    return Content(result,"application/json");
                 }
                 else
                 {
-                    Check = 0;
-                    return Json(new { status = "error" });
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    ViewBag.CartItem = result;
+                    Check = 1;
+                    return Content(result, "application/json");
                 }
 
             }
         }
 
-        public async Task<JsonResult> UpdateSerial(Serial p)
+        public async Task<IActionResult> UpdateSerial(Serial p)
         {
             try
             {
@@ -134,20 +163,24 @@ namespace AdminApp.Controllers
                 {
                     var accessToken = Request.Cookies["account"];
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                    string jwtToken = HttpContext.Session.GetString("AccessToken");
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                    //string jwtToken = HttpContext.Session.GetString("AccessToken");
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
                     // Gửi yêu cầu PUT dưới dạng JSON
                     HttpResponseMessage response = await client.PutAsJsonAsync($"/api/Serial", p);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        var result = await response.Content.ReadAsStringAsync();
+                        var result = response.Content.ReadAsStringAsync().Result;
                         ViewBag.CartItem = result;
-                        return Json(result);
+                        Check = 1;
+                        return Content(result, "application/json");
                     }
                     else
                     {
-                        return Json(null);
+                        var result = response.Content.ReadAsStringAsync().Result;
+                        ViewBag.CartItem = result;
+                        Check = 1;
+                        return Content(result, "application/json");
                     }
                 }
             }

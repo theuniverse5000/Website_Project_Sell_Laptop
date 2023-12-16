@@ -211,7 +211,7 @@
                                             {
                                                 field: "quantity",
                                                 title: "Số lượng",
-                                            },
+                                            },+
                                             {
                                                 command: [
                                                     {
@@ -257,10 +257,29 @@
                         // Trường hợp cập nhật
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
                         console.log(e.model.invoiceCode);
-                        totalAmount = 25000000;
+                        // totalAmount = 25000000;
+                        // $.ajax({
+                        //     type: "POST",
+                        //     url: "https://localhost:44333/api/Bill/PGetBillByInvoiceCode?invoiceCode=" + e.model.invoiceCode,
+                        //     success: function (response) {
+                        //         console.log(response);
+                        //         if (response.code === 200) {
+                        //             showNotification(response.message, "success");
+                        //         } else {
+                        //             showNotification("laasy gia thanh cong thất bại", "error");
+                        //         }
+                        //     },
+                        //     error: function (xhr, status, error) {
+                        //         console.error(xhr.responseText);
+                        //         alert("Lỗi khi gọi API. Xem log để biết thêm chi tiết.");
+                        //     }
+                        // });
+
+
+
                         $.ajax({
                             type: "POST",
-                            url: "https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync?invoiceCode=" + e.model.invoiceCode + "&TongTienThanhToan=" + totalAmount,
+                            url: "https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync?invoiceCode=" + e.model.invoiceCode, /* + "&TongTienThanhToan=" + totalAmount */
                             success: function (response) {
                                 console.log(response);
                                 if (response.code === 200) {

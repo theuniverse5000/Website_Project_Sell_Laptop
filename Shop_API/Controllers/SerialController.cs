@@ -56,12 +56,13 @@ namespace Shop_API.Controllers
             }
             obj.Id = Guid.NewGuid();
             obj.Status = 1;
-            obj.BillDetailId = null;
-            if (await _repository.Create(obj))
+            //obj.BillDetailId = null;
+            var result = await _repository.Create(obj);
+            if (result.IsSuccess)
             {
-                return Ok("Thêm thành công");
+                return Ok(result);
             }
-            return BadRequest("Thêm thất bại");
+            return BadRequest(result);
         }
         [HttpPost("CreateMany")]
         public async Task<IActionResult> CreateManySerial(List<Serial> listObj)
@@ -99,12 +100,14 @@ namespace Shop_API.Controllers
             {
                 return Unauthorized();
             }
-            if (await _repository.Update(obj))
+            var result = await  _repository.Update(obj);
+            if (result.IsSuccess)
             {
-                return Ok("Sửa thành công");
+                return Ok(result);
             }
-            return BadRequest("Sửa thất bại");
+            return BadRequest(result);
         }
+
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteSerial(Guid id)
         {

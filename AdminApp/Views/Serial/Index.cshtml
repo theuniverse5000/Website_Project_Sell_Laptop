@@ -144,29 +144,39 @@
                 },
                 editable: {
                     mode: "popup",
-                    window: { width: 550, height: 250 }, // Chỉnh chiều rộng ở đây
+                    window: { width: 550, height: 400 }, // Chỉnh chiều rộng ở đây
                 },
 
 
                 save: function (e) {
                     if (e.model.isNew()) {
-                        // Thay đổi status thành biến thực tế của bạn
-                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+                        e.model.dirty = true;
+                        console.log(" tra ve: " + e.response);
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            console.log(ev.response);
+                            if (ev.type === "create" && ev.response.code === 200) {
 
-                        if (status === 'success') {
-                            showNotification("Lưu thành công", "success");
-                        } else {
-                            showNotification("Lưu thất bại", "error");
-                        }
+                                showNotification(ev.response.message, "success");
+                            } else {
+                                showNotification("Thêm Thất Bại", "error");
+                                showNotification(ev.response.message, "error");
+                            }
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        });
                     } else if (e.model.dirty) {
-                        // Trường hợp cập nhật
-                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            console.log(ev);
+                            console.log(ev.response);
+                            if (ev.type === "update" && ev.response.code === 200) {
 
-                        if (status === 'success') {
-                            showNotification("Cập nhật thành công", "success");
-                        } else {
-                            showNotification("Cập nhật thất bại", "error");
-                        }
+                                showNotification(ev.response.message, "success");
+                            } else {
+                                showNotification("Cập nhật thất bại", "error");
+                                showNotification(ev.response, "error");
+                            }
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        });
+
                     } else if (e.model.isNew() && e.model.isDestroyed()) {
                         // Trường hợp xóa
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
@@ -217,29 +227,35 @@
                                 });
                         }
                     },
-                    // {
-                    //     field: "SerialTypeName",
-                    //     title: "Loại sản phẩm",
-                    //     editor: function (container, options) {
-                    //         // Tạo dropdownlist
-                    //         $("<input name='billDetailId' />")
-                    //             .appendTo(container)
-                    //             .kendoDropDownList({
-                    //                 // Cấu hình tải dữ liệu từ API hoặc nguồn dữ liệu của bạn
-                    //                 dataSource: {
-                    //                     transport: {
-                    //                         read: {
-                    //                             url: "/SerialType/GetList", // Thay thế đường dẫn bằng API của bạn
-                    //                             type: "GET"
-                    //                         }
-                    //                     }
-                    //                 },
-                    //                 dataValueField: "id", // Thay thế bằng trường ID thực tế
-                    //                 dataTextField: "code", // Thay thế bằng trường hiển thị thực tế
-                    //                 optionLabel: "Chọn loại sản phẩm" // Đây là giá trị mặc định (null)
-                    //             });
-                    //     }
-                    // },
+                    {
+                        field: "billDetailCode",
+                        title: "mã hóa đơn chi tiết",
+                        editor: function (container, options) {
+                            // Tạo dropdownlist
+                            $("<input name='billDetailId' />")
+                                .appendTo(container)
+                                .kendoDropDownList({
+                                    // Cấu hình tải dữ liệu từ API hoặc nguồn dữ liệu của bạn
+                                    dataSource: {
+                                        transport: {
+                                            read: {
+                                                url: "/Serial/GetAllBillDetail", // Thay thế đường dẫn bằng API của bạn
+                                                type: "GET"
+                                            }
+                                        }
+                                    },
+                                    dataValueField: "id", // Thay thế bằng trường ID thực tế
+                                    dataTextField: "code", // Thay thế bằng trường hiển thị thực tế
+                                    optionLabel: "Chọn mã hóa đơn chi tiết", // Đây là giá trị mặc định (null)
+                                    change: function (e) {
+                                        // Set billDetailId to null if the selected value is empty
+                                        var dropdownlist = this;
+                                        var selectedValue = dropdownlist.value();
+                                        options.model.set("billDetailId", selectedValue || null);
+                                    }
+                                });
+                        }
+                    },
                     {
                         command: [
                             {

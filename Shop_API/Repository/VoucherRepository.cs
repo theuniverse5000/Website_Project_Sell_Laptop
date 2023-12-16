@@ -104,7 +104,7 @@ namespace Shop_API.Repository
 
         public async Task<IEnumerable<Voucher>> GetAllVouchers()
         {
-            var list = await _context.Vouchers.AsQueryable().Where(x => x.Status != 0).ToListAsync();// lấy tất cả ram
+            var list = await _context.Vouchers.AsQueryable().Where(x => x.Status != 0).ToListAsync();
             return list;
         }
 
@@ -162,6 +162,12 @@ namespace Shop_API.Repository
             }
         }
 
+
+        public async Task<Voucher> GetByCode(string codeVoucher)
+        {
+            var result = await _context.Vouchers.FirstOrDefaultAsync(x => x.MaVoucher == codeVoucher);
+            return result;
+        }
         public async Task<bool> Duyet(Guid Id)
         {
             var vou = await _context.Vouchers.FindAsync(Id);

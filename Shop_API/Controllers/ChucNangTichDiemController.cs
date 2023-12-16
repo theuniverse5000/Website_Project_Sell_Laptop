@@ -59,7 +59,7 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            return Ok(await _tichDiemServices.TichDiemMuaHangAsync(invoiceCode, TongTienThanhToan));
+            return Ok(await _tichDiemServices.TichDiemMuaHangAsync(invoiceCode/*, TongTienThanhToan*/));
         }
 
         [HttpPost("TieuDiemMuaHangAsync")]
@@ -73,6 +73,7 @@ namespace Shop_API.Controllers
 
             //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
             //if (keyDomain != apiKey.ToLower())
+
             //{
             //    return Unauthorized();
             //}
