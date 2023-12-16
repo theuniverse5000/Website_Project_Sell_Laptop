@@ -6,6 +6,7 @@
     string statuswallet = ViewContext.HttpContext.Session.GetString("StatusPointWallet");
 }
 <style>
+
     .navbar-nav a {
         align-items: center;
         }
@@ -26,7 +27,7 @@
     }
 </style>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg" style="background-color:white">
     <a class="navbar-brand logoNav" href="#">
         <img alt="Logo" src="/Images/logopt.jpg" style="max-width:65%; margin-left:70px" />
     </a>
@@ -52,8 +53,8 @@
                     <i class="fas fa-truck"></i>Tra cứu đơn hàng
                 </a>
             </li>
-            <form class="d-flex" style="margin:auto">
-                <input class="form-control me-2" style="width:280px" type="search" placeholder="Bạn muốn tìm gì?" aria-label="Search">
+            <form asp-controller="ProductDetail" asp-action="ShowListProductDetail" method="get" class="d-flex" style="margin:auto">
+                <input class="form-control me-2" name="searchString" style="width:280px" type="search" placeholder="Bạn muốn tìm sản phẩm gì?" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
@@ -64,7 +65,13 @@
                 
                 if (username != null)
                 {
-                    <div class="pd-l-130">
+                    <li>
+
+                        <a class="nav-link textNavbar" href="/giỏ-hàng">
+                            <i class="fas fa-cart-plus"></i>Giỏ hàng
+                        </a>
+
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-user" style="color:aqua;font-size:30px"></i>@username
@@ -76,8 +83,7 @@
                             <li><a class="dropdown-item" asp-controller="Login" asp-action="LogOut">Đăng xuất</a></li>
                         </ul>
                     </li>
-                    </div>
-                  
+                    
                 }
                 else
                 {

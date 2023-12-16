@@ -18,16 +18,25 @@ namespace WebApp.Controllers
             urlApi = _config.GetSection("UrlApiAdmin").Value;
         }
         [HttpGet("sản-phẩm")]
-        public async Task<IActionResult> ShowListProductDetail()
+        public async Task<IActionResult> ShowListProductDetail([FromQuery] string? searchString)
         {
-            var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-            var apiUrl = "/api/ProductDetail/PGetProductDetail?status=1";
-            var apiRespone = await httpClient.GetStringAsync(apiUrl);
-            var Respone = apiRespone.ToString();
-            var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
-            var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
-            ViewBag.ListProduct = content;
-            return View();
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+                var apiUrl = $"/api/ProductDetail/PGetProductDetail?status=1&search={searchString}";
+                var apiRespone = await httpClient.GetStringAsync(apiUrl);
+                var Respone = apiRespone.ToString();
+                var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
+                var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
+                ViewBag.ListProduct = content;
+                return View();
+            }
+            catch (Exception)
+            {
+                return View("Error");
+                throw;
+            }
+
         }
         [HttpGet("sản-phẩm/{code}")]
         public async Task<IActionResult> Detail(string code, string name)

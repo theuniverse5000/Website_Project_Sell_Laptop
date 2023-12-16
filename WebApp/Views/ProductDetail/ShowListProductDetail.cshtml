@@ -26,7 +26,31 @@
     </a>
     </div>
     *@
-<section style="background-color:white;">
+<div class="filter-container pd-top-100">
+  <label for="category">Loại sản phẩm:</label>
+  <select id="category">
+    <option value="all">Tất cả</option>
+    <option value="laptop">Laptop</option>
+    <option value="smartphone">Smartphone</option>
+  </select>
+    <label for="category">Thương hiệu:</label>
+    <select id="category">
+        <option value="all">Tất cả</option>
+        <option value="laptop">Laptop</option>
+        <option value="smartphone">Smartphone</option>
+    </select>
+    <label for="category">Giá tiền sản phẩm:</label>
+    <select id="category">
+        <option value="all">Tất cả</option>
+        <option value="laptop">Laptop</option>
+        <option value="smartphone">Smartphone</option>
+    </select>
+  <label for="search">Tìm kiếm:</label>
+  <input type="text" id="search" placeholder="Nhập từ khóa">
+
+  <button onclick="filterProducts()">Lọc</button>
+</div>
+<section style="background-color:transparent;">
     <div class="rp-mobi py-5">
         <div class="row list-product">
             @foreach (var t in ViewBag.ListProduct)
@@ -51,61 +75,21 @@
                     </div>
                 </div>
                 </div> 
-             @*    <div class="hot-product col-md-3 col-sm3">
-                    @if (t.LinkImage != null)
-                    {
-                        <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" class="img-thumbnail img-product" />
-                    }
-                    else
-                    {
-                        <img src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" class="img-thumbnail img-product" />
-                    }
-                    <a>
-                        <b>@t.NameProduct</b>
-                        <div class="Product-price">
-                            <span>@t.Price </span>
-                            <p> @t.ImportPrice</p>
-                            <p>
-                                <span class="hot-price">Giá lên đời:</span>
-                                <span class="update-price">
-                                    12.490.000₫
-                                </span>
-                            </p>
-                        </div>
-                        <div class="Like-product">
-                            <i class="fa-solid fa-heart"></i>
-                            <span>Yêu Thích</span>
-                        </div>
-                    </a>
-                </div> *@
+     
             } 
             </div>
         </div>
         <br />
     </section>
     <p></p>
-  @*   <style>
-    .no-underline {
-        text-decoration: none;
-        color: black;
-    }
-
-    .img-product{
-        padding-top:10px;
-    }
-    .img-product:hover {
-        transform: scale(1.1); /* Ví dụ: phóng to 110% */
-        transition: transform 0.3s ease; /* Hiệu ứng phóng to có thời gian 0.3 giây và hiệu ứng chuyển động "ease" */
-    }
-    </style> *@
 <style>
     .list-product{
-        max-width: 1200px !important;
+        max-width: 1400px !important;
         text-align:center !important;
         margin:auto !important;
     }
     .card-product {
-        width: 300px;
+     
         height: 400px;
         padding-bottom:30px;
         border: 1px solid #ddd; /* Add a border to the card */
@@ -113,7 +97,7 @@
         overflow: hidden; /* Hide any content that overflows the card */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
         transition: box-shadow 0.3s ease; /* Add a smooth transition to the box shadow */
-        max-width: 18rem;
+      
         margin-right: 20px;
     }
 
@@ -147,6 +131,24 @@
     }
     .pd-bt-20{
         padding-bottom:20px
+    }
+        .filter-container {
+      margin-bottom: 20px;
+    }
+
+    /* Style cho danh sách sản phẩm */
+    .product-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .product-item {
+      border: 1px solid #ccc;
+      margin-bottom: 5px;
+      padding: 10px;
+    }
+    .pd-top-100{
+        padding-top:100px;
     }
 </style>
 
