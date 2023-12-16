@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Controllers
@@ -12,10 +16,14 @@ namespace Shop_API.Controllers
     {
         private readonly IGiamGiaRepository _giamGiaRepository;
         private readonly IConfiguration _config;
-        public GiamGiaController(IGiamGiaRepository giamGiaRepository, IConfiguration config)
+        private readonly IPagingRepository _iPagingRepository;
+        private readonly ResponseDto _reponse;
+        public GiamGiaController(IGiamGiaRepository giamGiaRepository, IConfiguration config, IPagingRepository iPagingRepository)
         {
             _giamGiaRepository = giamGiaRepository;
             _config = config;
+            _reponse = new ResponseDto();
+            _iPagingRepository = iPagingRepository;
         }
 
         [HttpGet]
@@ -102,5 +110,52 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Xóa Thất Bại");
         }
+
+        [AllowAnonymous]
+        [HttpGet("GetGiamGiasFSP")]
+        public IActionResult GetGiamGiasFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            _reponse.Result = _iPagingRepository.GetAllGiamGia(search, from, to, sortBy, page);
+            var count = _reponse.Count = _iPagingRepository.GetAllGiamGia(search, from, to, sortBy, page).Count;
+            return Ok(_reponse);
+        }
+
+
+        [HttpPost("CreateReturnDto")]
+        public async Task<IActionResult> CreateReturnDto(GiamGia obj)
+        {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            obj.Id = Guid.NewGuid();
+            obj.TrangThai = 1;
+            var response = await _giamGiaRepository.CreateReturnDto(obj);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
     }
 }

@@ -75,5 +75,10 @@ namespace Shop_API.Repository
                 return false;
             }
         }
+
+        public async Task<SanPhamGiamGia> GetById(Guid guid)
+        {
+            return await _context.SanPhamGiamGias.FindAsync(guid);
+        }
     }
 }

@@ -80,9 +80,9 @@ public class LoginController : Controller
             HttpContext.Session.SetString("username", userName);
             return RedirectToAction("Index", "Home");
         }
-        else {
-
-            return BadRequest("Error");
+        else
+        {
+            return RedirectToAction("Index", "Home");
         }
 
     }

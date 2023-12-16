@@ -9,5 +9,7 @@ namespace Shop_API.Repository.IRepository
         Task<bool> Update(SanPhamGiamGia obj);
         Task<bool> Delete(Guid id);
         Task<List<SanPhamGiamGia>> GetAllSanPhamGiamGias();
+        Task<SanPhamGiamGia> GetById(Guid guid);
+
     }
 }

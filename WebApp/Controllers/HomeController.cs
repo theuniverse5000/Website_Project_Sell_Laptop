@@ -24,6 +24,18 @@ namespace WebApp.Controllers
             var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
             var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
             ViewBag.ProductDetails = content;
+            var apiUrl2 = "/api/SanPhamGiamGia/GetSPGGPG";
+            var apiRespone2 = await httpClient.GetStringAsync(apiUrl2);
+            var Respone2 = apiRespone2.ToString();
+            var responeModel2 = JsonConvert.DeserializeObject<ResponseDto>(Respone2);
+            var content2 = JsonConvert.DeserializeObject<List<SanPhamGiamGiaDto>>(responeModel2.Result.ToString());
+            ViewBag.SanPhamGiamGia = content2;
+            var apiUrl3 = "api/GiamGia/GetGiamGiasFSP";
+            var apiRespone3 = await httpClient.GetStringAsync(apiUrl3);
+            var Respone3 = apiRespone3.ToString();
+            var responeModel3 = JsonConvert.DeserializeObject<ResponseDto>(Respone3);
+            var content3 = JsonConvert.DeserializeObject<List<GiamGia>>(responeModel3.Result.ToString());
+            ViewBag.GiamGia = content3;
             var apiImagesUrl = "/api/Images";
             var apiResponeImage = await httpClient.GetStringAsync(apiImagesUrl);
 
@@ -36,8 +48,37 @@ namespace WebApp.Controllers
 
             return View();
         }
-        public IActionResult Login()
+
+        [Route("deal")]
+        public async Task<IActionResult> Deal()
         {
+            var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+            var apiUrl = "/api/ProductDetail/PGetProductDetail";
+            var apiRespone = await httpClient.GetStringAsync(apiUrl);
+            var Respone = apiRespone.ToString();
+            var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
+            var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
+            ViewBag.ProductDetails = content;
+            var apiUrl2 = "/api/SanPhamGiamGia/GetSPGGPG";
+            var apiRespone2 = await httpClient.GetStringAsync(apiUrl2);
+            var Respone2 = apiRespone2.ToString();
+            var responeModel2 = JsonConvert.DeserializeObject<ResponseDto>(Respone2);
+            var content2 = JsonConvert.DeserializeObject<List<SanPhamGiamGiaDto>>(responeModel2.Result.ToString());
+            ViewBag.SanPhamGiamGia = content2;
+            var apiUrl3 = "api/GiamGia/GetGiamGiasFSP";
+            var apiRespone3 = await httpClient.GetStringAsync(apiUrl3);
+            var Respone3 = apiRespone3.ToString();
+            var responeModel3 = JsonConvert.DeserializeObject<ResponseDto>(Respone3);
+            var content3 = JsonConvert.DeserializeObject<List<GiamGia>>(responeModel3.Result.ToString());
+            ViewBag.GiamGia = content3;
+            var apiImagesUrl = "/api/Images";
+            var apiResponeImage = await httpClient.GetStringAsync(apiImagesUrl);
+
+            // Deserialize trực tiếp thành danh sách ImageDto
+            var contentIMage = JsonConvert.DeserializeObject<List<ImageDto>>(apiResponeImage);
+
+            // Gán danh sách ImageDto trực tiếp cho ViewBag.Image
+            ViewBag.Image = contentIMage;
             return View();
         }
         public async Task<IActionResult> ProductDetail(string code)
