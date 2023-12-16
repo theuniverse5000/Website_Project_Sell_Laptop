@@ -95,8 +95,7 @@ namespace Shop_API.Repository
             }
             try
             {
-                giamGia.TrangThai = 0;
-                _context.GiamGias.Update(giamGia);
+                _context.GiamGias.Remove(giamGia);
                 await _context.SaveChangesAsync();
                 return true;
 

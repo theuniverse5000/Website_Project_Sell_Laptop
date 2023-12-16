@@ -117,7 +117,7 @@ namespace AdminApp.Controllers
                 {
                     var accessToken = Request.Cookies["account"];
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                    HttpResponseMessage response = await client.DeleteAsync($"/api/GiamGia/id?id={id}");
+                    HttpResponseMessage response = await client.DeleteAsync($"/api/GiamGia?id={id}");
 
                     if (response.IsSuccessStatusCode)
                     {

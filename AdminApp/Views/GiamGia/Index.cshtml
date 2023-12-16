@@ -102,7 +102,7 @@
                             fields: {
                                 ma: { type: "string", validation: { required: true } },
                                 ten: { type: "string", validation: { required: true } },
-                                MucGiamGiaPhanTram: { type: "number", validation: { required: true, min: 0, }, },
+                                mucGiamGiaPhanTram: { type: "int", validation: { required: true, min: 0, }, },
                             }
                         }
                     },
@@ -150,33 +150,23 @@
 
                 save: function (e) {
                     if (e.model.isNew()) {
-                        e.model.dirty = true;
-                        console.log(" tra ve: " + e.response);
-                        e.sender.dataSource.one("requestEnd", function (ev) {
-                            console.log(ev.response);
-                            if (ev.type === "create" && ev.response.code === 200) {
+                        // Thay đổi status thành biến thực tế của bạn
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
 
-                                showNotification(ev.response.message, "success");
-                            } else {
-                                showNotification("Thêm Thất Bại", "error");
-                                showNotification(ev.response.message, "error");
-                            }
-                            $("#grid").data("kendoGrid").dataSource.read();
-                        });
+                        if (status === 'success') {
+                            showNotification("Lưu thành công", "success");
+                        } else {
+                            showNotification("Lưu thất bại", "error");
+                        }
                     } else if (e.model.dirty) {
-                        e.sender.dataSource.one("requestEnd", function (ev) {
-                            console.log(ev);
-                            console.log(ev.response);
-                            if (ev.type === "update" && ev.response === "Sửa thành công") {
+                        // Trường hợp cập nhật
+                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
 
-                                showNotification(ev.response, "success");
-                            } else {
-                                showNotification("Cập nhật thất bại", "error");
-                                showNotification(ev.response.message, "error");
-                            }
-                            $("#grid").data("kendoGrid").dataSource.read();
-                        });
-
+                        if (status === 'success') {
+                            showNotification("Cập nhật thành công", "success");
+                        } else {
+                            showNotification("Cập nhật thất bại", "error");
+                        }
                     } else if (e.model.isNew() && e.model.isDestroyed()) {
                         // Trường hợp xóa
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
@@ -202,7 +192,7 @@
                         title: "Tên"
                     },
                     {
-                        field: "MucGiamGiaPhanTram",
+                        field: "mucGiamGiaPhanTram",
                         title: "Mức giảm giá %"
                     },
                     {

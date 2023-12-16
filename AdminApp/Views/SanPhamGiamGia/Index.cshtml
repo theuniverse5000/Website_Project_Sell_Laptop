@@ -92,8 +92,8 @@
                             id: "id",
                             fields: {
                                 // ma: { type: "string", validation: { required: true } },
-                                serialNumber: { type: "string", validation: { required: true } },
-                                status: { type: "int" },
+                                donGia: { type: "int", validation: { required: true } },
+                                soTienConLai: { type: "int" },
                                 productDetailId: { type: "string", validation: { required: true } },
                                 giamGiaId: { type: "string", validation: { required: true } },
                                
@@ -213,7 +213,7 @@
                                         }
                                     },
                                     dataValueField: "id",
-                                    dataTextField: "ma",
+                                    dataTextField: "ten",
                                     optionLabel: "Chọn mã giảm giá"
                                 });
                         }
