@@ -145,7 +145,7 @@ namespace WebApp.Controllers
             var apiUrl = $"/api/Cart/TruQuantityCartDetail?idCartDetail={idCartDetail}";
             var responeApi = await httpClient.PutAsJsonAsync(apiUrl, string.Empty);
         }
-        public async Task<IActionResult> CreateBill(string? codeVoucher,double? PointYouWanToUse)
+        public async Task<IActionResult> CreateBill(string? codeVoucher,double? totalAmount, bool useAllPoints)
         {
             getUsername = HttpContext.Session.GetString("username");
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
@@ -155,13 +155,13 @@ namespace WebApp.Controllers
                 {
                     
                     var codeBill = await response.Content.ReadAsStringAsync();
-                    //HttpResponseMessage tichdiem = await client.PostAsJsonAsync($"https://localhost:44333/api/ChucNangTichDiem/first-buy?invoiceCode={codeBill}&TongTienThanhToan={PointYouWanToUse}&SoDiemMuonDung={PointYouWanToUse}", String.Empty);
-                    HttpResponseMessage response2 = await client.GetAsync($"/api/Bill/PGetBillByInvoiceCode?invoiceCode={codeBill}");
-                    var resultString2 = await response2.Content.ReadAsStringAsync();
-                    var resultResponse2 = JsonConvert.DeserializeObject<ResponseDto>(resultString2);
-                    var billS = JsonConvert.DeserializeObject<BillDto>(resultResponse2.Result.ToString());
-                    ViewBag.Bill = billS;
-                    ViewBag.ListBillItem = billS.BillDetail;
+                    if (useAllPoints == true) {
+                        //datHang = 1000000;
+                        HttpResponseMessage response2 = await client.PostAsJsonAsync($"https://localhost:44333/api/ChucNangTichDiem/TieuDiemMuaHangAsync?invoiceCode={codeBill}&TongTienThanhToan={totalAmount}", String.Empty);
+
+                        var resultString2 = await response2.Content.ReadAsStringAsync();
+                        var resultResponse2 = JsonConvert.DeserializeObject<ResponseDto>(resultString2);
+                    }
 
                     return RedirectToAction("ShowBill", new { invoiceCode = $"{codeBill}" });
                 }

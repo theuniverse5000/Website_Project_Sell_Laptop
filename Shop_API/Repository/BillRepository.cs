@@ -50,9 +50,28 @@ namespace Shop_API.Repository
         {
             return await _context.Bills.ToListAsync();
         }
-        public async Task<Bill> GetBillByInvoiceCode(string invoiceCode)
+        public async Task<BillDto> GetBillByInvoiceCode(string invoiceCode)
         {
-            return await _context.Bills.AsNoTracking().FirstOrDefaultAsync(x => x.InvoiceCode == invoiceCode);
+            var query = from bill in _context.Bills
+                        where bill.InvoiceCode == invoiceCode
+                        join v in _context.Vouchers on bill.VoucherId equals v.Id into voucherGroup
+                        from voucher in voucherGroup.DefaultIfEmpty()
+                        select new BillDto
+                        {
+                            InvoiceCode = bill.InvoiceCode,
+                            PhoneNumber = bill.PhoneNumber,
+                            FullName = bill.FullName,
+                            Address = bill.Address,
+                            Status = bill.Status,
+                            CreateDate = bill.CreateDate,
+                            GiamGia = voucher != null ? voucher.GiaTri : 0,
+                            CodeVoucher = voucher != null ? voucher.MaVoucher : null,
+                            UserId = bill.UserId
+                        };
+
+            return await query.AsNoTracking().FirstOrDefaultAsync();
+
+            // await _context.Bills.AsNoTracking().FirstOrDefaultAsync(x => x.InvoiceCode == invoiceCode);
         }
 
         public async Task<IEnumerable<BillDetailDto>> GetBillDetailByInvoiceCode(string invoiceCode)

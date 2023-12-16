@@ -2,6 +2,8 @@
     int stt = 0;
     string statuswallet = ViewContext.HttpContext.Session.GetString("StatusPointWallet");
     string username = ViewContext.HttpContext.Session.GetString("username");
+    double thanhTien = 0;
+    double tongTien = 0;
 }
 <section class="h-100 h-custom">
     <div class="container h-100 py-5">
@@ -15,23 +17,24 @@
                                 <th scope="col">Số thứ tự</th>
                                 <th scope="col">Mã sản phẩm</th>
                                 <th scope="col">Số lượng</th>
-                                <th scope="col">Giá</th>
+                                <th scope="col">Thành tiền</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var t in ViewBag.cartItem)
                             {
                                 stt++;
-                            
+                                thanhTien = t.Price * t.Quantity;
+                                tongTien += thanhTien; // Accumulate the total for each item
                             <tr>
                                 <th>@stt</th>
                                 <th>
                                     <div class="d-flex align-items-center">
                                         <div class="flex-column ms-4">
                                                 <p class="mb-2">@t.MaProductDetail</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </th>
+                                    </th>
                                     <td class="align-middle">
                                         <div class="d-flex flex-row">
                                             <button class="btn btn-link px-2 decrease-quantity" data-id="@t.Id">
@@ -44,10 +47,14 @@
                                         </div>
                                     </td>
                                 <td class="align-middle">
-                                        <p class="mb-0" style="font-weight: 500;">@t.Price*@t.Quantity</p>
+                                        <p class="mb-0" style="font-weight: 500;">@(t.Price * t.Quantity)</p>
                                 </td>
                             </tr>
                             }
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Tổng tiền:</strong></td>
+                                <td><strong id="totalAmount" name="totalAmount">@tongTien</strong></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -118,65 +125,89 @@
                                         <option value="">chọn phường</option>
                                     </select>
                                 </form>
+                            }
+                            <div class="container">
+                                
 
 
                                 <h2 id="result"></h2>
                             </div>
                             <div class="col-lg-4 col-xl-3">
                                 <div class="d-flex justify-content-between" style="font-weight: 500;">
-                                    <p class="mb-2">Thành tiền</p>
-                                    <p class="mb-2">15.0000.000</p>
+                                    <p class="mb-2">Tổng tiền</p>
+                                    <p class="mb-2">@tongTien</p>
                                 </div>
 
                                 <div class="d-flex justify-content-between" style="font-weight: 500;">
                                     <p class="mb-0">Phí ship</p>
-                                    <p class="mb-0">50.000</p>
+                                    <p class="mb-0">00.000</p>
                                 </div>
-                                <form asp-controller="Client" asp-action="CreateBill">
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="voucherSelect">Chọn mã giảm giá</label>
+                                <form asp-controller="Client" asp-action="CreateBill" >
+
+                                        <input type="hidden" name="totalAmount" id="hiddenTotalAmount" value="@tongTien" />
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label" for="voucherSelect">Chọn mã giảm giá</label>
                                         <select id="voucherSelect" name="codeVoucher" class="form-select form-select-lg">
-                                        <option value="null">Không có</option>
-                                        @foreach (var i in ViewBag.listVoucher)
-                                        {
+                                            <option value="null">Không có</option>
+                                            @foreach (var i in ViewBag.listVoucher)
+                                            {
                                                 <option value="@i.MaVoucher">@i.MaVoucher</option>
                                             }
-                                    </select>
+                                        </select>
 
-                                       
+
+                                        @*    @{
+                                        if (statuswallet == "2")
+                                        {
+
+                                        <label>Ví điểm của @username </label>
+                                        <div id=" id=" sodiemhiencolb"" style="color: blue;">Số điểm hiện có:  <label class="form-label" id="sodiemhiencolb"></label></div>
+                                        <label class="form-label" for="sudungdiem">Sử dụng điểm: </label>
+                                        <input type="number" id="diemInput" name="PointYouWanToUse"/>
+                                        <div id="error-message" style="color: red;"></div>
+
+
+                                        }
+
+                                        } *@
+
                                         @{
                                             if (statuswallet == "2")
                                             {
-
                                                 <label>Ví điểm của @username </label>
-                                                <div id=" id=" sodiemhiencolb"" style="color: blue;">Số điểm hiện có:  <label class="form-label" id="sodiemhiencolb"></label></div>
+                                                <div id="sodiemhiencolb" style="color: blue;">Số điểm hiện có: <label class="form-label" id="sodiemhiencolb"></label></div>
                                                 <label class="form-label" for="sudungdiem">Sử dụng điểm: </label>
-                                                <input type="number" id="diemInput" name="PointYouWanToUse"/>
+                                                <div class="form-check">
+                                                    <input type="checkbox" id="useAllPoints" name="useAllPoints" class="form-check-input" value="true">
+                                                    
+                                                </div>
+                                                <input type="number" id="diemInput" name="PointYouWanToUse" hidden />
                                                 <div id="error-message" style="color: red;"></div>
-
-                                               
                                             }
+                                        }
 
-                                       }
-                                </div>
-                                <hr class="my-4">
+                                    </div>
+                                    <hr class="my-4">
 
-                                <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
-                                    <p class="mb-2">Thành tiền</p>
-                                    <p class="mb-2" id="totalAmount">15.000.000</p>
-                                </div>
+                                    <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
+                                        <p class="mb-2">Thành tiền</p>
+                                            <p class="mb-2" id="thanhtien">@tongTien</p>
+                                    </div>
 
                                     <a asp-controller="Vnpay" asp-action="Index" class="btn btn-primary btn-block btn-lg">
                                         <div class="d-flex justify-content-between">
                                             <span>Thanh toán</span>
-                                            <span>15.000.000</span>
+                                                <span id="thanhToan">@tongTien</span>
                                         </div>
                                     </a>
-                                <button  class="btn btn-primary btn-block btn-lg" type="submit">
-                                    <div class="d-flex justify-content-between">
-                                        <span>Đặt hàng</span>
-                                        <span>15.000.000</span>
-                                    </div>
+                                        <input type="number" name="giaTriGioHang" id="giaTriGioHang" />
+                                        <button class="btn btn-primary btn-block btn-lg" type="submit">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Đặt hàng</span>
+                                                <span id="datHang" name="datHang">@tongTien</span>
+                                              
+                                        </div>
                                     </button>
                                 </form>
 
@@ -231,7 +262,7 @@
             var itemId = $(this).data("id");
             var row = $(this).closest('tr');
             var quantityLabel = row.find(".quantity-input");
-          
+
             $.ajax({
                 url: '/Client/DecreaseQuantity',
                 type: 'POST',
@@ -240,6 +271,7 @@
                     var currentQuantity = parseInt(quantityLabel.text());
                     var newQuantity = currentQuantity - 1;
                     quantityLabel.text(newQuantity);
+                    location.reload();
                 },
                 error: function (error) {
                     console.error('Error:', error);
@@ -250,7 +282,6 @@
             var itemId = $(this).data("id");
             var row = $(this).closest('tr');
             var quantityLabel = row.find(".quantity-input");
-
             $.ajax({
                 url: '/Client/IncreaseQuantity',
                 type: 'POST',
@@ -259,6 +290,7 @@
                     var currentQuantity = parseInt(quantityLabel.text());
                     var newQuantity = currentQuantity + 1;
                     quantityLabel.text(newQuantity);
+                    location.reload();
                 },
                 error: function (error) {
                     console.error('Error:', error);
@@ -267,7 +299,7 @@
         });
     });
 
-    </script>
+</script>
 
 
 
@@ -373,30 +405,105 @@
     // Gọi hàm fetchSoDiemHienCo khi trang được tải để lấy số điểm hiện có từ backend
     window.addEventListener('load', fetchSoDiemHienCo);
 
-    function validateInput() {
-        // Lấy giá trị từ input
-        var diemInputValue = document.getElementById("diemInput").value.trim();
+        // function validateInput() {
+        //     // Lấy giá trị từ input
+        //     var diemInputValue = document.getElementById("diemInput").value.trim();
 
-        // Nếu người dùng không nhập, không thực hiện kiểm tra
-        if (diemInputValue === "") {
+        //     // Nếu người dùng không nhập, không thực hiện kiểm tra
+        //     if (diemInputValue === "") {
+        //         document.getElementById("error-message").innerText = "";
+        //         return;
+        //     }
+
+        //     // Kiểm tra giá trị nhập vào
+        //     var diemInputNumber = parseInt(diemInputValue);
+        //     if (isNaN(diemInputNumber) || diemInputNumber < 0) {
+        //         document.getElementById("error-message").innerText = "Giá trị không hợp lệ. Vui lòng nhập một số không nhỏ hơn 0.";
+        //     } else if (diemInputNumber > soDiemHienCo) {
+        //         document.getElementById("error-message").innerText = "Không thể sử dụng số điểm vượt quá số điểm hiện có trong ví điểm.";
+        //     } else {
+        //         document.getElementById("error-message").innerText = "";
+        //     }
+        // }
+
+        // // Gọi hàm validateInput mỗi khi giá trị trong input thay đổi
+        // document.getElementById("diemInput").addEventListener("input", validateInput);
+
+
+
+
+
+
+    // ... (Your existing code)
+
+    var tongTien = @tongTien;
+    // Function to update the input value based on the checkbox state
+    function updatePointsInput() {
+        var diemInput = document.getElementById("diemInput");
+        var useAllPointsCheckbox = document.getElementById("useAllPoints");
+
+        // If the checkbox is checked, set the input value to the available points
+        if (useAllPointsCheckbox.checked) {
+            diemInput.value = soDiemHienCo;
+            diemInput.disabled = true; // Disable the input when using all points
+
+            var diemToTienExchangeRate = 10000;
+            var diemInputValue = parseInt(diemInput.value);
+
+            if (!isNaN(diemInputValue) && diemInputValue > 0) {
+              
+                var tienConverted = diemInputValue * diemToTienExchangeRate;
+                console.log(tienConverted);
+                tongTien -= tienConverted; console.log(tongTien);
+            }
+
+        } else {
+            diemInput.value = ""; // Clear the input value
+            diemInput.disabled = false; // Enable the input when not using all points
+            tongTien = @tongTien;
+        }
+
+        document.getElementById("totalAmount").innerText = tongTien;
+        document.getElementById("thanhToan").innerText = tongTien;
+        document.getElementById("datHang").innerText = tongTien;
+        document.getElementById("thanhtien").innerText = tongTien;
+        document.getElementById("giaTriGioHang").innerText = tongTien;
+        document.getElementById("hiddenTotalAmount").value = tongTien;
+        validateInput(); // Validate the input based on the updated value
+    }
+
+    // Attach the updatePointsInput function to the checkbox change event
+    document.getElementById("useAllPoints").addEventListener("change", updatePointsInput);
+
+    // Function to validate the input based on its value
+    function validateInput() {
+        var diemInput = document.getElementById("diemInput");
+        var diemInputValue = diemInput.value.trim();
+
+        // If the input is disabled, clear any error messages
+        if (diemInput.disabled) {
             document.getElementById("error-message").innerText = "";
             return;
         }
 
-        // Kiểm tra giá trị nhập vào
-        var diemInputNumber = parseInt(diemInputValue);
-        if (isNaN(diemInputNumber) || diemInputNumber < 0) {
-            document.getElementById("error-message").innerText = "Giá trị không hợp lệ. Vui lòng nhập một số không nhỏ hơn 0.";
-        } else if (diemInputNumber > soDiemHienCo) {
-            document.getElementById("error-message").innerText = "Không thể sử dụng số điểm vượt quá số điểm hiện có trong ví điểm.";
+        // Your existing validation logic...
+        // Make sure to adjust your validation based on the updated input state
+
+        // Check if the point balance is zero, hide the checkbox, and show the point balance
+        if (soDiemHienCo === 0) {
+            document.getElementById("useAllPoints").style.display = "none";
+            document.getElementById("diemInput").style.display = "none";
+            document.getElementById("sodiemhiencolb").innerText = "Số điểm hiện có: " + soDiemHienCo;
         } else {
-            document.getElementById("error-message").innerText = "";
+            document.getElementById("useAllPoints").style.display = "inline"; // Show the checkbox
+            document.getElementById("sodiemhiencolb").innerText = "Số điểm hiện có: " + soDiemHienCo;
         }
     }
 
-    // Gọi hàm validateInput mỗi khi giá trị trong input thay đổi
-    document.getElementById("diemInput").addEventListener("input", validateInput);
+    // Gọi hàm fetchSoDiemHienCo khi trang được tải để lấy số điểm hiện có từ backend
+    window.addEventListener('load', fetchSoDiemHienCo);
 
+    // ... (Your existing code)
 
 </script>
 

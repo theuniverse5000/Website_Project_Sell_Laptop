@@ -63,7 +63,7 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost("TieuDiemMuaHangAsync")]
-        public async Task<IActionResult> TieuDiemMuaHangAsync(string invoiceCode, double TongTienThanhToan, double SoDiemMuonDung)
+        public async Task<IActionResult> TieuDiemMuaHangAsync(string invoiceCode, double TongTienThanhToan/*, double SoDiemMuonDung*/)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
             //if (apiKey == null)
@@ -76,7 +76,7 @@ namespace Shop_API.Controllers
             //{
             //    return Unauthorized();
             //}
-            return Ok(await _tichDiemServices.TieuDiemMuaHangAsync(invoiceCode, TongTienThanhToan, SoDiemMuonDung));
+            return Ok(await _tichDiemServices.TieuDiemMuaHangAsync(invoiceCode, TongTienThanhToan/*, SoDiemMuonDung*/));
         }
 
         [HttpGet("GetStatusOfPointWallet")]
@@ -100,8 +100,13 @@ namespace Shop_API.Controllers
                 var user = await _userRepository.GetUserByUserName(usename);
                 var viDiem = await _viDiemRepository.GetViDiemById(user.Id);
                 var soDiemHienCo = viDiem.TongDiem - viDiem.SoDiemDaDung;
+                if (soDiemHienCo > 0) return Ok(new { soDiemHienCo });
+                else {
+                    soDiemHienCo = 0;
+                    return Ok(new { soDiemHienCo });
+                }
+                    
 
-                return Ok(new { soDiemHienCo });
             }
             catch (Exception ex)
             {

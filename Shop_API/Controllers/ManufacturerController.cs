@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -8,7 +9,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class ManufacturerController : ControllerBase
     {
         private readonly IManufacturerRepository _manufacturer;
@@ -43,27 +44,29 @@ namespace Shop_API.Controllers
         }
 
         [HttpPost("CreateManu")]
-
         public async Task<IActionResult> CreateManu(Manufacturer obj)
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             obj.Id = Guid.NewGuid();
-            if (await _manufacturer.Create(obj))
+            //obj.LinkImage ="Error";\
+            obj.Status = 1;
+            var response = await _manufacturer.Create(obj);
+            if (response.IsSuccess)
             {
-                return Ok("Thêm thành công");
+                return Ok(response);
             }
-            return BadRequest("Thêm thất bại");
+            return BadRequest(response);
         }
 
         [HttpPut]

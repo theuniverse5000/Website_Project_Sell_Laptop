@@ -2,6 +2,7 @@
 @{
     float thanhTien = 0;
     float total = 0;
+    float phaiTra = 0;
 }
     <title>Hóa Đơn Bán Laptop</title>
     <style>
@@ -145,8 +146,11 @@
         </table>
         <div class="total">
             <p>Tổng cộng: @total</p>
-            <p>Giảm giá: 0</p>
-            <p>Thành tiền: @total</p>
+                <p>Giảm giá: @ViewBag.Bill.GiamGia</p>
+                @{
+                    phaiTra = total - (float)ViewBag.Bill.GiamGia;
+                }
+                <p>Thành tiền: @phaiTra</p>
         </div>
     </div>
 }

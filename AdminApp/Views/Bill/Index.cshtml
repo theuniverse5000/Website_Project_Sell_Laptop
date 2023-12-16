@@ -184,6 +184,12 @@
                                 url: "/Bill/GetListBillDetailByInvoiceCode", // Replace with the actual API URL
                                 data: { invoiceCode: dataItem.invoiceCode }, // Pass any required parameters
                                 success: function (detailsData) {
+
+                                    calculateTotalAmount(detailsData.result);
+
+                                    console.log(calculateTotalAmount(detailsData.result));
+                                    // Update the value wherever you need it
+                                    $("#TongTienThanhToan").text("Tổng tiền thanh toán: " + totalAmount);
                                     // Create a new Kendo Grid for details
                                     var detailsGrid = $("#detailsGrid").kendoGrid({
                                         dataSource: {
@@ -250,6 +256,27 @@
                     } else if (e.model.dirty) {
                         // Trường hợp cập nhật
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
+                        console.log(e.model.invoiceCode);
+                        totalAmount = 25000000;
+                        $.ajax({
+                            type: "POST",
+                            url: "https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync?invoiceCode=" + e.model.invoiceCode + "&TongTienThanhToan=" + totalAmount,
+                            success: function (response) {
+                                console.log(response);
+                                if (response.code === 200) {
+                                    showNotification(response.message, "success");
+                                } else {
+                                    showNotification("Cập nhật thất bại", "error");
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                                alert("Lỗi khi gọi API. Xem log để biết thêm chi tiết.");
+                            }
+                        });
+
+
+
 
                         if (status === 'success') {
                             showNotification("Cập nhật thành công", "success");
@@ -267,7 +294,6 @@
                         }
                     }
                 },
-
                 columns: [
                     {
                         field: "invoiceCode",
@@ -374,6 +400,42 @@
                 default: return "Không xác định trạng thái";
             }
         }
+
+        var totalAmount = 0;
+        button.click(function (e) {
+            e.preventDefault();
+
+            // Fetch the details data for the clicked row
+            $.ajax({
+                type: "GET",
+                url: "/Bill/GetListBillDetailByInvoiceCode",
+                data: { invoiceCode: dataItem.invoiceCode },
+                success: function (detailsData) {
+                    // Calculate total amount
+                    calculateTotalAmount(detailsData.result);
+
+                    // Rest of your code...
+                },
+                error: function () {
+                    alert("Lỗi khi gọi API.");
+                }
+            });
+        });
+
+
+
+        function calculateTotalAmount(data) {
+            var totalAmount = 0;
+
+            for (var i = 0; i < data.length; i++) {
+                totalAmount += data[i].price * data[i].quantity;
+            }
+
+            return totalAmount;
+        }
+
+
+
 
     </script>
 }
