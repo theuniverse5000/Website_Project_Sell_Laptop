@@ -29,18 +29,6 @@ namespace Shop_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllGiamGias()
         {
-
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
             return Ok(await _giamGiaRepository.GetAllGiamGias());
         }
 
@@ -92,18 +80,6 @@ namespace Shop_API.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteGiamGia(Guid id)
         {
-
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
             if (await _giamGiaRepository.Delete(id))
             {
                 return Ok("Xóa Thành Công");
@@ -115,17 +91,6 @@ namespace Shop_API.Controllers
         [HttpGet("GetGiamGiasFSP")]
         public IActionResult GetGiamGiasFSP(string? search, double? from, double? to, string? sortBy, int page)
         {
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
             _reponse.Result = _iPagingRepository.GetAllGiamGia(search, from, to, sortBy, page);
             var count = _reponse.Count = _iPagingRepository.GetAllGiamGia(search, from, to, sortBy, page).Count;
             return Ok(_reponse);
