@@ -529,19 +529,20 @@ namespace Shop_API.Repository
             }).ToList();
         }
 
-        public List<SanPhamGiamGia> GetAllSPGGPGs(string? search, double? from, double? to, string? sortBy, int? page)
+        public List<SanPhamGiamGiaDto> GetAllSPGGPGs(string? search, double? from, double? to, string? sortBy, int? page)
         {
             var allSPGG = _context.SanPhamGiamGias.Where(x => x.TrangThai > 0).AsQueryable();
             int totalCount = allSPGG.Count();
-            return allSPGG.Select(hh => new SanPhamGiamGia
+            return allSPGG.Select(hh => new SanPhamGiamGiaDto
             {
                 Id = hh.Id,
                 ProductDetailId = hh.ProductDetailId,
                 GiamGiaId = hh.GiamGiaId,
                 DonGia = hh.DonGia,
                 SoTienConLai = hh.SoTienConLai,
-                TrangThai = hh.TrangThai
-
+                TrangThai = hh.TrangThai,
+                ProductDetailCode = hh.ProductDetail.Code,
+                GiamGiaCode = hh.GiamGia.Ten
             }).ToList();
         }
 

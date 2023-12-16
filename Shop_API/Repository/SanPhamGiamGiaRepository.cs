@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 
 namespace Shop_API.Repository
@@ -12,17 +13,58 @@ namespace Shop_API.Repository
         {
             _context = context;
         }
-        public async Task<bool> Create(SanPhamGiamGia obj)
+        public async Task<ResponseDto> Create(SanPhamGiamGia obj)
         {
+            var checkMa = await _context.SanPhamGiamGias.AnyAsync(x => x.ProductDetailId == obj.ProductDetailId);
+            if (obj == null || checkMa == true)
+            {
+
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Trùng Mã",
+
+                };
+            }
+            if (obj.ProductDetailId == Guid.Empty && obj.GiamGiaId == Guid.Empty)
+            {
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Bắt buộc phải chọn mã giảm giá và mã sản phẩm",
+
+                };
+            }
+           
+
             try
             {
+
                 await _context.SanPhamGiamGias.AddAsync(obj);
                 await _context.SaveChangesAsync();
-                return true;
+                return new ResponseDto
+                {
+                    Result = obj,
+                    IsSuccess = true,
+                    Code = 200,
+                    Message = "Thành Công",
+
+                };
             }
             catch (Exception)
             {
-                return false;
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 500,
+                    Message = "Lỗi hệ thống",
+
+                };
             }
         }
 
@@ -60,9 +102,9 @@ namespace Shop_API.Repository
             }
             try
             {
-                sanPhamGiamGia.DonGia = obj.DonGia;
-                sanPhamGiamGia.SoTienConLai = obj.SoTienConLai;
-                sanPhamGiamGia.TrangThai = obj.TrangThai;
+                //sanPhamGiamGia.DonGia = obj.DonGia;
+                //sanPhamGiamGia.SoTienConLai = obj.SoTienConLai;
+                //sanPhamGiamGia.TrangThai = obj.TrangThai;
                 sanPhamGiamGia.ProductDetailId = obj.ProductDetailId;
                 sanPhamGiamGia.GiamGiaId = obj.GiamGiaId;
 

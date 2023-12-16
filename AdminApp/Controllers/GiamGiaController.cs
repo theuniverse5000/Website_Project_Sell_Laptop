@@ -46,6 +46,32 @@ namespace AdminApp.Controllers
             }
         }
 
+        public async Task<IActionResult> GetGiamGiaComboBox()
+        {
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
+            {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                HttpResponseMessage response = await client.GetAsync($"/api/GiamGia");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    var count = result.Count();
+                    ViewBag.Count = count;
+
+
+                    return Content(result, "application/json");
+                }
+                else
+                {
+                    return Json(null);
+                }
+            }
+        }
+
+
+
         public async Task<IActionResult> CreateGiamGia(GiamGia p)
         {
             string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;

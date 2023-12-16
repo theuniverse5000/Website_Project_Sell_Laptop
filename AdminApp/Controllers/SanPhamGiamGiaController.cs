@@ -55,7 +55,7 @@ namespace AdminApp.Controllers
             {
                 var accessToken = Request.Cookies["account"];
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Serial/CreateSPGG", p);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/SanPhamGiamGia", p);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
@@ -83,8 +83,6 @@ namespace AdminApp.Controllers
                 {
                     var accessToken = Request.Cookies["account"];
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                    string jwtToken = HttpContext.Session.GetString("AccessToken");
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
                     // Gửi yêu cầu PUT dưới dạng JSON
                     HttpResponseMessage response = await client.PutAsJsonAsync($"/api/SanPhamGiamGia", p);
 
@@ -110,13 +108,11 @@ namespace AdminApp.Controllers
 
         public async Task<JsonResult> DeleteSPGG(Guid id)
         {
-            string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
-            string? urlApi = _config.GetSection("UrlApiAdmin").Value;
             using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 var accessToken = Request.Cookies["account"];
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                HttpResponseMessage response = await client.DeleteAsync($"/api/SanPhamGiamGia/id?id={id}");
+                HttpResponseMessage response = await client.DeleteAsync($"/api/SanPhamGiamGia/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var result = response.Content.ReadAsStringAsync().Result;

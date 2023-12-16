@@ -181,22 +181,6 @@
 
                 columns: [
                     {
-                        field: "dongia",
-                        title: "Đơn Giá",
-                        // Make "Mã" field editable when adding a new record
-                        editable: function (dataItem) {
-                            return dataItem.isNew();
-                        }
-                    },
-                    {
-                        field: "sotienconlai",
-                        title: "Số tiền còn lại",
-                        // Make "Mã" field editable when adding a new record
-                        editable: function (dataItem) {
-                            return dataItem.isNew();
-                        }
-                    },
-                    {
                         field: "giamGiaCode",
                         title: "Mã Giảm Giá",
                         editor: function (container, options) {
@@ -207,7 +191,7 @@
                                     dataSource: {
                                         transport: {
                                             read: {
-                                                url: "/GiamGia/GetGiamGia",
+                                                url: "/GiamGia/GetGiamGiaComboBox",
                                                 type: "GET"
                                             }
                                         }

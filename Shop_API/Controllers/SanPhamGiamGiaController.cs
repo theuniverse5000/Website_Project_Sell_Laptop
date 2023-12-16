@@ -29,59 +29,29 @@ namespace Shop_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllSanPhamGiamGias()
         {
-
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
             return Ok(await _sanPhamGiamGiaRepository.GetAllSanPhamGiamGias());
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateSanPhamGiamGia(SanPhamGiamGia obj)
         {
-
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
             obj.Id = Guid.NewGuid();
-            if (await _sanPhamGiamGiaRepository.Create(obj))
+            obj.TrangThai = 1;
+            var response = await _sanPhamGiamGiaRepository.Create(obj);
+            if (response.IsSuccess)
             {
-                return Ok("Thêm Thành Công");
+                //_reponse.Result = obj;
+                return Ok(response);
             }
-            return BadRequest("Thêm Thất Bại");
+            //_reponse.Result = null;
+            //_reponse.IsSuccess = false;
+            //_reponse.Message = "Thất bại";
+            return BadRequest(response);
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateSanPhamGiamGia(SanPhamGiamGia obj)
         {
-
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
             if (await _sanPhamGiamGiaRepository.Update(obj))
             {
                 return Ok("Chỉnh Sửa Thành Công");
@@ -92,18 +62,6 @@ namespace Shop_API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSanPhamGiamGia(Guid id)
         {
-
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
             if (await _sanPhamGiamGiaRepository.Delete(id))
             {
                 return Ok("Xóa Thành Công");
@@ -118,25 +76,6 @@ namespace Shop_API.Controllers
             _reponse.Result = _iPagingRepository.GetAllSPGGPGs(search, from, to, sortBy, page);
             var count = _reponse.Count = _iPagingRepository.GetAllSPGGPGs(search, from, to, sortBy, page).Count;
             return Ok(_reponse);
-        }
-
-        [HttpGet("ProductDetailById")]
-        public async Task<IActionResult> ProductDetailById(Guid guid)
-        {
-
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
-
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
-            _reponse.Result = await _sanPhamGiamGiaRepository.GetById(guid);
-            return Ok(await _sanPhamGiamGiaRepository.GetById(guid));
         }
     }
 }

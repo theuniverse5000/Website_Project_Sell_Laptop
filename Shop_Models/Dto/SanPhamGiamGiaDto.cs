@@ -10,14 +10,14 @@ namespace Shop_Models.Dto
 {
     public class SanPhamGiamGiaDto
     {
-        [Key]
         public Guid Id { get; set; }
-
         public double DonGia { get; set; }
         public double SoTienConLai { get; set; }
         public int TrangThai { get; set; }
         public Guid ProductDetailId { get; set; }
         public Guid GiamGiaId { get; set; }
+        public string? ProductDetailCode { get; set; }
+        public string? GiamGiaCode { get; set; }
         public virtual GiamGia? GiamGia { get; set; }
         public virtual ProductDetail? ProductDetail { get; set; }
     }
