@@ -17,6 +17,7 @@ namespace Shop_Models.Dto
         public Guid ProductDetailId { get; set; }
         public Guid GiamGiaId { get; set; }
         public string? ProductDetailCode { get; set; }
+        public string? ProductDetailName { get; set; }
         public string? GiamGiaCode { get; set; }
         public string? TenSanPham { get; set; }
         public string? LinkImage { get; set; }

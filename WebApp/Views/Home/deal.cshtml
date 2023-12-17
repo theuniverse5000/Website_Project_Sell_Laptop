@@ -19,11 +19,11 @@
                         decimal giamgia = sanPhamGiamGias[i].GiamGiaPhanTram ?? 0; // Sử dụng giá trị mặc định nếu là null
                         <div class="item">
                             <div class="p-container">
-                                <a href="" class="p-img">
+                                <a class="p-img" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@sanPhamGiamGias[i].ProductDetailCode" asp-route-name="@sanPhamGiamGias[i].ProductDetailName">
                                     <img src="@sanPhamGiamGias[i].LinkImage">
                                     <span class="percent">-@giamgia.ToString("0.")%</span>
                                 </a>
-                                <a href="" class="p-name">@sanPhamGiamGias[i].TenSanPham</a>
+                                <a class="p-name" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@sanPhamGiamGias[i].ProductDetailCode" asp-route-name="@sanPhamGiamGias[i].ProductDetailName">@sanPhamGiamGias[i].TenSanPham</a>
                                 <div class="p-price-all">
                                     <span class="p-price">
                                         @sanPhamGiamGias[i].SoTienConLai.ToString("N0")

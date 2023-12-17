@@ -546,6 +546,7 @@ namespace Shop_API.Repository
                 ProductDetailCode = hh.ProductDetail.Code,
                 GiamGiaPhanTram = hh.GiamGia.MucGiamGiaPhanTram,
                 GiamGiaCode = hh.GiamGia.Ten,
+                ProductDetailName = hh.ProductDetail.Product.Name,
                 TenSanPham = hh.ProductDetail.Product.Name + " " + hh.ProductDetail.Code + " " +
                 hh.ProductDetail.Cpu.Ten + " " + hh.ProductDetail.Ram.ThongSo + " " +
                 hh.ProductDetail.HardDrive.ThongSo + " " + hh.ProductDetail.CardVGA.Ten + " " +
