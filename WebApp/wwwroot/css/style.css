@@ -218,8 +218,8 @@ img {
         width: 100%;
         float: left;
         text-align: center;
-        height: 35px;
-        line-height: 20px;
+        height: 90px;
+        line-height: 15px;
         display: -webkit-box;
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
@@ -234,7 +234,7 @@ img {
         float: left;
         text-align: center;
         margin-bottom: 5px;
-        height: 30px;
+        height: 20px;
         overflow: hidden;
     }
 

@@ -532,17 +532,29 @@ namespace Shop_API.Repository
         public List<SanPhamGiamGiaDto> GetAllSPGGPGs(string? search, double? from, double? to, string? sortBy, int? page)
         {
             var allSPGG = _context.SanPhamGiamGias.Where(x => x.TrangThai > 0).AsQueryable();
+
             int totalCount = allSPGG.Count();
+
             return allSPGG.Select(hh => new SanPhamGiamGiaDto
             {
                 Id = hh.Id,
                 ProductDetailId = hh.ProductDetailId,
                 GiamGiaId = hh.GiamGiaId,
-                DonGia = hh.DonGia,
-                SoTienConLai = hh.SoTienConLai,
+                DonGia = hh.ProductDetail.Price,
+                SoTienConLai = hh.ProductDetail.Price - (hh.ProductDetail.Price * Convert.ToInt64(hh.GiamGia.MucGiamGiaPhanTram) / 100),
                 TrangThai = hh.TrangThai,
                 ProductDetailCode = hh.ProductDetail.Code,
-                GiamGiaCode = hh.GiamGia.Ten
+                GiamGiaPhanTram = hh.GiamGia.MucGiamGiaPhanTram,
+                GiamGiaCode = hh.GiamGia.Ten,
+                TenSanPham = hh.ProductDetail.Product.Name + " " + hh.ProductDetail.Code + " " +
+                hh.ProductDetail.Cpu.Ten + " " + hh.ProductDetail.Ram.ThongSo + " " +
+                hh.ProductDetail.HardDrive.ThongSo + " " + hh.ProductDetail.CardVGA.Ten + " " +
+                hh.ProductDetail.CardVGA.ThongSo + " " + hh.ProductDetail.Screen.KichCo + " " +
+                hh.ProductDetail.Screen.TanSo + " " + hh.ProductDetail.Screen.ChatLieu,
+                LinkImage = _context.Images
+                    .Where(image => image.ProductDetailId == hh.ProductDetailId && image.Ma == "Anh1")
+                    .Select(image => image.LinkImage)
+                    .FirstOrDefault(),
             }).ToList();
         }
 

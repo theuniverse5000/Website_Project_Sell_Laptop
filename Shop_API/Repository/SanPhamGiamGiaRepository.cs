@@ -104,7 +104,7 @@ namespace Shop_API.Repository
             {
                 //sanPhamGiamGia.DonGia = obj.DonGia;
                 //sanPhamGiamGia.SoTienConLai = obj.SoTienConLai;
-                //sanPhamGiamGia.TrangThai = obj.TrangThai;
+                ////sanPhamGiamGia.TrangThai = obj.TrangThai;
                 sanPhamGiamGia.ProductDetailId = obj.ProductDetailId;
                 sanPhamGiamGia.GiamGiaId = obj.GiamGiaId;
 

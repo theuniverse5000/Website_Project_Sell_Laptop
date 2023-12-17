@@ -700,29 +700,16 @@
                 </div>
                 <div class="produt-list loaded" id="js-home-deal">
                     @{
-                        // Định nghĩa phương thức GetProgressBarWidth ở đây
-                        string GetProgressBarWidth(int availableQuantity)
+                        for (int i = 0; i < 5; i++)
                         {
-                            // Thực hiện tính toán giá trị chiều rộng dựa trên availableQuantity
-                            // Ví dụ: giá trị mặc định là 100%, và giá trị tối đa của availableQuantity là 10
-                            double maxWidth = 100; // Giá trị chiều rộng tối đa của thanh tiến trình
-                            double maxAvailableQuantity = 10; // Giá trị tối đa của availableQuantity
-
-                            double widthPercentage = (availableQuantity / maxAvailableQuantity) * maxWidth;
-
-                            return widthPercentage.ToString() + "%";
-                        }
-
-                        for (int i = 0; i < 2; i++)
-                        {
-                            decimal giamgia = giamGias[i].MucGiamGiaPhanTram;
+                            decimal giamgia = sanPhamGiamGias[i].GiamGiaPhanTram ?? 0; // Sử dụng giá trị mặc định nếu là null
                             <div class="item">
                                 <div class="p-container">
                                     <a href="" class="p-img">
-                                        <img src="./img/Products/text_d_i_5__1 1.png">
+                                        <img src="@sanPhamGiamGias[i].LinkImage">
                                         <span class="percent">-@giamgia.ToString("0.")%</span>
                                     </a>
-                                    <a href="" class="p-name">@productDetails[i].NameProduct</a>
+                                    <a href="" class="p-name">@sanPhamGiamGias[i].TenSanPham</a>
                                     <div class="p-price-all">
                                         <span class="p-price">
                                             @sanPhamGiamGias[i].SoTienConLai.ToString("N0")
