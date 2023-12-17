@@ -19,7 +19,7 @@ namespace Shop_API.Repository.IRepository
         List<SerialDto> GetAllSerial(string? search, double? from, double? to, string? sortBy, int page);
         List<Voucher> GetAllVoucherPG(string? search, double? from, double? to, string? sortBy, int? page);
         List<GiamGia> GetAllGiamGia(string? search, double? from, double? to, string? sortBy, int page);
-        List<SanPhamGiamGiaDto> GetAllSPGGPGs(string? search, double? from, double? to, string? sortBy, int? page);
+        List<SanPhamGiamGiaDto> GetAllSPGGPGs(string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int? page);
 
     }
 }
