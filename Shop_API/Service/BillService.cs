@@ -18,10 +18,9 @@ namespace Shop_API.Service
         private readonly ResponseDto _reponse;
         private readonly BillDto _reponseBill;
         private static IEnumerable<CartItemDto>? cartItem;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         public BillService(IBillRepository billRepository, IBillDetailRepository billDetailRepository,
             IProductDetailRepository productDetailRepository, IUserRepository userRepository,
-            ICartRepository cartRepository, IVoucherRepository voucherRepository, IHttpContextAccessor httpContextAccessor)
+            ICartRepository cartRepository, IVoucherRepository voucherRepository)
         {
             _billRepository = billRepository;
             _billDetailRepository = billDetailRepository;
@@ -31,12 +30,10 @@ namespace Shop_API.Service
             _reponse = new ResponseDto();
             _reponseBill = new BillDto();
             _voucherRepository = voucherRepository;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ResponseDto> CreateBill(RequestBillDto request)
         {
-            var session = _httpContextAccessor.HttpContext.Session;
             try
             {
                 var user = _userRepository.GetAllUsers().Result.Where(x => x.UserName == request.Usename).FirstOrDefault();
