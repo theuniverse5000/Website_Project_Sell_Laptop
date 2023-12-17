@@ -26,62 +26,65 @@
     </a>
     </div>
     *@
-<div class="filter-container pd-top-100">
-  <label for="category">Loại sản phẩm:</label>
-  <select id="category">
-    <option value="all">Tất cả</option>
-    <option value="laptop">Laptop</option>
-    <option value="smartphone">Smartphone</option>
-  </select>
-    <label for="category">Thương hiệu:</label>
-    <select id="category">
-        <option value="all">Tất cả</option>
-        <option value="laptop">Laptop</option>
-        <option value="smartphone">Smartphone</option>
-    </select>
-    <label for="category">Giá tiền sản phẩm:</label>
-    <select id="category">
-        <option value="all">Tất cả</option>
-        <option value="laptop">Laptop</option>
-        <option value="smartphone">Smartphone</option>
-    </select>
-  <label for="search">Tìm kiếm:</label>
-  <input type="text" id="search" placeholder="Nhập từ khóa">
+<div style="background-color:white">
+    <div class="filter-container pd-top-100">
+        <label for="category">Loại sản phẩm:</label>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="laptop">Laptop</option>
+            <option value="smartphone">Smartphone</option>
+        </select>
+        <label for="category">Thương hiệu:</label>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="laptop">Laptop</option>
+            <option value="smartphone">Smartphone</option>
+        </select>
+        <label for="category">Giá tiền sản phẩm:</label>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="laptop">Laptop</option>
+            <option value="smartphone">Smartphone</option>
+        </select>
+        <label for="search">Tìm kiếm:</label>
+        <input type="text" id="search" placeholder="Nhập từ khóa">
 
-  <button onclick="filterProducts()">Lọc</button>
-</div>
-<section style="background-color:transparent;">
-    <div class="rp-mobi py-5">
-        <div class="row list-product">
-            @foreach (var t in ViewBag.ListProduct)
-            {
-                <div class="col-md-3 col-sm-3 pd-bt-20">
-                <div class="card card-product">
-                    @if (t.LinkImage != null)
-                    {
-                        <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" class="img-thumbnail img-product" />
-                    }
-                    else
-                    {
-                        <img src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" class="img-thumbnail img-product" />
-                    }
-                   
-                    <div class="card-body">
-                        <p class="card-text ">
-                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">[Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )  </a>
-                          <br>  <span style=" color: red;font-weight: bold;">@t.Price.ToString("N0")</span>
-                            <span style=" color: gray; text-decoration: line-through; ">@t.ImportPrice.ToString("N0")</span>
-                        </p>
+        <button onclick="filterProducts()">Lọc</button>
+    </div>
+    <section style="background-color:transparent;">
+        <div class="rp-mobi py-5">
+            <div class="row list-product">
+                @foreach (var t in ViewBag.ListProduct)
+                {
+                    <div class="col-md-3 col-sm-3 pd-bt-20">
+                        <div class="card card-product">
+                            @if (t.LinkImage != null)
+                            {
+                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" class="img-thumbnail img-product" />
+                            }
+                            else
+                            {
+                                <img src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" class="img-thumbnail img-product" />
+                            }
+
+                            <div class="card-body">
+                                <p class="card-text ">
+                                    <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">[Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )  </a>
+                                    <br>  <span style=" color: red;font-weight: bold;">@t.Price.ToString("N0")</span>
+                                    <span style=" color: gray; text-decoration: line-through; ">@t.ImportPrice.ToString("N0")</span>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                </div> 
-     
-            } 
+
+                }
             </div>
         </div>
         <br />
     </section>
     <p></p>
+    </div>
+
 <style>
     .list-product{
         max-width: 1400px !important;

@@ -37,6 +37,7 @@ namespace WebApp.Controllers
                     //  s = Cart.Where(a => a.IdProductDetail == Id).FirstOrDefault();
                     if (Cart.Count == 0)
                     {
+                        s.Id = Guid.NewGuid();
                         s.MaProductDetail = code;
                         s.Quantity = 1;
                         s.Price = (float)(product.Price);
@@ -134,6 +135,10 @@ namespace WebApp.Controllers
         [HttpPost]
         public async void IncreaseQuantity(Guid idCartDetail)
         {
+            var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
+            CartItemDto thao = Cart.FirstOrDefault(x => x.Id == idCartDetail);
+            thao.Quantity += 1;
+            SessionService.SetObjToSession(HttpContext.Session, "Cart", Cart);
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
             var apiurl = $"/api/Cart/CongQuantity?idCartDetail={idCartDetail}";
             var responeApi = await httpClient.PutAsJsonAsync(apiurl, string.Empty);
@@ -141,21 +146,44 @@ namespace WebApp.Controllers
         [HttpPost]
         public async void DecreaseQuantity(Guid idCartDetail)
         {
+            var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
+            CartItemDto thao = Cart.FirstOrDefault(x => x.Id == idCartDetail);
+            thao.Quantity -= 1;
+            SessionService.SetObjToSession(HttpContext.Session, "Cart", Cart);
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
             var apiUrl = $"/api/Cart/TruQuantityCartDetail?idCartDetail={idCartDetail}";
             var responeApi = await httpClient.PutAsJsonAsync(apiUrl, string.Empty);
         }
-        public async Task<IActionResult> CreateBill(string? codeVoucher,double? totalAmount, bool useAllPoints)
+
+        public async Task<IActionResult> DeleteCartDetail(Guid idCartDetail)
         {
-            getUsername = HttpContext.Session.GetString("username");
+            var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
+            CartItemDto thao = Cart.FirstOrDefault(x => x.Id == idCartDetail);
+            Cart.Remove(thao);
+            SessionService.SetObjToSession(HttpContext.Session, "Cart", Cart);
+            var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+            var apiUrl = $"/api/Cart/Delete?idCartDetail={idCartDetail}";
+            var responeApi = await httpClient.DeleteAsync(apiUrl);
+            return RedirectToAction("ShowCart", "Client");
+        }
+        public async Task<IActionResult> CreateBill(RequestBillDto request, double? totalAmount, bool useAllPoints)
+        {
+            request.CartItem = new List<CartItemDto>();
+            request.Usename = HttpContext.Session.GetString("username");
+            var cartSession = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
+            foreach (var i in cartSession)
+            {
+                request.CartItem.Add(i);
+            }
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
-                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Bill/CreateBill?username={getUsername}&maVoucher={codeVoucher}", String.Empty);
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Bill/CreateBill", request);
                 if (response.IsSuccessStatusCode)
                 {
-                    
+
                     var codeBill = await response.Content.ReadAsStringAsync();
-                    if (useAllPoints == true) {
+                    if (useAllPoints == true)
+                    {
                         //datHang = 1000000;
                         HttpResponseMessage response2 = await client.PostAsJsonAsync($"https://localhost:44333/api/ChucNangTichDiem/TieuDiemMuaHangAsync?invoiceCode={codeBill}&TongTienThanhToan={totalAmount}", String.Empty);
 
