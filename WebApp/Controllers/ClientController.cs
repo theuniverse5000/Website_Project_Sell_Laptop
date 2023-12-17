@@ -223,6 +223,57 @@ namespace WebApp.Controllers
                 return Json(new { success = false, message = "Không tìm thấy hóa đơn" });
             }
         }
-
+        public async Task<IActionResult> AddSanPhamGiamGiaToCart(string code)
+        {
+            getUsername = HttpContext.Session.GetString("username");
+            if (getUsername == null)
+            {
+                using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
+                {
+                    HttpResponseMessage response = await client.GetAsync($"/api/SanPhamGiamGia/GetSPGGPG?codeProductDetail={code}");
+                    var resultString = await response.Content.ReadAsStringAsync();
+                    var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
+                    var product = JsonConvert.DeserializeObject<List<SanPhamGiamGiaDto>>(resultResponse.Result.ToString()).FirstOrDefault(x => x.ProductDetailCode == code);
+                    var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
+                    CartItemDto s = new CartItemDto();
+                    if (Cart.Count == 0)
+                    {
+                        s.MaProductDetail = code;
+                        s.Quantity = 1;
+                        s.Price = (float)(product.SoTienConLai);
+                        Cart.Add(s);
+                        SessionService.SetObjToSession(HttpContext.Session, "Cart", Cart);
+                        return RedirectToAction("ShowCart");
+                    }
+                    else
+                    {
+                        if (SessionService.CheckObjInList(code, Cart))
+                        {
+                            CartItemDto thao = Cart.FirstOrDefault(x => x.MaProductDetail == code);
+                            thao.Quantity += 1;
+                            SessionService.SetObjToSession(HttpContext.Session, "Cart", Cart);
+                            return RedirectToAction("ShowCart");
+                        }
+                        else
+                        {
+                            s.MaProductDetail = code;
+                            s.Quantity = 1;
+                            Cart.Add(s);
+                            SessionService.SetObjToSession(HttpContext.Session, "Cart", Cart);
+                            return RedirectToAction("ShowCart");
+                        }
+                    }
+                }
+            }
+            using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
+            {
+                HttpResponseMessage response = await client.PostAsJsonAsync($"/api/Cart/AddCart?userName={getUsername}&codeProductDetail={code}", string.Empty);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("ShowCart");
+                }
+                return View();
+            }
+        }
     }
 }
