@@ -68,9 +68,9 @@ namespace Shop_API.Controllers
         }
         [AllowAnonymous]
         [HttpPost("CreateBill")]
-        public async Task<IActionResult> CreateBill(string? username, string? maVoucher)
+        public async Task<IActionResult> CreateBill(RequestBillDto request)
         {
-            var reponse = await _billService.CreateBill(username, maVoucher);
+            var reponse = await _billService.CreateBill(request);
             if (reponse.IsSuccess)
             {
                 return Ok(reponse.Message);
@@ -128,33 +128,33 @@ namespace Shop_API.Controllers
         [AllowAnonymous]
         [HttpGet("GetRevenueStatisticss")]
         public IActionResult GetRevenueStatisticss(DateTime selectedDate)
-        {     
-                var startDate = selectedDate.Date;
-                var endDate = startDate.AddMonths(1).AddDays(-1);
+        {
+            var startDate = selectedDate.Date;
+            var endDate = startDate.AddMonths(1).AddDays(-1);
 
-                var dailyStatistics = _context.Bills
-                    .Where(b => b.CreateDate >= startDate && b.CreateDate <= endDate)
-                    .Join(
-                        _context.BillDetails,
-                        bill => bill.Id,
-                        billDetail => billDetail.BillId,
-                        (bill, billDetail) => new
-                        {
-                            Day = bill.CreateDate.Day,
-                            Amount = billDetail.Price * billDetail.Quantity,
-                            // Add other fields as needed
-                        }
-                    )
-                    .GroupBy(result => result.Day)
-                    .Select(group => new
+            var dailyStatistics = _context.Bills
+                .Where(b => b.CreateDate >= startDate && b.CreateDate <= endDate)
+                .Join(
+                    _context.BillDetails,
+                    bill => bill.Id,
+                    billDetail => billDetail.BillId,
+                    (bill, billDetail) => new
                     {
-                        Day = group.Key,
-                        Amount = group.Sum(result => result.Amount),
-                        TotalOrders = group.Count(),
+                        Day = bill.CreateDate.Day,
+                        Amount = billDetail.Price * billDetail.Quantity,
                         // Add other fields as needed
-                    })
-                    .ToList();
-                return Ok(dailyStatistics);
+                    }
+                )
+                .GroupBy(result => result.Day)
+                .Select(group => new
+                {
+                    Day = group.Key,
+                    Amount = group.Sum(result => result.Amount),
+                    TotalOrders = group.Count(),
+                    // Add other fields as needed
+                })
+                .ToList();
+            return Ok(dailyStatistics);
         }
 
 

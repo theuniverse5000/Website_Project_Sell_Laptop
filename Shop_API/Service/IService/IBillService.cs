@@ -4,7 +4,7 @@ namespace Shop_API.Service.IService
 {
     public interface IBillService
     {
-        Task<ResponseDto> CreateBill(string? username, string? maVoucher);
+        Task<ResponseDto> CreateBill(RequestBillDto request);
         Task<ResponseDto> PGetBillByInvoiceCode(string invoiceCode);
         Task<ResponseDto> GetBillDetailByInvoiceCode(string invoiceCode);
         // Task<ResponseDto> GetAllBill();

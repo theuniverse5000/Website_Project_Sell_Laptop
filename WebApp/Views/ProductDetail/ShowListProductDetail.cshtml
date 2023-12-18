@@ -1,166 +1,78 @@
 ﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
-@using Shop_Models.Dto;
-@using Shop_Models.Entities
+<div style="background-color: aliceblue;">
+    <div class="filter-container pd-top-100">
+        <label for="category">Loại sản phẩm:</label>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="laptop">Laptop</option>
+            <option value="smartphone">Smartphone</option>
+        </select>
+        <label for="category">Thương hiệu:</label>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="laptop">Laptop</option>
+            <option value="smartphone">Smartphone</option>
+        </select>
+        <label for="category">Giá tiền sản phẩm:</label>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="laptop">Laptop</option>
+            <option value="smartphone">Smartphone</option>
+        </select>
+        <label for="search">Tìm kiếm:</label>
+        <input type="text" id="search" placeholder="Nhập từ khóa">
 
-
-
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-@* <div class="col-md-3" data-code="@t.Code.ToString()">
-
-    <a>
-        <img src="./img/Products/_0005_21675_laptop_asus_x515ma_br481w 1 (no bg).png">
-        <b>@t.NameProduct</b>
-        <div class="Product-price">
-            <span>@t.Price </span>
-            <p> t.ImportPrice</p>
-            <span class="hot-price">Giá lên đời:</span>
-            <span class="update-price">
-                12.490.000₫
-            </span>
-        </div>
-        <div class="Like-product">
-            <i class="fa-solid fa-heart"></i>
-            <span>Yêu Thích</span>
-        </div>
-    </a>
+        <button onclick="filterProducts()">Lọc</button>
     </div>
-    *@
-<style>
-    .filter-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .filter-container label,
-        .filter-container select,
-        .filter-container input,
-        .filter-container button {
-            margin-bottom: 5px; /* Điều chỉnh margin-bottom để giảm khoảng cách giữa các phần tử */
-        }
-
-        .filter-container select,
-        .filter-container input,
-        .filter-container button {
-            padding: 8px;
-            font-size: 14px;
-        }
-
-        .filter-container button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-
-            .filter-container button:hover {
-                background-color: #45a049;
-            }
-</style>
-
-<div class="filter-container pd-top-100">
-    <label for="loaiLapTop">Loại sản phẩm:</label>
-    <select id="loaiLapTop">
-        <option value="">Tất cả</option>
-        <option value="Laptop Gamming">Laptop Gaming</option>
-        <option value="Laptop đồ họa">Laptop đồ họa</option>
-        <option value="Laptop Mỏng Nhẹ">Laptop Mỏng Nhẹ</option>
-        <option value="Laptop Văn Phòng">Laptop Văn Phòng</option>
-    </select>
-
-    <label for="loaiMamufacturer">Thương hiệu:</label>
-    <select id="loaiMamufacturer">
-        <option value="">Tất cả</option>
-        <option value="Dell">Dell</option>
-        <option value="TUF">TUF</option>
-        <option value="Asus">Asus</option>
-    </select>
-
-    <label for="priceRange">Tìm kiếm theo khoảng giá:</label>
-    <select id="priceRange">
-        <option value="">Tất cả</option>
-        <option value="0-500000">0 - 5,000,000 VND</option>
-        <option value="5000000-1000000">5.000.000 - 10,000,000 VND</option>
-        <option value="10000000-15000000">10.000.000 - 15,000,000 VND</option>
-        <option value="15000000-20000000">15,000,000 - 20,000,000 VND</option>
-        <option value="20000000-25000000">20,000,000 - 25,000,000 VND</option>
-        <option value="25000000-30000000">25,000,000 - 30,000,000 VND</option>
-        <!-- Add more options as needed -->
-    </select>
-
-    <label for="search">Tìm kiếm tên sản phẩm:</label>
-    <input type="text" id="search" placeholder="Nhập từ khóa">
-
-    <button onclick="filterProducts()">Lọc</button>
-</div>
-
-
-<section style="background-color:transparent;">
-    <div class="rp-mobi py-5">
-        <div id="productListContainer" class="row list-product">
+    <section style="background-color: aliceblue;">
+        <div class="rp-mobi py-5 container">
+            <div class="row List-products-2">
                 @foreach (var t in ViewBag.ListProduct)
                 {
-                    <div class="col-md-3 col-sm-3 pd-bt-20">
-                        <div class="card card-product">
-                            @if (t.LinkImage != null)
-                            {
-                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" class="img-thumbnail img-product" />
+                    <div class="col-md-3 col-sm-3">
+                        <div class="product-box">
+                           
+                                @if (t.LinkImage != null)
+                                {
+                                    <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image"/><br />
+                                }
+                                else
+                                {
+                                <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" /><br />
                             }
-                            else
-                            {
-                                <img src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" class="img-thumbnail img-product" />
-                            }
-
-                            <div class="card-body">
-                                <p class="card-text ">
-                                    <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">[Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )  </a>
-                                    <br>  <span style=" color: red;font-weight: bold;">@t.Price.ToString("N0")</span>
-                                    <span style=" color: gray; text-decoration: line-through; ">@t.ImportPrice.ToString("N0")</span>
-                                </p>
-                            </div>
+                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct" >
+                                @t.NameProduct @t.Code (@t.TenCpu, @t.TenCardVGA @t.ThongSoCardVGA, @t.TanSoManHinh @t.ChatLieuManHinh )
+                            </a>
+                              
+                                <div class="computer-configuration">
+                                    <div class="configuration-item">
+                                    <span>@t.ThongSoRam</span>
+                                    </div>
+                                    <div class="configuration-item">
+                                    <span> @t.ThongSoHardDrive</span>
+                                    </div>
+                                    <div class="configuration-item">
+                                    <span>@t.KichCoManHinh</span>
+                                    </div>
+                                </div>
+                                <div class="Product-price">
+                                <span>@t.Price.ToString("N0") </span>
+                                <p>@t.ImportPrice.ToString("N0")</p>
+                                </div>
+                           
                         </div>
                     </div>
-
+                    
                 }
-            }
-                   
+            </div>
         </div>
+        <br />
+    </section>
+    <p></p>
     </div>
 
-
-
-    <br />
-</section>
-<p></p>
 <style>
-    .list-product {
-        max-width: 1400px !important;
-        text-align: center !important;
-        margin: auto !important;
-    }
-
-    .card-product {
-        height: 400px;
-        padding-bottom: 30px;
-        border: 1px solid #ddd; /* Add a border to the card */
-        border-radius: 8px; /* Add rounded corners to the card */
-        overflow: hidden; /* Hide any content that overflows the card */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-        transition: box-shadow 0.3s ease; /* Add a smooth transition to the box shadow */
-
-        margin-right: 20px;
-    }
-
-        .card-product:hover {
+    .product-box:hover {
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase box shadow on hover */
         }
 
@@ -181,97 +93,45 @@
         text-decoration: none; /* Remove underline from the link */
         color: #333; /* Set link color */
     }
-
-    .card-product {
+    .card-product{
         font-family: Inter;
         font-size: 16px;
         font-style: normal;
         font-weight: 500;
         line-height: normal;
     }
-
-    .pd-bt-20 {
-        padding-bottom: 20px
+    .pd-bt-20{
+        padding-bottom:20px
     }
-
-    .filter-container {
-        margin-bottom: 20px;
+        .filter-container {
+      margin-bottom: 20px;
     }
 
     /* Style cho danh sách sản phẩm */
     .product-list {
-        list-style: none;
-        padding: 0;
+      list-style: none;
+      padding: 0;
     }
 
     .product-item {
-        border: 1px solid #ccc;
-        margin-bottom: 5px;
-        padding: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 5px;
+      padding: 10px;
     }
-
-    .pd-top-100 {
-        padding-top: 100px;
+    .pd-top-100{
+        padding-top:100px;
+    }
+    .container{
+        max-width: 1450px !important;
     }
 </style>
 
 <script>
-    $(document).ready(function () {
-
+    $(document).ready(function(){
+      
     });
 </script>
 
 
-
-<script>
-
-    function filterProducts() {
-        var productTypeValue = $("#loaiLapTop").val();
-        var namufacturerValue = $("#loaiMamufacturer").val();
-        var nameProductDetail = $("#search").val();
-        var priceRange = $("#priceRange").val();
-        var from = null;
-        var to = null;
-
-        if (priceRange) {
-            var priceValues = priceRange.split('-');
-            from = parseFloat(priceValues[0]);
-            to = parseFloat(priceValues[1]);
-        }
-
-
-
-        // Gọi API với tham số lọc
-        loadData(productTypeValue, namufacturerValue, nameProductDetail, from, to);
-    }
-    function loadData(productTypeSearch, namufacturerSearch, nameProductDetail, from, to) {
-        $.ajax({
-            url: "/ProductDetail/ShowListProductDetailLoc",
-            type: "GET",
-            data: {
-                productType: productTypeSearch,
-                namufacturerz: namufacturerSearch,
-                searchString: nameProductDetail,
-                from: from,
-                to: to
-            },
-            success: function (data) {
-                console.log(data);
-                if (data.trim() !== "") {
-                    $("#productListContainer").html(data);
-                } else {
-                    // Hiển thị thông báo không có sản phẩm
-                    $("#productListContainer").html("<h3>Không có sản phẩm phù hợp với các điều kiện đã tìm kiếm</h3>");
-                }
-
-            },
-
-            error: function (error) {
-                console.error(error);
-            }
-        });
-    }
-
-</script>
-
+    
 

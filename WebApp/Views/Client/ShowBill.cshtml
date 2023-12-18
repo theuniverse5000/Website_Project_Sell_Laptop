@@ -15,6 +15,7 @@
             padding: 20px;
             border: 1px solid #ccc;
         background: azure;
+        margin-bottom:100px;
         }
         .header {
             text-align: center;
@@ -51,15 +52,22 @@
         margin-left: 100px;
     }
 
-    .pd-bt-40{
-        margin-bottom: 40px;
+    .pd-bt-20{
+        margin-bottom: 20px;
+    }
+
+    .pd-top-30{
+        padding-top:30px;
+    }
+    .container{
+        max-width:1500px !important;
     }
 </style>
 <div class="container">
-<h1>Mời bạn nhập mã hóa đơn để tra cứu đơn hàng</h1>
-    <div class="pd-bt-40">
+
+    <div class="pd-bt-20 pd-top-30  d-flex justify-content-center">
 <form asp-controller="Client" asp-action="ShowBill" class="d-flex">
-    <input class="form-control find-bill" name="invoiceCode" type="search" placeholder="Bạn muốn tìm gì?" aria-label="Search">
+    <input class="form-control find-bill" name="invoiceCode" type="search" placeholder="Nhập mã hóa đơn để tìm kiếm" aria-label="Search">
     <button class="btn btn-outline-success" type="submit">
         <i class="fas fa-search"></i>
     </button>

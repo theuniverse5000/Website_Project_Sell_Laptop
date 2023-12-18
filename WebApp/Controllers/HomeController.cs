@@ -18,12 +18,12 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-            var apiUrl = "/api/ProductDetail/PGetProductDetail";
+            var apiUrl = "/api/ProductDetail/PGetProductDetail?status=2";
             var apiRespone = await httpClient.GetStringAsync(apiUrl);
             var Respone = apiRespone.ToString();
             var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
             var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
-            ViewBag.ProductDetails = content;
+            ViewBag.LinhKien = content;
             var apiUrl2 = "/api/SanPhamGiamGia/GetSPGGPG";
             var apiRespone2 = await httpClient.GetStringAsync(apiUrl2);
             var Respone2 = apiRespone2.ToString();

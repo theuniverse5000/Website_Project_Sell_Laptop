@@ -5,11 +5,15 @@
     double thanhTien = 0;
     double tongTien = 0;
 }
-<section class="h-100 h-custom">
+<style>
+    .container{
+        max-width:1400px !important;
+    }
+</style>
+<section class="h-100 h-custom" style="font-family: Inter;
+	font-size: 16px;">
     <div class="container h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col">
-
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -18,6 +22,7 @@
                                 <th scope="col">Mã sản phẩm</th>
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Thành tiền</th>
+                            <th scope="col">Xóa</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,6 +54,9 @@
                                 <td class="align-middle">
                                         <p class="mb-0" style="font-weight: 500;">@(t.Price * t.Quantity)</p>
                                 </td>
+                                <td>
+                                    <a asp-controller="Client" asp-action="DeleteCartDetail" asp-route-idCartDetail="@t.Id">Xóa</a>
+                                </td>
                             </tr>
                             }
                             <tr>
@@ -58,170 +66,129 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px;">
+  </div>
+  <div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px;">
                     <div class="card-body p-4">
-
+                <form asp-controller="Client" asp-action="CreateBill">
                         <div class="row">
-                            <div class="col-md-6 col-lg-4 col-xl-3 mb-4 mb-md-0">
-                                <form>
-                                    <div class="d-flex flex-row pb-3">
-                                        <div class="d-flex align-items-center pe-2">
-                                            <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1v"
-                                                   value="" aria-label="..." checked />
-                                        </div>
-                                        <div class="rounded border w-100 p-3">
-                                            <p class="d-flex align-items-center mb-0">
-                                                <i class="fab fa-cc-mastercard fa-2x text-dark pe-2"></i>Credit
-                                                Card
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-row pb-3">
-                                        <div class="d-flex align-items-center pe-2">
-                                            <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel2v"
-                                                   value="" aria-label="..." />
-                                        </div>
-                                        <div class="rounded border w-100 p-3">
-                                            <p class="d-flex align-items-center mb-0">
-                                                <i class="fab fa-cc-visa fa-2x fa-lg text-dark pe-2"></i>Debit Card
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-row">
-                                        <div class="d-flex align-items-center pe-2">
-                                            <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel3v"
-                                                   value="" aria-label="..." />
-                                        </div>
-                                        <div class="rounded border w-100 p-3">
-                                            <p class="d-flex align-items-center mb-0">
-                                                <i class="fab fa-cc-paypal fa-2x fa-lg text-dark pe-2"></i>VN PAY
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex flex-row">
-                                        <div class="d-flex align-items-center pe-2">
-                                            <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel3v"
-                                                   value="" aria-label="..." />
-                                        </div>
-                                        <div class="rounded border w-100 p-3">
-                                            <p class="d-flex align-items-center mb-0">
-                                                <i class="fab fa-cc-paypal fa-2x fa-lg text-dark pe-2"></i>Thanh toán bằng tiền mặt
-                                            </p>
-                                        </div>
-                                    </div>
-                                </form>
+                        <div class="col-md-4 col-sm-4" style="border: solid 1px darkorchid;">
+                        <h3>Chọn phương thức thanh toán:</h3>
+                        <div>
+                            <input type="radio" id="option1" name="options" onclick="displayText('Nhận hàng và thanh toán tiền tại cửa hàng Laptop Phương Thảo: Số 18 phố Linh Lang, Ba Đình, Hà Nội')">
+                            <label for="option1">Thanh toán tại cửa hàng</label><br />
+
+                            <input type="radio" id="option2" name="options" onclick="displayText('Trả tiền mặt khi giao hàng')">
+                            <label for="option2">Thanh toán khi nhận hàng (COD)</label><br />
+
+                            <input type="radio" id="option3" name="options" onclick="displayText('Thực hiện thanh toán vào tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng Mã đơn hàng của bạn trong phần Nội dung đơn đặt hàng thành công. Đơn hàng sẽ đươc giao sau khi tiền đã chuyển. Thông tin tài Khoản ngân hàng: – STK: 08489497321 – Chủ TK: Phạm Thùy Linh – Tại ngân hàng TCB chi nhánh Nam Từ Liêm')">
+                            <label for="option3">Thanh toán bằng chuyển khoản ngân hàng</label>
+
+                            <div id="result" style="background-color:aqua"></div>
+                        </div>
+                       
                             </div>
-                           
-                            <div class="container">
-                                <h1>Chọn danh sách tỉnh</h1>
-                                <form action="">
-                                    <select name="" id="province">
-                                    </select>
-                                    <select name="" id="district">
-                                        <option value="">chọn quận</option>
-                                    </select>
-                                    <select name="" id="ward">
-                                        <option value="">chọn phường</option>
-                                    </select>
-                                </form>
-                            }
-                            <div class="container">
-                                
 
-
-                                <h2 id="result"></h2>
+                        <div class="col-md-4 col-sm-4" style="border: solid 1px darkorchid;">
+                       
+                            <div class="mb-3">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" name="FullName" class="form-control">
                             </div>
-                            <div class="col-lg-4 col-xl-3">
-                                <div class="d-flex justify-content-between" style="font-weight: 500;">
-                                    <p class="mb-2">Tổng tiền</p>
-                                    <p class="mb-2">@tongTien</p>
-                                </div>
-
-                                <div class="d-flex justify-content-between" style="font-weight: 500;">
-                                    <p class="mb-0">Phí ship</p>
-                                    <p class="mb-0">00.000</p>
-                                </div>
-                                <form asp-controller="Client" asp-action="CreateBill" >
-
-                                        <input type="hidden" name="totalAmount" id="hiddenTotalAmount" value="@tongTien" />
-
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="voucherSelect">Chọn mã giảm giá</label>
-                                        <select id="voucherSelect" name="codeVoucher" class="form-select form-select-lg">
-                                            <option value="null">Không có</option>
-                                            @foreach (var i in ViewBag.listVoucher)
-                                            {
-                                                <option value="@i.MaVoucher">@i.MaVoucher</option>
-                                            }
-                                        </select>
-
-
-                                        @*    @{
-                                        if (statuswallet == "2")
-                                        {
-
-                                        <label>Ví điểm của @username </label>
-                                        <div id=" id=" sodiemhiencolb"" style="color: blue;">Số điểm hiện có:  <label class="form-label" id="sodiemhiencolb"></label></div>
-                                        <label class="form-label" for="sudungdiem">Sử dụng điểm: </label>
-                                        <input type="number" id="diemInput" name="PointYouWanToUse"/>
-                                        <div id="error-message" style="color: red;"></div>
-
-
-                                        }
-
-                                        } *@
-
-                                        @{
-                                            if (statuswallet == "2")
-                                            {
-                                                <label>Ví điểm của @username </label>
-                                                <div id="sodiemhiencolb" style="color: blue;">Số điểm hiện có: <label class="form-label" id="sodiemhiencolb"></label></div>
-                                                <label class="form-label" for="sudungdiem">Sử dụng điểm: </label>
-                                                <div class="form-check">
-                                                    <input type="checkbox" id="useAllPoints" name="useAllPoints" class="form-check-input" value="true">
-                                                    
-                                                </div>
-                                                <input type="number" id="diemInput" name="PointYouWanToUse" hidden />
-                                                <div id="error-message" style="color: red;"></div>
-                                            }
-                                        }
-
-                                    </div>
-                                    <hr class="my-4">
-
-                                    <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
-                                        <p class="mb-2">Thành tiền</p>
-                                            <p class="mb-2" id="thanhtien">@tongTien</p>
-                                    </div>
-
-                                    <a asp-controller="Vnpay" asp-action="Index" class="btn btn-primary btn-block btn-lg">
-                                        <div class="d-flex justify-content-between">
-                                            <span>Thanh toán</span>
-                                                <span id="thanhToan">@tongTien</span>
-                                        </div>
-                                    </a>
-                                        <input type="number" name="giaTriGioHang" id="giaTriGioHang" />
-                                        <button class="btn btn-primary btn-block btn-lg" type="submit">
-                                        <div class="d-flex justify-content-between">
-                                            <span>Đặt hàng</span>
-                                                <span id="datHang" name="datHang">@tongTien</span>
-                                              
-                                        </div>
-                                    </button>
-                                </form>
-
+                            <div class="mb-3">
+                                <label class="form-label">Địa chỉ</label>
+                                <input type="text" name="Address" class="form-control">
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="text" name="PhoneNumber" class="form-control">
+                            </div>
+                        
+                    </div>
+                        <div class="col-md-4 col-sm-4" style="border: solid 1px darkorchid;">
+                        <div class="d-flex justify-content-between" style="font-weight: 500;">
+                            <p class="mb-2">Tổng tiền</p>
+                            <p class="mb-2">@tongTien</p>
                         </div>
 
-                    </div>
-                </div>
+                        <div class="d-flex justify-content-between" style="font-weight: 500;">
+                            <p class="mb-0">Phí ship</p>
+                            <p class="mb-0">00.000</p>
+                        </div>
+                       
 
-            </div>
-        </div>
+                            <input type="hidden" name="totalAmount" id="hiddenTotalAmount" value="@tongTien" />
+
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="voucherSelect">Chọn mã giảm giá</label>
+                                <select id="voucherSelect" name="CodeVoucher" class="form-select form-select-lg">
+                                    <option value="null">Không có</option>
+                                    @foreach (var i in ViewBag.listVoucher)
+                                    {
+                                        <option value="@i.MaVoucher">@i.MaVoucher</option>
+                                    }
+                                </select>
+
+
+                                @*    @{
+                                if (statuswallet == "2")
+                                {
+
+                                <label>Ví điểm của @username </label>
+                                <div id=" id=" sodiemhiencolb"" style="color: blue;">Số điểm hiện có:  <label class="form-label" id="sodiemhiencolb"></label></div>
+                                <label class="form-label" for="sudungdiem">Sử dụng điểm: </label>
+                                <input type="number" id="diemInput" name="PointYouWanToUse"/>
+                                <div id="error-message" style="color: red;"></div>
+
+
+                                }
+
+                                } *@
+
+                                @{
+                                    if (statuswallet == "2")
+                                    {
+                                        <label>Ví điểm của @username </label>
+                                        <div id="sodiemhiencolb" style="color: blue;">Số điểm hiện có: <label class="form-label" id="sodiemhiencolb"></label></div>
+                                        <label class="form-label" for="sudungdiem">Sử dụng điểm: </label>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="useAllPoints" name="useAllPoints" class="form-check-input" value="true">
+
+                                        </div>
+                                        <input type="number" id="diemInput" name="PointYouWanToUse" hidden />
+                                        <div id="error-message" style="color: red;"></div>
+                                    }
+                                }
+
+                            </div>
+                            <hr class="my-4">
+
+                            <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
+                                <p class="mb-2">Thành tiền</p>
+                                <p class="mb-2" id="thanhtien">@tongTien</p>
+                            </div>
+                            <input type="number" name="giaTriGioHang" id="giaTriGioHang" />
+                            <button class="btn btn-primary btn-block btn-lg" style="max-width:200px" type="submit">
+                                <div class="d-flex justify-content-between">
+                                    <span>Đặt hàng</span>
+                                    <span id="datHang" name="datHang">@tongTien</span>
+
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                        </div>
+                    </div>
+
+                </div>
+        
     </div>
 </section>
 <script>
+    function displayText(text) {
+        document.getElementById("result").innerHTML = "Bạn đã chọn: " + text;
+    }
     // function applySelectedVoucher() {
     //     // Lấy giá trị mã voucher từ option được chọn
     //     var selectedVoucher = document.getElementById('voucherSelect').value;

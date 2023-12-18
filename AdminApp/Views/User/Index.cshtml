@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Sản Phẩm Giảm Giá";
+    ViewBag.Title = "User";
 
 }
 <span id="notification" style="display:none;">222</span>
@@ -62,23 +62,23 @@
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/SanPhamGiamGia/GetSPGG",
+                            url: "/User/GetUser",
                             type: "GET",
                             dataType: "json"
                         },
                         create: {
-                            url: "/SanPhamGiamGia/CreateSPGGWithOne",
+                            url: "/Serial/CreateSerialWithOne",
                             type: "POST",
                             dataType: "json",
 
                         },
                         update: {
-                            url: "/SanPhamGiamGia/UpdateSPGG",
+                            url: "/Serial/UpdateSerial",
                             type: "PUT",
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/SanPhamGiamGia/DeleteSPGG",
+                            url: "/Serial/DeleteSerial",
                             type: "DELETE",
                             dataType: "json"
                         },
@@ -92,11 +92,12 @@
                             id: "id",
                             fields: {
                                 // ma: { type: "string", validation: { required: true } },
-                                donGia: { type: "int" },
-                                soTienConLai: { type: "int" },
+                                serialNumber: { type: "string", validation: { required: true } },
+                                status: { type: "int" },
                                 productDetailId: { type: "string", validation: { required: true } },
-                                giamGiaId: { type: "string", validation: { required: true } },
-                               
+                                productDetailCode: { type: "string", validation: { required: true } },
+                                billDetailId: { type: "string", validation: { required: true } },
+                                billDetailCode: { type: "string", validation: { required: true } },
                             }
                         }
                     },
@@ -143,29 +144,39 @@
                 },
                 editable: {
                     mode: "popup",
-                    window: { width: 550, height: 250 }, // Chỉnh chiều rộng ở đây
+                    window: { width: 550, height: 400 }, // Chỉnh chiều rộng ở đây
                 },
 
 
                 save: function (e) {
                     if (e.model.isNew()) {
-                        // Thay đổi status thành biến thực tế của bạn
-                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+                        e.model.dirty = true;
+                        console.log(" tra ve: " + e.response);
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            console.log(ev.response);
+                            if (ev.type === "create" && ev.response.code === 200) {
 
-                        if (status === 'success') {
-                            showNotification("Lưu thành công", "success");
-                        } else {
-                            showNotification("Lưu thất bại", "error");
-                        }
+                                showNotification(ev.response.message, "success");
+                            } else {
+                                showNotification("Thêm Thất Bại", "error");
+                                showNotification(ev.response.message, "error");
+                            }
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        });
                     } else if (e.model.dirty) {
-                        // Trường hợp cập nhật
-                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            console.log(ev);
+                            console.log(ev.response);
+                            if (ev.type === "update" && ev.response.code === 200) {
 
-                        if (status === 'success') {
-                            showNotification("Cập nhật thành công", "success");
-                        } else {
-                            showNotification("Cập nhật thất bại", "error");
-                        }
+                                showNotification(ev.response.message, "success");
+                            } else {
+                                showNotification("Cập nhật thất bại", "error");
+                                showNotification(ev.response, "error");
+                            }
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        });
+
                     } else if (e.model.isNew() && e.model.isDestroyed()) {
                         // Trường hợp xóa
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
@@ -180,53 +191,24 @@
 
 
                 columns: [
+                    // {
+                    //     field: "ma",
+                    //     title: "Mã",
+                    //     // Make "Mã" field editable when adding a new record
+                    //     editable: function (dataItem) {
+                    //         return dataItem.isNew();
+                    //     }
+                    // },
                     {
-                        field: "giamGiaCode",
-                        title: "Mã Giảm Giá",
-                        editor: function (container, options) {
-                            // Tạo dropdownlist
-                            $("<input name='giamGiaId'/>")
-                                .appendTo(container)
-                                .kendoDropDownList({
-                                    dataSource: {
-                                        transport: {
-                                            read: {
-                                                url: "/GiamGia/GetGiamGiaComboBox",
-                                                type: "GET"
-                                            }
-                                        }
-                                    },
-                                    dataValueField: "id",
-                                    dataTextField: "ten",
-                                    optionLabel: "Chọn mã giảm giá"
-                                });
-                        }
+                        field: "username",
+                        title: "Tài khoản"
                     },
                     {
-                        field: "productDetailCode",
-                        title: "Mã Sản Phẩm Chi Tiết",
-                        editor: function (container, options) {
-                            // Tạo dropdownlist
-                            $("<input name='productDetailId' />")
-                                .appendTo(container)
-                                .kendoDropDownList({
-                                    // Cấu hình tải dữ liệu từ API hoặc nguồn dữ liệu của bạn
-                                    dataSource: {
-                                        transport: {
-                                            read: {
-                                                url: "/ProductDetail/GetList", // Thay thế đường dẫn bằng API của bạn
-                                                type: "GET"
-                                            }
-                                        }
-                                    },
-                                    dataValueField: "id", // Thay thế bằng trường ID thực tế
-                                    dataTextField: "code", // Thay thế bằng trường hiển thị thực tế
-                                    optionLabel: "Chọn mã sản phẩm" // Đây là giá trị mặc định (null)
-
-                                });
-                        }
+                        field: "isAdmin",
+                        title: "Quản trị viên"
                     },
-                    
+                   
+                   
                     {
                         command: [
                             {

@@ -400,6 +400,50 @@ namespace Shop_API.Repository
                 Status = hh.TrangThai,
             }).ToList();
         }
+        public List<UserDto> GetAllUser(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            var allUser = _context.Users.Where(x => x.Status > 0).AsQueryable();
+
+
+            #region Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                allUser = allUser.Where(pt => pt.FullName.Contains(search));
+            }
+            //if (from.HasValue)
+            //{
+            //    allRams = allRams.Where(hh => hh.Status >= from);
+            //}
+            //if (to.HasValue)
+            //{
+            //    allRams = allRams.Where(hh => hh.Status <= to);
+            //}
+            #endregion
+
+            #region Sorting
+            //Default sort by Name 
+            allUser = allUser.OrderBy(hh => hh.FullName);
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+
+                allUser = allUser.OrderByDescending(hh => hh.FullName); /*break;*/
+
+            }
+            #endregion
+
+            //var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+            //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            int totalCount = allUser.Count();
+
+
+            return allUser.Select(hh => new UserDto
+            {
+                Id = hh.Id,
+                Username = hh.UserName,
+                Name = hh.FullName,    
+            }).ToList();
+        }
 
         public List<ProductDto> GetAllProduct(string? search, double? from, double? to, string? sortBy, int page)
         {
@@ -529,9 +573,9 @@ namespace Shop_API.Repository
             }).ToList();
         }
 
-        public List<SanPhamGiamGiaDto> GetAllSPGGPGs(string? search, double? from, double? to, string? sortBy, int? page)
+        public List<SanPhamGiamGiaDto> GetAllSPGGPGs(string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int? page)
         {
-            var allSPGG = _context.SanPhamGiamGias.Where(x => x.TrangThai > 0).AsQueryable();
+            var allSPGG = _context.SanPhamGiamGias.Where(x => x.TrangThai > 0 && (codeProductDetail != null ? x.ProductDetail.Code == codeProductDetail : true)).AsQueryable();
 
             int totalCount = allSPGG.Count();
 
@@ -552,6 +596,18 @@ namespace Shop_API.Repository
                 hh.ProductDetail.HardDrive.ThongSo + " " + hh.ProductDetail.CardVGA.Ten + " " +
                 hh.ProductDetail.CardVGA.ThongSo + " " + hh.ProductDetail.Screen.KichCo + " " +
                 hh.ProductDetail.Screen.TanSo + " " + hh.ProductDetail.Screen.ChatLieu,
+                TenCpu = hh.ProductDetail.Cpu.Ten,
+                ThongSoRam = hh.ProductDetail.Ram.ThongSo,
+                ThongSoHardDrive = hh.ProductDetail.HardDrive.ThongSo,
+                TenCardVGA = hh.ProductDetail.CardVGA.Ten,
+                ThongSoCardVGA = hh.ProductDetail.CardVGA.ThongSo,
+                KichCoManHinh = hh.ProductDetail.Screen.KichCo,
+                TanSoManHinh = hh.ProductDetail.Screen.TanSo,
+                ChatLieuManHinh = hh.ProductDetail.Screen.ChatLieu,
+                NameProductType = hh.ProductDetail.Product.Name,
+                NameManufacturer = hh.ProductDetail.Product.Manufacturer.Name,
+                NameColor = hh.ProductDetail.Color.Name,
+                Description = hh.ProductDetail.Description,
                 LinkImage = _context.Images
                     .Where(image => image.ProductDetailId == hh.ProductDetailId && image.Ma == "Anh1")
                     .Select(image => image.LinkImage)
