@@ -1,0 +1,9 @@
+﻿@{
+    @using Microsoft.AspNetCore.Http;
+    var httpContext = ViewContext.HttpContext;
+    string accessToken = httpContext.Request.Cookies["access_token"];
+    string username = ViewContext.HttpContext.Session.GetString("username");
+    string phoneNumber = ViewContext.HttpContext.Session.GetString("phoneNumber");
+    string address = ViewContext.HttpContext.Session.GetString("address");
+
+}

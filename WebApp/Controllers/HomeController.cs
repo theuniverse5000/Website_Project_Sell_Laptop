@@ -81,6 +81,20 @@ namespace WebApp.Controllers
             ViewBag.Image = contentIMage;
             return View();
         }
+
+        [Route("info")]
+        public async Task<IActionResult> info()
+        {
+            var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+            var apiUrl = "/api/ProductDetail/PGetProductDetail";
+            var apiRespone = await httpClient.GetStringAsync(apiUrl);
+            var Respone = apiRespone.ToString();
+            var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
+            var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
+            ViewBag.ProductDetails = content;
+           
+            return View();
+        }
         public async Task<IActionResult> ProductDetail(string code)
         {
             var  x = HttpContext.Request;

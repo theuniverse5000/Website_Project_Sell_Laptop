@@ -9,7 +9,7 @@ namespace Shop_API.Helpers
     public static class TokenHelper
     {
         public static string GenerateToken(string jwtSecret, string issuer, string audience
-        , IList<string> userRoles, string id, string userName, string fullName)
+        , IList<string> userRoles, string id, string userName, string fullName, string phoneNumber, string address)
         {
             List<Claim> authClaims = new();
             List<Claim> claimRoles = userRoles.Select(s => new Claim(AppJwtClaimTypes.Roles, s)).ToList();
@@ -19,7 +19,9 @@ namespace Shop_API.Helpers
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString().ToLower()),
             new(AppJwtClaimTypes.Subject, id.ToLower()),
             new(AppJwtClaimTypes.UserName, userName),
-            new(AppJwtClaimTypes.FullName, fullName)
+            new(AppJwtClaimTypes.FullName, fullName),
+              new(AppJwtClaimTypes.PhoneNumber, phoneNumber),
+            new(AppJwtClaimTypes.Address, address)
         });
 
             authClaims.AddRange(claimRoles);

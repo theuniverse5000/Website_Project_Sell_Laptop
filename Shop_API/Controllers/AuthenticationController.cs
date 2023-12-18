@@ -41,7 +41,9 @@ namespace Shop_API.Controllers
                 , userRoles
                 , user.Id.ToString()
                 , user.UserName
-                , user.FullName);
+                , user.FullName
+                , user.PhoneNumber
+                , user.Address);
 
             return Ok(new
             {
