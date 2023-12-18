@@ -55,7 +55,7 @@ builder.Services.AddTransient<ICartRepository, CartRepository>();
 builder.Services.AddTransient<ICartDetailRepository, CartDetailRepository>();
 builder.Services.AddTransient<IBillRepository, BillRepository>();
 builder.Services.AddTransient<IBillDetailRepository, BillDetailRepository>();
-builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddTransient<ISendMailService, SendMailService>();
 builder.Services.AddTransient<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddTransient<IGiamGiaHangLoatServices, GiamGiaHangLoatServices>();
 builder.Services.AddTransient<IBillService, BillService>();
