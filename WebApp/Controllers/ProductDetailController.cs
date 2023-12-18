@@ -30,7 +30,33 @@ namespace WebApp.Controllers
                 var Respone = apiRespone.ToString();
                 var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
                 var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
-                ViewBag.ListProduct = content;             
+                ViewBag.ListProduct = content;
+
+                // Ram        
+                var apiRamUrl = $"/api/Ram/GetRamsFSP";
+                var apiRamRespone = await httpClient.GetStringAsync(apiRamUrl);
+                var responeRam = apiRamRespone.ToString();
+                var responeModelRam = JsonConvert.DeserializeObject<ResponseDto>(responeRam);
+                var contentRam = JsonConvert.DeserializeObject<List<PagingDto>>(responeModelRam.Result.ToString());
+                ViewBag.ListRam = contentRam;
+
+
+                // CardVGA        
+                var apiCardVGAUrl = $"/api/CardVGA/GetCardVGAFSP";
+                var apiCardVGARespone = await httpClient.GetStringAsync(apiCardVGAUrl);
+                var responeCardVGA = apiCardVGARespone.ToString();
+                var responeModelCardVGA = JsonConvert.DeserializeObject<ResponseDto>(responeCardVGA);
+                var contentCardVGA = JsonConvert.DeserializeObject<List<PagingDto>>(responeModelCardVGA.Result.ToString());
+                ViewBag.ListCardVGA = contentCardVGA;
+
+                // GetCPUFSP        
+                var apiCpuUrl = $"/api/Cpu/GetCPUFSP";
+                var apiCpuRespone = await httpClient.GetStringAsync(apiCpuUrl);
+                var responeCpu = apiCpuRespone.ToString();
+                var responeModelCpu = JsonConvert.DeserializeObject<ResponseDto>(responeCpu);
+                var contentCpu = JsonConvert.DeserializeObject<List<PagingDto>>(responeModelCpu.Result.ToString());
+                ViewBag.ListCpu = contentCpu;
+
                 return View();
             }
             catch (Exception)
@@ -66,18 +92,20 @@ namespace WebApp.Controllers
         }
 
         //[HttpGet("sản-phẩm")]
-        public async Task<IActionResult> ShowListProductDetailLoc([FromQuery] string? searchString,int? page, string? productType, string? namufacturerz, double? from, double? to)
+        public async Task<IActionResult> ShowListProductDetailLoc([FromQuery] string? searchString, int? page, string? productType, string? namufacturerz, double? from, double? to,
+            string? ram, string? cpu, string? cardVga)
         {
             try
             {
                 var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-                var apiUrl = $"/api/ProductDetail/PGetProductDetail?status=1&search={searchString}&page={page}&productType={productType}&hangsx={namufacturerz}&from={from}&to={to}";
+                var apiUrl = $"/api/ProductDetail/PGetProductDetail?status=1&search={searchString}&page={page}&productType={productType}&hangsx={namufacturerz}&from={from}&to={to}" +
+                                 $"&ram={ram}&CPU={cpu}&cardVGA={cardVga}";
                 var apiRespone = await httpClient.GetStringAsync(apiUrl);
                 var Respone = apiRespone.ToString();
                 var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
                 var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
                 ViewBag.ListProduct = content;
-               
+
                 // Specify the page number and page size (4 records per page)
                 int pageNumber = page ?? 1;
                 int pageSize = 6;

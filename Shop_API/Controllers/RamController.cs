@@ -134,21 +134,21 @@ namespace Shop_API.Controllers
             return BadRequest("Xóa thất bại");
 
         }
-
+        [AllowAnonymous]
         [HttpGet("GetRamsFSP")]
         public IActionResult GetRamsFSP(string? search, double? from, double? to, string? sortBy, int page)
         {
-            string apiKey = _config.GetSection("ApiKey").Value;
-            if (apiKey == null)
-            {
-                return Unauthorized();
-            }
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            //if (apiKey == null)
+            //{
+            //    return Unauthorized();
+            //}
 
-            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            if (keyDomain != apiKey.ToLower())
-            {
-                return Unauthorized();
-            }
+            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            //if (keyDomain != apiKey.ToLower())
+            //{
+            //    return Unauthorized();
+            //}
             _reponse.Result = _iPagingRepository.GetAllRam(search, from, to, sortBy, page);
             var count = _reponse.Count = _iPagingRepository.GetAllRam(search, from, to, sortBy, page).Count;
             return Ok(_reponse);

@@ -234,6 +234,30 @@
     <link href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js"></script>
+
+
+    <script src="~/lib/summernote/summernote-bs4.js"></script>
+    @*    <link href="~/lib/summernote/summernote-bs4.min.css" rel="stylesheet" /> *@
+    <script src="~/js/animation.js"></script>
+
+    <link href="~/lib/summernote/summernote.css" rel="stylesheet" />
+    <link href="~/lib/summernote/summernote.min.css" rel="stylesheet" />
+    <script src="~/lib/summernote/summernote.js"></script>
+    <script src="~/lib/summernote/summernote.min.js"></script>
+    <a href="~/lib/summernote/summernote.js.map"></a>
+    <a href="~/lib/summernote/summernote.min.js.map"></a>
+    <link href="~/lib/summernote/summernote-bs4.css" rel="stylesheet" />
+    <link href="~/lib/summernote/summernote-bs4.min.css" rel="stylesheet" />
+    <script src="~/lib/summernote/summernote-bs4.js"></script>
+    <script src="~/lib/summernote/summernote-bs4.min.js"></script>
+    <a href="~/lib/summernote/summernote-bs4.js.map"></a>
+    <a href="~/lib/summernote/summernote-bs4.min.js.map"></a>
+    <script src="~/lib/summernote/summernote-lite.js"></script>
+    <script src="~/lib/summernote/summernote-lite.min.js"></script>
+    <a href="~/lib/summernote/summernote-lite.js.map"></a>
+    <a href="~/lib/summernote/summernote-lite.min.js.map"></a>
+    <link href="~/lib/summernote/summernote-lite.css" rel="stylesheet" />
+    <link href="~/lib/summernote/summernote-lite.min.css" rel="stylesheet" />
     <script>
         /*
             This demo renders the grid in "DejaVu Sans" font family, which is
@@ -274,36 +298,49 @@
 
 <script>
 
-    var editor = $("#description").kendoEditor({
-        // stylesheets: [
-        //     "../content/shared/styles/editor.css",
-        // ],
-        tools: [
-            "bold",
-            "italic",
-            "underline",
-            "strikethrough",
-            "fontName",
-            "fontSize",
-            "foreColor",
-            "backColor",
-            "insertImage",
-            "createLink",
-            "undo",
-            "redo",
-            "justifyLeft",
-            "justifyCenter",
-            "justifyRight",
-            "insertUnorderedList",
-            "insertOrderedList",
-            "indent",
-            "outdent",
-            "formatBlock",
-            "clearFormat"
-        ]
+    // var editor = $("#description").kendoEditor({
+    //     // stylesheets: [
+    //     //     "../content/shared/styles/editor.css",
+    //     // ],
+    //     tools: [
+    //         "bold",
+    //         "italic",
+    //         "underline",
+    //         "strikethrough",
+    //         "fontName",
+    //         "fontSize",
+    //         "foreColor",
+    //         "backColor",
+    //         "insertImage",
+    //         "createLink",
+    //         "undo",
+    //         "redo",
+    //         "justifyLeft",
+    //         "justifyCenter",
+    //         "justifyRight",
+    //         "insertUnorderedList",
+    //         "insertOrderedList",
+    //         "indent",
+    //         "outdent",
+    //         "formatBlock",
+    //         "clearFormat"
+    //     ]
+    // });
+
+    $(document).ready(function () {
+        $('#description').summernote({
+            toolbar: [
+                ['style', ['style']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']],
+            ],
+        });
     });
-
-
     $(document).ready(function () {
 
         // gọi form khi nhấn edit

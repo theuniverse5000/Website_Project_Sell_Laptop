@@ -153,7 +153,7 @@ namespace Shop_API.Controllers
             }
             return BadRequest("Xóa thất bại");
         }
-
+        [AllowAnonymous]
         [HttpGet("GetCardVGAFSP")]
         public IActionResult GetCardVGAFSP(string? search, double? from, double? to, string? sortBy, int page)
         {

@@ -21,33 +21,46 @@
 }
 
 <style>
-    .product-card {
-        border: 1px solid #ccc;
-        margin: 10px;
-        padding: 10px;
-        width: 300px; /* Đặt kích thước cố định cho sản phẩm */
-        text-align: center;
+    .container {
+        margin-top: 20px;
     }
 
-    .product-image {
+    .news-card {
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        padding: 15px;
+        text-align: left;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+        .news-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .news-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .news-image img {
         max-width: 100%;
         height: auto;
     }
 
-    .product-title {
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    .product-description {
-        font-size: 14px;
-        margin-top: 10px;
-    }
-
-    .product-price {
+    .news-description {
         font-size: 16px;
-        color: #e74c3c;
         margin-top: 10px;
+    }
+
+    .news-date {
+        font-size: 14px;
+        color: #555;
+        margin-top: 10px;
+    }
+
+    .pagination {
+        margin-top: 20px;
     }
 </style>
 
@@ -57,37 +70,36 @@
     <div class="row">
         @foreach (var item in managePost)
         {
-            <div class="col-md-4">
-                <a href="@Url.Action("Details", "Home", new { guid = item.Id })">
-                    <div class="product-card">
-                        <p class="product-image" alt="Manage Image">@Html.Raw(item.LinkImage)</p>
-                        <div class="product-details">
-                            <h3 class="product-title">@item.Code</h3>
-                            <p class="product-description">@ShortenDescription(item.Description, 10)</p>
-                            <p class="product-price">@item.CreateDate.ToString("yyyy-MM-dd")</p>
-                        </div>
+            <div class="col-md-6">
+                <div class="news-card">
+                    <div class="news-image">
+                        <p alt="News Image">@Html.Raw(item.LinkImage)<p/>
+
                     </div>
-                </a>
+                    <div class="news-details">
+                        <h3 class="news-title">@item.Code</h3>
+                        <p class="news-description">@Html.Raw(ShortenDescription(item.Description, 50))</p>
+                        <p class="news-date">@item.CreateDate.ToString("yyyy-MM-dd")</p>
+                        <a href="@Url.Action("Details", "Home", new { guid = item.Id })" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                </div>
             </div>
         }
     </div>
 
-
     <!-- Pagination -->
-    <div class="text-center">
+    <div class="text-center pagination">
         @if (managePost.HasPreviousPage)
         {
-            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber - 1 })" class="btn btn-primary">Trang Đầu</a>
+            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber - 1 })" class="btn btn-secondary">Trang Đầu</a>
         }
         @for (int i = 1; i <= managePost.PageCount; i++)
         {
             <a href="@Url.Action("GetAllManagePost", new { page = i })" class="btn @(i == managePost.PageNumber ? "btn-primary" : "btn-secondary")">@i</a>
         }
-        @if (managePost.HasNextPage )
+        @if (managePost.HasNextPage)
         {
-            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber + 1 })" class="btn btn-primary">Trang Kế</a>
+            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber + 1 })" class="btn btn-secondary">Trang Kế</a>
         }
     </div>
-
-    <p class="text-center">Trang @managePost.PageNumber trong @managePost.PageCount</p>
 </div>

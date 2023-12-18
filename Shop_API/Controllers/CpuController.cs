@@ -152,6 +152,7 @@ namespace Shop_API.Controllers
             return Ok(_reponse);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetCPUFSP")]
         public async Task<IActionResult> GetCPUFSP(string? search, double? from, double? to, string? sortBy, int page)
         {

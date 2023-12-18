@@ -7,7 +7,7 @@
     IPagedList<ProductDetailDto> managePost = ViewBag.ManagePost;
 }
 
-    @foreach (var t in Model)
+  @*   @foreach (var t in Model)
     {
        
             <div class="col-md-3 col-sm-3 pd-bt-20">
@@ -31,7 +31,50 @@
                 </div>
             </div>
 
-    }
+    } *@
+
+@foreach (var t in Model)
+{
+    <div class="col-md-3 col-sm-3">
+        <div class="product-box">
+
+            @if (t.LinkImage != null)
+            {
+                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+
+                <br />
+            }
+            else
+            {
+                <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" />
+
+                <br />
+            }
+            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">
+                @t.NameProduct @t.Code (@t.TenCpu, @t.TenCardVGA @t.ThongSoCardVGA, @t.TanSoManHinh @t.ChatLieuManHinh )
+            </a>
+
+            <div class="computer-configuration">
+                <div class="configuration-item">
+                    <span>@t.ThongSoRam</span>
+                </div>
+                <div class="configuration-item">
+                    <span> @t.ThongSoHardDrive</span>
+                </div>
+                <div class="configuration-item">
+                    <span>@t.KichCoManHinh</span>
+                </div>
+            </div>
+            <div class="Product-price">
+                <span>@t.Price.ToString("N0") </span>
+                <p>@t.ImportPrice.ToString("N0")</p>
+            </div>
+
+        </div>
+    </div>
+}
+
+
 @* 
 <!-- Pagination -->
 <div class="text-center">

@@ -255,7 +255,7 @@ namespace Shop_API.Repository
         }
 
 
-        public async Task<IEnumerable<ProductDetailDto>> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int? page,string? productType, string? namufacturer)
+        public async Task<IEnumerable<ProductDetailDto>> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int? page,string? productType, string? namufacturer,string? ram, string? CPU, string? cardVGA)
         {
             var query = _context.ProductDetails
                 .AsNoTracking()
@@ -318,6 +318,22 @@ namespace Shop_API.Repository
             {
                 query = query.Where(x => x.NameManufacturer.Contains(namufacturer));
             };
+
+            if (!string.IsNullOrEmpty(ram))
+            {
+                query = query.Where(x => x.ThongSoRam.Contains(ram));
+            };
+
+            if (!string.IsNullOrEmpty(CPU))
+            {
+                query = query.Where(x => x.TenCpu.Contains(CPU));
+            };
+
+            if (!string.IsNullOrEmpty(cardVGA))
+            {
+                query = query.Where(x => x.TenCardVGA.Contains(cardVGA));
+            }; 
+           
 
 
             if (!string.IsNullOrEmpty(sortBy))

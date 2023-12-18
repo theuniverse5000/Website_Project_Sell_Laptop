@@ -4,6 +4,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
+
 <style>
     .filter-container {
         display: flex;
@@ -40,7 +41,6 @@
                 background-color: #45a049;
             }
 </style>
-
 <div class="filter-container pd-top-100">
     <label for="loaiLapTop">Loại sản phẩm:</label>
     <select id="loaiLapTop">
@@ -71,66 +71,98 @@
         <!-- Add more options as needed -->
     </select>
 
-    <label for="search">Tìm kiếm tên sản phẩm:</label>
-    <input type="text" id="search" placeholder="Nhập từ khóa">
+    <label for="thongSoRam">Lọc theo Thông Số Ram:</label>
+    <select id="thongSoRam">
+        <option value="">Tất cả</option>
 
-    <button onclick="filterProducts()">Lọc</button>
+        @foreach (var load in ViewBag.ListRam)
+        {
+            <option value="@load.ThongSo">@load.ThongSo</option>
+        }
+    </select>
+
+    <label for="cpu">Lọc theo Cpu:</label>
+    <select id="cpuName">
+        <option value="">Tất cả</option>
+
+        @foreach (var load in ViewBag.ListCpu)
+        {
+            <option value="@load.Ten">@load.Ten</option>
+        }
+    </select>
+
+    <label for="cardVGA">Lọc theo cardVGA:</label>
+    <select id="cardVgaName">
+        <option value="">Tất cả</option>
+
+        @foreach (var load in ViewBag.ListCardVGA)
+        {
+            <option value="@load.Ten">@load.Ten</option>
+        }
+    </select>
+
+    <div>
+        <label for="search">Tìm kiếm tên sản phẩm:</label>
+        <input type="text" id="search" placeholder="Nhập từ khóa">
+    </div>
+
+    <button onclick="filterProducts()" style="width:50px;">Lọc</button>
 </div>
 
-<section style="background-color:transparent;">
-    <div class="rp-mobi py-5">
-        <div id="productListContainer" class="row list-product">
+<section style="background-color: aliceblue;">
+    <div class="rp-mobi py-5 container">
+        <div class="row List-products-2" id="productListContainer">
             @foreach (var t in ViewBag.ListProduct)
             {
-                <div class="col-md-3 col-sm-3 pd-bt-20">
-                <div class="card card-product">
-                    @if (t.LinkImage != null)
-                    {
-                        <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" class="img-thumbnail img-product" />
-                    }
-                    else
-                    {
-                        <img src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" class="img-thumbnail img-product" />
-                    }
-                   
-                    <div class="card-body">
-                        <p class="card-text ">
-                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">[Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )  </a>
-                          <br>  <span style=" color: red;font-weight: bold;">@t.Price.ToString("N0")</span>
-                            <span style=" color: gray; text-decoration: line-through; ">@t.ImportPrice.ToString("N0")</span>
-                        </p>
+                <div class="col-md-3 col-sm-3">
+                    <div class="product-box">
+
+                        @if (t.LinkImage != null)
+                        {
+                            <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+
+                            <br />
+                        }
+                        else
+                        {
+                            <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" />
+
+                            <br />
+                        }
+                        <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">
+                            @t.NameProduct @t.Code (@t.TenCpu, @t.TenCardVGA @t.ThongSoCardVGA, @t.TanSoManHinh @t.ChatLieuManHinh )
+                        </a>
+
+                        <div class="computer-configuration">
+                            <div class="configuration-item">
+                                <span>@t.ThongSoRam</span>
+                            </div>
+                            <div class="configuration-item">
+                                <span> @t.ThongSoHardDrive</span>
+                            </div>
+                            <div class="configuration-item">
+                                <span>@t.KichCoManHinh</span>
+                            </div>
+                        </div>
+                        <div class="Product-price">
+                            <span>@t.Price.ToString("N0") </span>
+                            <p>@t.ImportPrice.ToString("N0")</p>
+                        </div>
+
                     </div>
                 </div>
-                </div> 
-     
-            } 
-            </div>
+            }
         </div>
-        <br />
-    </section>
-    <p></p>
-<style>
-    .list-product{
-        max-width: 1400px !important;
-        text-align:center !important;
-        margin:auto !important;
-    }
-    .card-product {
-     
-        height: 400px;
-        padding-bottom:30px;
-        border: 1px solid #ddd; /* Add a border to the card */
-        border-radius: 8px; /* Add rounded corners to the card */
-        overflow: hidden; /* Hide any content that overflows the card */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-        transition: box-shadow 0.3s ease; /* Add a smooth transition to the box shadow */
-      
-        margin-right: 20px;
-    }
+    </div>
+    <br />
+</section>
+<p></p>
 
-        .card-product:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase box shadow on hover */
-        }
+
+    <style >
+    .product-box:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase box shadow on hover */
+    }
 
     .img-product {
         max-width: 100%; /* Make sure the image doesn't exceed the container */
@@ -181,10 +213,12 @@
     .pd-top-100 {
         padding-top: 100px;
     }
-    .container{
+
+    .container {
         max-width: 1450px !important;
     }
 </style>
+
 
 <script>
     $(document).ready(function () {
@@ -200,6 +234,12 @@
         var productTypeValue = $("#loaiLapTop").val();
         var namufacturerValue = $("#loaiMamufacturer").val();
         var nameProductDetail = $("#search").val();
+
+        var thongSoRam = $("#thongSoRam").val();
+        var cpuName = $("#cpuName").val();
+        var cardVgaName = $("#cardVgaName").val();
+
+
         var priceRange = $("#priceRange").val();
         var from = null;
         var to = null;
@@ -213,9 +253,9 @@
 
 
         // Gọi API với tham số lọc
-        loadData(productTypeValue, namufacturerValue, nameProductDetail, from, to);
+        loadData(productTypeValue, namufacturerValue, nameProductDetail, from, to, thongSoRam, cpuName, cardVgaName);
     }
-    function loadData(productTypeSearch, namufacturerSearch, nameProductDetail, from, to) {
+    function loadData(productTypeSearch, namufacturerSearch, nameProductDetail, from, to, ram, cpu, cardVga) {
         $.ajax({
             url: "/ProductDetail/ShowListProductDetailLoc",
             type: "GET",
@@ -224,8 +264,11 @@
                 namufacturerz: namufacturerSearch,
                 searchString: nameProductDetail,
                 from: from,
-                to: to
-            },
+                to: to,
+                ram:ram,
+                cpu: cpu,
+                cardVga: cardVga
+                },
             success: function (data) {
                 console.log(data);
                 if (data.trim() !== "") {
