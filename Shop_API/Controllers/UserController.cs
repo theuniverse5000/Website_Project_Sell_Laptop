@@ -1,5 +1,6 @@
 ﻿using Azure;
 using MailKit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Core.Types;
@@ -135,6 +136,61 @@ namespace Shop_API.Controllers
             _reponse.Result = _iPagingRepository.GetAllUser(search, from, to, sortBy, page);
             var count = _reponse.Count = _iPagingRepository.GetAllUser(search, from, to, sortBy, page).Count;
             return Ok(_reponse);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ChangeContactInfo([FromBody] ChangeContactInfoDto dto)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            // Update address if provided
+            if (!string.IsNullOrEmpty(dto.NewAddress))
+            {
+                currentUser.Address = dto.NewAddress;
+            }
+
+            // Update phone number if provided
+            if (!string.IsNullOrEmpty(dto.NewPhoneNumber))
+            {
+                currentUser.PhoneNumber = dto.NewPhoneNumber;
+            }
+
+            // Save changes
+            var result = await _userManager.UpdateAsync(currentUser);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok(new { Message = "Contact information changed successfully" });
+        }
+
+        [HttpPost]
+        [Authorize] // Assuming only authenticated users can change their password
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            // Get the current user
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            // Verify the old password
+            var passwordVerificationResult = await _userManager.CheckPasswordAsync(currentUser, dto.OldPassword);
+
+            if (!passwordVerificationResult)
+            {
+                return BadRequest("Invalid old password");
+            }
+
+            // Change the password
+            var result = await _userManager.ChangePasswordAsync(currentUser, dto.OldPassword, dto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok(new { Message = "Password changed successfully" });
         }
 
 
