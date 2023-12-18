@@ -253,6 +253,47 @@
         });
     });
 
+    document.addEventListener("DOMContentLoaded", function () {
+        var loginForm = document.forms["login"];
+
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            var username = loginForm.elements["username"].value;
+            var password = loginForm.elements["password"].value;
+
+            if (username.trim() === '' || password.trim() === '') {
+                alert('Vui lòng điền đầy đủ thông tin');
+            } else {
+                try {
+                    // Try to submit the form
+                    var response = await fetch(loginForm.action, {
+                        method: loginForm.method,
+                        body: new FormData(loginForm),
+                    });
+
+                    if (!response.ok) {
+                        // Handle error response
+                        if (response.status === 400) {
+                            alert('Sai tài khoản hoặc mật khẩu');
+                        } else {
+                            alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                        }
+                    } else {
+                        // If all conditions pass, manually submit the form
+                        loginForm.submit();
+                    }
+                } catch (error) {
+                    console.error('Đã xảy ra lỗi:', error);
+                    alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+                }
+            }
+        });
+    });
+
+
+
+
     // $(function () {
     //     $("form[name='login']").validate({
     //         rules: {
