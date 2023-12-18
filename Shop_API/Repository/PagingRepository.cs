@@ -442,6 +442,9 @@ namespace Shop_API.Repository
                 Id = hh.Id,
                 Username = hh.UserName,
                 Name = hh.FullName,    
+                Address = hh.Address,
+                PhoneNumber = hh.PhoneNumber
+                
             }).ToList();
         }
 

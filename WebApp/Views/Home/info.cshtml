@@ -1,0 +1,161 @@
+﻿@{
+    @using Microsoft.AspNetCore.Http;
+    var httpContext = ViewContext.HttpContext;
+    string accessToken = httpContext.Request.Cookies["access_token"];
+    string fullname = httpContext.Session.GetString("full_name");
+    string phoneNumber = httpContext.Session.GetString("phoneNumber");
+    string address = httpContext.Session.GetString("address");
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    #editForm {
+        max-width: 700px;
+        margin: auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        margin-top: 8px;
+        margin-bottom: 12px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+    #myTabs {
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-item {
+        margin-right: 10px; /* Optional: Adjust the spacing between tabs */
+    }
+
+    #passwordForm {
+        max-width: 400px;
+        margin: auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    h1.text-center {
+        font-size: 24px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        margin-top: 8px;
+        margin-bottom: 12px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 8px 12px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-block {
+        display: block;
+        width: 90%;
+        margin: auto; /* Center the button horizontally */
+    }
+
+
+</style>
+
+    <div class="container mt-5">
+        <ul class="nav nav-tabs" id="myTabs">
+            <li class="nav-item">
+                <a class="nav-link active" id="userInfo-tab" data-toggle="tab" href="#userInfo">Thông tin Người dùng</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="changePassword-tab" data-toggle="tab" href="#changePassword">Đổi mật khẩu</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3">
+            <!-- Tab 1: User Information -->
+            <div class="tab-pane fade show active" id="userInfo">
+                <h1 class="text-center">Chỉnh sửa Thông tin Người dùng</h1>
+
+                <form id="editForm" asp-controller="Login" asp-action="EditInfo" method="post">
+                    <div class="form-group">
+                        <label for="fullName">Họ và Tên:</label>
+                        <input type="text" id="fullName" name="fullName" class="form-control" value="@fullname" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">Số Điện thoại:</label>
+                        <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" value="@phoneNumber" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Địa chỉ:</label>
+                        <input type="text" id="address" name="address" class="form-control" value="@address" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Lưu</button>
+                </form>
+            </div>
+
+            <!-- Tab 2: Change Password -->
+            <div class="tab-pane fade" id="changePassword">
+                <h1 class="text-center">Đổi mật khẩu</h1>
+
+                <form id="passwordForm" asp-controller="Login" asp-action="ChangePassword" method="post">
+                    <div class="form-group">
+                        <label for="OldPassword">Mật khẩu hiện tại:</label>
+                        <input type="password" id="OldPassword" name="OldPassword" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="NewPassword">Mật khẩu mới:</label>
+                        <input type="password" id="NewPassword" name="NewPassword" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Đổi mật khẩu</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

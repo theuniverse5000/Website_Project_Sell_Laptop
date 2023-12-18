@@ -127,6 +127,12 @@ namespace WebApp.Controllers
             ViewBag.Image = contentIMage;
             return View();
         }
+
+        [Route("info")]
+        public IActionResult Info()
+        {
+            return View();
+        }
         public async Task<IActionResult> ProductDetail(string code)
         {
             var  x = HttpContext.Request;

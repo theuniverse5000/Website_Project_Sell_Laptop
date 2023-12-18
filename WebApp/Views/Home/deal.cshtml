@@ -6,36 +6,47 @@
     List<SanPhamGiamGiaDto> sanPhamGiamGias = ViewBag.SanPhamGiamGia;
     List<GiamGia> giamGias = ViewBag.GiamGia;
 }
-<section class="product-home-deal">
-    <div class="container">
-        <div class="box-home-deal">
-            <div class="title">
-                
-            </div>
-            <div class="produt-list loaded" id="js-home-deal">
-                @{
-                    for (int i = 0; i < 5; i++)
-                    {
-                        decimal giamgia = sanPhamGiamGias[i].GiamGiaPhanTram ?? 0; // Sử dụng giá trị mặc định nếu là null
-                        <div class="item">
-                            <div class="p-container">
-                                <a class="p-img" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@sanPhamGiamGias[i].ProductDetailCode" asp-route-name="@sanPhamGiamGias[i].ProductDetailName">
-                                    <img src="@sanPhamGiamGias[i].LinkImage">
-                                    <span class="percent">-@giamgia.ToString("0.")%</span>
-                                </a>
-                                <a class="p-name" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@sanPhamGiamGias[i].ProductDetailCode" asp-route-name="@sanPhamGiamGias[i].ProductDetailName">@sanPhamGiamGias[i].TenSanPham</a>
-                                <div class="p-price-all">
-                                    <span class="p-price">
-                                        @sanPhamGiamGias[i].SoTienConLai.ToString("N0")
-                                    </span>
-                                    <span class="p-old-price">@sanPhamGiamGias[i].DonGia.ToString("N0") </span>
-                                </div>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 
+@if (sanPhamGiamGias.Count > 0)
+{
+    <section class="product-home-deal">
+        <div class="container">
+            <div class="box-home-deal">
+                <div class="title">
+                   
+                    <a href="/deal" class="vm-deal">Xem tất cả <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                </div>
+                <div class="produt-list loaded" id="js-home-deal">
+                    @{
+
+
+                        foreach (var giamgiai in sanPhamGiamGias)
+                        {
+                            decimal giamgia = giamgiai.GiamGiaPhanTram ?? 0; // Sử dụng giá trị mặc định nếu là null
+
+                            <div class="item">
+                                <div class="p-container">
+                                    <a class="p-img" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@giamgiai.ProductDetailCode" asp-route-name="@giamgiai.ProductDetailName">
+                                        <img src=" @Configuration.GetSection("UrlApiAdmin").Value@Url.Content(@giamgiai.LinkImage)">
+
+                                        <span class="percent">-@giamgia.ToString("0.")%</span>
+                                    </a>
+                                    <a class="p-name" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@giamgiai.ProductDetailCode" asp-route-name="@giamgiai.ProductDetailName">@giamgiai.TenSanPham</a>
+                                    <div class="p-price-all">
+                                        <span class="p-price">
+                                            @giamgiai.SoTienConLai.ToString("N0")
+                                        </span>
+                                        <span class="p-old-price">@giamgiai.DonGia.ToString("N0") </span>
+                                    </div>
+
+                                </div>
                             </div>
-                        </div>
+                        }
+
                     }
-                }
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+}
