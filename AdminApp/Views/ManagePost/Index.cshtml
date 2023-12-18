@@ -11,52 +11,241 @@
 <script src="https://kendo.cdn.telerik.com/2021.3.1207/js/jquery.min.js"></script>
 <script src="https://kendo.cdn.telerik.com/2021.3.1207/js/kendo.all.min.js"></script>
 
-
-<button id="openNewWindowButton">Open New Window</button>
-
+<div>
+    <label for="statusFilter">Trạng thái:</label>
+    <select id="statusFilter">
+        <option value="">Tất cả</option>
+        <option value="true">Đã duyệt</option>
+        <option value="false">Chưa duyệt</option>
+    </select>
+    <button onclick="filterData()">Lọc</button>
+</div>
 <div id="example">
-    @* button thêm mới *@
-    @*  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New Product Detail</button>*@
-
     <div id="grid"></div>
-
-
     <div id="modalContent" style="display: block;">
     </div>
 </div>
-
-
-<style>
-    #grid {
-        margin: 0;
-        padding: 0;
-        border-width: 0;
-        height: 100%; /* DO NOT USE !important for setting the Grid height! */
-    }
-
-
-    /* Đặt kích thước modal mặc định */
-    .modal-dialog {
-        max-width: 90%;
-        width: auto;
-    }
-
-    /* Thiết lập thuộc tính cho việc kéo modal */
-    .modal-content {
-        overflow: hidden; /* Ngăn chặn nội dung bên ngoài khỏi modal */
-    }
-
-    /* Thiết lập kích thước của modal-body khi kéo */
-    .modal-body {
-        max-height: 80vh; /* Điều chỉnh kích thước tùy ý dựa trên nhu cầu của bạn */
-        overflow-y: auto;
-    }
-
-</style>
 @section scripts {
-   
+
 }
 <script>
+
+
+
+    $("#grid").kendoGrid({
+        dataSource: {
+            transport: {
+                read: {
+                    url: "/ManagePost/GetAll",
+                    type: "GET",
+                    dataType: "json"
+                },
+                duyet: {
+                    url: "/ManagePost/DetailsManagePost({guid})",
+                    type: "Post",
+                    dataType: "object",
+
+                },
+                destroy: {
+                    url: "/ManagePost/DeleteManage",
+                    type: "DELETE",
+                    dataType: "json"
+                },
+
+            },
+            schema: {
+                data: "result",
+                total: "count", // Chỉ định tên trường tổng số dòng,
+                model: {
+                    id: "id",
+                    fields: {
+                        code: { type: "string", validation: { required: true } },
+                        price: { type: "int", validate: { required: true } },
+                        status: { type: "boolean", validate: { required: true } }
+                    }
+                }
+            },
+
+            pageSize: 20,
+        },
+        height: 550,
+        groupable: false,
+        sortable: true,
+        pageable: {
+            refresh: true,
+            pageSizes: [5, 10, 20, "All"],
+            buttonCount: 3,
+            messages: {
+                itemsPerPage: "Số dòng trên mỗi trang",
+                display: "{0}-{1} trong {2} dòng"
+            }
+        },
+
+        toolbar: [
+            // {
+            //     name: "pdf",
+            //     text: "Xuất file PDF", // Change the text of the "PDF" button to "Xuất file PDF"
+            //     hidden:true
+            // },
+            "search"
+        ],
+        pdf: {
+            allPages: true,
+            avoidLinks: true,
+            paperSize: "A4",
+            margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
+            landscape: true,
+            repeatHeaders: true,
+            template: $("#page-template").html(),
+            scale: 0.8
+        }
+        ,
+        editable: {
+            mode: "popup",
+            window: { width: 1500, height: 1000 }, // Chỉnh chiều rộng ở đây
+        },
+        columns: [
+            {
+                field: "code",
+                title: "Mã", width: "150px",
+            },
+            {
+                field: "createDate",
+                title: "Ngày Viết",
+                width: "200px",
+                template: "#= kendo.toString(kendo.parseDate(createDate), 'dd/MM/yyyy hh:mm tt') #"
+            },
+
+            {
+                field: "linkImage",
+                title: "Ảnh bìa",
+                width: "200px", 
+                template: function (dataItem) {
+                    return decodeHtmlEntities(dataItem.linkImage);
+                }
+            },
+            {
+                field: "status",
+                title: "Trạng Thái",
+                hidden: false, // Ẩn cột này,
+                width: "150px",
+                template: "# if(status) { # Đã duyệt # } else { # Chưa Duyệt # } #"
+            },
+            {
+                command: [
+                    {
+
+
+                        name: "capnhat",
+                        text: "sửa",
+                        click: function (e) {
+                            e.preventDefault();
+                            var dataItem = this.dataItem($(e.target).closest("tr"));
+                            var managePostId = dataItem.id; // Assuming 'Id' is the property that holds the ID
+                            openEditModal(managePostId);
+                        },
+                    },
+                    {
+                        name: "approve",
+                        text: "Duyệt",
+                        click: function (e) {
+                            e.preventDefault();
+                            var dataItem = this.dataItem($(e.target).closest("tr"));
+                            var managePostId = dataItem.id;
+                            console.log("Duyệt post with ID: " + managePostId);
+
+                            // Make an AJAX call to approve using $.ajax
+                            // Make an AJAX call to approve using $.ajax
+                            $.ajax({
+                                url: "https://localhost:44333/api/ManagePost/Duyet?id=" + managePostId,
+                                type: "PUT",
+                                success: function (result) {
+                                    if (result) {
+                                        console.log("Post approved successfully!");
+                                        // Reload the grid after approval
+                                        var grid = $("#grid").data("kendoGrid");
+                                        grid.dataSource.read();
+                                        grid.refresh();
+
+                                        grid.dataSource.sync(); // Sync local changes with the server
+                                        grid.dataSource.read(); // Fetch updated data from the server
+                                        grid.refresh(); // Refresh the grid, including its configuration
+
+                                    } else {
+                                        console.log("Failed to approve post!");
+                                    }
+                                },
+                                error: function () {
+                                    console.log("Error in AJAX call");
+                                }
+                            });
+                           
+                            loadDatgrid();
+                            
+                            var grid = $("#grid").data("kendoGrid");
+                            grid.dataSource.read(); // This will re-fetch the data from the server
+                            grid.refresh(); // This will refresh the grid, including its configuration
+                        },
+                        visible: function (dataItem) {
+                            // Show the "Duyệt" button if the post is not approved (status is false)
+                            return !dataItem.status;
+                        }
+                    },
+
+                    {
+                        name: "disapprove",
+                        text: "Hủy Duyệt",
+                        click: function (e) {
+                            e.preventDefault();
+                            var dataItem = this.dataItem($(e.target).closest("tr"));
+                            var managePostId = dataItem.id;
+                            console.log("Hủy duyệt post with ID: " + managePostId);
+
+                            // Make an AJAX call to disapprove using $.ajax
+                            $.ajax({
+                                url: "https://localhost:44333/api/ManagePost/HuyDuyet?id=" + managePostId,
+                                type: "PUT",
+                                success: function (result) {
+                                    if (result) {
+                                        console.log("Post disapproved successfully!");
+
+                                    } else {
+                                        console.log("Failed to disapprove post!");
+                                    }
+
+                                },
+                                error: function () {
+                                    console.log("Error in AJAX call");
+                                }
+                            }); var grid = $("#grid").data("kendoGrid");
+                            grid.dataSource.read(); // This will re-fetch the data from the server
+                            grid.refresh(); // This will refresh the grid, including its configuration
+
+
+                            loadDatgrid();
+
+                        },
+                        visible: function (dataItem) {
+                            // Show the "Hủy Duyệt" button if the post is approved (status is true)
+                            return dataItem.status;
+                        }
+                    },
+                    {
+                        name: "destroy",
+                        text: "Xóa",
+
+                    },
+                ],
+                title: "Hành động",
+                width: "280px",
+                exportable: false
+            }
+        ],
+
+    });
+
+
+
 
     var editor = $("#description").kendoEditor({
         // stylesheets: [
@@ -89,170 +278,24 @@
 
 
     $(document).ready(function () {
-
-
         // gọi form khi nhấn edit
-
-        var editButtons = document.querySelectorAll('.k-button k-button-icontext k-grid-capnhat');
-
+        var editButtons = document.querySelectorAll('.k-grid-capnhat');
     @* Gán sự kiện click cho từng nút "Sửa"*@
             editButtons.forEach(function (button) {
                 button.addEventListener('click', function () {
     @* Gọi hàm hay thực hiện các đoạn mã tương ứng khi nút "Sửa" được nhấn*@
                         $('#exampleModal').modal('show');
                     console.log("Nút 'Sửa' đã được nhấn");
-    @* Thực hiện các tác vụ khác tại đây*@
-                                                    });
+                });
             });
-
-
-        $("#grid").kendoGrid({
-            dataSource: {
-                transport: {
-                    read: {
-                        url: "/ManagePost/GetAll",
-                        type: "GET",
-                        dataType: "json"
-                    },
-                    capnhat: {
-                        url: "/ManagePost/DetailsManagePost({guid})",
-                        type: "GET",
-                        dataType: "object",
-
-                    },
-                    destroy: {
-                        url: "/",
-                        type: "DELETE",
-                        dataType: "json"
-                    },
-
-                },
-                schema: {
-                    data: "result",
-                    total: "count", // Chỉ định tên trường tổng số dòng,
-                    model: {
-                        id: "id",
-                        fields: {
-                            code: { type: "string", validation: { required: true } },
-                            price: { type: "int", validate: { required: true } },
-                            status: { type: "int", validate: { required: true } }
-                        }
-                    }
-                },
-
-                pageSize: 20,
-            },
-            height: 550,
-            groupable: false,
-            sortable: true,
-            pageable: {
-                refresh: true,
-                pageSizes: [5, 10, 20, "All"],
-                buttonCount: 3,
-                messages: {
-                    itemsPerPage: "Số dòng trên mỗi trang",
-                    display: "{0}-{1} trong {2} dòng"
-                }
-            },
-
-            toolbar: [
-                {
-                    name: "pdf",
-                    text: "Xuất file PDF" // Change the text of the "PDF" button to "Xuất file PDF"
-                }
-            ],
-            pdf: {
-                allPages: true,
-                avoidLinks: true,
-                paperSize: "A4",
-                margin: { top: "2cm", left: "1cm", right: "1cm", bottom: "1cm" },
-                landscape: true,
-                repeatHeaders: true,
-                template: $("#page-template").html(),
-                scale: 0.8
-            }
-            ,
-            editable: {
-                mode: "popup",
-                window: { width: 1500, height: 1000 }, // Chỉnh chiều rộng ở đây
-            },
-            columns: [
-                {
-                    field: "code",
-                    title: "Mã"
-                },
-                {
-                    field: "createDate",
-                    title: "createDate"
-                },
-                {
-                    field: "linkImage",
-                    title: "linkImage"
-                },
-                {
-                    field: "description",
-                    title: "description",
-                    template: function (dataItem) {
-                        return decodeHtmlEntities(dataItem.description);
-                    }
-
-                },
-                {
-                    field: "status",
-                    title: "status",
-                    hidden: false, // Ẩn cột này
-                },             
-                {
-                    command: [
-                        {
-
-                            // return '<button type="button" class="k-button k-button-icontext k-grid-capnhat">capnhat</button>'
-                            name: "capnhat",
-                            text: "sửa",
-                            click: function (e) {
-                                e.preventDefault();
-                                var dataItem = this.dataItem($(e.target).closest("tr"));
-                                var managePostId = dataItem.id; // Assuming 'Id' is the property that holds the ID
-                                openEditModal(managePostId);
-                            }
-
-                        },
-                        {
-                            name: "destroy",
-                            text: "Xóa",
-
-                        },
-                    ],
-                    title: "Hành động",
-                    width: "250px",
-                    exportable: false
-                }
-            ],
-
-        });
-        var newTextarea = $('<textarea id="editor" rows="10" cols="30" style="width:100%; height:840px" aria-label="editor"></textarea>');
-
-        // Find elements with the specified class and prepend the textarea before them
-        $(".k-edit-buttons.k-state-default").prepend(newTextarea);
-
+        // var newTextarea = $('<textarea id="editor" rows="10" cols="30" style="width:100%; height:840px" aria-label="editor"></textarea>');
+        // // Find elements with the specified class and prepend the textarea before them
+        // $(".k-textbox k-grid-search k-display-flex").prepend(newTextarea);
         // tạo 1 nút thêm(Create New) trước class k-grid-pdf
         var newButton = $('<a type="button" class="k-button k-button-icontext k-grid-create" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openCreateModal()">Thêm</a> ');
         // Find elements with the specified class and prepend the textarea before them
-        $(".k-grid-pdf").before(newButton);
+        $(".k-textbox").before(newButton);
 
-    });
-
-
-
-    document.getElementById('openNewWindowButton').addEventListener('click', function () {
-        // Specify the URL you want to open
-        var newUrl = "/ManagePost/CreateWithOtherPage";
-
-        // Open the URL in a new browser window or tab
-        // window.open(newUrl);
-
-
-        window.location.href = newUrl;
     });
 
     function openCreateModal() {
@@ -274,35 +317,98 @@
         $("#pdf-export-button").text("Xuất file PDF");
     });
 
-    // function openEditModal(Id) {
-    //     $.ajax({
-    //         url: "/ManagePost/Update?id=" + Id,
-    //         type: "GET",
-    //         dataType: "html",
-    //         success: function (response) {
-    //             // Tải nội dung modal vào div ẩn
-    //             $("#modalContent").html(response);
-
-    //             // Mở modal
-    //             $("#updateModal").modal("show");
-    //         },
-    //         error: function () {
-    //             // Xử lý lỗi
-    //         }
-    //     });
-    // }
-
     function decodeHtmlEntities(text) {
         var txt = document.createElement("textarea");
         txt.innerHTML = text;
         return txt.value;
     }
 
-
-
 </script>
 
+<style>
+    #grid {
+        margin: 0;
+        padding: 0;
+        border-width: 0;
+        /* height: 100%; /* DO NOT USE !important for setting the Grid height! */ */ height: 900px;
+    }
+
+    .k-grid-content.k-auto-scrollable {
+        height: 660px !important;
+    }
 
 
 
+    /* Đặt kích thước modal mặc định */
+    .modal-dialog {
+        max-width: 90%;
+        width: auto;
+    }
 
+    /* Thiết lập thuộc tính cho việc kéo modal */
+    .modal-content {
+        overflow: hidden; /* Ngăn chặn nội dung bên ngoài khỏi modal */
+    }
+
+    /* Thiết lập kích thước của modal-body khi kéo */
+    .modal-body {
+        max-height: 80vh; /* Điều chỉnh kích thước tùy ý dựa trên nhu cầu của bạn */
+        overflow-y: auto;
+    }
+</style>
+
+
+<script>
+    function filterData() {
+        var statusFilterValue = $("#statusFilter").val();
+        // Gọi API với tham số lọc
+        loadData(statusFilterValue);
+    }
+    function loadData(status) {
+        $.ajax({
+            url: "/ManagePost/GetAll", // Đổi ControllerName thành tên của controller thực tế
+            type: "GET",
+            data: { status: status },
+            success: function (data) {
+                console.log(data.result);
+                var grid = $("#grid").data("kendoGrid");
+                grid.dataSource.data(data.result);
+            },
+
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function loadDatgrid() {
+        $.ajax({
+            url: "/ManagePost/GetAll",
+            type: "Get",
+            success: function (result) {
+                if (result) {
+                    console.log("Post approved successfully!");
+                    // Reload the grid after approval
+                    var grid = $("#grid").data("kendoGrid");
+                    grid.dataSource.read();
+                    grid.refresh();
+
+                    grid.dataSource.sync(); // Sync local changes with the server
+                    grid.dataSource.read(); // Fetch updated data from the server
+                    grid.refresh(); // Refresh the grid, including its configuration
+
+                } else {
+                    console.log("Failed to approve post!");
+                }
+            },
+            error: function () {
+                console.log("Error in AJAX call");
+            }
+        });
+    }
+
+    // Gọi hàm loadData khi trang được tải lần đầu
+    $(document).ready(function () {
+        loadData(null); // Truyền null nếu muốn lấy tất cả dữ liệu ban đầu
+    });
+</script>

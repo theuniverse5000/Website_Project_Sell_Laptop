@@ -16,10 +16,11 @@ namespace Shop_API.Repository.IRepository
         List<PagingDto> GetAllCardVGA(string? search, double? from, double? to, string? sortBy, int page);
         List<PagingDto> GetAllManufacturer(string? search, double? from, double? to, string? sortBy, int page);
         List<PagingDto> GetAllCpu(string? search, double? from, double? to, string? sortBy, int page);
+        List<UserDto> GetAllUser(string? search, double? from, double? to, string? sortBy, int page);
         List<SerialDto> GetAllSerial(string? search, double? from, double? to, string? sortBy, int page);
         List<Voucher> GetAllVoucherPG(string? search, double? from, double? to, string? sortBy, int? page);
         List<GiamGia> GetAllGiamGia(string? search, double? from, double? to, string? sortBy, int page);
-        List<SanPhamGiamGiaDto> GetAllSPGGPGs(string? search, double? from, double? to, string? sortBy, int? page);
+        List<SanPhamGiamGiaDto> GetAllSPGGPGs(string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int? page);
 
     }
 }

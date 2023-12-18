@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
@@ -8,7 +9,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "ADMIN")]
     public class ManagePostController : Controller
     {
         private readonly IManagePostRepository _mpRepository;
@@ -43,17 +44,17 @@ namespace Shop_API.Controllers
         public async Task<IActionResult> CreateMP(ManagePost obj)
         {
 
-            string apiKey = _config.GetSection("ApiKey").Value;
-            //if (apiKey == null)
-            //{
-            //    return Unauthorized();
-            //}
+            //string apiKey = _config.GetSection("ApiKey").Value;
+            ////if (apiKey == null)
+            ////{
+            ////    return Unauthorized();
+            ////}
 
-            //var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
-            //if (keyDomain != apiKey.ToLower())
-            //{
-            //    return Unauthorized();
-            //}
+            ////var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            ////if (keyDomain != apiKey.ToLower())
+            ////{
+            ////    return Unauthorized();
+            ////}
             obj.Id = Guid.NewGuid();
             obj.CreateDate = DateTime.Now;
             obj.Status = true;
@@ -138,7 +139,7 @@ namespace Shop_API.Controllers
         }
         [AllowAnonymous]
         [HttpGet("GGetManagePostDtosFSP")]
-        public async Task<IActionResult> GGetManagePostDtosFSP(string? search, DateTime? from, DateTime? to, string? sortBy, int page)
+        public async Task<IActionResult> GGetManagePostDtosFSP(string? search, DateTime? from, DateTime? to, string? sortBy, bool? status, int page)
         {
             //string apiKey = _config.GetSection("ApiKey").Value;
             //if (apiKey == null)
@@ -154,9 +155,32 @@ namespace Shop_API.Controllers
             //_response.Result = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page);
             //_response.Count = _iPagingRepository.GetProductDtos(search, from, to, sortBy, page).Count;
 
-            _response.Result = await _mpRepository.GetManagePostDtos(search, from, to, sortBy, page);
-            _response.Count = _mpRepository.GetManagePostDtos(search, from, to, sortBy, page).Result.Count();
+            _response.Result = await _mpRepository.GetManagePostDtos(search, from, to, sortBy,status, page);
+            _response.Count = _mpRepository.GetManagePostDtos(search, from, to, sortBy,status, page).Result.Count();
             return Ok(_response);
+        }
+
+
+        [HttpPut("Duyet")]
+        public async Task<IActionResult> Duyet(Guid id)
+        {      
+            var response = await _mpRepository.Duyet(id);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPut("HuyDuyet")]
+        public async Task<IActionResult> HuyDuyet(Guid id)
+        {
+            var response = await _mpRepository.HuyDuyet(id);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
         }
 
     }

@@ -20,8 +20,11 @@ namespace AdminApp.Controllers
         }
 		public IActionResult Index()
 		{
-
-			return View();
+            if (Request.Cookies["account"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
 		}
 
 		public async Task<IActionResult> GetColor()

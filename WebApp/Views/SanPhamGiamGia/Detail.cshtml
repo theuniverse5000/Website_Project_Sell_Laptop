@@ -1,11 +1,13 @@
-﻿@inject IConfiguration Configuration;
+﻿@using Shop_Models.Dto;
+@inject IConfiguration Configuration;
 @{
     string tinhTrangSoLuong = String.Empty;
+    List<SanPhamGiamGiaDto> sanPhamGiamGias = ViewBag.SanPhamGiamGia;
+    List<SanPhamGiamGiaDto> sanPhamGiamGia2 = ViewBag.SanPhamGiamGiaSame;
+
+
 }
 <style>
-    .container {
-        max-width: 1450px !important;
-    }
     .wrapper {
         display: inline-flex;
         background: #fff;
@@ -86,25 +88,23 @@
         color: #fff;
     }
 </style>
-@foreach (var t in ViewBag.product)
+@foreach (var t in sanPhamGiamGias)
 {
     <section class="py-5">
         <div class="container">
             <h4 class="title text-dark">
-                [Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )
-                <br />
-                    
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <span class="ms-1">
-                            4.5
-                        </span>
-                    <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
-                    <span class="text-success ms-2">In stock</span>
-              
+                [Deal] @t.TenSanPham)
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span class="ms-1">
+                    4.5
+                </span>
+                <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
+                <span class="text-success ms-2">In stock</span>
+
             </h4>
             <div class="row gx-5">
                 <div class="col-md-4 col-md-4">
@@ -115,15 +115,15 @@
                     </div>
 
                     <div class="d-flex justify-content-center mb-3">
-                        @if (t.OtherImages != null )
+                        @if (t.OtherImages != null)
                         {
                             @foreach (var linkImagesOther in t.OtherImages)
                             {
-                                <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  >
+                                <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image">
                                     <img width="100" height="100" class="rounded-2" src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(linkImagesOther)" />
                                 </a>
                             }
-                        }                                                                       
+                        }
                     </div>
                     <h1>Thông số kỹ thuật</h1>
                     <table class="table border mt-3 mb-2">
@@ -148,69 +148,74 @@
                             <td class="py-2">@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh</td>
                         </tr>
                     </table>
-              
+
                 </div>
-                <div class="col-md-4 col-sm-4">             
-                            <div class="mb-3">
-                                <span class="h5">Giá bán: @t.Price.ToString("N0")</span>
-                                <span class="text-muted">@t.ImportPrice.ToString("N0")</span><br>
-                                <span class="h5">Bảo hành: 12 Tháng</span><br>
-                                @if (t.AvailableQuantity > 0)
-                                {
-                                    tinhTrangSoLuong = "Còn hàng";
-                                }
-                                else
-                                {
-                                    tinhTrangSoLuong = "Hết hàng";
-                                }
-                                <span class="h5">Tình trạng: @tinhTrangSoLuong</span>
-                            </div>
-                        <p> Loại sản phẩm: @t.NameProductType </p>
-                        <p>Nhà sản xuất: @t.NameManufacturer </p>
-                        <p> Màu sắc: @t.NameColor </p>
-                            <hr />
-                <h2>CẤU HÌNH:</h2>
-                    @foreach (var k in ViewBag.listProductSame)
+                <div class="col-md-4 col-sm-4">
+                    <div class="mb-3">
+                        <span class="h5">Giá bán: @t.SoTienConLai.ToString("N0")</span>
+                        <span class="text-muted">@t.DonGia.ToString("N0")</span><br>
+                        <span class="h5">Bảo hành: 12 Tháng</span><br>
+                        <span class="h5">Tình trạng: @tinhTrangSoLuong</span>
+                    </div>
+                    <p> Loại sản phẩm: @t.NameProductType </p>
+                    <p>Nhà sản xuất: @t.NameManufacturer </p>
+                    <p> Màu sắc: @t.NameColor </p>
+                    <hr />
+                    <h2>CẤU HÌNH:</h2>
+                    @foreach (var k in sanPhamGiamGia2)
                     {
-                        if(t.Code == k.Code)
+                        if (t.ProductDetailCode == k.ProductDetailCode)
                         {
-                          
-                                <input type="radio" name="select"checked>
-                                <label >
-                                    <span>
-                                        <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
-                                            @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
-                                        </a>
-                                    </span>
-                                </label>
-                           
+
+                            <input type="radio" name="select" checked>
+                            <label>
+                                <div class="dot"></div>
+                                <span>
+                                    <a class="nav-link mb-1" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@k.ProductDetailCode" asp-route-name="@k.NameProduct">
+                                        @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
+                                    </a>
+                                </span>
+                            </label>
+
                         }
                         else
                         {
                             <div class="wrapper">
                                 <input type="radio" name="select">
-                                <label >
+                                <label>
+                                    <div class="dot"></div>
                                     <span>
-                                        <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
+                                        <a class="nav-link mb-1" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@k.ProductDetailCode" asp-route-name="@k.NameProduct">
                                             @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
                                         </a>
                                     </span>
                                 </label>
                             </div>
-                          
-                        }
-                    }
-                    <a asp-controller="Client" asp-action="AddProductToCart" asp-route-code="@t.Code" class="btn btn-warning shadow-0"> Mua ngay </a>
+                            @*     <div class="px-0 border rounded-2 shadow-0">
+                <div class="d-flex">
+                <div class="info">
+                <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
+                @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
+                </a>
+                <strong class="text-dark"> @k.Price.ToString("N0")</strong>
                 </div>
-               <div class="col-md-4 col-sm-4">
-                   <div class="">
-                       <ul>
+                </div>
+                </div> *@
+                        }
+
+
+                    }
+                    <a asp-controller="Client" asp-action="AddSanPhamGiamGiaToCart" asp-route-code="@t.ProductDetailCode" class="btn btn-warning shadow-0"> Mua ngay </a>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <div class="">
+                        <ul>
                             <li> <i class="fa-solid fa-star" style="color: #e2ff05;"></i>Chất lượng sản phẩm là hàng đầu</li>
-                       </ul>
-                   </div>
-               </div>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            </div>
+        </div>
     </section>
     <!-- content -->
     <section class="bg-light border-top py-4">
@@ -222,6 +227,15 @@
                         <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
                             <li class="nav-item d-flex" role="presentation">
                                 <a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="ex1-tab-1" data-mdb-toggle="pill" href="#ex1-pills-1" role="tab" aria-controls="ex1-pills-1" aria-selected="true">Specification</a>
+                            </li>
+                            <li class="nav-item d-flex" role="presentation">
+                                <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-2" data-mdb-toggle="pill" href="#ex1-pills-2" role="tab" aria-controls="ex1-pills-2" aria-selected="false">Warranty info</a>
+                            </li>
+                            <li class="nav-item d-flex" role="presentation">
+                                <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-3" data-mdb-toggle="pill" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3" aria-selected="false">Shipping info</a>
+                            </li>
+                            <li class="nav-item d-flex" role="presentation">
+                                <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-4" data-mdb-toggle="pill" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4" aria-selected="false">Seller profile</a>
                             </li>
                         </ul>
                         <!-- Pills navs -->

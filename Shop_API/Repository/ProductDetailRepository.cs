@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Shop_API.AppDbContext;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
+using System.Linq;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace Shop_API.Repository
@@ -58,7 +60,7 @@ namespace Shop_API.Repository
 
                 };
             }
-            if (obj.ProductId==Guid.Empty)
+            if (obj.ProductId == Guid.Empty)
             {
                 return new ResponseDto
                 {
@@ -253,7 +255,7 @@ namespace Shop_API.Repository
         }
 
 
-        public async Task<IEnumerable<ProductDetailDto>> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int page = 10)
+        public async Task<IEnumerable<ProductDetailDto>> PGetProductDetail(int? getNumber, string? codeProductDetail, int? status, string? search, double? from, double? to, string? sortBy, int? page,string? productType, string? namufacturer)
         {
             var query = _context.ProductDetails
                 .AsNoTracking()
@@ -307,6 +309,16 @@ namespace Shop_API.Repository
             {
                 query = query.Where(x => x.Price <= to);
             }
+            if (!string.IsNullOrEmpty(productType))
+            {
+                query = query.Where(x => x.NameProductType.Contains(productType));
+            };
+
+            if (!string.IsNullOrEmpty(namufacturer))
+            {
+                query = query.Where(x => x.NameManufacturer.Contains(namufacturer));
+            };
+
 
             if (!string.IsNullOrEmpty(sortBy))
             {
@@ -327,8 +339,8 @@ namespace Shop_API.Repository
             var pageSize = Page_Size;
             var totalItems = await query.CountAsync();
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-            page = Math.Clamp(page, 1, totalPages);
-            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            //page = Math.Clamp((byte)page, 1, totalPages);
+            //query = query.Skip((int)((page - 1) * pageSize)).Take(pageSize);
 
             var result = await query.ToListAsync();
 

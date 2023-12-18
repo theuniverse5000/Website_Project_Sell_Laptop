@@ -148,7 +148,7 @@ namespace Shop_API.Service
         {
             try
             {
-                var productDetailToCart = _productDetailRepository.PGetProductDetail(1, codeProductDetail, null, null, null, null, null, 1).Result.FirstOrDefault();
+                var productDetailToCart = _productDetailRepository.PGetProductDetail(1, codeProductDetail, null, null, null, null, null, 1,null,null).Result.FirstOrDefault();
                 var userToCart = await _userRepository.GetAllUsers();
                 var user = userToCart.FirstOrDefault(x => x.UserName == userName);
 

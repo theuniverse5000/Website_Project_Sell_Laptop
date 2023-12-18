@@ -1332,10 +1332,11 @@ body {
 }
 
 .item-box {
-	width: 150px;
-	height: 150px;
+	width: 250px;
+	height: 100px;
 	border-radius: 5px;
 	background: linear-gradient(225deg,rgb(52, 179, 218) 20%, rgba(202, 83, 244, 0.25) 90%);
+	margin:auto;
 }
 
 .product-box {
@@ -1566,8 +1567,10 @@ body {
 .List-products-2 {
 	display: flex;
 	justify-content: center;
-	gap: 20px;
 	margin: 0 30px;
+}
+.width-330{
+	width: 330px;
 }
 
 

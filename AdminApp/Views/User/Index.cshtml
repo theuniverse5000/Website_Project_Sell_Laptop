@@ -1,8 +1,15 @@
 ﻿@{
-    ViewBag.Title = "Product";
+    ViewBag.Title = "User";
 
 }
 <span id="notification" style="display:none;">222</span>
+<form asp-controller="Serial" asp-action="ImportFromExcel" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="excelFile">Chọn file excel</label>
+        <input type="file" name="excelFile" class="form-control-file" accept=".xlsx" required />
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" type="submit">Lưu lại</button>
+</form>
 <div id="example">
     <div id="grid"></div>
 </div>
@@ -55,23 +62,23 @@
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/Product/GetProduct",
+                            url: "/User/GetUser",
                             type: "GET",
                             dataType: "json"
                         },
                         create: {
-                            url: "/Product/CreateProduct",
+                            url: "/Serial/CreateSerialWithOne",
                             type: "POST",
                             dataType: "json",
 
                         },
                         update: {
-                            url: "/Product/UpdateProduct",
+                            url: "/Serial/UpdateSerial",
                             type: "PUT",
                             dataType: "json"
                         },
                         destroy: {
-                            url: "/Product/DeleteProduct2",
+                            url: "/Serial/DeleteSerial",
                             type: "DELETE",
                             dataType: "json"
                         },
@@ -85,10 +92,12 @@
                             id: "id",
                             fields: {
                                 // ma: { type: "string", validation: { required: true } },
-                                name: { type: "string", validation: { required: true } },
+                                serialNumber: { type: "string", validation: { required: true } },
                                 status: { type: "int" },
-                                manufacturerId: { type: "string", validation: { required: true } },
-                                productTypeId: { type: "string", validation: { required: true } },
+                                productDetailId: { type: "string", validation: { required: true } },
+                                productDetailCode: { type: "string", validation: { required: true } },
+                                billDetailId: { type: "string", validation: { required: true } },
+                                billDetailCode: { type: "string", validation: { required: true } },
                             }
                         }
                     },
@@ -120,7 +129,9 @@
                         name: "pdf",
                         text: "Xuất file PDF", /* Thay đổi văn bản của nút "Thêm" */
 
-                    }, "search"],
+                    },
+                    "search"
+                ],
                 pdf: {
                     allPages: true,
                     avoidLinks: true,
@@ -133,29 +144,39 @@
                 },
                 editable: {
                     mode: "popup",
-                    window: { width: 550, height: 330 }, // Chỉnh chiều rộng ở đây
+                    window: { width: 550, height: 400 }, // Chỉnh chiều rộng ở đây
                 },
 
 
                 save: function (e) {
                     if (e.model.isNew()) {
-                        // Thay đổi status thành biến thực tế của bạn
-                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+                        e.model.dirty = true;
+                        console.log(" tra ve: " + e.response);
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            console.log(ev.response);
+                            if (ev.type === "create" && ev.response.code === 200) {
 
-                        if (status === 'success') {
-                            showNotification("Lưu thành công", "success");
-                        } else {
-                            showNotification("Lưu thất bại", "error");
-                        }
+                                showNotification(ev.response.message, "success");
+                            } else {
+                                showNotification("Thêm Thất Bại", "error");
+                                showNotification(ev.response.message, "error");
+                            }
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        });
                     } else if (e.model.dirty) {
-                        // Trường hợp cập nhật
-                        var status = 'success'; // hoặc 'error' tùy theo trạng thái
+                        e.sender.dataSource.one("requestEnd", function (ev) {
+                            console.log(ev);
+                            console.log(ev.response);
+                            if (ev.type === "update" && ev.response.code === 200) {
 
-                        if (status === 'success') {
-                            showNotification("Cập nhật thành công", "success");
-                        } else {
-                            showNotification("Cập nhật thất bại", "error");
-                        }
+                                showNotification(ev.response.message, "success");
+                            } else {
+                                showNotification("Cập nhật thất bại", "error");
+                                showNotification(ev.response, "error");
+                            }
+                            $("#grid").data("kendoGrid").dataSource.read();
+                        });
+
                     } else if (e.model.isNew() && e.model.isDestroyed()) {
                         // Trường hợp xóa
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
@@ -179,56 +200,15 @@
                     //     }
                     // },
                     {
-                        field: "name",
-                        title: "Tên"
+                        field: "username",
+                        title: "Tài khoản"
                     },
                     {
-                        field: "manuName",
-                        title: "Nhà sản xuất",
-                        editor: function (container, options) {
-                            // Tạo dropdownlist
-                            $("<input name='manufacturerId' />")
-                                .appendTo(container)
-                                .kendoDropDownList({
-                                    // Cấu hình tải dữ liệu từ API hoặc nguồn dữ liệu của bạn
-                                    dataSource: {
-                                        transport: {
-                                            read: {
-                                                url: "/Manufacturer/GetList", // Thay thế đường dẫn bằng API của bạn
-                                                type: "GET"
-                                            }
-                                        }
-                                    },
-                                    dataValueField: "id", // Thay thế bằng trường ID thực tế
-                                    dataTextField: "name", // Thay thế bằng trường hiển thị thực tế
-                                    optionLabel: "Chọn hãng" // Đây là giá trị mặc định (null)
-
-                                });
-                        }
+                        field: "isAdmin",
+                        title: "Quản trị viên"
                     },
-                    {
-                        field: "productTypeName",
-                        title: "Loại sản phẩm",
-                        editor: function (container, options) {
-                            // Tạo dropdownlist
-                            $("<input name='productTypeId' />")
-                                .appendTo(container)
-                                .kendoDropDownList({
-                                    // Cấu hình tải dữ liệu từ API hoặc nguồn dữ liệu của bạn
-                                    dataSource: {
-                                        transport: {
-                                            read: {
-                                                url: "/ProductType/GetList", // Thay thế đường dẫn bằng API của bạn
-                                                type: "GET"
-                                            }
-                                        }
-                                    },
-                                    dataValueField: "id", // Thay thế bằng trường ID thực tế
-                                    dataTextField: "name", // Thay thế bằng trường hiển thị thực tế
-                                    optionLabel: "Chọn loại sản phẩm" // Đây là giá trị mặc định (null)
-                                });
-                        }
-                    },
+                   
+                   
                     {
                         command: [
                             {
@@ -253,37 +233,7 @@
 
 
 
-<style>
-    #grid {
-        margin: 0;
-        padding: 0;
-        border-width: 0;
-        /* height: 100%; /* DO NOT USE !important for setting the Grid height! */ */ height: 900px;
-    }
 
-    .k-grid-content.k-auto-scrollable {
-        height: 650px !important;
-    }
-
-
-
-    /* Đặt kích thước modal mặc định */
-    .modal-dialog {
-        max-width: 90%;
-        width: auto;
-    }
-
-    /* Thiết lập thuộc tính cho việc kéo modal */
-    .modal-content {
-        overflow: hidden; /* Ngăn chặn nội dung bên ngoài khỏi modal */
-    }
-
-    /* Thiết lập kích thước của modal-body khi kéo */
-    .modal-body {
-        max-height: 80vh; /* Điều chỉnh kích thước tùy ý dựa trên nhu cầu của bạn */
-        overflow-y: auto;
-    }
-</style>
 
 
 

@@ -71,10 +71,10 @@ namespace Shop_API.Controllers
 
         [AllowAnonymous]
         [HttpGet("GetSPGGPG")]
-        public IActionResult GetSPGGPG(string? search, double? from, double? to, string? sortBy, int page)
+        public IActionResult GetSPGGPG(string? codeProductDetail, string? search, double? from, double? to, string? sortBy, int page)
         {
-            _reponse.Result = _iPagingRepository.GetAllSPGGPGs(search, from, to, sortBy, page);
-            var count = _reponse.Count = _iPagingRepository.GetAllSPGGPGs(search, from, to, sortBy, page).Count;
+            _reponse.Result = _iPagingRepository.GetAllSPGGPGs(codeProductDetail, search, from, to, sortBy, page);
+            var count = _reponse.Count = _iPagingRepository.GetAllSPGGPGs(codeProductDetail,search, from, to, sortBy, page).Count;
             return Ok(_reponse);
         }
     }

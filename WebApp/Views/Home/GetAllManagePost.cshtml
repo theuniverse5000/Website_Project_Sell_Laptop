@@ -60,7 +60,7 @@
             <div class="col-md-4">
                 <a href="@Url.Action("Details", "Home", new { guid = item.Id })">
                     <div class="product-card">
-                        <img src="@item.LinkImage" class="product-image" alt="Manage Image">
+                        <p class="product-image" alt="Manage Image">@Html.Raw(item.LinkImage)</p>
                         <div class="product-details">
                             <h3 class="product-title">@item.Code</h3>
                             <p class="product-description">@ShortenDescription(item.Description, 10)</p>
@@ -77,17 +77,17 @@
     <div class="text-center">
         @if (managePost.HasPreviousPage)
         {
-            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber - 1 })" class="btn btn-primary">Previous</a>
+            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber - 1 })" class="btn btn-primary">Trang Đầu</a>
         }
         @for (int i = 1; i <= managePost.PageCount; i++)
         {
             <a href="@Url.Action("GetAllManagePost", new { page = i })" class="btn @(i == managePost.PageNumber ? "btn-primary" : "btn-secondary")">@i</a>
         }
-        @if (managePost.HasNextPage)
+        @if (managePost.HasNextPage )
         {
-            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber + 1 })" class="btn btn-primary">Next</a>
+            <a href="@Url.Action("GetAllManagePost", new { page = managePost.PageNumber + 1 })" class="btn btn-primary">Trang Kế</a>
         }
     </div>
 
-    <p class="text-center">Page @managePost.PageNumber of @managePost.PageCount</p>
+    <p class="text-center">Trang @managePost.PageNumber trong @managePost.PageCount</p>
 </div>

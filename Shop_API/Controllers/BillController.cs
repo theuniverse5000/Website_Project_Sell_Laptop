@@ -68,7 +68,7 @@ namespace Shop_API.Controllers
         }
         [AllowAnonymous]
         [HttpPost("CreateBill")]
-        public async Task<IActionResult> CreateBill(string? username, string? maVoucher, RequestBillDto request)
+        public async Task<IActionResult> CreateBill(RequestBillDto request)
         {
             var reponse = await _billService.CreateBill(request);
             if (reponse.IsSuccess)
