@@ -3,12 +3,17 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
 @{
     List<ProductDetailDto> productDetails = ViewBag.ProductDetails;
-        List<ImageDto> images = ViewBag.Image;
+    List<ImageDto> images = ViewBag.Image;
     List<SanPhamGiamGiaDto> sanPhamGiamGias = ViewBag.SanPhamGiamGia;
     List<GiamGia> giamGias = ViewBag.GiamGia;
+    int productMongNheCounter = 0;
+    int productGamingCounter = 0;
+    int productVanPhongCounter = 0;
+    int productGiaReCounter = 0;
+    int productDoHoaCounter = 0;
 }
 <style>
-    .container{
+    .container {
         max-width: 1450px !important;
     }
 </style>
@@ -118,31 +123,31 @@
     <!-- danh mục loại sản phẩm -->
     <div class="categories-content-wrapper is-flex">
         <div class="item-categories-outer" style="margin-top: 15px; justify-content:center">
-            <div class="item-box">
+            <div class="item-box" id="viewAllLinkVanPhong1">
                 <a>
                     <span>Văn Phòng</span>
                     <img src="./img/Company-icon/item-cato/Screenshot 2023-06-22 185155 1.png">
                 </a>
             </div>
-            <div class="item-box">
+            <div class="item-box" id="viewAllLinkGaming1">
                 <a>
                     <span>Gaming</span>
                     <img src="./img/Company-icon/item-cato/Screenshot 2023-06-22 190131 1.png">
                 </a>
             </div>
-            <div class="item-box">
+            <div class="item-box" id="viewAllLinkMongNhe1">
                 <a>
                     <span>Mỏng Nhẹ</span>
                     <img src="./img/Company-icon/item-cato/Screenshot 2023-06-22 190340 1.png">
                 </a>
             </div>
-            <div class="item-box">
+            <div class="item-box" id="viewAllLink1">
                 <a>
                     <span>Đồ Họa</span>
                     <img src="./img/Company-icon/item-cato/Screenshot 2023-06-22 190543 1.png">
                 </a>
             </div>
-            <div class="item-box">
+            <div class="item-box" id="viewAllLinkgiaRe1">
                 <a>
                     <span>Giá rẻ</span>
                     <img src="./img/Company-icon/item-cato/Screenshot 2023-06-22 191109 1.png">
@@ -151,40 +156,40 @@
         </div>
     </div>
     <!-- sản phẩm hot-sale -->
-   @*  <div class="block-hot-sale">
-        <div class="block-tittle">
-            <b>SĂN NGAY DEAL SỐC  </b>
-            <i class="fa-solid fa-bolt" style="margin-left: 15px; color: yellow;transform: rotate(10deg);font-size: 90px;"></i>
-        </div>
-        <div class="List-products row">
+    @*  <div class="block-hot-sale">
+    <div class="block-tittle">
+    <b>SĂN NGAY DEAL SỐC  </b>
+    <i class="fa-solid fa-bolt" style="margin-left: 15px; color: yellow;transform: rotate(10deg);font-size: 90px;"></i>
+    </div>
+    <div class="List-products row">
 
-            @{
-                for (int i = 0; i < 2; i++)
-                {
-                    <div class="hot-product  col-md-3" data-code="@productDetails[i].Code.ToString()">
+    @{
+    for (int i = 0; i < 2; i++)
+    {
+    <div class="hot-product  col-md-3" data-code="@productDetails[i].Code.ToString()">
 
-                        <a>
-                            <img src="./img/Products/_0005_21675_laptop_asus_x515ma_br481w 1 (no bg).png">
-                            <b>@productDetails[i].NameProduct</b>
-                            <div class="Product-price">
-                                <span>@productDetails[i].Price </span>
-                                <p> @productDetails[i].ImportPrice</p>
-                                <span class="hot-price">Giá lên đời:</span>
-                                <span class="update-price">
-                                    12.490.000₫
-                                </span>
-                            </div>
-                            <div class="Like-product">
-                                <i class="fa-solid fa-heart"></i>
-                                <span>Yêu Thích</span>
-                            </div>
-                        </a>
-                    </div>
-                }
-            }
+    <a>
+    <img src="./img/Products/_0005_21675_laptop_asus_x515ma_br481w 1 (no bg).png">
+    <b>@productDetails[i].NameProduct</b>
+    <div class="Product-price">
+    <span>@productDetails[i].Price </span>
+    <p> @productDetails[i].ImportPrice</p>
+    <span class="hot-price">Giá lên đời:</span>
+    <span class="update-price">
+    12.490.000₫
+    </span>
+    </div>
+    <div class="Like-product">
+    <i class="fa-solid fa-heart"></i>
+    <span>Yêu Thích</span>
+    </div>
+    </a>
+    </div>
+    }
+    }
 
 
-        </div>
+    </div>
     </div> *@
 
     @if (sanPhamGiamGias.Count > 0)
@@ -235,7 +240,7 @@
             </div>
         </section>
     }
- 
+
     <script>
         // Lấy các phần tử HTML cần thao tác
         const hoursElement = document.querySelector('.h');
@@ -277,125 +282,395 @@
         // Thiết lập đếm ngược mỗi giây
         const timer = setInterval(countdown, 1000);
     </script>
-   
 
 
-    <!-- danh sách sản phẩm -->
-    <div class="Products">
-        <b>Sắp Xếp Theo</b>
-        <div class="Product-filter">
-            <a>
-                <div class="price-filter">
-                    <i class="fa-solid fa-arrow-down-wide-short"></i>
-                    <span>Giá Cao - Thấp </span>
-                </div>
-            </a>
-            <a>
-                <div class="price-filter">
-                    <i class="fa-solid fa-arrow-down-short-wide"></i>
-                    <span>
-                        Giá Thấp  - Cao
-                    </span>
-                </div>
-            </a>
-        </div>
-        <div class="categories-boxs-name">
-            <div class="box-names-title">
-                <b>LAP TOP VĂN PHÒNG</b>
-            </div>
-        </div>
-        <div class="List-products-2">
-            <div class="product-box  col-sm-3" ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-            <div class="product-box  col-sm-3">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-            <div class="product-box  col-sm-3">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
-            <div class="product-box  col-sm-3 " ">
-                <a>
-                    <img src="./img/Products/text_d_i_5__1 1.png">
-                    <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
-                    <div class="computer-configuration">
-                        <div class="configuration-item">
-                            <span>16GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>512GB</span>
-                        </div>
-                        <div class="configuration-item">
-                            <span>15.6 inches</span>
-                        </div>
-                    </div>
-                    <div class="Product-price">
-                        <span>15.490.000₫ </span>
-                        <p> 18.000.000₫</p>
-                    </div>
-                    <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
-                </a>
-            </div>
 
+
+
+
+
+
+    <!-- Laptop Văn Phòng -->
+    <div class="categories-boxs-name">
+        <div class="box-names-title">
+            <b>LAP TOP VĂN PHÒNG</b>
+            <a href="#" class="vm-deal" id="viewAllLinkVanPhong">Xem tất cả <i class="fa fa-angle-right" aria-hidden="true"></i></a>
         </div>
     </div>
+    <section style="background-color: aliceblue;">
+        <div class="rp-mobi py-5 container">
+            <div class="row List-products-2" id="productListContainer">
+
+                @foreach (var t in ViewBag.ListvanPhong)
+                {
+                    if (productVanPhongCounter >= 4)
+                    {
+                        break;
+                    }
+
+                    <div class="col-md-3 col-sm-3">
+                        <div class="product-box">
+
+                            @if (t.LinkImage != null)
+                            {
+                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <br />
+                            }
+                            else
+                            {
+                                <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" />
+                                <br />
+                            }
+
+                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">
+                                @t.NameProduct @t.Code (@t.TenCpu, @t.TenCardVGA @t.ThongSoCardVGA, @t.TanSoManHinh @t.ChatLieuManHinh )
+                            </a>
+
+                            <div class="computer-configuration">
+                                <div class="configuration-item">
+                                    <span>@t.ThongSoRam</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span> @t.ThongSoHardDrive</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span>@t.KichCoManHinh</span>
+                                </div>
+                            </div>
+
+                            <div class="Product-price">
+                                <span>@t.Price.ToString("N0") </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    productVanPhongCounter++;
+                }
+
+            </div>
+        </div>
+        <br />
+    </section>
+    <script>
+        document.getElementById('viewAllLinkVanPhong').addEventListener('click', function (event) {
+            event.preventDefault();
+            var laptopTypeValue = 'Laptop Văn Phòng';
+            var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+            window.location.href = url;
+        });
+    </script>
+
+
+    <!-- Laptop Đồ Họa-->
+
+    <div class="categories-boxs-name">
+        <div class="box-names-title">
+            <b>LAP TOP ĐỒ HỌA</b>
+            <a href="#" class="vm-deal" id="viewAllLink">Xem tất cả <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+    </div>
+    <section style="background-color: aliceblue;">
+        <div class="rp-mobi py-5 container">
+            <div class="row List-products-2" id="productListContainer">
+
+                @foreach (var t in ViewBag.ListLaptopDoHoa)
+                {
+                    if (productDoHoaCounter >= 4)
+                    {
+                        break;
+                    }
+
+                    <div class="col-md-3 col-sm-3">
+                        <div class="product-box">
+
+                            @if (t.LinkImage != null)
+                            {
+                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <br />
+                            }
+                            else
+                            {
+                                <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" />
+                                <br />
+                            }
+
+                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">
+                                @t.NameProduct @t.Code (@t.TenCpu, @t.TenCardVGA @t.ThongSoCardVGA, @t.TanSoManHinh @t.ChatLieuManHinh )
+                            </a>
+
+                            <div class="computer-configuration">
+                                <div class="configuration-item">
+                                    <span>@t.ThongSoRam</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span> @t.ThongSoHardDrive</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span>@t.KichCoManHinh</span>
+                                </div>
+                            </div>
+
+                            <div class="Product-price">
+                                <span>@t.Price.ToString("N0") </span>
+                                <p>@t.ImportPrice.ToString("N0")</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    productDoHoaCounter++;
+                }
+
+            </div>
+        </div>
+        <br />
+    </section>
+    <script>
+        document.getElementById('viewAllLink').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default behavior of the anchor tag
+
+            // Get the parameter value (replace 'laptopTypeValue' with the actual value or variable)
+            var laptopTypeValue = 'Laptop Đồ Họa';
+
+            // Construct the URL with the parameter
+            var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+
+            // Navigate to the constructed URL
+            window.location.href = url;
+        });
+    </script>
+
+
+
+
+    <!-- Laptop Gaming -->
+    <div class="categories-boxs-name">
+        <div class="box-names-title">
+            <b>LAP TOP GAMING</b>
+            <a href="#" class="vm-deal" id="viewAllLinkGaming">Xem tất cả <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+    </div>
+    <section style="background-color: aliceblue;">
+        <div class="rp-mobi py-5 container">
+            <div class="row List-products-2" id="productListContainer">
+
+                @foreach (var t in ViewBag.ListGaming)
+                {
+                    if (productGamingCounter >= 4)
+                    {
+                        break;
+                    }
+
+                    <div class="col-md-3 col-sm-3">
+                        <div class="product-box">
+
+                            @if (t.LinkImage != null)
+                            {
+                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <br />
+                            }
+                            else
+                            {
+                                <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" />
+                                <br />
+                            }
+
+                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">
+                                @t.NameProduct @t.Code (@t.TenCpu, @t.TenCardVGA @t.ThongSoCardVGA, @t.TanSoManHinh @t.ChatLieuManHinh )
+                            </a>
+
+                            <div class="computer-configuration">
+                                <div class="configuration-item">
+                                    <span>@t.ThongSoRam</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span> @t.ThongSoHardDrive</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span>@t.KichCoManHinh</span>
+                                </div>
+                            </div>
+
+                            <div class="Product-price">
+                                <span>@t.Price.ToString("N0") </span>
+                                <p>@t.ImportPrice.ToString("N0")</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    productGamingCounter++;
+                }
+
+            </div>
+        </div>
+        <br />
+    </section>
+    <script>
+        document.getElementById('viewAllLinkGaming').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default behavior of the anchor tag
+
+            // Get the parameter value (replace 'laptopTypeValue' with the actual value or variable)
+            var laptopTypeValue = 'Laptop Gaming';
+
+            // Construct the URL with the parameter
+            var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+
+            // Navigate to the constructed URL
+            window.location.href = url;
+        });
+    </script>
+
+
+    <!-- Laptop Mỏng Nhẹ -->
+    <div class="categories-boxs-name">
+        <div class="box-names-title">
+            <b>LAP TOP MỎNG NHẸ</b>
+            <a href="#" class="vm-deal" id="viewAllLinkMongNhe">Xem tất cả <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+    </div>
+    <section style="background-color: aliceblue;">
+        <div class="rp-mobi py-5 container">
+            <div class="row List-products-2" id="productListContainer">
+
+                @foreach (var t in ViewBag.ListmongNhe)
+                {
+                    if (productMongNheCounter >= 4)
+                    {
+                        break;
+                    }
+
+                    <div class="col-md-3 col-sm-3">
+                        <div class="product-box">
+
+                            @if (t.LinkImage != null)
+                            {
+                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <br />
+                            }
+                            else
+                            {
+                                <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" />
+                                <br />
+                            }
+
+                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">
+                                @t.NameProduct @t.Code (@t.TenCpu, @t.TenCardVGA @t.ThongSoCardVGA, @t.TanSoManHinh @t.ChatLieuManHinh )
+                            </a>
+
+                            <div class="computer-configuration">
+                                <div class="configuration-item">
+                                    <span>@t.ThongSoRam</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span> @t.ThongSoHardDrive</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span>@t.KichCoManHinh</span>
+                                </div>
+                            </div>
+
+                            <div class="Product-price">
+                                <span>@t.Price.ToString("N0") </span>
+                                <p>@t.ImportPrice.ToString("N0")</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    productMongNheCounter++;
+                }
+
+            </div>
+        </div>
+        <br />
+    </section>
+    <script>
+        document.getElementById('viewAllLinkMongNhe').addEventListener('click', function (event) {
+            event.preventDefault();
+            var laptopTypeValue = 'Laptop Mỏng Nhẹ';
+            var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+            window.location.href = url;
+        });
+    </script>
+
+
+
+
+    <!-- Laptop Giá Rẻ -->
+    <div class="categories-boxs-name">
+        <div class="box-names-title">
+            <b>LAP TOP GIÁ RẺ</b>
+            <a href="#" class="vm-deal" id="viewAllLinkgiaRe">Xem tất cả <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+        </div>
+    </div>
+    <section style="background-color: aliceblue;">
+        <div class="rp-mobi py-5 container">
+            <div class="row List-products-2" id="productListContainer">
+
+                @foreach (var t in ViewBag.ListgiaRe)
+                {
+                    if (productGiaReCounter >= 4)
+                    {
+                        break;
+                    }
+
+                    <div class="col-md-3 col-sm-3">
+                        <div class="product-box">
+
+                            @if (t.LinkImage != null)
+                            {
+                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <br />
+                            }
+                            else
+                            {
+                                <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" />
+                                <br />
+                            }
+
+                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">
+                                @t.NameProduct @t.Code (@t.TenCpu, @t.TenCardVGA @t.ThongSoCardVGA, @t.TanSoManHinh @t.ChatLieuManHinh )
+                            </a>
+
+                            <div class="computer-configuration">
+                                <div class="configuration-item">
+                                    <span>@t.ThongSoRam</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span> @t.ThongSoHardDrive</span>
+                                </div>
+                                <div class="configuration-item">
+                                    <span>@t.KichCoManHinh</span>
+                                </div>
+                            </div>
+
+                            <div class="Product-price">
+                                <span>@t.Price.ToString("N0") </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    productGiaReCounter++;
+                }
+
+            </div>
+        </div>
+        <br />
+    </section>
+    <script>
+        document.getElementById('viewAllLinkgiaRe').addEventListener('click', function (event) {
+            event.preventDefault();
+            var laptopTypeValue = 'Laptop Giá Rẻ';
+            var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+            window.location.href = url;
+        });
+    </script>
+
+
+
 
     <section>
         <div class="categories-boxs-name">
@@ -425,7 +700,7 @@
                             <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">
                                 @t.NameProduct @t.Code
                             </a>
-                          
+
                             <div class="Product-price">
                                 <span>@t.Price.ToString("N0") </span>
                                 <p>@t.ImportPrice.ToString("N0")</p>
@@ -471,7 +746,7 @@
                     <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z" />
                 </svg>
                 <svg class="swiper-button-prev" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-                
+
                     <path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM271 135c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-87 87 87 87c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L167 273c-9.4-9.4-9.4-24.6 0-33.9L271 135z" />
                 </svg>
             </div>
@@ -479,3 +754,164 @@
     </div>
 
 </main>
+
+
+<script>
+    document.getElementById('viewAllLinkVanPhong1').addEventListener('click', function (event) {
+        event.preventDefault();
+        var laptopTypeValue = 'Laptop Văn Phòng';
+        var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+        window.location.href = url;
+    });
+
+    document.getElementById('viewAllLink1').addEventListener('click', function (event) {
+        event.preventDefault();
+        var laptopTypeValue = 'Laptop Đồ Họa';
+        var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+        window.location.href = url;
+    });
+
+    document.getElementById('viewAllLinkMongNhe1').addEventListener('click', function (event) {
+        event.preventDefault();
+        var laptopTypeValue = 'Laptop Mỏng Nhẹ';
+        var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+        window.location.href = url;
+    });
+
+    document.getElementById('viewAllLinkGaming1').addEventListener('click', function (event) {
+        event.preventDefault();
+        var laptopTypeValue = 'Laptop Gaming';
+        var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+        window.location.href = url;
+    });
+
+    document.getElementById('viewAllLinkgiaRe1').addEventListener('click', function (event) {
+        event.preventDefault();
+        var laptopTypeValue = 'Laptop Giá Rẻ';
+        var url = '/sản-phẩm?laptoptype=' + encodeURIComponent(laptopTypeValue);
+        window.location.href = url;
+    });
+</script>
+
+
+
+@*
+<!-- danh sách sản phẩm -->
+<div class="Products">
+    <b>Sắp Xếp Theo</b>
+    <div class="Product-filter">
+        <a>
+            <div class="price-filter">
+                <i class="fa-solid fa-arrow-down-wide-short"></i>
+                <span>Giá Cao - Thấp </span>
+            </div>
+        </a>
+        <a>
+            <div class="price-filter">
+                <i class="fa-solid fa-arrow-down-short-wide"></i>
+                <span>
+                    Giá Thấp  - Cao
+                </span>
+            </div>
+        </a>
+    </div>
+    <div class="categories-boxs-name">
+        <div class="box-names-title">
+            <b>LAP TOP VĂN PHÒNG</b>
+        </div>
+    </div>
+    <div class="List-products-2">
+        <div class="product-box  col-sm-3" ">
+            <a>
+                <img src="./img/Products/text_d_i_5__1 1.png">
+                <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
+                <div class="computer-configuration">
+                    <div class="configuration-item">
+                        <span>16GB</span>
+                    </div>
+                    <div class="configuration-item">
+                        <span>512GB</span>
+                    </div>
+                    <div class="configuration-item">
+                        <span>15.6 inches</span>
+                    </div>
+                </div>
+                <div class="Product-price">
+                    <span>15.490.000₫ </span>
+                    <p> 18.000.000₫</p>
+                </div>
+                <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
+            </a>
+        </div>
+        <div class="product-box  col-sm-3">
+            <a>
+                <img src="./img/Products/text_d_i_5__1 1.png">
+                <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
+                <div class="computer-configuration">
+                    <div class="configuration-item">
+                        <span>16GB</span>
+                    </div>
+                    <div class="configuration-item">
+                        <span>512GB</span>
+                    </div>
+                    <div class="configuration-item">
+                        <span>15.6 inches</span>
+                    </div>
+                </div>
+                <div class="Product-price">
+                    <span>15.490.000₫ </span>
+                    <p> 18.000.000₫</p>
+                </div>
+                <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
+            </a>
+        </div>
+        <div class="product-box  col-sm-3">
+            <a>
+                <img src="./img/Products/text_d_i_5__1 1.png">
+                <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
+                <div class="computer-configuration">
+                    <div class="configuration-item">
+                        <span>16GB</span>
+                    </div>
+                    <div class="configuration-item">
+                        <span>512GB</span>
+                    </div>
+                    <div class="configuration-item">
+                        <span>15.6 inches</span>
+                    </div>
+                </div>
+                <div class="Product-price">
+                    <span>15.490.000₫ </span>
+                    <p> 18.000.000₫</p>
+                </div>
+                <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
+            </a>
+        </div>
+        <div class="product-box  col-sm-3 " ">
+            <a>
+                <img src="./img/Products/text_d_i_5__1 1.png">
+                <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
+                <div class="computer-configuration">
+                    <div class="configuration-item">
+                        <span>16GB</span>
+                    </div>
+                    <div class="configuration-item">
+                        <span>512GB</span>
+                    </div>
+                    <div class="configuration-item">
+                        <span>15.6 inches</span>
+                    </div>
+                </div>
+                <div class="Product-price">
+                    <span>15.490.000₫ </span>
+                    <p> 18.000.000₫</p>
+                </div>
+                <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
+            </a>
+        </div>
+
+    </div>
+</div> *@
+
+
+

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
+using System.Runtime.Intrinsics.Arm;
 using X.PagedList;
 
 namespace WebApp.Controllers
@@ -38,6 +40,50 @@ namespace WebApp.Controllers
             ViewBag.GiamGia = content3;
             var apiImagesUrl = "/api/Images";
             var apiResponeImage = await httpClient.GetStringAsync(apiImagesUrl);
+
+
+            string doHoa = "Laptop đồ họa";
+            var apiLaptopDoHoaUrl = $"api/ProductDetail/PGetProductDetail?productType={doHoa}&page=1";                             
+            var apiResponeLapTopDoHoa = await httpClient.GetStringAsync(apiLaptopDoHoaUrl);
+            var ResponeLaptopDoHoa = apiResponeLapTopDoHoa.ToString();
+            var responeModelLaptopDoHoa = JsonConvert.DeserializeObject<ResponseDto>(ResponeLaptopDoHoa);
+            var contentLapTopDoHoa = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModelLaptopDoHoa.Result.ToString());
+            ViewBag.ListLaptopDoHoa = contentLapTopDoHoa;
+
+            string gaming = "Laptop Gaming";
+            var apiLaptopGamingUrl = $"api/ProductDetail/PGetProductDetail?productType={gaming}&page=1";
+            var apiResponeGaming = await httpClient.GetStringAsync(apiLaptopGamingUrl);
+            var ResponeGaming = apiResponeGaming.ToString();
+            var responeModelGaming = JsonConvert.DeserializeObject<ResponseDto>(ResponeGaming);
+            var contentGaming = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModelGaming.Result.ToString());
+            ViewBag.ListGaming = contentGaming;
+
+
+            string mongNhe = "Laptop Mỏng Nhẹ";
+            var apiLaptopmongNheUrl = $"api/ProductDetail/PGetProductDetail?productType={mongNhe}&page=1";
+            var apiResponemongNhe = await httpClient.GetStringAsync(apiLaptopmongNheUrl);
+            var ResponemongNhe = apiResponemongNhe.ToString();
+            var responeModelmongNhe = JsonConvert.DeserializeObject<ResponseDto>(ResponemongNhe);
+            var contentmongNhe = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModelmongNhe.Result.ToString());
+            ViewBag.ListmongNhe = contentmongNhe;
+
+
+            string giaRe = "Laptop Giá Rẻ";
+            var apiLaptopgiaReUrl = $"api/ProductDetail/PGetProductDetail?productType={giaRe}&page=1";
+            var apiResponegiaRe = await httpClient.GetStringAsync(apiLaptopgiaReUrl);
+            var ResponegiaRe = apiResponegiaRe.ToString();
+            var responeModelgiaRe = JsonConvert.DeserializeObject<ResponseDto>(ResponegiaRe);
+            var contentgiaRe = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModelgiaRe.Result.ToString());
+            ViewBag.ListgiaRe = contentgiaRe;
+
+            string vanPhong = "Laptop Văn Phòng";
+            var apiLaptopvanPhongUrl = $"api/ProductDetail/PGetProductDetail?productType={vanPhong}&page=1";
+            var apiResponevanPhong = await httpClient.GetStringAsync(apiLaptopvanPhongUrl);
+            var ResponevanPhong = apiResponevanPhong.ToString();
+            var responeModelvanPhong = JsonConvert.DeserializeObject<ResponseDto>(ResponevanPhong);
+            var contentvanPhong = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModelvanPhong.Result.ToString());
+            ViewBag.ListvanPhong = contentvanPhong;
+
 
             // Deserialize trực tiếp thành danh sách ImageDto
             var contentIMage = JsonConvert.DeserializeObject<List<ImageDto>>(apiResponeImage);

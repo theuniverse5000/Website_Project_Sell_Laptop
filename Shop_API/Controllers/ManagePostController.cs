@@ -57,7 +57,7 @@ namespace Shop_API.Controllers
             ////}
             obj.Id = Guid.NewGuid();
             obj.CreateDate = DateTime.Now;
-            obj.Status = true;
+          
 
             if (await _mpRepository.Create(obj))
             {
