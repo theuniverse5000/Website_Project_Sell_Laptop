@@ -212,12 +212,12 @@
 
                                 <div class="item">
                                     <div class="p-container">
-                                        <a class="p-img" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@giamgiai.ProductDetailCode" asp-route-name="@giamgiai.ProductDetailName">
+                                        <a class="p-img" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@giamgiai.ProductDetailCode" asp-route-name="@giamgiai.ProductDetailName">
                                             <img src=" @Configuration.GetSection("UrlApiAdmin").Value@Url.Content(@giamgiai.LinkImage)">
 
                                             <span class="percent">-@giamgia.ToString("0.")%</span>
                                         </a>
-                                        <a class="p-name" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@giamgiai.ProductDetailCode" asp-route-name="@giamgiai.ProductDetailName">@giamgiai.TenSanPham</a>
+                                        <a class="p-name" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@giamgiai.ProductDetailCode" asp-route-name="@giamgiai.ProductDetailName">@giamgiai.TenSanPham</a>
                                         <div class="p-price-all">
                                             <span class="p-price">
                                                 @giamgiai.SoTienConLai.ToString("N0")

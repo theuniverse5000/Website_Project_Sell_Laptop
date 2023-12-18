@@ -18,6 +18,9 @@ namespace Shop_Models.Entities
         public string? FullName { get; set; }
         [MaxLength(150)]
         public string? Address { get; set; }
+        public int Payment { get; set; }
+        public bool IsPayment { get; set; }
+        public float? Discount { get; set; }
         public int Status { get; set; }
         public Guid? VoucherId { get; set; }
         public Guid? UserId { get; set; }
