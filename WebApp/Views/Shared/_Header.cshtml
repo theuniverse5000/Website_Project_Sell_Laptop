@@ -23,9 +23,7 @@
     .btn-login {
         margin-top:30px;
     }
-    .pd-l-130{
-        padding-left: 130px;
-    }
+   
 </style>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg" style="background-color:white">
@@ -54,18 +52,18 @@
                     <i class="fas fa-truck"></i>Tra cứu đơn hàng
                 </a>
             </li>
-            <li>
-                <a class="nav-link textNavbar" href="/Home/GetAllManagePost">
-                    <i class="fa-solid fa-newspaper"></i>Tin Tức, Sự Kiện
-                </a>
-            </li>
+            
             <form asp-controller="ProductDetail" asp-action="ShowListProductDetail" method="get" class="d-flex" style="margin:auto">
                 <input class="form-control me-2" name="searchString" style="width:280px" type="search" placeholder="Bạn muốn tìm sản phẩm gì?" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
             </form>
-          
+            <li>
+                <a class="nav-link textNavbar" href="/Home/GetAllManagePost">
+                    <i class="fa-solid fa-newspaper"></i>Tin tức, khuyến mại
+                </a>
+            </li>
           
             @{
                 
@@ -93,7 +91,7 @@
                 }
                 else
                 {
-                    <form class="d-flex pd-l-130">
+                    <form class="d-flex">
                     <li>
 
                         <a class="nav-link textNavbar" href="/giỏ-hàng">
@@ -288,7 +286,7 @@
                 if (vnf_regex.test(phoneNumber) == false) {
                     alert('Số điện thoại của bạn không đúng định dạng!');
                 } else {
-                    alert('Số điện thoại của bạn hợp lệ!');
+                    
                 }
             } else {
                 alert('Bạn chưa điền số điện thoại!');

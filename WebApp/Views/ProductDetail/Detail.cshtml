@@ -92,18 +92,7 @@
         <div class="container">
             <h4 class="title text-dark">
                 [Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )
-                <br />
-                    
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <span class="ms-1">
-                            4.5
-                        </span>
-                    <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
-                    <span class="text-success ms-2">In stock</span>
+               
               
             </h4>
             <div class="row gx-5">
@@ -174,28 +163,23 @@
                     {
                         if(t.Code == k.Code)
                         {
-                          
-                                <input type="radio" name="select"checked>
-                                <label >
-                                    <span>
-                                        <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
-                                            @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
-                                        </a>
-                                    </span>
-                                </label>
-                           
+
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedDisabled" checked disabled>
+                               
+                                <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">@k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive</label>
+                                </a>
+                            </div>
                         }
                         else
                         {
-                            <div class="wrapper">
-                                <input type="radio" name="select">
-                                <label >
-                                    <span>
-                                        <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
-                                            @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
-                                        </a>
-                                    </span>
-                                </label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" disabled>
+
+                                <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">@k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive</label>
+                                </a>
                             </div>
                           
                         }
@@ -204,8 +188,12 @@
                 </div>
                <div class="col-md-4 col-sm-4">
                    <div class="">
-                       <ul>
+                        <ul class="list-unstyled">
                             <li> <i class="fa-solid fa-star" style="color: #e2ff05;"></i>Chất lượng sản phẩm là hàng đầu</li>
+                            <li> <i class="fa-solid fa-star" style="color: #e2ff05;"></i>Dùng test máy 15 ngày đầu lỗi 1 đổi 1</li>
+                            <li> <i class="fa-solid fa-star" style="color: #e2ff05;"></i>Hỗ trợ và hậu mãi sau bán hàng tốt nhất</li>
+                            <li> <i class="fa-solid fa-star" style="color: #e2ff05;"></i>Phương thức thanh toán linh hoạt</li>
+                            <li> <i class="fa-solid fa-star" style="color: #e2ff05;"></i>Giao hàng miễn phí toàn quốc</li>
                        </ul>
                    </div>
                </div>
@@ -221,14 +209,14 @@
                         <!-- Pills navs -->
                         <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
                             <li class="nav-item d-flex" role="presentation">
-                                <a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="ex1-tab-1" data-mdb-toggle="pill" href="#ex1-pills-1" role="tab" aria-controls="ex1-pills-1" aria-selected="true">Specification</a>
+                                <a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="ex1-tab-1" data-mdb-toggle="pill" role="tab" aria-controls="ex1-pills-1" aria-selected="true">Thông tin thêm về sản phẩm</a>
                             </li>
                         </ul>
                         <!-- Pills navs -->
                         <!-- Pills content -->
                         <div class="tab-content" id="ex1-content">
                             <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
-                                <h1>Thông tin thêm về sản phẩm</h1><br />
+                              
                                 <p class="product-description">@Html.Raw(t.Description)</p>
                             </div>
                         </div>
