@@ -15,6 +15,8 @@ namespace Shop_API.Helpers
                 Email = dto.Email,
                 NormalizedEmail = dto.Email.ToUpper(),
                 FullName = dto.FullName,
+                PhoneNumber = dto.PhoneNumber,  
+                Address = dto.Address,
             };
         }
     }

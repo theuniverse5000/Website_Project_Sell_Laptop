@@ -173,6 +173,14 @@
                                 <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="">
                             </div>
                             <div class="form-group">
+                                <label for="exampleInputEmail1">Số điện thoại</label>
+                                <input type="tel" name="phoneNumber" class="form-control" id="phoneNumber" aria-describedby="emailHelp" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Địa chỉ</label>
+                                <input type="text" name="address" class="form-control" id="address" aria-describedby="emailHelp" placeholder="">
+                            </div>
+                            <div class="form-group">
                                 <label for="exampleInputEmail1">Mật khẩu</label>
                                 <input type="password" name="password" id="password" class="form-control" aria-describedby="emailHelp" placeholder="">
                             </div>
@@ -227,10 +235,20 @@
             var fullName = registrationForm.elements["fullName"].value;
             var userName = registrationForm.elements["userName"].value;
             var email = registrationForm.elements["email"].value;
+            var address = registrationForm.elements["address"].value;
+            var phoneNumber = registrationForm.elements["phoneNumber"].value;
             var password = registrationForm.elements["password"].value;
             var confirmPassword = registrationForm.elements["confirmPassword"].value;
 
-            if (fullName.trim() === '' || userName.trim() === '' || email.trim() === '' || password.trim() === '' || confirmPassword.trim() === '') {
+            if (
+                fullName.trim() === '' ||
+                userName.trim() === '' ||
+                email.trim() === '' ||
+                password.trim() === '' ||
+                confirmPassword.trim() === '' ||
+                phoneNumber.trim() === '' ||
+                address.trim() === ''
+            ) {
                 alert('Vui lòng điền đầy đủ thông tin');
             } else if (userName.length < 4 || userName.length > 100) {
                 alert('Tên đăng nhập phải có ít nhất 4 và nhiều nhất 100 kí tự.');
@@ -246,9 +264,29 @@
                 alert('Mật khẩu phải chứa ít nhất một chữ viết thường (a-z).');
             } else if (!/\W/.test(password)) {
                 alert('Mật khẩu phải chứa ít nhất một ký tự không phải chữ hoặc số.');
+            } else if (fullName.length <= 3 || fullName.length > 100) {
+                alert('Họ tên phải có ít nhất 3 và nhiều nhất 100 kí tự.');
+            } else if (address.length <= 5 || address.length > 100) {
+                alert('Địa chỉ phải có ít nhất 5 và nhiều nhất 100 kí tự.');
             } else {
                 // If all conditions pass, manually submit the form
                 registrationForm.submit();
+            }
+        });
+
+        // Adding phone number validation
+        var phoneNumberInput = registrationForm.elements["phoneNumber"];
+        phoneNumberInput.addEventListener("blur", function () {
+            var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+            var phoneNumber = phoneNumberInput.value;
+            if (phoneNumber !== '') {
+                if (vnf_regex.test(phoneNumber) == false) {
+                    alert('Số điện thoại của bạn không đúng định dạng!');
+                } else {
+                    alert('Số điện thoại của bạn hợp lệ!');
+                }
+            } else {
+                alert('Bạn chưa điền số điện thoại!');
             }
         });
     });
