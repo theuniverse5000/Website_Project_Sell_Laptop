@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 
@@ -46,11 +47,18 @@ public class LoginController : Controller
         var httpclien2t = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
         var respone2 = await httpclient.GetAsync(apiUrl2);
         var jsonRespone2 = await respone2.Content.ReadAsStringAsync();
+        var apiUrl3 = $"https://localhost:44333/User/GetUserInfo?usename={username}";
+        var respone3 = await httpclient.GetAsync(apiUrl3);
+        var jsonRespone3 = await respone3.Content.ReadAsStringAsync();
         if (respone.IsSuccessStatusCode)
         {
             var loginRespones = JsonConvert.DeserializeObject<LoginResponesDto>(jsonRespone);
             var StatusPointWallet = JsonConvert.DeserializeObject<int>(jsonRespone2);
+            var info = JsonConvert.DeserializeObject<UserDto>(jsonRespone3);
             var trangthaividiem = StatusPointWallet.ToString();
+            HttpContext.Session.SetString("full_name", info.Name);
+            HttpContext.Session.SetString("address", info.Address);
+            HttpContext.Session.SetString("phoneNumber", info.PhoneNumber);
             HttpContext.Session.SetString("username", username);
             HttpContext.Session.SetString("AccessToken", loginRespones.Token);
             HttpContext.Session.SetString("StatusPointWallet", trangthaividiem);
@@ -95,6 +103,66 @@ public class LoginController : Controller
         //  await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToAction("Index", "Home");
     }
+
+    [HttpPost]
+    public async Task<IActionResult> EditInfo(string fullName, string phoneNumber, string address)
+    {
+        try
+        {
+            // Create a DTO to hold the data
+            ChangeContactInfoDto info = new ChangeContactInfoDto
+            {
+                FullName = fullName,
+                NewPhoneNumber = phoneNumber,
+                NewAddress = address
+            };
+
+            // Get the bearer token from the request cookies
+            var accessToken = HttpContext.Session.GetString("AccessToken");
+
+            // Create the HttpClient instance from the factory
+            var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+
+            // Set the authorization header with the bearer token
+            httpclient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            // Set the API endpoint
+            var apiUrl = "https://localhost:44333/User/ChangeContactInfo";
+
+            // Serialize the DTO to JSON
+            var requestdata = new StringContent(JsonConvert.SerializeObject(info), Encoding.UTF8, "application/json");
+
+            // Make the HTTP POST request
+            var response = await httpclient.PostAsync(apiUrl, requestdata);
+
+            // Read the response content
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Deserialize the response if needed
+                var infoRespones = JsonConvert.DeserializeObject<ChangeContactInfoDto>(jsonResponse);
+
+                // Update session variables
+                HttpContext.Session.SetString("full_name", fullName);
+                HttpContext.Session.SetString("phoneNumber", phoneNumber);
+                HttpContext.Session.SetString("address", address);
+                return RedirectToAction("info", "Home");
+            }
+            else
+            {
+                // Handle unsuccessful response, maybe log the error
+                // Redirect or return to the info action in the Home controller
+                return RedirectToAction("info", "Home");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions, log the error, and redirect to the info action with an error message
+            return RedirectToAction("info", "Home", new { error = ex.Message });
+        }
+    }
+
     public IActionResult LoginWithGoogle(string returnUrl = "/")
     {
         var properties = new AuthenticationProperties

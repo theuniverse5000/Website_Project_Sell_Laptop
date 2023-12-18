@@ -11,6 +11,9 @@ namespace Shop_Models.Dto
         public string Picture { get; set; }
         public string Provider { get; set; }
         public string Password { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
+
         public bool isAdmin { get; set; }
 
     }

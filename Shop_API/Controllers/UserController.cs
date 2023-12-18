@@ -138,14 +138,48 @@ namespace Shop_API.Controllers
             return Ok(_reponse);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetUserInfo(string usename)
+        {
+            var user = await _repository.GetUserByUserName(usename);
+
+            if (user != null)
+            {
+                return Ok(new UserDto
+                {
+                    Name = user.FullName,
+                    Address = user.Address,
+                    PhoneNumber = user.PhoneNumber
+                });
+            }
+
+            return BadRequest("User not found");
+        }
+
+
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> ChangeAddress([FromBody] ChangeAddressDto dto)
+        public async Task<IActionResult> ChangeContactInfo([FromBody] ChangeContactInfoDto dto)
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
-            // Update the address
-            currentUser.Address = dto.NewAddress;
+
+            if (!string.IsNullOrEmpty(dto.FullName))
+            {
+                currentUser.FullName = dto.FullName;
+            }
+
+            // Update address if provided
+            if (!string.IsNullOrEmpty(dto.NewAddress))
+            {
+                currentUser.Address = dto.NewAddress;
+            }
+
+            // Update phone number if provided
+            if (!string.IsNullOrEmpty(dto.NewPhoneNumber))
+            {
+                currentUser.PhoneNumber = dto.NewPhoneNumber;
+            }
 
             // Save changes
             var result = await _userManager.UpdateAsync(currentUser);
@@ -155,28 +189,9 @@ namespace Shop_API.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return Ok(new { Message = "Address changed successfully" });
+            return Ok(new { Message = "Contact information changed successfully" });
         }
 
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> ChangePhoneNumber([FromBody] ChangePhoneNumberDto dto)
-        {
-            var currentUser = await _userManager.GetUserAsync(User);
-
-            // Update the phone number
-            currentUser.PhoneNumber = dto.NewPhoneNumber;
-
-            // Save changes
-            var result = await _userManager.UpdateAsync(currentUser);
-
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            return Ok(new { Message = "Phone number changed successfully" });
-        }
 
         [HttpPost]
         [Authorize] // Assuming only authenticated users can change their password

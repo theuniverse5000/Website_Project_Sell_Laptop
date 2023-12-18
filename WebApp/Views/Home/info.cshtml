@@ -2,8 +2,30 @@
     @using Microsoft.AspNetCore.Http;
     var httpContext = ViewContext.HttpContext;
     string accessToken = httpContext.Request.Cookies["access_token"];
-    string username = ViewContext.HttpContext.Session.GetString("username");
-    string phoneNumber = ViewContext.HttpContext.Session.GetString("phoneNumber");
-    string address = ViewContext.HttpContext.Session.GetString("address");
-
+    string fullname = httpContext.Session.GetString("full_name");
+    string phoneNumber = httpContext.Session.GetString("phoneNumber");
+    string address = httpContext.Session.GetString("address");
 }
+
+<body>
+    <h1>Chỉnh sửa Thông tin Người dùng</h1>
+
+    <form id="editForm" asp-controller="Login" asp-action="EditInfo" method="post">
+        <div>
+            <label for="fullName">Họ và Tên:</label>
+            <input type="text" id="fullName" name="fullName" value="@fullname" required>
+        </div>
+
+        <div>
+            <label for="phoneNumber">Số Điện thoại:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" value="@phoneNumber" required>
+        </div>
+
+        <div>
+            <label for="address">Địa chỉ:</label>
+            <input type="text" id="address" name="address" value="@address" required>
+        </div>
+
+        <button type="submit">Lưu</button>
+    </form>
+</body>

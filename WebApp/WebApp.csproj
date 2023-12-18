@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Home\info.cshtml" />
     <Content Remove="wwwroot\lib\bootstrap\bootstrap-5.0.2-dist\css\bootstrap-grid.css.map" />
     <Content Remove="wwwroot\lib\bootstrap\bootstrap-5.0.2-dist\css\bootstrap-grid.min.css.map" />
     <Content Remove="wwwroot\lib\bootstrap\bootstrap-5.0.2-dist\css\bootstrap-grid.rtl.css.map" />
@@ -78,7 +77,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Home\info.cshtml" />
     <None Include="wwwroot\lib\bootstrap\bootstrap-5.0.2-dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\bootstrap-5.0.2-dist\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\lib\bootstrap\bootstrap-5.0.2-dist\css\bootstrap-grid.rtl.css.map" />
@@ -107,14 +105,6 @@
     <None Include="wwwroot\lib\bootstrap\bootstrap-5.0.2-dist\js\bootstrap.js.map" />
     <None Include="wwwroot\lib\bootstrap\bootstrap-5.0.2-dist\js\bootstrap.min.js" />
     <None Include="wwwroot\lib\bootstrap\bootstrap-5.0.2-dist\js\bootstrap.min.js.map" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Home\info.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Home\info.cshtml" />
   </ItemGroup>
 
 </Project>
