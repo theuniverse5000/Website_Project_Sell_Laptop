@@ -163,6 +163,64 @@ public class LoginController : Controller
         }
     }
 
+
+    [HttpPost]
+    public async Task<IActionResult> ChangePassword(string OldPassword, string NewPassword)
+    {
+        try
+        {
+            // Create a DTO to hold the data
+            ChangePasswordDto changePassword = new ChangePasswordDto
+            {
+                OldPassword = OldPassword,
+                NewPassword = NewPassword,
+            
+            };
+
+            // Get the bearer token from the request cookies
+            var accessToken = HttpContext.Session.GetString("AccessToken");
+
+            // Create the HttpClient instance from the factory
+            var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+
+            // Set the authorization header with the bearer token
+            httpclient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            // Set the API endpoint
+            var apiUrl = "https://localhost:44333/User/ChangePassword";
+
+            // Serialize the DTO to JSON
+            var requestdata = new StringContent(JsonConvert.SerializeObject(changePassword), Encoding.UTF8, "application/json");
+
+            // Make the HTTP POST request
+            var response = await httpclient.PostAsync(apiUrl, requestdata);
+
+            // Read the response content
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Deserialize the response if needed
+                var infoRespones = JsonConvert.DeserializeObject<ChangeContactInfoDto>(jsonResponse);
+
+                // Update session variables
+              
+                return RedirectToAction("info", "Home");
+            }
+            else
+            {
+                // Handle unsuccessful response, maybe log the error
+                // Redirect or return to the info action in the Home controller
+                return RedirectToAction("info", "Home");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions, log the error, and redirect to the info action with an error message
+            return RedirectToAction("info", "Home", new { error = ex.Message });
+        }
+    }
+
     public IActionResult LoginWithGoogle(string returnUrl = "/")
     {
         var properties = new AuthenticationProperties

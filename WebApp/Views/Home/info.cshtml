@@ -29,3 +29,22 @@
         <button type="submit">Lưu</button>
     </form>
 </body>
+
+
+<body>
+    <h1>Đổi mật khẩu</h1>
+
+    <form id="editForm" asp-controller="Login" asp-action="ChangePassword" method="post">
+        <div>
+            <label for="OldPassword">Mật khẩu hiện tại:</label>
+            <input type="password" id="OldPassword" name="OldPassword" required>
+        </div>
+
+        <div>
+            <label for="NewPassword">Mật khẩu mới</label>
+            <input type="password" id="NewPassword" name="NewPassword" required>
+        </div>
+
+        <button type="submit">Đổi mật khẩu</button>
+    </form>
+</body>
