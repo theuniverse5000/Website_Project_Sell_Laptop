@@ -1,107 +1,78 @@
 ﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+<div style="background-color: aliceblue;">
+    <div class="filter-container pd-top-100">
+        <label for="category">Loại sản phẩm:</label>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="laptop">Laptop</option>
+            <option value="smartphone">Smartphone</option>
+        </select>
+        <label for="category">Thương hiệu:</label>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="laptop">Laptop</option>
+            <option value="smartphone">Smartphone</option>
+        </select>
+        <label for="category">Giá tiền sản phẩm:</label>
+        <select id="category">
+            <option value="all">Tất cả</option>
+            <option value="laptop">Laptop</option>
+            <option value="smartphone">Smartphone</option>
+        </select>
+        <label for="search">Tìm kiếm:</label>
+        <input type="text" id="search" placeholder="Nhập từ khóa">
 
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-    @* <div class="col-md-3" data-code="@t.Code.ToString()">
-
-    <a>
-        <img src="./img/Products/_0005_21675_laptop_asus_x515ma_br481w 1 (no bg).png">
-        <b>@t.NameProduct</b>
-        <div class="Product-price">
-            <span>@t.Price </span>
-            <p> t.ImportPrice</p>
-            <span class="hot-price">Giá lên đời:</span>
-            <span class="update-price">
-                12.490.000₫
-            </span>
-        </div>
-        <div class="Like-product">
-            <i class="fa-solid fa-heart"></i>
-            <span>Yêu Thích</span>
-        </div>
-    </a>
+        <button onclick="filterProducts()">Lọc</button>
     </div>
-    *@
-<div class="filter-container pd-top-100">
-  <label for="category">Loại sản phẩm:</label>
-  <select id="category">
-    <option value="all">Tất cả</option>
-    <option value="laptop">Laptop</option>
-    <option value="smartphone">Smartphone</option>
-  </select>
-    <label for="category">Thương hiệu:</label>
-    <select id="category">
-        <option value="all">Tất cả</option>
-        <option value="laptop">Laptop</option>
-        <option value="smartphone">Smartphone</option>
-    </select>
-    <label for="category">Giá tiền sản phẩm:</label>
-    <select id="category">
-        <option value="all">Tất cả</option>
-        <option value="laptop">Laptop</option>
-        <option value="smartphone">Smartphone</option>
-    </select>
-  <label for="search">Tìm kiếm:</label>
-  <input type="text" id="search" placeholder="Nhập từ khóa">
-
-  <button onclick="filterProducts()">Lọc</button>
-</div>
-<section style="background-color:transparent;">
-    <div class="rp-mobi py-5">
-        <div class="row list-product">
-            @foreach (var t in ViewBag.ListProduct)
-            {
-                <div class="col-md-3 col-sm-3 pd-bt-20">
-                <div class="card card-product">
-                    @if (t.LinkImage != null)
-                    {
-                        <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" class="img-thumbnail img-product" />
-                    }
-                    else
-                    {
-                        <img src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" class="img-thumbnail img-product" />
-                    }
-                   
-                    <div class="card-body">
-                        <p class="card-text ">
-                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">[Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )  </a>
-                          <br>  <span style=" color: red;font-weight: bold;">@t.Price.ToString("N0")</span>
-                            <span style=" color: gray; text-decoration: line-through; ">@t.ImportPrice.ToString("N0")</span>
-                        </p>
+    <section style="background-color: aliceblue;">
+        <div class="rp-mobi py-5 container">
+            <div class="row List-products-2">
+                @foreach (var t in ViewBag.ListProduct)
+                {
+                    <div class="col-md-3 col-sm-3">
+                        <div class="product-box">
+                           
+                                @if (t.LinkImage != null)
+                                {
+                                    <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image"/><br />
+                                }
+                                else
+                                {
+                                <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" /><br />
+                            }
+                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct" >
+                                @t.NameProduct @t.Code (@t.TenCpu, @t.TenCardVGA @t.ThongSoCardVGA, @t.TanSoManHinh @t.ChatLieuManHinh )
+                            </a>
+                              
+                                <div class="computer-configuration">
+                                    <div class="configuration-item">
+                                    <span>@t.ThongSoRam</span>
+                                    </div>
+                                    <div class="configuration-item">
+                                    <span> @t.ThongSoHardDrive</span>
+                                    </div>
+                                    <div class="configuration-item">
+                                    <span>@t.KichCoManHinh</span>
+                                    </div>
+                                </div>
+                                <div class="Product-price">
+                                <span>@t.Price.ToString("N0") </span>
+                                <p>@t.ImportPrice.ToString("N0")</p>
+                                </div>
+                           
+                        </div>
                     </div>
-                </div>
-                </div> 
-     
-            } 
+                    
+                }
             </div>
         </div>
         <br />
     </section>
     <p></p>
-<style>
-    .list-product{
-        max-width: 1400px !important;
-        text-align:center !important;
-        margin:auto !important;
-    }
-    .card-product {
-     
-        height: 400px;
-        padding-bottom:30px;
-        border: 1px solid #ddd; /* Add a border to the card */
-        border-radius: 8px; /* Add rounded corners to the card */
-        overflow: hidden; /* Hide any content that overflows the card */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-        transition: box-shadow 0.3s ease; /* Add a smooth transition to the box shadow */
-      
-        margin-right: 20px;
-    }
+    </div>
 
-        .card-product:hover {
+<style>
+    .product-box:hover {
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase box shadow on hover */
         }
 
@@ -149,6 +120,9 @@
     }
     .pd-top-100{
         padding-top:100px;
+    }
+    .container{
+        max-width: 1450px !important;
     }
 </style>
 

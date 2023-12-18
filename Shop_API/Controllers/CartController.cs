@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shop_API.Repository.IRepository;
 using Shop_API.Service.IService;
 using Shop_Models.Dto;
 
@@ -11,10 +12,12 @@ namespace Shop_API.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
+        private readonly ICartDetailRepository _cartDetailRepository;
         private readonly ResponseDto _reponse;
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, ICartDetailRepository cartDetailRepository)
         {
             _cartService = cartService;
+            _cartDetailRepository = cartDetailRepository;
             _reponse = new ResponseDto();
         }
         [AllowAnonymous]// For admin
@@ -124,6 +127,15 @@ namespace Shop_API.Controllers
             {
                 return BadRequest(reponse);
             }
+        }
+        [AllowAnonymous]
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete(Guid idCartDetail)
+        {
+            if (await _cartDetailRepository.Delete(idCartDetail))
+                return Ok();
+            return BadRequest();
+
         }
     }
 }

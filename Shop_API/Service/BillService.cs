@@ -32,55 +32,74 @@ namespace Shop_API.Service
             _voucherRepository = voucherRepository;
         }
 
-        public async Task<ResponseDto> CreateBill(string? username, string? maVoucher)
+        public async Task<ResponseDto> CreateBill(RequestBillDto request)
         {
             try
             {
-                var user = _userRepository.GetAllUsers().Result.Where(x => x.UserName == username).FirstOrDefault();
-                if (user == null)
-                {
-                    return NotFoundResponse("Không tìm thấy tài khoản người dùng");
-                }
+                var user = _userRepository.GetAllUsers().Result.Where(x => x.UserName == request.Usename).FirstOrDefault();
 
-                var cartItem = await _cartRepository.GetCartItem(username);
-                if (cartItem == null)
-                {
-                    return NotFoundResponse("Không có sản phẩm trong giỏ hàng");
-                }
+                var cartItem = await _cartRepository.GetCartItem(request.Usename);
+                //if (cartItem == null)
+                //{
+                //    return NotFoundResponse("Không có sản phẩm trong giỏ hàng");
+                //}
+
+
 
                 var listVoucher = await _voucherRepository.GetAllVouchers();
-                var voucherX = listVoucher.FirstOrDefault(x => x.MaVoucher == maVoucher);
+                var voucherX = listVoucher.FirstOrDefault(x => x.MaVoucher == request.CodeVoucher);
                 var bill = new Bill
                 {
                     Id = Guid.NewGuid(),
                     InvoiceCode = "Bill" + RamdomString.GenerateRandomString(10),
                     CreateDate = DateTime.Now,
                     Status = 2, // Trạng thái 2: Chờ xác nhận
-                    FullName = user.FullName,
-                    PhoneNumber = user.PhoneNumber,
-                    Address = user.Address,
+                    FullName = user != null ? user.FullName : request.FullName,
+                    PhoneNumber = user != null ? user.PhoneNumber : request.Address,
+                    Address = user != null ? user.Address : request.PhoneNumber,
                     UserId = user != null ? user.Id : null,
                     VoucherId = voucherX != null ? voucherX.Id : (Guid?)null
                 };
 
                 if (await _billRepository.Create(bill))
                 {
-                    var cartItemToBill = cartItem.Where(x => x.Status == 1).ToList();
-
-                    foreach (var cartItemDetail in cartItemToBill)
+                    if (request.Usename == null)
                     {
-                        var billDetail = new BillDetail
+                        foreach (var x in request.CartItem)
                         {
-                            Id = Guid.NewGuid(),
-                            Code = bill.InvoiceCode + RamdomString.GenerateRandomString(6),
-                            CodeProductDetail = cartItemDetail.MaProductDetail,
-                            Price = cartItemDetail.Price,
-                            Quantity = cartItemDetail.Quantity,
-                            BillId = bill.Id
-                        };
+                            var billDetail = new BillDetail
+                            {
+                                Id = Guid.NewGuid(),
+                                Code = bill.InvoiceCode + RamdomString.GenerateRandomString(6),
+                                CodeProductDetail = x.MaProductDetail,
+                                Price = x.Price,
+                                Quantity = x.Quantity,
+                                BillId = bill.Id
+                            };
 
-                        await _billDetailRepository.CreateBillDetail(billDetail);
+                            await _billDetailRepository.CreateBillDetail(billDetail);
+                        }
+
                     }
+                    else
+                    {
+                        var cartItemToBill = cartItem.Where(x => x.Status == 1).ToList();
+                        foreach (var cartItemDetail in cartItemToBill)
+                        {
+                            var billDetail = new BillDetail
+                            {
+                                Id = Guid.NewGuid(),
+                                Code = bill.InvoiceCode + RamdomString.GenerateRandomString(6),
+                                CodeProductDetail = cartItemDetail.MaProductDetail,
+                                Price = cartItemDetail.Price,
+                                Quantity = cartItemDetail.Quantity,
+                                BillId = bill.Id
+                            };
+
+                            await _billDetailRepository.CreateBillDetail(billDetail);
+                        }
+                    }
+
 
                     return SuccessResponse(bill, $"{bill.InvoiceCode}");
                 }
