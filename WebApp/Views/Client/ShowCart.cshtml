@@ -4,6 +4,9 @@
     string username = ViewContext.HttpContext.Session.GetString("username");
     double thanhTien = 0;
     double tongTien = 0;
+    string fullname = ViewContext.HttpContext.Session.GetString("full_name");
+    string phoneNumber = ViewContext.HttpContext.Session.GetString("phoneNumber");
+    string address = ViewContext.HttpContext.Session.GetString("address");
 }
 <style>
     .container{
@@ -92,15 +95,15 @@
                        
                             <div class="mb-3">
                                 <label class="form-label">Họ và tên</label>
-                                <input type="text" name="FullName" class="form-control">
+                                <input type="text" name="FullName" class="form-control" value="@fullname">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Địa chỉ</label>
-                                <input type="text" name="Address" class="form-control">
+                                <input type="text" name="Address" class="form-control" value="@address">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Số điện thoại</label>
-                                <input type="text" name="PhoneNumber" class="form-control">
+                                <input type="text" name="PhoneNumber" class="form-control" value="@phoneNumber">
                             </div>
                         
                     </div>
