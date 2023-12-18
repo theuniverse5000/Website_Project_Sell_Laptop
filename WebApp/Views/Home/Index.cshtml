@@ -1,15 +1,18 @@
 ﻿@using Shop_Models.Dto
 @using Shop_Models.Entities;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     List<ProductDetailDto> productDetails = ViewBag.ProductDetails;
         List<ImageDto> images = ViewBag.Image;
     List<SanPhamGiamGiaDto> sanPhamGiamGias = ViewBag.SanPhamGiamGia;
     List<GiamGia> giamGias = ViewBag.GiamGia;
-
-
-
 }
-<div class=" row">
+<style>
+    .container{
+        max-width: 1450px !important;
+    }
+</style>
+<div class="row">
     <div class="carousel col-sm-12 col-md-6">
         <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -114,7 +117,7 @@
     <span style="font-weight: 500;font-size: larger; color: rgb(52, 52, 52);">Chọn  theo nhu cầu</span>
     <!-- danh mục loại sản phẩm -->
     <div class="categories-content-wrapper is-flex">
-        <div class="item-categories-outer" style="margin-top: 15px;">
+        <div class="item-categories-outer" style="margin-top: 15px; justify-content:center">
             <div class="item-box">
                 <a>
                     <span>Văn Phòng</span>
@@ -148,7 +151,7 @@
         </div>
     </div>
     <!-- sản phẩm hot-sale -->
-    <div class="block-hot-sale">
+   @*  <div class="block-hot-sale">
         <div class="block-tittle">
             <b>SĂN NGAY DEAL SỐC  </b>
             <i class="fa-solid fa-bolt" style="margin-left: 15px; color: yellow;transform: rotate(10deg);font-size: 90px;"></i>
@@ -182,7 +185,7 @@
 
 
         </div>
-    </div>
+    </div> *@
 
 @*     <section class="product-home-deal">
         <div class="container">
@@ -316,7 +319,7 @@
                     <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
                 </a>
             </div>
-            <div class="product-box  col-sm-3" ">
+            <div class="product-box  col-sm-3">
                 <a>
                     <img src="./img/Products/text_d_i_5__1 1.png">
                     <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
@@ -338,7 +341,7 @@
                     <span>Giảm ngay 600.000đ khi mở thẻ TPBANK EVO</span>
                 </a>
             </div>
-            <div class="product-box  col-sm-3" ">
+            <div class="product-box  col-sm-3">
                 <a>
                     <img src="./img/Products/text_d_i_5__1 1.png">
                     <b>Laptop Asus VivoBook 15 OLED A1505VA-L1114W</b>
@@ -386,26 +389,67 @@
         </div>
     </div>
 
-    </div>
+    <section>
+        <div class="categories-boxs-name">
+            <div class="box-names-title">
+                <b>LINH KIỆN - PHỤ KIỆN</b>
+            </div>
+        </div>
+        <div class="rp-mobi py-5 container">
+            <div class="row List-products-2">
+                @foreach (var t in ViewBag.LinhKien)
+                {
+                    <div class="col-md-3 col-sm-3">
+                        <div class="product-box">
+
+                            @if (t.LinkImage != null)
+                            {
+                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+
+                                <br />
+                            }
+                            else
+                            {
+                                <img class="width-330" src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" />
+
+                                <br />
+                            }
+                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">
+                                @t.NameProduct @t.Code
+                            </a>
+                          
+                            <div class="Product-price">
+                                <span>@t.Price.ToString("N0") </span>
+                                <p>@t.ImportPrice.ToString("N0")</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+        <br />
+    </section>
     <div class="container">
         <!-- Swiper -->
         <div class="loi-ich ">
             <div class="swiper mySwiper ">
                 <div class="swiper-wrapper pd-top-40">
                     <div class="swiper-slide swiper1 text-center">
-                        <img src="./Images/imageSwipper1.png" class="iconSwipper1" />
+                        <img src="/Images/imageSwipper1.png" class="iconSwipper1" />
                         <h2>Gắn kết khách hàng</h2>
                         <p> Đem đến sự chuyên nghiệp và trải nghiệm dịch vụ tốt nhất cho khách. </p>
                     </div>
                     <div class="swiper-slide swiper2 text-center">
-                        <img src="./Images/imageSwipper2.png" class="iconSwipper2" />
+                        <img src="/Images/imageSwipper2.png" class="iconSwipper2" />
                         <h2>Điều phối lịch hẹn</h2>
                         <p>
                             Không còn lo lắng khi quên lịch hẹn với khách hàng.
                         </p>
                     </div>
                     <div class="swiper-slide swiper1 text-center">
-                        <img src="./Images/imageSwipper3.png" class="iconSwipper3">
+                        <img src="/Images/imageSwipper3.png" class="iconSwipper3">
                         <h2 class="pd-top-30">Quản lý hiệu quả</h2>
                         <p>
                             Giúp nhân viên tăng năng xuất làm việc. Quản lý

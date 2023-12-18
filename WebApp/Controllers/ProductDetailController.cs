@@ -43,7 +43,7 @@ namespace WebApp.Controllers
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
             {
-                HttpResponseMessage response = await client.GetAsync($"/api/ProductDetail/PGetProductDetail?codeProductDetail={code}&status=1");
+                HttpResponseMessage response = await client.GetAsync($"/api/ProductDetail/PGetProductDetail?codeProductDetail={code}");
 
                 if (response.IsSuccessStatusCode)
                 {
