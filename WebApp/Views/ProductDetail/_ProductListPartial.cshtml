@@ -1,0 +1,53 @@
+﻿@using Shop_Models.Dto;
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration;
+@model List<ProductDetailDto>
+@using X.PagedList
+
+@{
+    IPagedList<ProductDetailDto> managePost = ViewBag.ManagePost;
+}
+
+    @foreach (var t in Model)
+    {
+       
+            <div class="col-md-3 col-sm-3 pd-bt-20">
+                <div class="card card-product">
+                    @if (t.LinkImage != null)
+                    {
+                        <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" class="img-thumbnail img-product" />
+                    }
+                    else
+                    {
+                        <img src="@Configuration.GetSection("UrlApiAdmin").Value/images/NoImage.png" alt="Product Image" class="img-thumbnail img-product" />
+                    }
+
+                    <div class="card-body">
+                        <p class="card-text ">
+                            <a class="no-underline" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@t.Code" asp-route-name="@t.NameProduct">[Mới 100%]* @t.NameProduct @t.Code (@t.TenCpu,@t.ThongSoRam, @t.ThongSoHardDrive,@t.TenCardVGA @t.ThongSoCardVGA,@t.KichCoManHinh @t.TanSoManHinh @t.ChatLieuManHinh )  </a>
+                            <br>  <span style=" color: red;font-weight: bold;">@t.Price.ToString("N0")</span>
+                            <span style=" color: gray; text-decoration: line-through; ">@t.ImportPrice.ToString("N0")</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+    }
+@* 
+<!-- Pagination -->
+<div class="text-center">
+    @if (managePost.HasPreviousPage)
+    {
+        <a href="@Url.Action("ShowListProductDetailLoc", new { page = managePost.PageNumber - 1 })" class="btn btn-primary">Trang Đầu</a>
+    }
+    @for (int i = 1; i <= managePost.PageCount; i++)
+    {
+        <a href="@Url.Action("ShowListProductDetailLoc", new { page = i })" class="btn @(i == managePost.PageNumber ? "btn-primary" : "btn-secondary")">@i</a>
+    }
+    @if (managePost.HasNextPage)
+    {
+        <a href="@Url.Action("ShowListProductDetailLoc", new { page = managePost.PageNumber + 1 })" class="btn btn-primary">Trang Kế</a>
+    }
+</div>
+
+<p class="text-center">Trang @managePost.PageNumber trong @managePost.PageCount</p> *@
+

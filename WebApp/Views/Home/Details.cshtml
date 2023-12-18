@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="product-card">
-                <img src="@Model.LinkImage" class="product-image" alt="Manage Image">
+                <p class="product-image" alt="Manage Image">@Html.Raw(Model.LinkImage)</p>
                 <div class="product-details">
                     <h3 class="product-title">@Model.Code</h3>
                     <p class="product-description">@Html.Raw(Model.Description)</p>
