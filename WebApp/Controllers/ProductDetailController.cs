@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shop_Models.Dto;
+using Shop_Models.Entities;
+using X.PagedList;
 
 namespace WebApp.Controllers
 {
@@ -28,7 +30,7 @@ namespace WebApp.Controllers
                 var Respone = apiRespone.ToString();
                 var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
                 var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
-                ViewBag.ListProduct = content;
+                ViewBag.ListProduct = content;             
                 return View();
             }
             catch (Exception)
@@ -62,5 +64,46 @@ namespace WebApp.Controllers
                 return View();
             }
         }
+
+        //[HttpGet("sản-phẩm")]
+        public async Task<IActionResult> ShowListProductDetailLoc([FromQuery] string? searchString,int? page, string? productType, string? namufacturerz, double? from, double? to)
+        {
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
+                var apiUrl = $"/api/ProductDetail/PGetProductDetail?status=1&search={searchString}&page={page}&productType={productType}&hangsx={namufacturerz}&from={from}&to={to}";
+                var apiRespone = await httpClient.GetStringAsync(apiUrl);
+                var Respone = apiRespone.ToString();
+                var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);
+                var content = JsonConvert.DeserializeObject<List<ProductDetailDto>>(responeModel.Result.ToString());
+                ViewBag.ListProduct = content;
+               
+                // Specify the page number and page size (4 records per page)
+                int pageNumber = page ?? 1;
+                int pageSize = 6;
+
+                // Create a paged list
+                var pagedList = content.ToPagedList(pageNumber, pageSize);
+                ViewBag.ManagePost = pagedList;
+
+
+                //// Specify the page number and page size (... records per page)
+                //int pageNumber = page ?? 1;
+                //int pageSize = 10;
+                //// Create a paged list
+                //var pagedList = content.ToPagedList(pageNumber, pageSize);
+                //ViewBag.ListPhanTrang = pagedList;
+
+
+                // Return the partial view with the filtered product list
+                return PartialView("_ProductListPartial", content);
+            }
+            catch (Exception)
+            {
+                return View("Error");
+                throw;
+            }
+        }
+
     }
 }

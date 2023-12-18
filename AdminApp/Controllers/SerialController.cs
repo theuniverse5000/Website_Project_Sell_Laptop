@@ -19,6 +19,10 @@ namespace AdminApp.Controllers
         }
         public IActionResult Index()
         {
+            if (Request.Cookies["account"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         //public async Task<IActionResult> ImportProductsFromExcel(IFormFile excelFile)

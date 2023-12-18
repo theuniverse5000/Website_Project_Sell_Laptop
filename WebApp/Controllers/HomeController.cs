@@ -92,20 +92,23 @@ namespace WebApp.Controllers
             return PartialView("_Detail", productDetails.FirstOrDefault());
 
         }
-
-        public async Task<IActionResult> GetAllManagePost(int? page)
+        //[Route("tintucsukien")]
+        public async Task<IActionResult> GetAllManagePost(int? page,bool status)
         {
             try
             {
                 using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpWeb"))
                 {
-                    string getAll = await client.GetStringAsync("/api/ManagePost/GGetManagePostDtosFSP");
+                    status = true;
+                    string getAll = await client.GetStringAsync($"https://localhost:44333/api/ManagePost/GGetManagePostDtosFSP?status={status}");
+                
+
                     var responeModel = JsonConvert.DeserializeObject<ResponseDto>(getAll);
                     var managePosts = JsonConvert.DeserializeObject<List<ManagePost>>(responeModel.Result.ToString());
 
                     // Specify the page number and page size (4 records per page)
                     int pageNumber = page ?? 1;
-                    int pageSize = 4;
+                    int pageSize = 6;
 
                     // Create a paged list
                     var pagedList = managePosts.ToPagedList(pageNumber, pageSize);

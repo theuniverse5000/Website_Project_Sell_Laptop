@@ -50,6 +50,14 @@
         });
     });
 
+    $(document).ready(function () {
+        $('#linkimage').summernote({
+            toolbar: [
+                ['picture'],
+            ],
+        });
+    });
+
 </script>
 
 
@@ -87,9 +95,6 @@
             <div class="modal-body">
                 <p id="resultMessage"></p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-            </div>
         </div>
     </div>
 </div>
@@ -108,7 +113,7 @@
             </div>
             <div class=" col-md-3">
                 <label asp-for="LinkImage">LinkImage</label>
-                <input asp-for="LinkImage" class="form-control" placeholder="nhap LinkImage " />
+                <textarea asp-for="LinkImage" id="linkimage"></textarea>
                 <span asp-validation-for="LinkImage" class="text-danger"></span>
             </div>
         </div>
@@ -122,7 +127,8 @@
                 Vui lòng nhập nội dung trường này.
             </div>
         </div>
-        <button class="btn btn-primary" id="saveButton">Lưu</button>
+        <button class="btn btn-primary" id="saveButton" type="submit">Lưu</button>
+        <a class="btn btn-danger" href="/ManagePost">Thoát</a>
     </form>
 </div>
 
@@ -138,12 +144,20 @@
                     url: $("#saveForm").attr("action"),
                     data: $("#saveForm").serialize(),
                     success: function (response) {
-                        if (response.success) {
+                        console.log(response);
+                        if (response.success == true) {
                             // Nếu lưu thành công, cập nhật nội dung của modal và hiển thị modal
                             $("#resultMessage").text("Lưu thành công").css("color", "green");
+                            // Reload the page or perform any other action
+                            setTimeout(function () {
+                                $("#resultModal").modal("hide");
+                            }, 3000);
+                            window.location.href = "/ManagePost";  // Reload the current page
                         } else {
                             // Nếu không lưu thành công, cập nhật nội dung của modal và hiển thị modal
-                            $("#resultMessage").text("Lưu thất bại").css("color", "red");
+                            $("#resultMessage").text("Lưu thất bại").css("color", "red"); setTimeout(function () {
+                                $("#resultModal").modal("hide");
+                            }, 3000);
                         }
                         // Hiển thị modal
                         $("#resultModal").modal("show");
@@ -154,25 +168,14 @@
                     }
                 });
 
-                // // Ngăn chặn chuyển hướng mặc định
+                // Ngăn chặn chuyển hướng mặc định
                 return false;
             } else {
                 // Nếu người dùng không muốn lưu, không làm gì cả
-                $.ajax({
-                    url: "/ManagePost/GetAll",
-                    type: "GET",
-                    dataType: "html",
-                    success: function (response) {
-
-                        $("#resultMessage").text("Huy luu thanh cong").css("color", "red");
-                        // Hiển thị modal
-                        $("#resultModal").modal("show");
-                        window.location.href = url;
-                    }
-                })
+                // Ngăn chặn chuyển hướng mặc định
+                /*  window.location.href = "/ManagePost"; */ // Redirect to the desired URL
+                return false;
             }
         });
     });
-
-
 </script>

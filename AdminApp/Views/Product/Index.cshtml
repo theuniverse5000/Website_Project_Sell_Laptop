@@ -3,7 +3,7 @@
 
 }
 <span id="notification" style="display:none;">222</span>
-<div id="example" style="width: 1300px; margin: 0 auto;">
+<div id="example">
     <div id="grid"></div>
 </div>
 <br />
@@ -120,7 +120,7 @@
                         name: "pdf",
                         text: "Xuất file PDF", /* Thay đổi văn bản của nút "Thêm" */
 
-                    },],
+                    }, "search"],
                 pdf: {
                     allPages: true,
                     avoidLinks: true,
@@ -133,7 +133,7 @@
                 },
                 editable: {
                     mode: "popup",
-                    window: { width: 550, height: 250 }, // Chỉnh chiều rộng ở đây
+                    window: { width: 550, height: 330 }, // Chỉnh chiều rộng ở đây
                 },
 
 
@@ -253,7 +253,37 @@
 
 
 
+<style>
+    #grid {
+        margin: 0;
+        padding: 0;
+        border-width: 0;
+        /* height: 100%; /* DO NOT USE !important for setting the Grid height! */ */ height: 900px;
+    }
 
+    .k-grid-content.k-auto-scrollable {
+        height: 650px !important;
+    }
+
+
+
+    /* Đặt kích thước modal mặc định */
+    .modal-dialog {
+        max-width: 90%;
+        width: auto;
+    }
+
+    /* Thiết lập thuộc tính cho việc kéo modal */
+    .modal-content {
+        overflow: hidden; /* Ngăn chặn nội dung bên ngoài khỏi modal */
+    }
+
+    /* Thiết lập kích thước của modal-body khi kéo */
+    .modal-body {
+        max-height: 80vh; /* Điều chỉnh kích thước tùy ý dựa trên nhu cầu của bạn */
+        overflow-y: auto;
+    }
+</style>
 
 
 

@@ -18,30 +18,59 @@ namespace AdminApp.Controllers
         }
         public IActionResult Index()
         {
+            if (Request.Cookies["account"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
 
         public IActionResult _75584461()
         {
+            if (Request.Cookies["account"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
-
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(bool? status)
         {
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 var accessToken = Request.Cookies["account"];
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                var reponse = await client.GetAsync($"/api/ManagePost/GetAllReturnReposon");
-                if (reponse.IsSuccessStatusCode)
+
+                // Sử dụng tham số status để tạo đường dẫn tương ứng
+                var statusQueryParam = status.HasValue ? $"?status={status}" : "";
+
+                var response = await client.GetAsync($"https://localhost:44333/api/ManagePost/GGetManagePostDtosFSP{statusQueryParam}");
+
+                if (response.IsSuccessStatusCode)
                 {
-                    var result = await reponse.Content.ReadAsStringAsync();
+                    var result = await response.Content.ReadAsStringAsync();
                     return Content(result, "application/json");
                 }
+
                 return Json(null);
             }
         }
+
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
+        //    {
+        //        var accessToken = Request.Cookies["account"];
+        //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        //        var reponse = await client.GetAsync($"/api/ManagePost/GetAllReturnReposon");
+        //        if (reponse.IsSuccessStatusCode)
+        //        {
+        //            var result = await reponse.Content.ReadAsStringAsync();
+        //            return Content(result, "application/json");
+        //        }
+        //        return Json(null);
+        //    }
+        //}
 
 
         public async Task<IActionResult> Create(ManagePost obj)
@@ -63,6 +92,10 @@ namespace AdminApp.Controllers
         public  IActionResult CreateWithOtherPage()
         {
 
+            if (Request.Cookies["account"] == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
 
         }
@@ -77,8 +110,9 @@ namespace AdminApp.Controllers
                 var reponse = await client.PostAsJsonAsync($"/api/ManagePost/CreateMP", obj);
                 if (reponse.IsSuccessStatusCode)
                 {
-                    return View("Index");
-                }else return View();
+                    return Json(new { success = true });
+                }
+                else return Json(new { success = false }); ;
               
 
             }
@@ -104,13 +138,6 @@ namespace AdminApp.Controllers
         [HttpPost]
         public async Task<IActionResult> DetailsManagePost(ManagePost obj)
         {
-            
-            //ManagePost updateObj = new ManagePost();
-            //updateObj.Code = obj.Code;
-            //updateObj.LinkImage = obj.LinkImage;
-            //updateObj.CreateDate = obj.CreateDate;
-            //updateObj.Description = obj.Description;
-            //updateObj.Status = obj.Status;
             using (var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
             {
                 var accessToken = Request.Cookies["account"];
@@ -122,11 +149,38 @@ namespace AdminApp.Controllers
                     return Json(new { success = true });
                 }
                 else {
-                    
-                    return Json(null);
+
+                    return Json(new { success = false });
                 }
             }
 
         }
+
+        public async Task<JsonResult> DeleteManage(ManagePost p)
+        {
+            string? apiKey = _config.GetSection("TokenGetApiAdmin").Value;
+            string? urlApi = _config.GetSection("UrlApiAdmin").Value;
+            using (HttpClient client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin"))
+            {
+                var accessToken = Request.Cookies["account"];
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                HttpResponseMessage response = await client.DeleteAsync($"https://localhost:44333/api/ManagePost/id?id={p.Id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    ViewBag.CartItem = result;
+                   
+                    return Json(new { status = "success" });
+                }
+                else
+                {
+                    
+                    return Json(new { status = "error" });
+                }
+
+            }
+        }
+
+
     }
 }

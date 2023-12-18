@@ -16,7 +16,8 @@ namespace Shop_API.Repository
         }
         public async Task<bool> Create(ManagePost managePost)
         {
-            if (managePost == null)
+            var check = await _dbContext.ManagePosts.FirstOrDefaultAsync(x=>x.Code==managePost.Code);
+            if (managePost == null || check !=null)
             {
                 return false;
             }
@@ -32,6 +33,82 @@ namespace Shop_API.Repository
             }
         }
 
+        public async Task<ResponseDto> Duyet(Guid Id)
+        {
+            var obj = await _dbContext.ManagePosts.FindAsync(Id);
+            if (obj == null)
+            {
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Không tìm thấy bài viết",
+                };
+            }
+            try
+            {
+                obj.Status = true;
+                _dbContext.ManagePosts.Update(obj);
+                await _dbContext.SaveChangesAsync();
+                return new ResponseDto
+                {
+                    Result = obj,
+                    IsSuccess = false,
+                    Code = 200,
+                    Message = "Duyệt thành công",
+                };
+            }
+            catch (Exception)
+            {
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 500,
+                    Message = "Lỗi hệ thống",
+                };
+            }
+        }
+
+        public async Task<ResponseDto> HuyDuyet(Guid Id)
+        {
+            var obj = await _dbContext.ManagePosts.FindAsync(Id);
+            if (obj == null)
+            {
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Không tìm thấy bài viết",
+                };
+            }
+            try
+            {
+                obj.Status = false;
+                _dbContext.ManagePosts.Update(obj);
+                await _dbContext.SaveChangesAsync();
+                return new ResponseDto
+                {
+                    Result = obj,
+                    IsSuccess = false,
+                    Code = 200,
+                    Message = "Hủy duyệt Thành Công",
+                };
+            }
+            catch (Exception)
+            {
+                return new ResponseDto
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Code = 500,
+                    Message = "Lỗi hệ thống",
+                };
+            }
+        }
+
         public async Task<bool> Delete(Guid Id)
         {
             var obj = await _dbContext.ManagePosts.FindAsync(Id);
@@ -42,7 +119,7 @@ namespace Shop_API.Repository
             try
             {
                 obj.Status = false;
-                _dbContext.ManagePosts.Update(obj);
+                _dbContext.ManagePosts.Remove(obj);
                 await _dbContext.SaveChangesAsync();
                 return true;
             }
@@ -51,6 +128,8 @@ namespace Shop_API.Repository
                 return false;
             }
         }
+
+
 
         public async Task<List<ManagePost>> GetAllManagePosts()
         {
@@ -94,7 +173,7 @@ namespace Shop_API.Repository
             }
         }
 
-        public async Task<IEnumerable<ManagePost>> GetManagePostDtos(string? search, DateTime? from, DateTime? to, string? sortBy, int page = 1)
+        public async Task<IEnumerable<ManagePost>> GetManagePostDtos(string? search, DateTime? from, DateTime? to, string? sortBy,bool? status, int page = 1)
         {
             var query = _dbContext.ManagePosts
                 .AsNoTracking()
@@ -106,7 +185,7 @@ namespace Shop_API.Repository
                     CreateDate = a.CreateDate,
                     LinkImage = a.LinkImage,
                     Description = a.Description,
-                    Status = a.Status,                  
+                    Status = a.Status,
 
                 });
 
@@ -125,7 +204,11 @@ namespace Shop_API.Repository
                 query = query.Where(x => x.CreateDate <= to);
             }
             #endregion
-
+        
+            if (status.HasValue)
+            {
+                query = query.Where(x => x.Status == status.Value);
+            }
             #region Sorting
             //if (!string.IsNullOrEmpty(sortBy))
             //{
