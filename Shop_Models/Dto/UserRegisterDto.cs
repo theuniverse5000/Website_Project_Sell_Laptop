@@ -29,6 +29,8 @@ namespace Shop_Models.Dto
         [Compare("Password",ErrorMessage = "Mật khẩu lặp lại không chính xác")]
         public string ConfirmPassword { get; set; }
         public string FullName { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
         public bool IsAdmin { get; set; }
     }
 }

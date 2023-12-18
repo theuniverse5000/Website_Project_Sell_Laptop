@@ -61,13 +61,15 @@ public class LoginController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> AccountSignUp(string userName, string email, string password, string fullName)
+    public async Task<IActionResult> AccountSignUp(string userName, string email, string password, string fullName, string phoneNumber, string address)
     {
         UserRegisterDto userLogin = new UserRegisterDto();
         userLogin.UserName = userName;
         userLogin.Email = email;
         userLogin.Password = password;
         userLogin.FullName = fullName;
+        userLogin.PhoneNumber = phoneNumber;
+        userLogin.Address = address;
         userLogin.IsAdmin = false;
         var apiUrl = "https://localhost:44333/User/Register";
         var httpclient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
