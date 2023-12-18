@@ -140,21 +140,12 @@ namespace Shop_API.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> ChangeContactInfo([FromBody] ChangeContactInfoDto dto)
+        public async Task<IActionResult> ChangeAddress([FromBody] ChangeAddressDto dto)
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
-            // Update address if provided
-            if (!string.IsNullOrEmpty(dto.NewAddress))
-            {
-                currentUser.Address = dto.NewAddress;
-            }
-
-            // Update phone number if provided
-            if (!string.IsNullOrEmpty(dto.NewPhoneNumber))
-            {
-                currentUser.PhoneNumber = dto.NewPhoneNumber;
-            }
+            // Update the address
+            currentUser.Address = dto.NewAddress;
 
             // Save changes
             var result = await _userManager.UpdateAsync(currentUser);
@@ -164,7 +155,27 @@ namespace Shop_API.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return Ok(new { Message = "Contact information changed successfully" });
+            return Ok(new { Message = "Address changed successfully" });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ChangePhoneNumber([FromBody] ChangePhoneNumberDto dto)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            // Update the phone number
+            currentUser.PhoneNumber = dto.NewPhoneNumber;
+
+            // Save changes
+            var result = await _userManager.UpdateAsync(currentUser);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok(new { Message = "Phone number changed successfully" });
         }
 
         [HttpPost]

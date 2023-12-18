@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Shop_Models.Dto
 {
-    public class ChangeContactInfoDto
+    public class ChangeAddressDto
     {
         public string NewAddress { get; set; }
-        public string NewPhoneNumber { get; set; }
     }
 }
