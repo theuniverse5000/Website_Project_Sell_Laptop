@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using Shop_API.Constants;
 using Shop_API.Helpers;
+using Shop_API.Repository;
 using Shop_API.Repository.IRepository;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace Shop_API.Controllers
 {
@@ -13,11 +17,20 @@ namespace Shop_API.Controllers
     {
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _config;
+        private readonly IPagingRepository _iPagingRepository;
+        private readonly ResponseDto _reponse;
+        private readonly IUserRepository _repository;
 
-        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager)
+
+        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager, IUserRepository repository, IConfiguration config, IPagingRepository iPagingRepository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _repository = repository;
+            _config = config;
+            _reponse = new ResponseDto();
+            _iPagingRepository = iPagingRepository;
         }
 
         [HttpPost]
@@ -65,5 +78,16 @@ namespace Shop_API.Controllers
 
             return Ok(response);
         }
+
+
+        [HttpGet]
+        public IActionResult GetUsersFSP(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            _reponse.Result = _iPagingRepository.GetAllUser(search, from, to, sortBy, page);
+            var count = _reponse.Count = _iPagingRepository.GetAllUser(search, from, to, sortBy, page).Count;
+            return Ok(_reponse);
+        }
+
+
     }
 }

@@ -400,6 +400,50 @@ namespace Shop_API.Repository
                 Status = hh.TrangThai,
             }).ToList();
         }
+        public List<UserDto> GetAllUser(string? search, double? from, double? to, string? sortBy, int page)
+        {
+            var allUser = _context.Users.Where(x => x.Status > 0).AsQueryable();
+
+
+            #region Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                allUser = allUser.Where(pt => pt.FullName.Contains(search));
+            }
+            //if (from.HasValue)
+            //{
+            //    allRams = allRams.Where(hh => hh.Status >= from);
+            //}
+            //if (to.HasValue)
+            //{
+            //    allRams = allRams.Where(hh => hh.Status <= to);
+            //}
+            #endregion
+
+            #region Sorting
+            //Default sort by Name 
+            allUser = allUser.OrderBy(hh => hh.FullName);
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+
+                allUser = allUser.OrderByDescending(hh => hh.FullName); /*break;*/
+
+            }
+            #endregion
+
+            //var result = PaginatedList<MyWebApiApp.Data.HangHoa>.Create(allProducts, page, PAGE_SIZE);
+
+            //var result = allProducts = allProducts.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            int totalCount = allUser.Count();
+
+
+            return allUser.Select(hh => new UserDto
+            {
+                Id = hh.Id,
+                Username = hh.UserName,
+                Name = hh.FullName,    
+            }).ToList();
+        }
 
         public List<ProductDto> GetAllProduct(string? search, double? from, double? to, string? sortBy, int page)
         {
