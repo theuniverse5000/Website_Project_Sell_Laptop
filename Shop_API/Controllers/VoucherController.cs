@@ -10,7 +10,7 @@ namespace Shop_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public class VoucherController : ControllerBase
     {
         private readonly IVoucherRepository _repository;
@@ -104,6 +104,27 @@ namespace Shop_API.Controllers
             }
             return BadRequest(response);
         }
+        [HttpPut("UpdateSL")]
+        public async Task<IActionResult> UpdateSLVoucher(string codeVoucher)
+        {
+
+            string apiKey = _config.GetSection("ApiKey").Value;
+            if (apiKey == null)
+            {
+                return Unauthorized();
+            }
+
+            var keyDomain = Request.Headers["Key-Domain"].FirstOrDefault();
+            if (keyDomain != apiKey.ToLower())
+            {
+                return Unauthorized();
+            }
+            if (await _repository.UpdateSL(codeVoucher))
+                return Ok();
+            return BadRequest();
+
+        }
+
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteRam(Guid id)
         {

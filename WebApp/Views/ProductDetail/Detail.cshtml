@@ -142,9 +142,9 @@
                 </div>
                 <div class="col-md-4 col-sm-4">             
                             <div class="mb-3">
-                                <span class="h5">Giá bán: @t.Price.ToString("N0")</span>
-                                <span class="text-muted">@t.ImportPrice.ToString("N0")</span><br>
-                                <span class="h5">Bảo hành: 12 Tháng</span><br>
+                        <span class="h5">Giá bán: @t.ImportPrice.ToString("N0")</span>
+                        <span class="text-muted"><del>@t.Price.ToString("N0")</del></span><br>
+                        <span class="h5">Bảo hành: 12 Tháng</span><br>
                                 @if (t.AvailableQuantity > 0)
                                 {
                                     tinhTrangSoLuong = "Còn hàng";
@@ -169,7 +169,7 @@
                                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedDisabled" checked disabled>
                                
                                 <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
-                                    <label class="form-check-label" for="flexSwitchCheckDefault">@k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive</label>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">@k.TenCpu,@k.ThongSoRam, @k.ThongSoHardDrive</label>
                                 </a>
                             </div>
                         }
@@ -179,7 +179,7 @@
                                 <input class="form-check-input" type="checkbox" disabled>
 
                                 <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
-                                    <label class="form-check-label" for="flexSwitchCheckDefault">@k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive</label>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">@k.TenCpu,@k.ThongSoRam, @k.ThongSoHardDrive</label>
                                 </a>
                             </div>
                           

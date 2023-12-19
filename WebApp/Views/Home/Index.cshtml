@@ -208,7 +208,7 @@
                                 <div class="item">
                                     <div class="p-container">
                                         <a class="p-img" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@giamgiai.ProductDetailCode" asp-route-name="@giamgiai.ProductDetailName">
-                                            <img src=" @Configuration.GetSection("UrlApiAdmin").Value@Url.Content(@giamgiai.LinkImage)">
+                                            <img style="width:300px" src=" @Configuration.GetSection("UrlApiAdmin").Value@Url.Content(@giamgiai.LinkImage)">
 
                                             <span class="percent">-@giamgia.ToString("0.")%</span>
                                         </a>
@@ -303,7 +303,7 @@
 
                             @if (t.LinkImage != null)
                             {
-                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <img style="width:300px" src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
                                 <br />
                             }
                             else
@@ -329,7 +329,8 @@
                             </div>
 
                             <div class="Product-price">
-                                <span>@t.Price.ToString("N0") </span>
+                                <span>@t.ImportPrice.ToString("N0") </span>
+                                <p>@t.Price.ToString("N0")</p>
                             </div>
 
                         </div>
@@ -376,7 +377,7 @@
 
                             @if (t.LinkImage != null)
                             {
-                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <img style="width:300px" src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
                                 <br />
                             }
                             else
@@ -402,8 +403,8 @@
                             </div>
 
                             <div class="Product-price">
-                                <span>@t.Price.ToString("N0") </span>
-                                <p>@t.ImportPrice.ToString("N0")</p>
+                                <span>@t.ImportPrice.ToString("N0") </span>
+                                <p>@t.Price.ToString("N0")</p>
                             </div>
 
                         </div>
@@ -457,7 +458,7 @@
 
                             @if (t.LinkImage != null)
                             {
-                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <img style="width:300px" src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
                                 <br />
                             }
                             else
@@ -483,8 +484,8 @@
                             </div>
 
                             <div class="Product-price">
-                                <span>@t.Price.ToString("N0") </span>
-                                <p>@t.ImportPrice.ToString("N0")</p>
+                                <span>@t.ImportPrice.ToString("N0") </span>
+                                <p>@t.Price.ToString("N0")</p>
                             </div>
 
                         </div>
@@ -536,7 +537,7 @@
 
                             @if (t.LinkImage != null)
                             {
-                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <img style="width:300px" src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
                                 <br />
                             }
                             else
@@ -562,8 +563,8 @@
                             </div>
 
                             <div class="Product-price">
-                                <span>@t.Price.ToString("N0") </span>
-                                <p>@t.ImportPrice.ToString("N0")</p>
+                                <span>@t.ImportPrice.ToString("N0") </span>
+                                <p>@t.Price.ToString("N0")</p>
                             </div>
 
                         </div>
@@ -611,7 +612,7 @@
 
                             @if (t.LinkImage != null)
                             {
-                                <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                                <img style="width:300px" src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
                                 <br />
                             }
                             else
@@ -637,7 +638,8 @@
                             </div>
 
                             <div class="Product-price">
-                                <span>@t.Price.ToString("N0") </span>
+                                <span>@t.ImportPrice.ToString("N0") </span>
+                                <p>@t.Price.ToString("N0")</p>
                             </div>
 
                         </div>
@@ -692,8 +694,8 @@
                             </a>
 
                             <div class="Product-price">
-                                <span>@t.Price.ToString("N0") </span>
-                                <p>@t.ImportPrice.ToString("N0")</p>
+                                <span>@t.ImportPrice.ToString("N0") </span>
+                                <p>@t.Price.ToString("N0")</p>
                             </div>
 
                         </div>
@@ -716,18 +718,16 @@
                     </div>
                     <div class="swiper-slide swiper2 text-center">
                         <img src="/Images/imageSwipper2.png" class="iconSwipper2" />
-                        <h2>Điều phối lịch hẹn</h2>
+                        <h2>Tối ưu thời gian mua sắm</h2>
                         <p>
-                            Không còn lo lắng khi quên lịch hẹn với khách hàng.
+                            Không còn lo lắng khi không có thời gian mua hàng trực tiếp.
                         </p>
                     </div>
                     <div class="swiper-slide swiper1 text-center">
                         <img src="/Images/imageSwipper3.png" class="iconSwipper3">
-                        <h2 class="pd-top-30">Quản lý hiệu quả</h2>
+                        <h2 class="pd-top-30">Bảo hành lâu dài</h2>
                         <p>
-                            Giúp nhân viên tăng năng xuất làm việc. Quản lý
-                            hiệu
-                            quả từ xa
+                           Khách hàng yên tâm khi mua sản phẩm của chúng tôi
                         </p>
                     </div>
                 </div>
