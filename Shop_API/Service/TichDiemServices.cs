@@ -827,18 +827,6 @@ namespace Shop_API.Service
 
                 return _reponseDto;
             }
-            //else if (billT.Status != 4 && billT.Status != 6 && billT.Status != 7)
-            //{
-            //    // Existing code for handling errors
-            //}
-            //else if (SoDiemMuonDung> viDiem.TongDiem)
-            //{
-            //    _reponseDto.Code = 405;
-            //    _reponseDto.Message = "Số điểm muốn dùng không thể lớn hơn tổng điểm hiện có";
-            //    _reponseDto.IsSuccess = false;
-
-            //    return _reponseDto;
-            //}
             else
             {
                 var user = await _userRepository.GetUserById(billT.UserId);
