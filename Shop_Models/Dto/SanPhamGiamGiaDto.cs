@@ -16,6 +16,7 @@ namespace Shop_Models.Dto
         public int TrangThai { get; set; }
         public Guid ProductDetailId { get; set; }
         public Guid GiamGiaId { get; set; }
+        public int AvailableQuantity { get; set; }
         public string? ProductDetailCode { get; set; }
         public string? ProductDetailName { get; set; }
         public string? GiamGiaCode { get; set; }

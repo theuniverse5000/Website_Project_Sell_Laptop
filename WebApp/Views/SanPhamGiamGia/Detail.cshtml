@@ -155,6 +155,14 @@
                         <span class="h5">Giá bán: @t.SoTienConLai.ToString("N0")</span>
                         <span class="text-muted">@t.DonGia.ToString("N0")</span><br>
                         <span class="h5">Bảo hành: 12 Tháng</span><br>
+                        @if (t.AvailableQuantity > 0)
+                        {
+                            tinhTrangSoLuong = "Còn hàng";
+                        }
+                        else
+                        {
+                            tinhTrangSoLuong = "Hết hàng";
+                        }
                         <span class="h5">Tình trạng: @tinhTrangSoLuong</span>
                     </div>
                     <p> Loại sản phẩm: @t.NameProductType </p>
@@ -167,43 +175,25 @@
                         if (t.ProductDetailCode == k.ProductDetailCode)
                         {
 
-                            <input type="radio" name="select" checked>
-                            <label>
-                                <div class="dot"></div>
-                                <span>
-                                    <a class="nav-link mb-1" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@k.ProductDetailCode" asp-route-name="@k.NameProduct">
-                                        @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
-                                    </a>
-                                </span>
-                            </label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedDisabled" checked disabled>
 
+                                <a class="nav-link mb-1" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@k.ProductDetailCode" asp-route-name="@k.NameProduct">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">@k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive</label>
+                                </a>
+                            </div>
                         }
                         else
                         {
-                            <div class="wrapper">
-                                <input type="radio" name="select">
-                                <label>
-                                    <div class="dot"></div>
-                                    <span>
-                                        <a class="nav-link mb-1" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@k.ProductDetailCode" asp-route-name="@k.NameProduct">
-                                            @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
-                                        </a>
-                                    </span>
-                                </label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" disabled>
+
+                                <a class="nav-link mb-1" asp-controller="SanPhamGiamGia" asp-action="Detail" asp-route-code="@k.ProductDetailCode" asp-route-name="@k.NameProduct">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">@k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive</label>
+                                </a>
                             </div>
-                            @*     <div class="px-0 border rounded-2 shadow-0">
-                <div class="d-flex">
-                <div class="info">
-                <a class="nav-link mb-1" asp-controller="ProductDetail" asp-action="Detail" asp-route-code="@k.Code" asp-route-name="@k.NameProduct">
-                @k.TenCpu,@k.ThongSoRam, @t.ThongSoHardDrive
-                </a>
-                <strong class="text-dark"> @k.Price.ToString("N0")</strong>
-                </div>
-                </div>
-                </div> *@
+
                         }
-
-
                     }
                     <a asp-controller="Client" asp-action="AddSanPhamGiamGiaToCart" asp-route-code="@t.ProductDetailCode" class="btn btn-warning shadow-0"> Mua ngay </a>
                 </div>

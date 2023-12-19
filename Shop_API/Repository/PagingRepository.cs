@@ -615,7 +615,9 @@ namespace Shop_API.Repository
                     .Where(image => image.ProductDetailId == hh.ProductDetailId && image.Ma == "Anh1")
                     .Select(image => image.LinkImage)
                     .FirstOrDefault(),
+                AvailableQuantity = hh.ProductDetail.Serials.Count(),
             }).ToList();
+
         }
 
         public List<GiamGia> GetAllGiamGia(string? search, double? from, double? to, string? sortBy, int page)
