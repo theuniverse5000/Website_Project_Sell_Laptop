@@ -534,5 +534,36 @@ img {
 }
 
 
+/* For larger screens */
+@media screen and (min-width: 769px) {
+    .box-home-deal .produt-list .item {
+        width: calc(20% - 10px);
+    }
 
+    .box-deal-list .deal-wrapper .tab-deal a {
+        margin-right: 20px;
+    }
+}
 
+/* For medium screens */
+@media screen and (max-width: 768px) {
+    .box-home-deal .produt-list .item {
+        width: calc(33.33% - 10px);
+    }
+
+    .box-deal-list .deal-wrapper .tab-deal a {
+        margin-right: 10px;
+    }
+}
+
+/* For smaller screens */
+@media screen and (max-width: 480px) {
+    .box-home-deal .produt-list .item {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .box-deal-list .deal-wrapper .tab-deal a {
+        margin-right: 10px;
+    }
+}
