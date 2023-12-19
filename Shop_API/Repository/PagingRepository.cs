@@ -607,7 +607,7 @@ namespace Shop_API.Repository
                 KichCoManHinh = hh.ProductDetail.Screen.KichCo,
                 TanSoManHinh = hh.ProductDetail.Screen.TanSo,
                 ChatLieuManHinh = hh.ProductDetail.Screen.ChatLieu,
-                NameProductType = hh.ProductDetail.Product.Name,
+                NameProductType = hh.ProductDetail.Product.ProductType.Name,
                 NameManufacturer = hh.ProductDetail.Product.Manufacturer.Name,
                 NameColor = hh.ProductDetail.Color.Name,
                 Description = hh.ProductDetail.Description,
@@ -615,7 +615,11 @@ namespace Shop_API.Repository
                     .Where(image => image.ProductDetailId == hh.ProductDetailId && image.Ma == "Anh1")
                     .Select(image => image.LinkImage)
                     .FirstOrDefault(),
-                AvailableQuantity = hh.ProductDetail.Serials.Count(),
+                OtherImages = _context.Images
+                    .Where(image => image.ProductDetailId == hh.ProductDetailId && image.Ma != "Anh1")
+                    .Select(image => image.LinkImage)
+                    .ToList(),
+                AvailableQuantity = hh.ProductDetail.Serials.Count,
             }).ToList();
 
         }
