@@ -100,13 +100,21 @@ namespace Shop_API.Controllers
             {
                 var user = await _userRepository.GetUserByUserName(usename);
                 var viDiem = await _viDiemRepository.GetViDiemById(user.Id);
-                var soDiemHienCo = viDiem.TongDiem - viDiem.SoDiemDaDung;
-                if (soDiemHienCo > 0) return Ok(new { soDiemHienCo });
-                else {
-                    soDiemHienCo = 0;
-                    return Ok(new { soDiemHienCo });
+                float soDiemHienCo = 0;
+                if (user != null) {
+
+                    if (soDiemHienCo > 0) {
+
+                        soDiemHienCo = (float)(viDiem.TongDiem - viDiem.SoDiemDaDung);
+                        return Ok(new { soDiemHienCo }); }
+                    else
+                    {
+                        soDiemHienCo = 0;
+                        return Ok(new { soDiemHienCo });
+                    }
                 }
-                    
+
+                return Ok(new { soDiemHienCo });
 
             }
             catch (Exception ex)

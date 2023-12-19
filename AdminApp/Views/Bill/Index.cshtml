@@ -14,13 +14,15 @@
             </div>
     </div>
 </div> *@
-@* <div id="myModal" class="modal fade" role="dialog" data-backdrop="static">
+<div id="myModal" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
-        <div class="modal-body">*@
-<div id="detailsGrid"></div>
-@*        </div>
+        <div id="detailsGrid"> <div id="TongTienThanhToan"></div></div>
+        <div class="modal-body">
+           
+           
+       </div>
     </div>
- </div> *@
+ </div>
 
 
 
@@ -189,7 +191,7 @@
 
                                     console.log(calculateTotalAmount(detailsData.result));
                                     // Update the value wherever you need it
-                                    $("#TongTienThanhToan").text("Tổng tiền thanh toán: " + totalAmount);
+                                    $("#TongTienThanhToan").text("Tổng tiền thanh toán: " + calculateTotalAmount(detailsData.result));
                                     // Create a new Kendo Grid for details
                                     var detailsGrid = $("#detailsGrid").kendoGrid({
                                         dataSource: {
@@ -197,7 +199,7 @@
                                         },
                                         columns: [
                                             {
-                                                field: "maProductDetail",
+                                                field: "codeProductDetail",
                                                 title: "Mã sản phẩm",
                                             },
                                             {
@@ -211,7 +213,7 @@
                                             {
                                                 field: "quantity",
                                                 title: "Số lượng",
-                                            },+
+                                            },
                                             {
                                                 command: [
                                                     {
@@ -257,35 +259,25 @@
                         // Trường hợp cập nhật
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
                         console.log(e.model.invoiceCode);
-                        // totalAmount = 25000000;
-                        // $.ajax({
-                        //     type: "POST",
-                        //     url: "https://localhost:44333/api/Bill/PGetBillByInvoiceCode?invoiceCode=" + e.model.invoiceCode,
-                        //     success: function (response) {
-                        //         console.log(response);
-                        //         if (response.code === 200) {
-                        //             showNotification(response.message, "success");
-                        //         } else {
-                        //             showNotification("laasy gia thanh cong thất bại", "error");
-                        //         }
-                        //     },
-                        //     error: function (xhr, status, error) {
-                        //         console.error(xhr.responseText);
-                        //         alert("Lỗi khi gọi API. Xem log để biết thêm chi tiết.");
-                        //     }
-                        // });
+                        
 
+                        if (status === 'success') {
+                            showNotification("Cập nhật thành công", "success");
+                            totalAmount = 25000000;
+                           
 
-
+                        } else {
+                            showNotification("Cập nhật thất bại", "error");
+                        }
                         $.ajax({
                             type: "POST",
-                            url: "https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync?invoiceCode=" + e.model.invoiceCode, /* + "&TongTienThanhToan=" + totalAmount */
+                            url: "https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync?invoiceCode=" + e.model.invoiceCode + "&TongTienThanhToan=" + totalAmount,
                             success: function (response) {
                                 console.log(response);
                                 if (response.code === 200) {
                                     showNotification(response.message, "success");
                                 } else {
-                                    showNotification("Cập nhật thất bại", "error");
+                                    showNotification(response.message, "error");
                                 }
                             },
                             error: function (xhr, status, error) {
@@ -293,15 +285,6 @@
                                 alert("Lỗi khi gọi API. Xem log để biết thêm chi tiết.");
                             }
                         });
-
-
-
-
-                        if (status === 'success') {
-                            showNotification("Cập nhật thành công", "success");
-                        } else {
-                            showNotification("Cập nhật thất bại", "error");
-                        }
                     } else if (e.model.isNew() && e.model.isDestroyed()) {
                         // Trường hợp xóa
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
@@ -359,14 +342,14 @@
                                     { text: "Chưa thanh toán - Chưa giao hàng", value: 2 },
                                     { text: "Chưa thanh toán - Đang giao hàng", value: 3 },
                                     { text: "Đã thanh toán - Chưa giao hàng", value: 4 },
-                                    { text: "Chưa thanh toán - Giao thất bại", value: 5},
-                                    { text: "Đã thanh toán - Giao thất bại", value: 6},
-                                    { text: "Đã hoàn thành", value: 7},
-                                    { text: "Chờ đổi trả", value: 8},
+                                    { text: "Chưa thanh toán - Giao thất bại", value: 5 },
+                                    { text: "Đã thanh toán - Giao thất bại", value: 6 },
+                                    { text: "Đã hoàn thành", value: 7 },
+                                    { text: "Chờ đổi trả", value: 8 },
                                 ],
                                 dataTextField: "text",
                                 dataValueField: "value",
-                                value: options.model.status || 1, 
+                                value: options.model.status || 1,
                                 change: function (e) {
                                     console.log("Selected value:", options.model.status.value);
                                     console.log("this value:", this.value());
