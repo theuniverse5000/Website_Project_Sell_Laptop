@@ -120,7 +120,7 @@
 
                         @if (t.LinkImage != null)
                         {
-                            <img src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
+                            <img style="width:300px" src="@Configuration.GetSection("UrlApiAdmin").Value@Url.Content(t.LinkImage)" alt="Product Image" />
 
                             <br />
                         }
@@ -146,8 +146,8 @@
                             </div>
                         </div>
                         <div class="Product-price">
-                            <span>@t.Price.ToString("N0") </span>
-                            <p>@t.ImportPrice.ToString("N0")</p>
+                            <span>@t.Importrice.ToString("N0") </span>
+                            <p>@t.Price.ToString("N0")</p>
                         </div>
 
                     </div>

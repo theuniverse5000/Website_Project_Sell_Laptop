@@ -161,6 +161,26 @@ namespace Shop_API.Repository
                 };
             }
         }
+        public async Task<bool> UpdateSL(string codeVoucher)
+        {
+            var vou =await _context.Vouchers.FirstOrDefaultAsync(x => x.MaVoucher == codeVoucher);
+            if (vou == null)
+            {
+                return false;
+            }
+            try
+            {
+                vou.SoLuong--;
+
+                _context.Vouchers.Update(vou);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
 
         public async Task<Voucher> GetByCode(string codeVoucher)
