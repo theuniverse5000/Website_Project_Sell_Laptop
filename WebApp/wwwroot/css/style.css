@@ -532,22 +532,12 @@ img {
 .p-container:hover .p-name {
     color: #2b80dd;
 }
-/* Common styles for items */
-.box-home-deal .produt-list .item {
-    float: left;
-    background: #fff;
-    margin: 5px;
-    padding: 5px;
-    box-sizing: border-box;
-    width: 100%; /* Set the width to 100% for all screen sizes */
-}
+
 
 /* For larger screens */
 @media screen and (min-width: 769px) {
-    .box-home-deal .produt-list {
-        display: flex; /* Use flex display for larger screens */
-        flex-wrap: wrap; /* Allow items to wrap to the next line */
-        justify-content: space-between; /* Adjust alignment as needed */
+    .box-home-deal .produt-list .item {
+        width: calc(20% - 10px);
     }
 
     .box-deal-list .deal-wrapper .tab-deal a {
@@ -557,6 +547,10 @@ img {
 
 /* For medium screens */
 @media screen and (max-width: 768px) {
+    .box-home-deal .produt-list .item {
+        width: calc(33.33% - 10px);
+    }
+
     .box-deal-list .deal-wrapper .tab-deal a {
         margin-right: 10px;
     }
@@ -564,6 +558,11 @@ img {
 
 /* For smaller screens */
 @media screen and (max-width: 480px) {
+    .box-home-deal .produt-list .item {
+        width: 100%;
+        margin-right: 0;
+    }
+
     .box-deal-list .deal-wrapper .tab-deal a {
         margin-right: 10px;
     }
