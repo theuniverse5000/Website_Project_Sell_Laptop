@@ -1,9 +1,7 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shop_Models.Dto;
 using Shop_Models.Entities;
-using System.Runtime.Intrinsics.Arm;
 using X.PagedList;
 
 namespace WebApp.Controllers
@@ -14,7 +12,7 @@ namespace WebApp.Controllers
 
         public HomeController(IHttpClientFactory httpClientFactory)
         {
-            _httpClientFactory=httpClientFactory;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<IActionResult> Index()
@@ -43,7 +41,7 @@ namespace WebApp.Controllers
 
 
             string doHoa = "Laptop đồ họa";
-            var apiLaptopDoHoaUrl = $"api/ProductDetail/PGetProductDetail?productType={doHoa}&page=1";                             
+            var apiLaptopDoHoaUrl = $"api/ProductDetail/PGetProductDetail?productType={doHoa}&page=1";
             var apiResponeLapTopDoHoa = await httpClient.GetStringAsync(apiLaptopDoHoaUrl);
             var ResponeLaptopDoHoa = apiResponeLapTopDoHoa.ToString();
             var responeModelLaptopDoHoa = JsonConvert.DeserializeObject<ResponseDto>(ResponeLaptopDoHoa);
@@ -135,7 +133,7 @@ namespace WebApp.Controllers
         }
         public async Task<IActionResult> ProductDetail(string code)
         {
-            var  x = HttpContext.Request;
+            var x = HttpContext.Request;
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
             var apiUrl = $@"/api/ProductDetail/PGetProductDetail?codeProductDetail={code}";
             var apiRespone = await httpClient.GetStringAsync(apiUrl);
@@ -145,7 +143,7 @@ namespace WebApp.Controllers
 
         }
         //[Route("tintucsukien")]
-        public async Task<IActionResult> GetAllManagePost(int? page,bool status)
+        public async Task<IActionResult> GetAllManagePost(int? page, bool status)
         {
             try
             {
@@ -153,7 +151,7 @@ namespace WebApp.Controllers
                 {
                     status = true;
                     string getAll = await client.GetStringAsync($"https://localhost:44333/api/ManagePost/GGetManagePostDtosFSP?status={status}");
-                
+
 
                     var responeModel = JsonConvert.DeserializeObject<ResponseDto>(getAll);
                     var managePosts = JsonConvert.DeserializeObject<List<ManagePost>>(responeModel.Result.ToString());

@@ -58,6 +58,8 @@ namespace Shop_API.Service
                     PhoneNumber = user != null ? user.PhoneNumber : request.Address,
                     Address = user != null ? user.Address : request.PhoneNumber,
                     UserId = user != null ? user.Id : null,
+                    Payment = request.Payment,
+                    IsPayment = false,
                     VoucherId = voucherX != null ? voucherX.Id : (Guid?)null
                 };
 
@@ -161,6 +163,8 @@ namespace Shop_API.Service
                 _reponseBill.CreateDate = billT.CreateDate;
                 _reponseBill.CodeVoucher = billT.CodeVoucher;
                 _reponseBill.GiamGia = billT.GiamGia;
+                _reponseBill.Payment = billT.Payment;
+                _reponseBill.IsPayment = billT.IsPayment;
                 _reponseBill.UserId = billT.UserId;
                 _reponseBill.BillDetail = listBillDetail;
                 _reponseBill.Count = listBillDetail.Count();

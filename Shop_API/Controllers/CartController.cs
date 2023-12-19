@@ -13,11 +13,15 @@ namespace Shop_API.Controllers
     {
         private readonly ICartService _cartService;
         private readonly ICartDetailRepository _cartDetailRepository;
+        private readonly ICartRepository _cartRepository;
+        private readonly IUserRepository _userRepository;
         private readonly ResponseDto _reponse;
-        public CartController(ICartService cartService, ICartDetailRepository cartDetailRepository)
+        public CartController(ICartService cartService, ICartDetailRepository cartDetailRepository, ICartRepository cartRepository, IUserRepository userRepository)
         {
             _cartService = cartService;
             _cartDetailRepository = cartDetailRepository;
+            _cartRepository = cartRepository;
+            _userRepository = userRepository;
             _reponse = new ResponseDto();
         }
         [AllowAnonymous]// For admin
@@ -130,9 +134,11 @@ namespace Shop_API.Controllers
         }
         [AllowAnonymous]
         [HttpDelete("Delete")]
-        public async Task<IActionResult> Delete(Guid idCartDetail)
+        public async Task<IActionResult> Delete(string username)
         {
-            if (await _cartDetailRepository.Delete(idCartDetail))
+            var userId = _userRepository.GetAllUsers().Result.FirstOrDefault(x => x.UserName == username).Id;
+
+            if (await _cartRepository.Delete(userId))
                 return Ok();
             return BadRequest();
 

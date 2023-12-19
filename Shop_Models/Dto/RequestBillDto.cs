@@ -7,6 +7,7 @@
         public string? Address { get; set; }
         public string? Usename { get; set; }
         public string? CodeVoucher { get; set; }
+        public int Payment { get; set; }
         public List<CartItemDto>? CartItem { get; set; }
     }
 }

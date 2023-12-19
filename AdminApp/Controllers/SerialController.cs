@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using OfficeOpenXml;
+using Shop_Models.Dto;
 using Shop_Models.Entities;
 using System.Net.Http.Headers;
 
@@ -143,7 +145,7 @@ namespace AdminApp.Controllers
                     var result = response.Content.ReadAsStringAsync().Result;
                     ViewBag.CartItem = result;
                     Check = 1;
-                    return Content(result,"application/json");
+                    return Content(result, "application/json");
                 }
                 else
                 {
@@ -229,17 +231,23 @@ namespace AdminApp.Controllers
                     var worksheet = package.Workbook.Worksheets[0];
                     var rowCount = worksheet.Dimension.Rows;
                     var serials = new List<Serial>();
-                    string jwtToken = HttpContext.Session.GetString("AccessToken");
+
                     var client = _httpClientFactory.CreateClient("PhuongThaoHttpAdmin");
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                    var accessToken = Request.Cookies["account"];
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                     for (int row = 2; row <= rowCount; row++)
                     {
+                        string codeProduct = worksheet.Cells[row, 3].Text;
+                        var responseProduct = client.GetAsync("/api/ProductDetail/GetAlls").Result;
+                        var resultString = await responseProduct.Content.ReadAsStringAsync();
+                        var resultResponse = JsonConvert.DeserializeObject<ResponseDto>(resultString);
+                        var idProductDetails = JsonConvert.DeserializeObject<IEnumerable<ProductDetail>>(resultResponse.Result.ToString()).FirstOrDefault(x => x.Code == codeProduct).Id;
                         var serial = new Serial
                         {
                             Id = Guid.NewGuid(),
                             SerialNumber = worksheet.Cells[row, 1].Text,
                             Status = Convert.ToInt32(worksheet.Cells[row, 2].Text),
-                            ProductDetailId = Guid.Parse("6600DB54-6954-451E-88AB-2A1EA4902D02"),
+                            ProductDetailId = idProductDetails,
 
                         };
                         serials.Add(serial);

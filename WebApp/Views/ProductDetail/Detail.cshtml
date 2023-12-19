@@ -85,6 +85,7 @@
     #option-2:checked:checked ~ .option-2 span {
         color: #fff;
     }
+
 </style>
 @foreach (var t in ViewBag.product)
 {
@@ -217,7 +218,7 @@
                         <div class="tab-content" id="ex1-content">
                             <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
                               
-                                <p class="product-description">@Html.Raw(t.Description)</p>
+                                <p class="product-description">@Html.Raw(@t.Description)</p>
                             </div>
                         </div>
                         <!-- Pills content -->

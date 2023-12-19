@@ -201,7 +201,15 @@ namespace WebApp.Controllers
         {
             var Cart = SessionService.GetObjFromSession(HttpContext.Session, "Cart");
             CartItemDto thao = Cart.FirstOrDefault(x => x.Id == idCartDetail);
-            thao.Quantity -= 1;
+            if (thao.Quantity == 1)
+            {
+                Cart.Remove(thao);
+            }
+            else
+            {
+                thao.Quantity -= 1;
+            }
+
             SessionService.SetObjToSession(HttpContext.Session, "Cart", Cart);
             var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
             var apiUrl = $"/api/Cart/TruQuantityCartDetail?idCartDetail={idCartDetail}";
@@ -243,7 +251,8 @@ namespace WebApp.Controllers
                         var resultString2 = await response2.Content.ReadAsStringAsync();
                         var resultResponse2 = JsonConvert.DeserializeObject<ResponseDto>(resultString2);
                     }
-
+                    await client.DeleteAsync($"api/Cart/Delete?username={request.Usename}");
+                    HttpContext.Session.Remove("Cart");
                     return RedirectToAction("ShowBill", new { invoiceCode = $"{codeBill}" });
                 }
                 return View();

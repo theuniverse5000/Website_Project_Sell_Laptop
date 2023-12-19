@@ -10,6 +10,8 @@
         public string? Address { get; set; }
         public string? CodeVoucher { get; set; }
         public double? GiamGia { get; set; }
+        public int Payment { get; set; }
+        public bool IsPayment { get; set; }
         public Guid? UserId { get; set; }
         public int Status { get; set; }
         public object? BillDetail { get; set; }

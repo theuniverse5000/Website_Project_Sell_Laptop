@@ -119,7 +119,23 @@
                     {
                         <p>Trạng thái: Đang chờ đổi trả.</p>
                     }
-            <p>Người bán: </p>
+                    @if (ViewBag.Bill.Payment == 1)
+                    {
+                        <p>Thanh toán: Tại cửa hàng</p>
+                    }
+                    else if (ViewBag.Bill.Payment == 2)
+                    {
+                        <p>Thanh toán: Khi nhận hàng (COD)</p>
+                    }
+                    else if (ViewBag.Bill.Payment == 3)
+                    {
+                        <p>Thanh toán: Chuyển khoản ngân hàng </p>
+                    }
+                    else
+                    {
+                        <p>Thanh toán: Chưa xác định</p>
+                    }
+                    <p>Người bán: </p>
             </div>
             <div>
                 <p>Khách hàng: @ViewBag.Bill.FullName</p>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Shop_Models.Dto;
-using Shop_Models.Entities;
 using X.PagedList;
 
 namespace WebApp.Controllers
@@ -20,12 +19,12 @@ namespace WebApp.Controllers
             urlApi = _config.GetSection("UrlApiAdmin").Value;
         }
         [HttpGet("sản-phẩm")]
-        public async Task<IActionResult> ShowListProductDetail([FromQuery] string? searchString,string? laptoptype)
+        public async Task<IActionResult> ShowListProductDetail([FromQuery] string? searchString, string? laptoptype, string nsx)
         {
             try
             {
                 var httpClient = _httpClientFactory.CreateClient("PhuongThaoHttpWeb");
-                var apiUrl = $"/api/ProductDetail/PGetProductDetail?status=1&search={searchString}&productType={laptoptype}";
+                var apiUrl = $"/api/ProductDetail/PGetProductDetail?status=1&search={searchString}&productType={laptoptype}&hangsx={nsx}";
                 var apiRespone = await httpClient.GetStringAsync(apiUrl);
                 var Respone = apiRespone.ToString();
                 var responeModel = JsonConvert.DeserializeObject<ResponseDto>(Respone);

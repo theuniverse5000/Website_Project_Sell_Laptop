@@ -169,7 +169,7 @@
                                 <p class="mb-2">Thành tiền</p>
                                 <p class="mb-2" id="thanhtien">@tongTien</p>
                             </div>
-                            <input type="number" name="giaTriGioHang" id="giaTriGioHang" />
+                            <input type="number" name="giaTriGioHang" id="giaTriGioHang" hidden />
                             <button class="btn btn-primary btn-block btn-lg" style="max-width:200px" type="submit">
                                 <div class="d-flex justify-content-between">
                                     <span>Đặt hàng</span>
@@ -192,41 +192,7 @@
     function displayText(text) {
         document.getElementById("result").innerHTML = "Bạn đã chọn: " + text;
     }
-    // function applySelectedVoucher() {
-    //     // Lấy giá trị mã voucher từ option được chọn
-    //     var selectedVoucher = document.getElementById('voucherSelect').value;
-
-    //     // Gửi yêu cầu đến API để lấy giá trị giảm giá cho mã voucher được chọn
-    //     $.ajax({
-    //         url: 'https://your-api-url/voucher',
-    //         type: 'GET',
-    //         data: { voucherCode: selectedVoucher },
-    //         success: function (response) {
-    //             // Xử lý phản hồi từ API
-    //             if (response.success) {
-    //                 // Giảm giá thành công
-    //                 var discount = response.discount;
-    //                 updateTotalWithDiscount(discount);
-    //             } else {
-    //                 // Hiển thị thông báo lỗi nếu cần
-    //                 alert('Invalid voucher code');
-    //             }
-    //         },
-    //         error: function () {
-    //             // Xử lý lỗi nếu có
-    //             alert('Error applying voucher');
-    //         }
-    //     });
-    // }
-
-    // function updateTotalWithDiscount(discount) {
-    //     // Tính toán giá mới sau khi áp dụng voucher
-    //     var originalTotal = 26.48; // Giả sử giá trước khi giảm giá là 26.48
-    //     var discountedTotal = originalTotal - (originalTotal * discount);
-
-    //     // Cập nhật giá trên giao diện người dùng
-    //     document.getElementById('totalAmount').innerText = '$' + discountedTotal.toFixed(2);
-    // }
+   
     $(document).ready(function () {
         $(".decrease-quantity").click(function () {
             var itemId = $(this).data("id");
@@ -270,85 +236,7 @@
     });
 
 </script>
-
-
-
-
-
-
 <script>
-
-    // function calculateTotalAmount() {
-    //     var totalAmount = 0;
-
-    //     // Iterate through each row in the table
-    //     $("#yourTableId tbody tr").each(function () {
-    //         var quantity = parseInt($(this).find(".quantity-input").text());
-    //         var price = parseFloat($(this).find("td:eq(2) p").text().replace(',', '')); // Adjust the index based on your actual structure
-
-    //         totalAmount += quantity * price;
-    //     });
-    //     console.log(totalAmount);
-    //     alert(totalAmount);
-    //     return totalAmount;
-    // }
-
-
-
-    // function updateTotalAmount() {
-    //     var totalAmount = 0;
-
-    //     // Loop through each row in the table
-    //     $("tbody tr").each(function () {
-    //         var quantity = parseInt($(this).find(".quantity-input").text());
-    //         var price = parseFloat($(this).find(".price").text().replace(',', '')); // Assuming the price is displayed as a string with commas
-
-    //         totalAmount += quantity * price;
-    //     });
-
-    //     // Update the total amount on the UI
-    //     $("#totalAmount").text(formatCurrency(totalAmount)); // Format the total amount as needed
-    // }
-
-    // // Function to format currency
-    // function formatCurrency(amount) {
-    //     // Customize this function based on your currency formatting requirements
-    //     var formatter = new Intl.NumberFormat('en-US', {
-    //         style: 'currency',
-    //         currency: 'USD', // Change this to your currency code
-    //         minimumFractionDigits: 2
-    //     });
-
-    //     return formatter.format(amount);
-    // }
-
-    // $("#diemInput").on("input", function () {
-    //     var soDiemMuonDoi = parseFloat($(this).val());
-    //     var tongTienHoaDon = calculateTotalAmount(); // Calculate the total amount based on product prices and quantities
-
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "https://localhost:44333/api/ChucNangTichDiem/CalculateTotalAmount",
-    //         data: {
-    //             tongTienHoaDon: tongTienHoaDon,
-    //             soDiemMuonDoi: soDiemMuonDoi
-    //         },
-    //         success: function (response) {
-    //             $(
-
-    //                 "#totalAmount").text(formatCurrency(response.totalAmount));
-    //         },
-    //         error: function (error) {
-    //             console.error('Error:', error);
-    //         }
-    //     });
-    // });
-
-
-
-
-
-    // Biến để chứa số điểm hiện có từ ví điểm
     var soDiemHienCo;
 
     // Hàm để lấy số điểm hiện có từ backend
@@ -374,38 +262,6 @@
 
     // Gọi hàm fetchSoDiemHienCo khi trang được tải để lấy số điểm hiện có từ backend
     window.addEventListener('load', fetchSoDiemHienCo);
-
-        // function validateInput() {
-        //     // Lấy giá trị từ input
-        //     var diemInputValue = document.getElementById("diemInput").value.trim();
-
-        //     // Nếu người dùng không nhập, không thực hiện kiểm tra
-        //     if (diemInputValue === "") {
-        //         document.getElementById("error-message").innerText = "";
-        //         return;
-        //     }
-
-        //     // Kiểm tra giá trị nhập vào
-        //     var diemInputNumber = parseInt(diemInputValue);
-        //     if (isNaN(diemInputNumber) || diemInputNumber < 0) {
-        //         document.getElementById("error-message").innerText = "Giá trị không hợp lệ. Vui lòng nhập một số không nhỏ hơn 0.";
-        //     } else if (diemInputNumber > soDiemHienCo) {
-        //         document.getElementById("error-message").innerText = "Không thể sử dụng số điểm vượt quá số điểm hiện có trong ví điểm.";
-        //     } else {
-        //         document.getElementById("error-message").innerText = "";
-        //     }
-        // }
-
-        // // Gọi hàm validateInput mỗi khi giá trị trong input thay đổi
-        // document.getElementById("diemInput").addEventListener("input", validateInput);
-
-
-
-
-
-
-    // ... (Your existing code)
-
     var tongTien = @tongTien;
     // Function to update the input value based on the checkbox state
     function updatePointsInput() {
