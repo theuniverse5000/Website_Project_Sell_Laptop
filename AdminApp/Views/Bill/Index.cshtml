@@ -269,22 +269,18 @@
                         } else {
                             showNotification("Cập nhật thất bại", "error");
                         }
-                        $.ajax({
-                            type: "POST",
-                            url: "https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync?invoiceCode=" + e.model.invoiceCode + "&TongTienThanhToan=" + totalAmount,
-                            success: function (response) {
-                                console.log(response);
-                                if (response.code === 200) {
-                                    showNotification(response.message, "success");
-                                } else {
-                                    showNotification(response.message, "error");
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.error(xhr.responseText);
-                                alert("Lỗi khi gọi API. Xem log để biết thêm chi tiết.");
-                            }
-                        });
+                        // $.ajax({
+                        //     type: "POST",
+                        //     url: "https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync?invoiceCode=" + e.model.invoiceCode + "&TongTienThanhToan=" + totalAmount,
+                        //     success: function (response) {
+                        //         console.log(response);
+
+                        //     },
+                        //     error: function (xhr, status, error) {
+                        //         console.error(xhr.responseText);
+                        //         alert("Lỗi khi gọi API. Xem log để biết thêm chi tiết.");
+                        //     }
+                        // });
                     } else if (e.model.isNew() && e.model.isDestroyed()) {
                         // Trường hợp xóa
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
