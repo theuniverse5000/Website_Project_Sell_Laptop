@@ -18,11 +18,9 @@
     <div class="modal-dialog">
         <div id="detailsGrid"> <div id="TongTienThanhToan"></div></div>
         <div class="modal-body">
-           
-           
-       </div>
+        </div>
     </div>
- </div>
+</div>
 
 
 
@@ -259,17 +257,28 @@
                         // Trường hợp cập nhật
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
                         console.log(e.model.invoiceCode);
-                        
+
 
                         if (status === 'success') {
                             showNotification("Cập nhật thành công", "success");
                             totalAmount = 25000000;
-                           
+
 
                         } else {
                             showNotification("Cập nhật thất bại", "error");
                         }
-                      
+                        // $.ajax({
+                        //     type: "POST",
+                        //     url: "https://localhost:44333/api/ChucNangTichDiem/TichDiemMuaHangAsync?invoiceCode=" + e.model.invoiceCode + "&TongTienThanhToan=" + totalAmount,
+                        //     success: function (response) {
+                        //         console.log(response);
+
+                        //     },
+                        //     error: function (xhr, status, error) {
+                        //         console.error(xhr.responseText);
+                        //         alert("Lỗi khi gọi API. Xem log để biết thêm chi tiết.");
+                        //     }
+                        // });
                     } else if (e.model.isNew() && e.model.isDestroyed()) {
                         // Trường hợp xóa
                         var status = 'success'; // hoặc 'error' tùy theo trạng thái
